@@ -33,5 +33,9 @@ if (!homepage.includes('/media/resources/branding/epok-lockup.png')) errors.push
 for (const file of [...files, 'assets/search.json']) {
   if (/uniqu?o|unicore|eraengine/i.test(fs.readFileSync(path.join(root, file), 'utf8'))) errors.push(`${file}: obsolete engine branding`);
 }
+for (const image of ['epok-editor.png', 'epok-scene-view.png', 'epok-blueprints.png']) {
+  if (!homepage.includes(`/assets/captures/${image}`)) errors.push(`Homepage is missing ${image}`);
+}
+if (!homepage.includes('/media/docs/images/forest-dialogue.png')) errors.push('Homepage must retain the ForestTest gameplay capture');
 if (errors.length) { console.error(errors.join('\n')); process.exit(1); }
 console.log(`Validated ${files.length} pages, ${checked} local links/assets and ${search.length} searchable guides.`);
