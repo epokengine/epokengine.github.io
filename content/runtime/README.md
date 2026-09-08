@@ -9,6 +9,8 @@ Inside the UniQo repository, build through the editor or `cargo run --locked -- 
 
 ## Build an exported project
 
+No editor, host Clang extractor, or Lua VM is required by native exports. On Windows the included `build.ps1` accepts `-Make <make.exe> -Nugget <SDK directory> -ToolchainBin <MIPS bin>`. It normalizes the working directory for GNU tools, including Unicode directories with an ASCII Windows short alias. If the volume has no suitable alias, move the complete export to an ASCII directory. Keep SDK/tool installation paths ASCII and without spaces.
+
 Install GCC MIPS 16.2.0 and Make, and put their binaries on PATH for the current shell. Use a path without spaces.
 
 From the export directory:
@@ -23,7 +25,7 @@ Do not initialize Nugget's nested submodules recursively. They are not required 
 
 Output is `uniqo.ps-exe`. The ELF and map files support debugging. The exported Makefile requires an explicit `NUGGET_DIR` when the SDK is elsewhere. For an existing portable UniQo setup, prepend its `.tools/mips/bin` to the current shell's PATH and point `NUGGET_DIR` to its `third_party/nugget`.
 
-The exported game does not require the Rust editor or Lua. Run the PS-X executable using a compatible emulator or a suitable console loading method. Music-enabled exports require the generated CD image as described below. Hardware validation is still pending.
+The exported game does not require the Rust editor or Lua. Run the PS-X executable using a compatible emulator or a suitable console loading method. Music-enabled or geometry-streaming exports require the generated CD image as described below. Hardware validation is still pending.
 
 ## Scene and scripts
 
@@ -53,6 +55,27 @@ EditableMesh assets compile into linked spatial `MeshGeometry` chunks with relat
 
 `mesh_stats` reports tested/visible chunks, transformed vertices, rejected backfaces and clipped input triangles. Use it with `lighting_stats.dropped_triangles` and frame timing to profile a level. The clipping reserve is bounded; capacity limits do not guarantee frame rate. See the editor's Blockout guide for authoring limits.
 
+`performance_stats.streamed_chunks` is descriptive and collected only with
+`UNIQO_PROFILE_DETAIL=1`. Ordinary builds store `UINT32_MAX` (not collected),
+which the editor profiler exposes as JSON `null`. Read, failure and dropped
+geometry counters stay active. The profiler's existing `--detail` option enables
+this diagnostic and extra timers; its overhead makes those timings unsuitable
+as release FPS measurements.
+
+Project Settings > Engine > Rendering offers optional conservative visibility
+masks. Visibility and geometry streaming are **Experimental**, remain off by
+default and may lower FPS; nearby-page preloading is also Experimental.
+Engine > Streaming offers geometry CD pages, a bounded page pool, a
+per-frame triangle budget and optional nearby-page preloading. Exporting with
+streaming enabled includes `GEOMETRY.BIN` and a CD manifest; launching only the
+PS-X executable cannot supply the paged payload. Required reads can stall and
+restart XA music. See [geometry streaming](docs/streaming.md) for configuration,
+resource lifetimes and CD launch requirements.
+
+Streamed meshes can retain prepared packets within the configured budget;
+objects that do not fit use per-frame packets. Startup loads active pages before
+gameplay when they fit the pool. Later required reads may stall rendering.
+
 ## HUD
 
 Canvas, RectTransform, Image, Text and ProgressBar belong to the same scene entities. HUD rendering follows the 3D world at the configured output resolution. Anchors and pivots are 0..1; position and Size Delta use Q12 native pixels with +Y up. The 3D Transform does not affect UI layout. Text remains 8 x 16 pixels.
@@ -75,7 +98,7 @@ Imported PNGs compile into 8-bit PSX palettes and texture banks. Transparent tex
 
 `input` exposes held/pressed/released states on both physical controller ports. AdvancedPad shares the bus safely with the Memory Card service. Collider queries include overlap, segment raycast, ground and swept kinematic movement, plus trigger enter/stay/exit callbacks.
 
-`request_scene(name)` or `request_scene(size_t(index))` queues one of the exported scene banks. A switch stops outgoing audio, waits for XA callbacks, invalidates handles, clears simulation pools and initializes incoming components/scripts. Banks share one reusable object pool and immutable resources. Their source data is prelinked and must fit main RAM; this is not arbitrary CD map streaming.
+`request_scene(name)` or `request_scene(size_t(index))` queues one of the exported scene banks. A switch stops outgoing audio, waits for XA callbacks, invalidates handles, clears simulation pools and initializes incoming components/scripts. Banks share one reusable object pool and immutable resources. Their metadata and nonstreamed resources remain prelinked and must fit main RAM. With geometry streaming enabled, immutable editable-mesh payloads use CD pages with build-global IDs; the page cache survives bank changes. Textures, collision data, scripts and other resources keep their existing storage paths.
 
 `memory_card` offers asynchronous probe/read/write/list with service-owned buffers, paired recovery records and readback verification. It never formats cards automatically. The game's progress format remains project-owned.
 

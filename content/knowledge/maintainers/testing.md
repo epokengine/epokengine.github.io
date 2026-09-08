@@ -1,4 +1,4 @@
-# Local testing
+# Local testing for UniQo maintainers
 
 Run checks from the repository root. GitHub Actions is not configured; validation is performed locally.
 
@@ -27,24 +27,43 @@ Unit tests also cover disabled defaults, key migration, port conflicts, Host/Ori
 
 ## Native PSX checks
 
+Blueprint foundation checks after `cargo build --locked --bins` and SDK setup:
+
+```powershell
+cargo test --locked blueprint_creation_dialog_reflects_inherits_attaches_and_undoes -- --ignored --nocapture
+python tests/integration/verify_reflection.py --emulator
+python tests/integration/verify_projects.py
+python tests/integration/verify_project_registration.py
+```
+
+The ImGui test creates/attaches inherited native classes through production controls using real Clang. Reflection acceptance rebuilds a standalone export and checks inherited behavior, independent properties and scene-bank resets in emulator RAM; do not run it alongside another Play session on 8077. `--keep` retains its isolated temporary project for diagnosis. Registration tests use a unique HKCU test subtree and do not alter live file associations. Capture the real dialog with `--screenshot-script-dialog --screenshot <path>`; live Windows click-through and double-click launch still need an unlocked desktop.
+
 For runtime features, run the host C++ suites and emulator acceptance checks:
 
 ```powershell
 python tests/runtime/verify_spatial.py
 python tests/runtime/verify_sprites_particles.py
+python tests/runtime/test_compare_runtime.py
+python tests/runtime/test_stream_pool_layout.py
 python tests/integration/verify_rpg.py
+python tests/integration/verify_streaming.py
+python tests/integration/verify_streaming_xa.py
 ```
 
 The two host runners cover input, time, collision, transform caching, lifecycle,
 Memory Card recovery, utility services, palettes, frustum/polygon processing and
 sprite/particle pools. They require a C++20 compiler and the pinned Nugget sources.
-The native acceptance check requires a built editor, configured MIPS tools and PCSX-Redux;
-run it sequentially with other emulator checks. It covers sprite depth/blending,
+Streaming checks use isolated projects on ports 8092 and 8093 and require the
+configured CD authoring tools. For diagnostic assertions, benchmark methodology
+and regression gates, see the internal
+[performance validation workflow](../performance-testing.md).
+All native acceptance checks require a built editor, configured MIPS tools and PCSX-Redux;
+run them sequentially. The RPG check covers sprite depth/blending,
 camera projection, resource counters, palette animation, scene transitions,
 object handles, particle capacity/expiry and input/timing behavior. Feature limits
-are documented under [Sprites and particles](sprites-particles.md),
-[Cameras and resources](camera-resources.md), [Runtime services](runtime-services.md)
-and [Input and collision](input-collision.md).
+are documented under [Sprites and particles](../../docs/sprites-particles.md),
+[Cameras and resources](../../docs/camera-resources.md), [Runtime services](../../docs/runtime-services.md)
+and [Input and collision](../../docs/input-collision.md).
 
 Run dependency setup first. Integration scripts use Python 3.10 or newer and its standard library; no Python packages are required. The scripts default to `target/debug/uniqo-editor.exe`. Close a running editor before rebuilding that executable.
 
@@ -77,6 +96,36 @@ Run these **sequentially**, with no other Play session using port 8077.
 | Live bridge | Changing video, controller press/release, stable pause, one-VBlank step and process cleanup |
 
 Hierarchy, HUD and lighting accept `--exe <path>` for an alternate editor build. Verification creates isolated temporary game projects under `.uniqo/`; the pipeline check also builds the sample project. Reports, screenshots and memory captures go to ignored `artifacts/`.
+
+## Blueprint acceptance
+
+Build both editor and reflection extractor with `cargo build --locked --bins`.
+The ordinary Rust suite covers schema/IR/compiler, stable identities, linked
+templates, typed references, editing transactions, and debug protocol validation.
+Additional target and native UI checks are:
+
+```powershell
+python tests/runtime/verify_blueprint_runtime.py
+python tests/runtime/verify_blueprint_bridge.py
+cargo test graph_canvas_creates_connects_drags_and_undoes_using_imgui_events -- --ignored --nocapture
+python tests/integration/verify_blueprints.py --keep --emulator
+python tests/integration/verify_blueprint_features.py --keep --emulator
+python tests/integration/verify_blueprint_performance.py --keep --emulator
+```
+
+Serialize emulator tests. The runtime harness runs host contract assertions and
+compiles actual pinned MIPS/PsyQo/EASTL headers; the Lua protocol harness mocks
+emulator services and is not a real-breakpoint acceptance substitute.
+For that acceptance, set `UNIQO_BP_DEBUG_PROJECT` to the retained inheritance
+fixture's relocated project, then run
+`cargo test live_blueprint_breakpoint_snapshot_step_resume_and_cleanup -- --ignored --nocapture`.
+
+The performance fixture compares equivalent arithmetic at 1/16/64 instances
+under common `-Os` optimization, verifies native RAM results, and reports linked
+sections, the measured function's prologue frame, and guest interpreter cycles.
+It does not measure peak stack/RAM, hardware timing, or FPS. Native/debug builds
+are kept separate. See `docs/blueprints.md` for reproducible example generation
+and `design-qa.md` for actual desktop evidence.
 
 ## Screenshots and profiling
 
@@ -115,7 +164,7 @@ python tools/compare_vram.py artifacts/performance/demo/vram.bin artifacts/perfo
 
 Run these commands from the engine checkout. `--project` selects a different game project; `--optimization Os` or `--optimization O2` compares runtime compilation options. Detail and validation timers add work, so do not interpret their frame times as release performance. The helper invalidates the instrumented runtime object after a run so the next normal build can rebuild it.
 
-The profiler generates `profile.json`, `vram.bin` and logs in the requested output directory. VRAM comparisons require matching scene state and display settings; animated effects can differ between captures. See [Performance](performance.md) for counter semantics and measurement limits.
+The profiler generates `profile.json`, `vram.bin` and logs in the requested output directory. VRAM comparisons require matching scene state and display settings; animated effects can differ between captures. See [Performance](../../docs/performance.md) for counter semantics and measurement limits.
 
 ## Clean-checkout verification
 

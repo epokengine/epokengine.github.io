@@ -1,35 +1,51 @@
 # C++ scripting and exports
 
-Each component has three original files under the game project's `assets/scripts/`:
+## Creating and inheriting classes
 
-- `Spinner.hpp`: a class derived from `uniqo::Behaviour` and its public fields.
-- `Spinner.cpp`: implementations of `start(Transform&)` and `update(Transform&, Fixed dt)`.
-- `Spinner.script.json`: the class name and exposed properties with defaults.
+Use **New C++ Script** in the Project panel or **Add Component**. Choose an asset name, a folder relative to `assets/scripts`, and a searchable parent class. The hierarchy shows eligible classes and inherited properties/event signatures. Folder components use portable identifiers such as `Enemies/Bosses`.
 
-Use Add Component > New C++ Script to create and attach a component. One Behaviour is supported per entity. Each entity gets its own instance and property values, which are saved with the scene.
+**Create** writes an annotated `.hpp` and `.cpp`; **Create and Attach** also binds the concrete class to the selected entity. Clang validates the transaction; failure removes only newly created files and empty directories. Abstract bases are selectable, but a still-abstract child cannot attach until its pure virtual events are implemented. Generated classes are not `final`. Children retain parent behavior; only a direct Behaviour child gets the empty `update` required by Behaviour's pure virtual contract.
 
-## Exposed properties
+One Behaviour is supported per entity. **Edit > Undo Component Attachment / Redo Component Attachment** restores bindings and values, rejecting intervening scene edits. Undoing attachment does not delete the source asset.
 
-Metadata is explicit; the editor does not parse C++ classes or provide reflection. To expose a property, declare a public `uniqo::Fixed` member in the header and add its name/default to the JSON metadata.
+## Semantic reflection
 
-```json
-{
-  "name": "Spinner",
-  "properties": [
-    { "name": "speed", "default": 90.0 }
-  ]
-}
-```
-
-If a persisted property is removed from metadata, reattach the component to reset its fields. Stale bindings produce a build error.
+Build both host binaries with `cargo build --locked --bins` and run dependency setup for pinned libclang 18.1.1. Keep `uniqo-header-tool` beside the editor. It parses real PsyQo headers using MIPS1/o32/little-endian C++20 settings and the configured MIPS compiler's include directories; it is never linked into the game. Metadata under `.uniqo/reflection` is invalidated by the extractor, configuration, compiler, and transitively included files. Extraction errors preserve the last cache but prevent stale metadata from building.
 
 ```cpp
-void Spinner::update(uniqo::Transform& transform, uniqo::Fixed dt) {
-    transform.rotation[1] += speed * dt;
-    if (transform.rotation[1] >= 360.0)
-        transform.rotation[1] -= 360.0;
-}
+#pragma once
+#include "uniqo.hpp"
+
+class UQ_CLASS(Blueprintable, Id="a1df4e7f-9f49-4e74-a1c6-4d703047215b") Enemy
+    : public uniqo::Behaviour {
+public:
+    UQ_PROPERTY(EditAnywhere) uniqo::Fixed health = 100.0;
+    UQ_PROPERTY(EditAnywhere) bool aggressive = true;
+    UQ_FUNCTION(BlueprintCallable) void damage(uniqo::Fixed amount) { health -= amount; }
+    UQ_FUNCTION(BlueprintEvent) virtual void defeated() {}
+    void update(uniqo::Transform& transform, uniqo::Fixed dt) override {
+        transform.rotation[1] += dt;
+    }
+};
 ```
+
+Place the class annotation **after `class`**. Supported fields are bool, signed/unsigned 32-bit integers, Q12 Fixed, enums up to 32-bit storage, and Fixed arrays of length two or three. Properties must be public instance fields with declarative constant defaults. Constructors must be implicit/defaulted: arbitrary constructor effects cannot be inspected. Multiple/virtual/private inheritance, raw pointers, dynamic containers, nested reflected classes, and reflected templates are rejected. Concrete classes must be default-constructible and assignable for bank reset.
+
+Function metadata includes parameter types/directions, returns, visibility, virtual/abstract/final state, and overridden member IDs. This milestone does not include graph authoring or a general dynamic invocation system.
+
+## Values and compatibility
+
+The Inspector and picker consume one registry. Editing a field stores an explicit instance override. **Reset to Inherited** removes it and uses the current class default. Legacy serialized values remain explicit even when equal to a default. Removed fields retain their values and produce a build diagnostic. **Discard orphan override** is an explicit user action, not an automatic migration.
+
+Generated classes receive a UUID. Unspecified member IDs use Clang USRs, stable across relocation but not renaming. Use `Id="<UUID>"` on properties/functions before first use when rename-stable identity is required. Bindings save class/member IDs and versioned provider/backend identifiers alongside names. Changed member identities require explicit migration instead of reinterpreting old values. Scene version 1 loads into version 2 in memory and is written only on Save.
+
+Legacy `.hpp`, `.cpp`, and `.script.json` assets remain readable through a compatibility provider. Their exposed fields are Fixed; they are not inheritance bases until annotated. New classes do not duplicate declarations in JSON.
+
+```json
+{"name":"Spinner","properties":[{"name":"speed","default":90.0}]}
+```
+
+Unavailable providers/backends remain serialized and diagnose their missing capability. Lua creation, a VM, and Lua dependencies are not enabled.
 
 ## Runtime semantics
 
@@ -47,6 +63,11 @@ Activation, destruction, safe handles, scene transitions, tweens and event helpe
 
 Use the editor's File menu to export a C++ project. Export writes a new timestamped folder under `exports/`, containing runtime sources, scripts, scene data, a Makefile, instructions and license notices.
 
-The exported project can be built with Make, the pinned Nugget SDK and a MIPS toolchain. See the [runtime build instructions](../runtime/README.md). Generated scene data is a snapshot; continue authoring original scenes and scripts in the game project.
+The exported project rebuilds with Make, the pinned Nugget SDK and a MIPS toolchain, without the editor or extractor. On Windows, use `build.ps1 -Make <make.exe> -Nugget <SDK> -ToolchainBin <MIPS bin>`. Unicode export directories use an ASCII Windows short alias; if unavailable on that volume, move the complete export to an ASCII directory. SDK/tool installations still require ASCII paths without spaces. See the [runtime build instructions](../runtime/README.md). Generated scene data is a snapshot; continue authoring original scenes and scripts in the game project.
 
 Only the UniQo runtime is covered by the included UniQo MIT license. User-authored game scripts and assets retain their owners' chosen licenses. Third-party runtime notices accompany the export.
+
+## Visual Blueprints
+
+For visual class assets, graph authoring, entity templates, references, timelines,
+and instrumented node debugging, see [Blueprints](blueprints.md).

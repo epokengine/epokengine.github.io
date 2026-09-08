@@ -6,7 +6,7 @@
 
 <p align="center">
   <strong>A desktop game engine for the original PlayStation.</strong><br />
-  Build worlds, animate characters and write native gameplay.
+  Build worlds, animate characters and create gameplay with Blueprints or C++.
 </p>
 
 <p align="center">
@@ -14,18 +14,20 @@
 </p>
 
 <p align="center">
+  <a href="https://uniqoengine.github.io/">Website</a> &nbsp;·&nbsp;
   <a href="#getting-started">Get started</a> &nbsp;·&nbsp;
   <a href="#features">Features</a> &nbsp;·&nbsp;
+  <a href="#blueprints">Blueprints</a> &nbsp;·&nbsp;
   <a href="#examples">Examples</a> &nbsp;·&nbsp;
   <a href="#ai-assisted-development">AI assistants</a> &nbsp;·&nbsp;
-  <a href="#documentation">Documentation</a>
+  <a href="https://uniqoengine.github.io/docs/">Documentation</a>
 </p>
 
 ---
 
-UniQo brings a visual editor workflow to PSX development. Create a project, arrange a scene, import assets, write C++ behaviours and press **Play**. Your game compiles to a native MIPS executable and runs inside an integrated PCSX-Redux Game view.
+UniQo brings a visual editor workflow to PSX development. Create a project, arrange a scene, import assets, connect Blueprint graphs or write C++ behaviours, and press **Play**. Your game compiles to a native MIPS executable and runs inside an integrated PCSX-Redux Game view.
 
-**Windows x64 · Experimental · MIT-licensed original code.** The editor and runtime are in active development. Emulator validation is available; physical-console validation is pending.
+**Windows x64 and macOS Apple Silicon · Experimental · MIT-licensed original code.** The editor and runtime are in active development. Emulator validation is available; physical-console validation is pending.
 
 ![UniQo editor with the UQ monogram, editable 2.5D courtyard, scene hierarchy and component inspector](docs/images/uniqo-editor.png)
 
@@ -39,19 +41,44 @@ UniQo brings a visual editor workflow to PSX development. Create a project, arra
 | **Bring in your assets** | Import [PNG textures](docs/textures.md), [OBJ/MTL models](docs/static-mesh-import.md) and [FBX characters](docs/skeletal.md). Asset identities survive moves and reimports. |
 | **Animate and add effects** | Use rigid skeletal animation, atlas sprites, billboards, flipbooks and bounded [particle emitters](docs/sprites-particles.md). Add [fog, scrolling water](docs/environment-effects.md) and [palette cycling](docs/palette-animation.md). |
 | **Write native gameplay** | Author C++20 behaviours with Inspector properties. Connect [input and collision](docs/input-collision.md), [scene transitions and object lifecycle](docs/runtime-services.md), cameras, tweens and [Memory Card storage](docs/memory-card.md). |
+| **Build visual gameplay** | Create [Blueprint classes](docs/blueprints.md) with native or visual parents, inherited defaults, typed graph nodes, functions, event overrides and Call Parent. Author entity templates, spawn classes and debug node execution. Graphs compile ahead of time to native C++; no graph VM runs on the PSX. |
 | **Light and render** | Combine baked vertex lighting, bounded realtime GTE lighting, static shadows and blob shadows. Author for PSX rendering limits with native [performance counters](docs/performance.md). |
 | **Add audio and UI** | Import WAV, MP3, FLAC or OGG for SPU sound effects and XA music. Build [HUDs](docs/hud.md) with text, atlases, nine-slice images, progress bars and navigation. |
 | **Play and export** | Run, pause and step games in PCSX-Redux. Build PS-X executables and BIN/CUE disc images, or [export a standalone PsyQo project](runtime/README.md). |
 
 Projects live independently of the editor. Scenes, scripts and imported assets stay in your game folder; the engine owns the runtime and development tools.
 
+## Blueprints
+
+**Visual authoring. Native PSX execution.** Build reusable gameplay classes in a
+node editor with Components, My Blueprint and a contextual Details panel.
+Reflected C++ methods and Blueprint functions share typed pins; child classes
+inherit defaults and behavior, override events and explicitly Call Parent.
+
+![UniQo Blueprint editor with component hierarchy, inherited variables, typed graph connections and contextual Details](docs/images/blueprint-editor.png)
+
+<p align="center"><sub>A compiled interaction Blueprint in the real Windows editor. Original editable nodes and controls, not a mockup.</sub></p>
+
+Blueprints include bounded Delay and Timeline nodes, checked entity/asset/class
+references, linked component templates, dynamic class spawning and cross-instance
+calls. Instrumented Play supports node breakpoints, stepping and typed values;
+release builds omit debugger instrumentation. Exported C++ projects rebuild
+without the editor or reflection extractor.
+
+Read the [Blueprint guide](docs/blueprints.md) for the workflow, reproducible
+examples and console-side limits. Blueprints use UniQo's own asset format and
+bounded native backend; Unreal assets/APIs and live native-code patching are not
+supported. Blueprint reflection/authoring currently requires the Windows x64
+toolchain; general macOS editor support does not yet include that runtime.
+
 ## Getting started
 
 ### Prerequisites
 
-- **Windows x64**
+- **Windows x64** or **macOS 11+ on Apple Silicon**
 - [Git](https://git-scm.com/) and [Rust through rustup](https://rustup.rs/)
-- Visual Studio Build Tools with **Desktop development with C++** and a **Windows SDK**
+- On Windows: Visual Studio Build Tools with **Desktop development with C++** and a **Windows SDK**
+- On macOS: Xcode Command Line Tools and [Homebrew](https://brew.sh/)
 
 Clone into a path without spaces, then run setup:
 
@@ -63,6 +90,16 @@ cargo run --locked
 ```
 
 Setup initializes the pinned Nugget SDK and installs verified portable MIPS tools, PCSX-Redux, psxavenc and mkpsxiso under `.tools/`. Rustup selects the repository's pinned toolchain. Setup does not change your global PATH.
+
+On macOS, download the macOS Arm build of PCSX-Redux and move it to `/Applications/PCSX-Redux.app`, then run:
+
+```sh
+xcode-select --install
+./tools/setup-macos.sh
+make run
+```
+
+The setup script installs Rust and the upstream MIPS toolchain with Homebrew, builds pinned host audio/disc utilities under `.tools/macos/`, and writes an untracked `uniqo.local.json`. Start UniQo with `make run` or `./tools/run-macos.sh`; neither command requires changing your shell PATH. The first launch of PCSX-Redux may require approving the unsigned application in macOS Privacy & Security.
 
 ### Your first game
 
@@ -86,7 +123,7 @@ See [Getting started](docs/getting-started.md) for configuration and troubleshoo
 | `cargo test --locked` | Run the default Rust test suite |
 | `.\.tools\mips\bin\make.exe check` | Run formatting, tests, Clippy and the debug build |
 
-A release build produces the editor executable; distributable application packaging is not yet provided. See [all development commands](docs/getting-started.md#common-development-commands) and [local testing](docs/testing.md).
+A release build produces the editor executable; distributable application packaging is not yet provided. See [all development commands](docs/getting-started.md#common-development-commands) and [local testing](knowledge/maintainers/testing.md).
 
 </details>
 
@@ -144,21 +181,23 @@ See the [MCP guide](docs/mcp.md) for setup, the full tool list and current limit
 
 ## Documentation
 
+Browse the **[UniQo documentation](https://uniqoengine.github.io/docs/)** for searchable guides, workflows and API references. The Markdown sources are also linked below.
+
 | Area | Guides |
 | --- | --- |
 | **Start and configure** | [Getting started](docs/getting-started.md) · [Projects](docs/projects.md) · [Settings](docs/settings.md) · [Editor](docs/editor.md) |
 | **Create content** | [Blockout](docs/blockout.md) · [Third Person arena](docs/third-person.md) · [Static model import](docs/static-mesh-import.md) · [Skeletal characters](docs/skeletal.md) |
 | **Render and animate** | [Textures](docs/textures.md) · [Lighting](docs/lighting.md) · [Sprites and particles](docs/sprites-particles.md) · [Environment effects](docs/environment-effects.md) · [Palette animation](docs/palette-animation.md) |
-| **Build gameplay** | [C++ scripting](docs/scripting.md) · [Input and collision](docs/input-collision.md) · [Runtime services](docs/runtime-services.md) · [Cameras and resources](docs/camera-resources.md) · [Memory Card](docs/memory-card.md) |
+| **Build gameplay** | [Blueprints](docs/blueprints.md) · [C++ scripting](docs/scripting.md) · [Input and collision](docs/input-collision.md) · [Runtime services](docs/runtime-services.md) · [Cameras and resources](docs/camera-resources.md) · [Memory Card](docs/memory-card.md) |
 | **Sound and interface** | [Assets and audio](docs/assets.md) · [HUD](docs/hud.md) |
-| **Extend and verify** | [AI / MCP](docs/mcp.md) · [Architecture](docs/architecture.md) · [Performance](docs/performance.md) · [Testing](docs/testing.md) · [Runtime and export](runtime/README.md) |
+| **Extend and verify** | [AI / MCP](docs/mcp.md) · [Architecture](knowledge/architecture.md) · [Performance](docs/performance.md) · [Testing](knowledge/maintainers/testing.md) · [Runtime and export](runtime/README.md) |
 
 ## Current limits
 
 UniQo targets the original hardware's constraints. Keep these boundaries in mind when planning a project:
 
 - **Animation:** rigid skeletal deformation is supported; skeletal textures, blended skin weights and animation blending remain future work.
-- **Editing:** Blockout geometry and MCP scene batches have Undo/Redo. General editor Undo/Redo and entity multiselection remain future work.
+- **Editing:** Blueprint graphs/templates, Blockout geometry and MCP scene batches have Undo/Redo. Entity multiselection remains future work.
 - **Rendering:** frustum clipping and ordering tables are used; intersecting polygons can still produce sorting artifacts. Capacity limits are not frame-rate guarantees.
 - **Simulation:** measured time drives fixed 60 Hz steps with bounded catch-up. Collision uses conservative AABBs, rather than rigid-body physics.
 - **Resources:** prelinked scene banks share resources and reuse active objects and VRAM. Resident data must fit PSX RAM; arbitrary map streaming from CD is not implemented.

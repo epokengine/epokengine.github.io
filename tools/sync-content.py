@@ -10,7 +10,7 @@ root = Path(__file__).resolve().parent.parent
 checkout = Path(sys.argv[1]).resolve()
 ref = sys.argv[2] if len(sys.argv) > 2 else "origin/main"
 commit = subprocess.check_output(["git", "-C", str(checkout), "rev-parse", ref], text=True).strip()
-paths = ["docs", "README.md", "LICENSE", "THIRD_PARTY_NOTICES.md", "runtime/README.md", "runtime/THIRD_PARTY_NOTICES.md", "examples/rpg-2-5d-demo/README.md", "examples/rpg-2-5d-demo/preview.png", "resources/branding/uniqo.png", "resources/branding/README.md"]
+paths = ["docs", "knowledge/architecture.md", "knowledge/maintainers/resources.md", "knowledge/maintainers/testing.md", "README.md", "LICENSE", "THIRD_PARTY_NOTICES.md", "runtime/README.md", "runtime/THIRD_PARTY_NOTICES.md", "examples/rpg-2-5d-demo/README.md", "examples/rpg-2-5d-demo/preview.png", "resources/branding/uniqo.png", "resources/branding/README.md"]
 archive = subprocess.check_output(["git", "-C", str(checkout), "archive", "--format=tar", commit, "--", *paths])
 content = root / "content"
 content.mkdir(exist_ok=True)

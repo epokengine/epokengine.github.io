@@ -10,7 +10,8 @@ These settings live in `ProjectSettings/project.json` and travel with the game p
 | --- | --- |
 | Project / Description | Project name shown in the Hub |
 | Project / Maps & Build | Startup scene and automatic compilation |
-| Engine / Rendering | Native output resolution, scan mode and retained geometry packets |
+| Engine / Rendering | Native output resolution, retained packets and precomputed visibility |
+| Engine / Streaming | Geometry streaming, page pool, RAM budget and disc music behavior |
 
 The default is **640 x 480 interlaced NTSC**, including existing projects that do not yet have a `rendering` entry. Widths of 256, 320, 368, 512 and 640 are available at 240 progressive or 480 interlaced lines. PAL output is not exposed by this runtime yet.
 
@@ -18,7 +19,12 @@ The default is **640 x 480 interlaced NTSC**, including existing projects that d
 "rendering": {
   "width": 640,
   "height": 480,
-  "retained_geometry": true
+  "retained_geometry": true,
+  "precomputed_visibility": false,
+  "streaming_geometry": false,
+  "streaming_pool_pages": 4,
+  "streaming_triangle_budget": 4096,
+  "streaming_prefetch": true
 }
 ```
 
@@ -31,8 +37,40 @@ where fog applies. Animated (skeletal) meshes and materials with UV scrolling
 always use the per-frame path. The switch reaches the runtime through
 `display.hh` and changes nothing in the image; see
 [performance](performance.md) for the measured effect. Turn it off to compare
-against the per-frame path or when RAM is tight: the pool holds one record per
-scene quad.
+against the per-frame path or when RAM is tight: retention uses one record per
+allocated quad, bounded by the per-frame triangle budget in streaming builds.
+
+**Precomputed Visibility — Experimental** (`precomputed_visibility`, default off)
+adds conservative selection of editable-mesh chunks. Camera, object and parent
+transforms remain supported. It does not add occlusion or increase the visible
+range, and it may lower FPS.
+
+**Geometry Streaming — Experimental** (`streaming_geometry`, default off) stores
+immutable editable-mesh geometry in 64 KiB CD pages. It may lower FPS or stall
+frames. A generated CD image is required. Textures, collision, scripts and other
+resources retain their existing storage paths. Visibility and streaming can be
+enabled independently.
+
+**Streaming Pool Pages** (`streaming_pool_pages`, default 4, range 2–8) reserves
+128–512 KiB for resident page payloads. Active pages load before gameplay when
+they fit the pool; later required reads may stall rendering. XA music pauses
+during required reads and restarts at the beginning of the track.
+
+**Per-frame Triangle Budget** (`streaming_triangle_budget`, default 4096, range
+512–8192) caps triangle storage in streamed builds, including resident geometry
+and clipped triangles. Lower values save RAM. Excess triangles are omitted and
+counted as dropped. Retained packets share this bounded capacity; objects that
+do not fit use per-frame packets.
+
+**Preload Nearby Geometry — Experimental** (`streaming_prefetch`, default on,
+inactive while streaming is off) requests a nearby page when a free slot and
+the CD controller are available. Additional work may lower FPS. Disable it to
+compare demand-only loading. It does not interrupt XA playback or evict loaded
+pages for speculative reads.
+
+These controls appear under **Engine > Streaming** and apply on rebuild. See
+[Using geometry streaming](streaming.md) for the CD launch requirements and
+runtime behavior.
 
 Resolution changes apply on the next build. The generated `display.hh` travels with standalone C++ exports; runtime GPU setup, projection, clipping and blob-shadow projection use that configuration. The image keeps the same camera field of view and is presented at 4:3, including modes with nonsquare pixels.
 
@@ -40,7 +78,11 @@ HUD coordinates are native output pixels. Anchors follow the selected canvas siz
 
 640 x 480 contains four times the pixels of 320 x 240. The higher mode costs more GPU fill work; it does not increase geometry or animation budgets. Interlaced modes can flicker on a CRT. Measured elapsed time drives fixed 60 Hz simulation with at most eight catch-up steps per rendered frame; see [input and time](input-collision.md). Hardware validation is pending.
 
-**Reset Rendering** restores the 640 x 480 draft without changing project identity or the startup scene. A startup-scene change takes effect when the project is reopened.
+**Reset Rendering** restores the rendering defaults without changing streaming,
+project identity or the startup scene. **Reset Streaming** restores streaming
+to off, its pool to four pages, its triangle budget to 4096 and preloading to on
+without changing rendering. A startup-scene
+change takes effect when the project is reopened.
 
 ## Editor Preferences
 

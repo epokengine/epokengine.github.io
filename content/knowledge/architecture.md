@@ -22,9 +22,11 @@ UniQo has two compilation targets: a Rust desktop editor and a native C++ PlaySt
 | `exports/` | Ignored generated standalone C++ projects |
 | `target/` | Ignored Cargo build output |
 
-The repository is the editor installation/development root. A game is identified by `ProjectSettings/project.json` and owns its `assets/`, caches, layout and exports. Startup without a selected project shows the Hub; no Editor instance is created before validation and locking.
+The repository is the editor installation/development root. New games are identified by one root `.uniqoproject` descriptor; legacy `ProjectSettings/project.json` remains readable and migrates only explicitly. Games own their assets, caches, layout and exports. Folder/file aliases resolve to one canonical root before locking/reflection. Startup without a project shows the Hub.
 
-`workspace::Project` owns the canonical game root, versioned manifest and OS lock. `Editor` owns that project for the session lifetime. Closing drops the build job before releasing the lock. Runtime sources are embedded in the editor and staged into the selected game's cache. Tool configuration resolves against the editor installation, independently of game paths and the process working directory. See [Projects](projects.md) for the format and project lifecycle; [Assets and audio](assets.md) documents portable imported assets and reconciliation.
+`reflection_schema`, `header_tool`, `header_extract` and `reflection` define the versioned semantic C++ extraction boundary. libclang runs in a pinned host process, not in the editor or PSX game. `blueprint` exposes the shared picker/Inspector registry; `scripts` adapts legacy metadata and creates native classes; `script_values` handles typed overrides; `script_backend` separates authoring capabilities/artifacts from execution declaration, binding and reset. Non-native/Lua execution remains unavailable with preserved serialized data and explicit diagnostics. See the [foundation status](initiatives/blueprints/foundation-status.md).
+
+`workspace::Project` owns the canonical game root, versioned manifest and OS lock. `Editor` owns that project for the session lifetime. Closing drops the build job before releasing the lock. Runtime sources are embedded in the editor and staged into the selected game's cache. Tool configuration resolves against the editor installation, independently of game paths and the process working directory. See [Projects](../docs/projects.md) for the format and project lifecycle; [Assets and audio](../docs/assets.md) documents portable imported assets and reconciliation.
 
 ## Source responsibilities
 
@@ -45,7 +47,7 @@ The repository is the editor installation/development root. A game is identified
 
 The Rust editor is one Cargo package. No separate engine crate or runtime repository is required at this stage.
 
-MCP runs an authenticated Streamable HTTP service on a dedicated current-thread Tokio runtime. Network handlers enqueue bounded requests; the window loop performs editor operations and captures textures after rendering. Requests waiting beyond their deadline or cancelled by the client cannot mutate the editor. Server state belongs to the open Editor and is dropped on project close. Preferences enable it explicitly and keep credentials outside game data. The stdio mode only proxies an already running server. See [MCP](mcp.md) for its public contract.
+MCP runs an authenticated Streamable HTTP service on a dedicated current-thread Tokio runtime. Network handlers enqueue bounded requests; the window loop performs editor operations and captures textures after rendering. Requests waiting beyond their deadline or cancelled by the client cannot mutate the editor. Server state belongs to the open Editor and is dropped on project close. Preferences enable it explicitly and keep credentials outside game data. The stdio mode only proxies an already running server. See [MCP](../docs/mcp.md) for its public contract.
 
 ## Build and execution
 
@@ -78,4 +80,4 @@ Keep MIPS tools and emulator versions/hashes in the same manifest. Rust dependen
 `audio_decode` integrates Symphonia on the host. `music` encodes/interleaves XA with the pinned psxavenc tool. `disc` writes the ISO manifest and invokes mkpsxiso after the native build; music-enabled Play boots the resulting CUE. `runtime/music.hpp` uses PsyQo async CD actions/ISO9660 and leaves sample voices available for SFX.
 
 
-The [skeletal pipeline](skeletal.md) converts FBX on the host with ufbx, stores UUID-linked subassets, and emits shared immutable target tables plus independent Animator states. The PSX uses rigid bone transforms and a shared vertex scratch buffer.
+The [skeletal pipeline](../docs/skeletal.md) converts FBX on the host with ufbx, stores UUID-linked subassets, and emits shared immutable target tables plus independent Animator states. The PSX uses rigid bone transforms and a shared vertex scratch buffer.

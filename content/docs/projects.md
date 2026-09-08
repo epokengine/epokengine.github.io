@@ -12,7 +12,7 @@ The dark Hub opens on a searchable project list. Search matches names and paths;
 
 ```text
 My Game/
-  ProjectSettings/project.json      # Versioned project identity and settings
+  My Game.uniqoproject              # Versioned project identity and settings
   assets/scenes/Main.uniqo.json      # Original scenes
   assets/scripts/                   # Original C++ and .script.json metadata
   assets/Audio/*.uniqoasset          # Imported assets with UUIDs and source snapshots
@@ -22,9 +22,9 @@ My Game/
   exports/                          # Standalone C++ exports; ignored
 ```
 
-`project.json` contains `format_version`, `editor_version`, `name`, `startup_scene`, `auto_build` and `rendering`. Open **Edit > Project Settings** to edit them through the settings window. Rendering defaults to 640 x 480 interlaced NTSC when omitted. The startup scene is a relative path within `assets/scenes`; there is no fixed SampleScene path. Change it in Project Settings and reopen the project. Format/version mismatches are rejected. See [Settings](settings.md) for video modes and local Editor Preferences.
+The root-level `.uniqoproject` descriptor contains `format_version`, `editor_version`, `name`, `startup_scene`, `auto_build` and `rendering`. It is the single writable owner of these settings; it is not an archive and does not contain assets. Open **Edit > Project Settings** to edit it. Rendering defaults to 640 x 480 interlaced NTSC when omitted. The startup scene is a relative path within `assets/scenes`; there is no fixed SampleScene path. Format/version mismatches are rejected. Existing `ProjectSettings/project.json` projects remain readable and migrate only through `--migrate-project <folder>`; reading never rewrites them. Projects with both active formats, or multiple root descriptors, are rejected until recovered.
 
-Track `assets/`, `ProjectSettings/` and `.gitignore` in the game's own repository. Moving or copying this content preserves the game; `.uniqo/` can be removed while the project is closed and regenerated on the next build. Creation requires a new destination directory and never merges with an existing folder. If disk creation fails partway through, the partial directory is retained for inspection and the error is shown; choose a fresh destination after correcting the cause.
+Track the root `.uniqoproject` descriptor, `assets/`, `ProjectSettings/` and `.gitignore` in the game's own repository. Moving or copying this content preserves the game; `.uniqo/` can be removed while closed and regenerated on the next build. Preserve `.uniqo/migrations/` backups separately before deleting that cache if needed for recovery. Creation requires a new destination and never merges with existing files. A failed creation retains its partial directory for inspection; choose a fresh destination after correcting the cause.
 
 The editor executable embeds its runtime source snapshot, templates, fonts and emulator adapter. Only generated C++ builds and exports receive runtime copies. Projects do not need editor Rust sources, `runtime/`, `resources/`, `third_party/` or `.tools/`.
 
@@ -39,6 +39,7 @@ cargo run --locked
 cargo run --locked -- --create-project "D:/Games/My Game" --template basic
 cargo run --locked -- --create-project "D:/Games/My Demo" --template sample --name "My Demo"
 cargo run --locked -- --project "D:/Games/My Game"
+cargo run --locked -- --project "D:/Games/My Game/My Game.uniqoproject"
 cargo run --locked -- --project "D:/Games/My Game" --build-psx
 cargo run --locked -- --project examples/sample-game --play-psx --stop-after 10
 ```
@@ -51,4 +52,18 @@ The old repository-root sample lives in `examples/sample-game/`. It is an ordina
 
 UniQo ships one matched PsyQo runtime; `editor_version` pins that contract. Dependency resolution, package installation and multi-editor upgrades remain future work.
 
-Imported AudioClips use UUID references and portable `.uniqoasset` packages with embedded source snapshots. Their index and conversions are disposable; moves are reconciled when the project opens and while it is running. See [Assets and audio](assets.md). Script metadata remains explicit and script bindings remain name-based.
+Imported AudioClips use UUID references and portable `.uniqoasset` packages with embedded source snapshots. Their index and conversions are disposable; moves are reconciled on opening and while running. See [Assets and audio](assets.md). Native script bindings support stable class/member IDs; old name-based bindings remain readable through the [scripting compatibility adapter](scripting.md).
+
+## Migration and recovery
+
+Opening never rewrites a legacy manifest. Close the project, then run `uniqo-editor --migrate-project <folder>`. Migration validates settings/startup scene, takes the canonical-root lock, publishes the descriptor exclusively, and preserves legacy bytes in a uniquely named `.uniqo/migrations/*.backup` file.
+
+If interrupted, both formats may remain active. Choose deliberately: `uniqo-editor --recover-project <folder> --prefer legacy` or `--prefer descriptor`. The selected format must validate; the other is preserved as a backup. Multiple descriptors are never arbitrarily selected: move unwanted descriptors outside the root before opening. No automatic merge is performed.
+
+The Hub's **Open project** accepts a path and offers separate **File...** and **Folder...** browsers. Folder, `--project <descriptor>`, and positional `uniqo-editor "My Game.uniqoproject"` launches use the same root, settings, lock, and recent entry.
+
+## Optional Windows file association
+
+After installing both host executables and the dependency distribution, run `tools/register-project.ps1 -EditorPath "C:/UniQo/uniqo-editor.exe"` to register the quoted open command and application icon for the current user. `tools/setup.ps1 -RegisterProjectFiles -EditorPath <exe>` provides the same optional setup step. Existing non-UniQo defaults are respected; choose UniQo in Windows Default Apps if necessary.
+
+Use the same command with `-Unregister` before removing that installation. It removes only registrations owned by that executable and leaves other applications' associations intact. `-WhatIf` previews registration/removal. Portable builds need no registration and never register themselves on launch. Double-clicking the descriptor opens the folder-based project, not a scene or archive.

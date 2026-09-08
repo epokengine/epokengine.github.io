@@ -12,7 +12,7 @@ UniQo's original source code is MIT licensed. This does not replace the licenses
 
 Codicons legal notices distinguish content from code: https://github.com/microsoft/vscode-codicons#legal-notices
 
-The included Codicons font is a subset of version 0.0.46-24 containing the glyphs used by the editor. Unused glyphs and glyph-name metadata were removed with fonttools 4.60.1; the retained designs are unchanged. See [resource maintenance](docs/resources.md) for regeneration.
+The included Codicons font is a subset of version 0.0.46-24 containing the glyphs used by the editor. Unused glyphs and glyph-name metadata were removed with fonttools 4.60.1; the retained designs are unchanged. See [resource maintenance](knowledge/maintainers/resources.md) for regeneration.
 
 Font Awesome's distribution includes different licenses for different formats. UniQo uses the TTF font: https://fontawesome.com/license/free
 
@@ -27,6 +27,8 @@ Nugget is referenced as an upstream submodule at the revision in [dependencies.j
 The repository does not distribute a proprietary PlayStation BIOS or game images.
 
 ## External development tools
+
+Host C++ reflection uses libclang 18.1.1 (Apache-2.0 WITH LLVM-exception), distributed through the pinned `libclang` wheel. Setup extracts it as an archive; Python is not required to execute the extractor. Preserve `libclang-18.1.1.dist-info/LICENSE.TXT` with binary distributions. The DLL is loaded only by `uniqo-header-tool`, never by a PSX game or standalone export. The Rust `clang` 2.0.0 wrapper and `clang-sys` are pinned in Cargo.lock and carry their own package notices.
 
 PCSX-Redux and the MIPS toolchain are downloaded separately by setup and remain outside version control. PCSX-Redux is GPL-2.0 licensed and includes additional third-party notices. OpenBIOS is included in that upstream distribution. Preserve those distributions' license files when preparing a binary package.
 

@@ -2,9 +2,9 @@
 
 ## Requirements
 
-Use Windows x64, Git, rustup, Visual Studio Build Tools with the Desktop development with C++ workload, and a Windows SDK. A DirectX 12 graphics adapter is needed for the editor. Python 3.10 or newer is needed only for the local verification scripts. VS Code is optional.
+Use Windows x64 or macOS 11+ on Apple Silicon. Install Git and rustup on either platform. Windows additionally needs Visual Studio Build Tools with the Desktop development with C++ workload and a Windows SDK. macOS additionally needs Xcode Command Line Tools and Homebrew. Python 3.10 or newer is needed only for the local verification scripts. VS Code is optional.
 
-Use a checkout path without spaces. The upstream MIPS Makefiles do not escape every path. Other desktop platforms have not been validated.
+Use a checkout path without spaces. The upstream MIPS Makefiles do not escape every path. Other desktop platforms are not yet supported.
 
 ## Install and run
 
@@ -12,12 +12,25 @@ Use a checkout path without spaces. The upstream MIPS Makefiles do not escape ev
 git clone https://github.com/franadoriv/UniQo.git
 cd UniQo
 powershell -ExecutionPolicy Bypass -File tools/setup.ps1
+cargo build --locked --bins
 cargo run --locked
 ```
 
 Use a normal clone. Setup initializes only `third_party/nugget`; do not use recursive submodule initialization for this pinned SDK. Nugget's mirror contains an unrelated xmake submodule with an inconsistent path.
 
+On macOS, download the macOS Arm PCSX-Redux release to `/Applications/PCSX-Redux.app`, then run:
+
+```sh
+xcode-select --install
+./tools/setup-macos.sh
+make run
+```
+
+The script installs Rust and the MIPS compiler through Homebrew, builds `psxavenc` and mkpsxiso from their pinned source revisions, and writes an ignored `uniqo.local.json` containing the native executable paths. It does not change the shell PATH: use `make run` or `./tools/run-macos.sh` to start the editor.
+
 Exact SDK and download versions are recorded in [dependencies.json](../tools/dependencies.json). Setup verifies archive SHA-256 hashes and checks installed distribution files against those archives, including DLLs, headers and licenses. Existing source changes or a different Nugget revision produce an error rather than being overwritten.
+
+Build/distribute both `uniqo-editor` and `uniqo-header-tool`; native reflection uses pinned host libclang from setup. It is not included in PSX games. New projects have a root `.uniqoproject` descriptor. See [Projects](projects.md) for folder/file opening, explicit legacy migration and optional Windows file association. No registration is required for portable use.
 
 If an installation was interrupted or its distribution files changed, preserve any intentional edits and run:
 
@@ -31,7 +44,7 @@ Source ZIP downloads omit submodule content. Setup can fetch the same pinned Nug
 
 ## Common development commands
 
-The root `Makefile` provides the same Cargo-based commands across host systems. GNU Make is a convenience for developers; direct Cargo commands remain supported. Windows is still the only validated editor/PSX environment. The common targets do not supply macOS/Linux graphics integration, native build prerequisites or PSX tools.
+The root `Makefile` provides the same Cargo-based commands across host systems. GNU Make is a convenience for developers; direct Cargo commands remain supported. `make setup` provisions Windows or macOS; Linux provisioning is not implemented. macOS support targets Apple Silicon and uses Metal through wgpu.
 
 After setup, Windows already has GNU Make under `.tools/mips/bin/`. Use it directly, or add a session-local PowerShell alias:
 
@@ -44,7 +57,7 @@ make release
 make check
 ```
 
-The alias only affects the current PowerShell session. Before the first setup, use the PowerShell setup command above, or `make setup` if GNU Make is already installed. On macOS/Linux the common targets use GNU Make and Cargo from PATH; `make setup` reports that dependency provisioning is not implemented for those hosts.
+The alias only affects the current PowerShell session. Before the first setup, use the PowerShell setup command above, or `make setup` if GNU Make is already installed. On macOS, `make setup` runs `tools/setup-macos.sh`; common targets find Cargo through Homebrew when it is not in PATH.
 
 | Command | Result |
 | --- | --- |
@@ -55,7 +68,7 @@ The alias only affects the current PowerShell session. Before the first setup, u
 | `make check` | Check formatting, run default tests, strict Clippy and a debug build, stopping on failure |
 | `make test` / `make lint` | Run default tests or strict Clippy separately |
 | `make fmt` / `make fmt-check` | Apply formatting or check it without edits |
-| `make setup` / `make setup-repair` | Verify/install Windows PSX dependencies or repair their distribution files |
+| `make setup` / `make setup-repair` | Verify/install Windows or macOS PSX dependencies; `setup-repair` rebuilds macOS host tools |
 | `make build-psx` | Compile the sample game for PSX; override with `PROJECT=...` |
 
 `PROJECT` is optional for `run` and `run-release`; quote the assignment for a project path containing spaces. `ARGS` forwards additional editor arguments. For example:
@@ -93,6 +106,8 @@ The local file **replaces** the editor installation configuration; the two JSON 
 | `toolchain_bin` | MIPS tools directory, prepended to the child process PATH |
 | `nugget` | Nugget SDK directory |
 | `emulator` | PCSX-Redux executable |
+| `psxavenc` | XA audio encoder executable |
+| `mkpsxiso` | CD image builder executable |
 | `code` | VS Code executable; empty enables discovery |
 | `web_port` | Emulator HTTP port, normally 8077 |
 | `auto_build` | Fallback; the game manifest owns the initial Auto compile setting |
@@ -123,4 +138,4 @@ cargo run --locked -- --project examples/sample-game --play-psx --stop-after 10
 - **Port busy:** stop the other session or choose a free port in the local configuration. Integration scripts currently require 8077.
 - **Layout unusable:** use Layout > Default or Window > Reset Layout.
 - **Executable locked during compilation:** close the running editor before rebuilding it.
-- **No suitable graphics adapter:** verify DirectX 12 support and graphics drivers. GPU-free unit tests can still run.
+- **No suitable graphics adapter:** on Windows, verify DirectX 12 support and graphics drivers; on macOS, verify Metal support and macOS updates. GPU-free unit tests can still run.
