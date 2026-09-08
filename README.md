@@ -19,7 +19,7 @@ Open http://127.0.0.1:4173. The generated static site lives in `dist/`.
 
 ## Update the engine guides
 
-The Markdown and screenshots in `content/` are a snapshot of published engine documentation. `content-manifest.json` records the exact commit. They do not include uncommitted editor or runtime changes.
+The Markdown and screenshots in `content/` come from published engine documentation. The sync step adapts migration wording to the current public identity and excludes historical editor captures with obsolete branding. `content-manifest.json` records the exact commit. They do not include uncommitted editor or runtime changes.
 
 After fetching the engine repository, sync from its published branch:
 

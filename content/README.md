@@ -28,7 +28,7 @@ Epok brings a visual editor workflow to PSX development. Create a project, arran
 
 **Windows x64 and macOS Apple Silicon · Experimental · MIT-licensed original code.** The editor and runtime are in active development. Emulator validation is available; physical-console validation is pending.
 
-![Epok editor with the scene viewport, editable 2.5D courtyard, scene hierarchy and component inspector](docs/images/epok-editor.png)
+
 
 <p align="center"><sub>The included 2.5D courtyard, open in the real editor. Screenshots in this README show the working application.</sub></p>
 
@@ -56,7 +56,7 @@ node editor with Components, My Blueprint and a contextual Details panel.
 Reflected C++ methods and Blueprint functions share typed pins; child classes
 inherit defaults and behavior, override events and explicitly Call Parent.
 
-![Epok Blueprint editor with component hierarchy, inherited variables, typed graph connections and contextual Details](docs/images/blueprint-editor.png)
+
 
 <p align="center"><sub>A compiled interaction Blueprint in the real Windows editor. Original editable nodes and controls, not a mockup.</sub></p>
 
@@ -157,7 +157,7 @@ Try **Assets → Import sample character (FBX)…**, select the imported **Model
 <details>
 <summary><strong>See the skeletal animation workflow</strong></summary>
 
-![Epok skeletal preview with the original mannequin, animation controls and bone overlay](docs/images/skeletal-preview.png)
+
 
 The included mannequin has 96 vertices, 144 triangles and Idle/Walk clips. The PSX skeletal profile uses one bone per vertex, quantized 30 Hz animation samples and flat material colors. See [Skeletal characters](docs/skeletal.md) for the workflow and limits.
 
@@ -176,7 +176,7 @@ Enable **Edit → Editor Preferences → AI / MCP → Enable MCP Server → Appl
 <details>
 <summary><strong>View the connection settings</strong></summary>
 
-![Epok AI / MCP preferences with the optional server disabled](docs/images/mcp-preferences.png)
+
 
 </details>
 
@@ -218,4 +218,4 @@ Epok's original code and included mannequin are [MIT licensed](LICENSE). Fonts, 
 
 Built with Rust, Dear ImGui, PsyQo and PCSX-Redux. Proprietary PlayStation BIOS images are not bundled.
 
-Python validation and migration tools require `python -m pip install -r tools/requirements.txt`. See [document formats](docs/formats.md) for YAML and the UniQo-to-Epok migration.
+Python validation and migration tools require `python -m pip install -r tools/requirements.txt`. See [document formats](docs/formats.md) for YAML and the migration to Epok Engine.

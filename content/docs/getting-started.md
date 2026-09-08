@@ -140,4 +140,4 @@ cargo run --locked -- --project examples/sample-game --play-psx --stop-after 10
 - **Executable locked during compilation:** close the running editor before rebuilding it.
 - **No suitable graphics adapter:** on Windows, verify DirectX 12 support and graphics drivers; on macOS, verify Metal support and macOS updates. GPU-free unit tests can still run.
 
-Python validation and migration tools require `python -m pip install -r tools/requirements.txt`. See [document formats](formats.md) for YAML and the UniQo-to-Epok migration.
+Python validation and migration tools require `python -m pip install -r tools/requirements.txt`. See [document formats](formats.md) for YAML and the migration to Epok Engine.

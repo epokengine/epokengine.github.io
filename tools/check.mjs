@@ -28,6 +28,10 @@ for (const file of files) {
 const search = JSON.parse(fs.readFileSync(path.join(root, 'assets/search.json'), 'utf8'));
 for (const query of ['textures', 'collision', 'mcp', 'blueprint']) if (!search.some(d => `${d.title} ${d.text}`.toLowerCase().includes(query))) errors.push(`Search index missing ${query}`);
 const homepage = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
-if (!homepage.includes('id="blueprints"') || !homepage.includes('/media/docs/images/blueprint-editor.png')) errors.push('Homepage is missing the real Blueprint editor showcase');
+if (!homepage.includes('id="blueprints"') || !homepage.includes('/docs/blueprints/')) errors.push('Homepage is missing Blueprint documentation access');
+if (!homepage.includes('/media/resources/branding/epok-lockup.png')) errors.push('Homepage is missing the Epok Engine wordmark');
+for (const file of [...files, 'assets/search.json']) {
+  if (/uniqu?o|unicore|eraengine/i.test(fs.readFileSync(path.join(root, file), 'utf8'))) errors.push(`${file}: obsolete engine branding`);
+}
 if (errors.length) { console.error(errors.join('\n')); process.exit(1); }
 console.log(`Validated ${files.length} pages, ${checked} local links/assets and ${search.length} searchable guides.`);

@@ -11,7 +11,7 @@ The server is **off by default**. No AI account or provider SDK is needed.
 3. Check **Enable MCP Server**, then **Apply**. Status should show `Listening`.
 4. Copy either client configuration and add it to your AI application's MCP settings.
 
-![MCP preferences with the local server disabled by default](images/mcp-preferences.png)
+
 
 **HTTP:** the default endpoint is `http://127.0.0.1:8765/mcp`, with a bearer access key. **Copy HTTP Client Config** produces this shape with your actual key:
 

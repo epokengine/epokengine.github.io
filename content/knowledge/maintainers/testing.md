@@ -179,4 +179,4 @@ After validation, verify that generated files remain ignored and Nugget source r
 
 Skeletal validation: `cargo test --locked skeletal_tests` compares quantized poses with the FBX evaluator and checks reimport consistency. `python tests/integration/verify_skeletal.py` compiles for MIPS, compares native poses, verifies changing GPU output in PCSX-Redux and captures the UI.
 
-Python validation and migration tools require `python -m pip install -r tools/requirements.txt`. See [document formats](../../docs/formats.md) for YAML and the UniQo-to-Epok migration.
+Python validation and migration tools require `python -m pip install -r tools/requirements.txt`. See [document formats](../../docs/formats.md) for YAML and the migration to Epok Engine.

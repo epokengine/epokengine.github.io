@@ -47,7 +47,7 @@ Clang's `compile_commands.json`, PCSX-Redux configuration, the dependency bootst
 manifest `tools/dependencies.json`, and explicitly JSON diagnostic reports.
 These do not acquire Epok extensions merely because they are in this checkout.
 
-## Migrating a UniQo game
+## Migrating an existing game
 
 The original engine checkout and existing games are not automatically modified.
 Copy a game to a new destination using the migration tool:
@@ -78,4 +78,4 @@ full cross-engine migration tool above.
 This refactor started from upstream `main` commit
 `811fcb4` (Replace Blueprint promo screenshot with cursor-free native capture).
 Epok is presented as an engine for the original PlayStation. The source repository
-is https://github.com/franadoriv/epok-engine. The website will be linked when published.
+is https://github.com/franadoriv/epok-engine. The website is https://epokengine.github.io/.
