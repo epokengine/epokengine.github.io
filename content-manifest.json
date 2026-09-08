@@ -1,6 +1,6 @@
 {
   "repository": "https://github.com/franadoriv/UniQo",
-  "commit": "e96261692709ebbe1ca79aa9fdea5cdbc10aa279",
+  "commit": "811fcb4f9198edcde43427d0c0610ccc8e6bce4f",
   "files": [
     "LICENSE",
     "README.md",
@@ -13,7 +13,7 @@
     "docs/environment-effects.md",
     "docs/getting-started.md",
     "docs/hud.md",
-    "docs/images/blueprint-editor.jpg",
+    "docs/images/blueprint-editor.png",
     "docs/images/editor.png",
     "docs/images/forest-dialogue.png",
     "docs/images/mcp-preferences.png",

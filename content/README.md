@@ -55,7 +55,7 @@ node editor with Components, My Blueprint and a contextual Details panel.
 Reflected C++ methods and Blueprint functions share typed pins; child classes
 inherit defaults and behavior, override events and explicitly Call Parent.
 
-![UniQo Blueprint editor with component hierarchy, inherited variables, typed graph connections and contextual Details](docs/images/blueprint-editor.jpg)
+![UniQo Blueprint editor with component hierarchy, inherited variables, typed graph connections and contextual Details](docs/images/blueprint-editor.png)
 
 <p align="center"><sub>A compiled interaction Blueprint in the real Windows editor. Original editable nodes and controls, not a mockup.</sub></p>
 
