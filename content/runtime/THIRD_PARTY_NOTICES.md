@@ -1,6 +1,6 @@
 # Runtime third-party notices
 
-The accompanying UniQo runtime sources are licensed under the included UniQo MIT license. This license does not assign a license to user-authored game scripts or assets.
+The accompanying Epok runtime sources are licensed under the included Epok MIT license. This license does not assign a license to user-authored game scripts or assets.
 
 The supported SDK is Nugget revision `6186b131aacc5853a9161fb076ed34ffe504552d`:
 https://github.com/pcsx-redux/nugget/tree/6186b131aacc5853a9161fb076ed34ffe504552d

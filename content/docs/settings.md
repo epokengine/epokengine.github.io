@@ -4,7 +4,7 @@ Open **Edit > Project Settings...** or **Edit > Editor Preferences...**. Both wi
 
 ## Project Settings
 
-These settings live in `ProjectSettings/project.json` and travel with the game project.
+These settings live in the root `.epokproject` YAML descriptor and travel with the game project.
 
 | Category | Options |
 | --- | --- |
@@ -15,17 +15,16 @@ These settings live in `ProjectSettings/project.json` and travel with the game p
 
 The default is **640 x 480 interlaced NTSC**, including existing projects that do not yet have a `rendering` entry. Widths of 256, 320, 368, 512 and 640 are available at 240 progressive or 480 interlaced lines. PAL output is not exposed by this runtime yet.
 
-```json
-"rendering": {
-  "width": 640,
-  "height": 480,
-  "retained_geometry": true,
-  "precomputed_visibility": false,
-  "streaming_geometry": false,
-  "streaming_pool_pages": 4,
-  "streaming_triangle_budget": 4096,
-  "streaming_prefetch": true
-}
+```yaml
+rendering:
+  width: 640
+  height: 480
+  retained_geometry: true
+  precomputed_visibility: false
+  streaming_geometry: false
+  streaming_pool_pages: 4
+  streaming_triangle_budget: 4096
+  streaming_prefetch: true
 ```
 
 **Retained Packets** (`retained_geometry`, default on) keeps the GPU packets of
@@ -86,7 +85,7 @@ change takes effect when the project is reopened.
 
 ## Editor Preferences
 
-Preferences are stored in the user's UniQo data directory (`%LOCALAPPDATA%/UniQo/editor-preferences.json` on Windows). They apply across projects and are not included in game exports.
+Preferences are stored in the user's Epok data directory (`%LOCALAPPDATA%/Epok/Editor.epokprefs` on Windows). They apply across projects and are not included in game exports.
 
 | Category | Options |
 | --- | --- |

@@ -1,6 +1,6 @@
 # AI assistants / MCP
 
-UniQo exposes the open game project through the Model Context Protocol. An MCP client can inspect and edit scenes, components, assets and C++ scripts, control the editor and emulator, and receive PNG screenshots from the actual renderer.
+Epok exposes the open game project through the Model Context Protocol. An MCP client can inspect and edit scenes, components, assets and C++ scripts, control the editor and emulator, and receive PNG screenshots from the actual renderer.
 
 The server is **off by default**. No AI account or provider SDK is needed.
 
@@ -18,7 +18,7 @@ The server is **off by default**. No AI account or provider SDK is needed.
 ```json
 {
   "mcpServers": {
-    "uniqo": {
+    "epok": {
       "url": "http://127.0.0.1:8765/mcp",
       "headers": { "Authorization": "Bearer YOUR_ACCESS_KEY" }
     }
@@ -31,8 +31,8 @@ The server is **off by default**. No AI account or provider SDK is needed.
 ```json
 {
   "mcpServers": {
-    "uniqo": {
-      "command": "D:/Applications/UniQo/uniqo-editor.exe",
+    "epok": {
+      "command": "D:/Applications/Epok/epok-editor.exe",
       "args": ["--mcp-stdio"]
     }
   }
@@ -64,7 +64,7 @@ Tools publish their argument schemas and descriptions through `tools/list`.
 | `mesh_create`, `asset_document` | Create Blockout primitives or custom geometry; read/edit mesh, skeleton, animation and material documents while preserving asset UUIDs. |
 | `asset_manage` | Move, duplicate or move imported assets to the existing recoverable trash. Referenced assets cannot be trashed. |
 
-Read-only resources are also available at `uniqo://guide`, `uniqo://editor/state`, `uniqo://scene/current`, `uniqo://scene/schema` and `uniqo://project/settings`.
+Read-only resources are also available at `epok://guide`, `epok://editor/state`, `epok://scene/current`, `epok://scene/schema` and `epok://project/settings`.
 
 ## Editing workflow
 
@@ -93,7 +93,7 @@ Entity indices refer to the scene array, not permanent IDs. Deleting a branch ch
 
 Scene changes remain unsaved until `scene_save`. Revisions prevent stale edits; Undo/Redo also rejects intervening changes from the user. MCP history covers scene batches only, not file changes, asset documents, lighting bakes or arbitrary GUI actions.
 
-For source files, `project_files` returns a SHA256 revision. Supply it for replacement/deletion, or `"absent"` to create a new file. Prior contents are retained under `.uniqo/mcp-backups/`; the response identifies the backup path for manual recovery. Imported asset trash lives in `UserSettings/AssetTrash/`. The active scene and `.uniqoasset` packages use their dedicated tools.
+For source files, `project_files` returns a SHA256 revision. Supply it for replacement/deletion, or `"absent"` to create a new file. Prior contents are retained under `.epok/mcp-backups/`; the response identifies the backup path for manual recovery. Imported asset trash lives in `UserSettings/AssetTrash/`. The active scene and `.epokasset` packages use their dedicated tools.
 
 Build, Play, import and lighting bake run asynchronously. Poll `editor_state` and read `logs_read` to distinguish completion from failure. Stop Play before authoring changes. The same scene, geometry and PSX budget validators used by the editor apply to MCP edits.
 

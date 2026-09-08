@@ -1,6 +1,6 @@
 {
-  "repository": "https://github.com/franadoriv/UniQo",
-  "commit": "811fcb4f9198edcde43427d0c0610ccc8e6bce4f",
+  "repository": "https://github.com/franadoriv/epok-engine",
+  "commit": "e8a05d8ccc4f2e7dc354b784469b8b6021bbec05",
   "files": [
     "LICENSE",
     "README.md",
@@ -11,15 +11,17 @@
     "docs/camera-resources.md",
     "docs/editor.md",
     "docs/environment-effects.md",
+    "docs/formats.md",
     "docs/getting-started.md",
     "docs/hud.md",
     "docs/images/blueprint-editor.png",
     "docs/images/editor.png",
+    "docs/images/epok-editor.png",
+    "docs/images/epok-hub.png",
     "docs/images/forest-dialogue.png",
     "docs/images/mcp-preferences.png",
     "docs/images/skeletal-preview.png",
     "docs/images/third-person-arena.png",
-    "docs/images/uniqo-editor.png",
     "docs/input-collision.md",
     "docs/lighting.md",
     "docs/mcp.md",
@@ -42,7 +44,8 @@
     "knowledge/maintainers/resources.md",
     "knowledge/maintainers/testing.md",
     "resources/branding/README.md",
-    "resources/branding/uniqo.png",
+    "resources/branding/epok-lockup.png",
+    "resources/branding/epok.png",
     "runtime/README.md",
     "runtime/THIRD_PARTY_NOTICES.md"
   ]

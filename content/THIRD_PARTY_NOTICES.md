@@ -1,6 +1,6 @@
 # Third-party notices
 
-UniQo's original source code is MIT licensed. This does not replace the licenses of dependencies, fonts, icons or user-authored game content.
+Epok's original source code is MIT licensed. This does not replace the licenses of dependencies, fonts, icons or user-authored game content.
 
 ## Editor resources
 
@@ -14,7 +14,7 @@ Codicons legal notices distinguish content from code: https://github.com/microso
 
 The included Codicons font is a subset of version 0.0.46-24 containing the glyphs used by the editor. Unused glyphs and glyph-name metadata were removed with fonttools 4.60.1; the retained designs are unchanged. See [resource maintenance](knowledge/maintainers/resources.md) for regeneration.
 
-Font Awesome's distribution includes different licenses for different formats. UniQo uses the TTF font: https://fontawesome.com/license/free
+Font Awesome's distribution includes different licenses for different formats. Epok uses the TTF font: https://fontawesome.com/license/free
 
 The HUD bitmap is decoded from the pinned PsyQo system font for matching editor/console glyphs. Its representation was converted; credit remains with Zingot Games. Author: https://www.zingot.com/ and https://zingot.itch.io/fontpack
 
@@ -28,7 +28,7 @@ The repository does not distribute a proprietary PlayStation BIOS or game images
 
 ## External development tools
 
-Host C++ reflection uses libclang 18.1.1 (Apache-2.0 WITH LLVM-exception), distributed through the pinned `libclang` wheel. Setup extracts it as an archive; Python is not required to execute the extractor. Preserve `libclang-18.1.1.dist-info/LICENSE.TXT` with binary distributions. The DLL is loaded only by `uniqo-header-tool`, never by a PSX game or standalone export. The Rust `clang` 2.0.0 wrapper and `clang-sys` are pinned in Cargo.lock and carry their own package notices.
+Host C++ reflection uses libclang 18.1.1 (Apache-2.0 WITH LLVM-exception), distributed through the pinned `libclang` wheel. Setup extracts it as an archive; Python is not required to execute the extractor. Preserve `libclang-18.1.1.dist-info/LICENSE.TXT` with binary distributions. The DLL is loaded only by `epok-header-tool`, never by a PSX game or standalone export. The Rust `clang` 2.0.0 wrapper and `clang-sys` are pinned in Cargo.lock and carry their own package notices.
 
 PCSX-Redux and the MIPS toolchain are downloaded separately by setup and remain outside version control. PCSX-Redux is GPL-2.0 licensed and includes additional third-party notices. OpenBIOS is included in that upstream distribution. Preserve those distributions' license files when preparing a binary package.
 
@@ -59,4 +59,4 @@ The external tools are pinned in `tools/dependencies.json` and installed under `
 ## FBX importer and sample character
 
 - ufbx Rust bindings 0.11.3: https://github.com/ufbx/ufbx-rust - MIT (the Rust bindings also offer PDDL-1.0); includes the ufbx C parser under its MIT license. It is linked into the desktop editor only. Preserve the upstream license text in binary editor distributions. No ufbx code is linked into PSX games.
-- `resources/models/UniQoMannequin.fbx` is original UniQo content under the repository MIT license. See [skeletal characters](docs/skeletal.md) for its generation script and usage.
+- `resources/models/EpokMannequin.fbx` is original Epok content under the repository MIT license. See [skeletal characters](docs/skeletal.md) for its generation script and usage.

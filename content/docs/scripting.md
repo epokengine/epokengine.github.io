@@ -10,20 +10,20 @@ One Behaviour is supported per entity. **Edit > Undo Component Attachment / Redo
 
 ## Semantic reflection
 
-Build both host binaries with `cargo build --locked --bins` and run dependency setup for pinned libclang 18.1.1. Keep `uniqo-header-tool` beside the editor. It parses real PsyQo headers using MIPS1/o32/little-endian C++20 settings and the configured MIPS compiler's include directories; it is never linked into the game. Metadata under `.uniqo/reflection` is invalidated by the extractor, configuration, compiler, and transitively included files. Extraction errors preserve the last cache but prevent stale metadata from building.
+Build both host binaries with `cargo build --locked --bins` and run dependency setup for pinned libclang 18.1.1. Keep `epok-header-tool` beside the editor. It parses real PsyQo headers using MIPS1/o32/little-endian C++20 settings and the configured MIPS compiler's include directories; it is never linked into the game. Metadata under `.epok/reflection` is invalidated by the extractor, configuration, compiler, and transitively included files. Extraction errors preserve the last cache but prevent stale metadata from building.
 
 ```cpp
 #pragma once
-#include "uniqo.hpp"
+#include "epok.hpp"
 
-class UQ_CLASS(Blueprintable, Id="a1df4e7f-9f49-4e74-a1c6-4d703047215b") Enemy
-    : public uniqo::Behaviour {
+class EPOK_CLASS(Blueprintable, Id="a1df4e7f-9f49-4e74-a1c6-4d703047215b") Enemy
+    : public epok::Behaviour {
 public:
-    UQ_PROPERTY(EditAnywhere) uniqo::Fixed health = 100.0;
-    UQ_PROPERTY(EditAnywhere) bool aggressive = true;
-    UQ_FUNCTION(BlueprintCallable) void damage(uniqo::Fixed amount) { health -= amount; }
-    UQ_FUNCTION(BlueprintEvent) virtual void defeated() {}
-    void update(uniqo::Transform& transform, uniqo::Fixed dt) override {
+    EPOK_PROPERTY(EditAnywhere) epok::Fixed health = 100.0;
+    EPOK_PROPERTY(EditAnywhere) bool aggressive = true;
+    EPOK_FUNCTION(BlueprintCallable) void damage(epok::Fixed amount) { health -= amount; }
+    EPOK_FUNCTION(BlueprintEvent) virtual void defeated() {}
+    void update(epok::Transform& transform, epok::Fixed dt) override {
         transform.rotation[1] += dt;
     }
 };
@@ -39,10 +39,13 @@ The Inspector and picker consume one registry. Editing a field stores an explici
 
 Generated classes receive a UUID. Unspecified member IDs use Clang USRs, stable across relocation but not renaming. Use `Id="<UUID>"` on properties/functions before first use when rename-stable identity is required. Bindings save class/member IDs and versioned provider/backend identifiers alongside names. Changed member identities require explicit migration instead of reinterpreting old values. Scene version 1 loads into version 2 in memory and is written only on Save.
 
-Legacy `.hpp`, `.cpp`, and `.script.json` assets remain readable through a compatibility provider. Their exposed fields are Fixed; they are not inheritance bases until annotated. New classes do not duplicate declarations in JSON.
+Legacy `.hpp`, `.cpp`, and `.epokscript` assets remain readable through a compatibility provider. Their exposed fields are Fixed; they are not inheritance bases until annotated. New classes do not need a separate metadata document.
 
-```json
-{"name":"Spinner","properties":[{"name":"speed","default":90.0}]}
+```yaml
+name: Spinner
+properties:
+  - name: speed
+    default: 90.0
 ```
 
 Unavailable providers/backends remain serialized and diagnose their missing capability. Lua creation, a VM, and Lua dependencies are not enabled.
@@ -65,7 +68,7 @@ Use the editor's File menu to export a C++ project. Export writes a new timestam
 
 The exported project rebuilds with Make, the pinned Nugget SDK and a MIPS toolchain, without the editor or extractor. On Windows, use `build.ps1 -Make <make.exe> -Nugget <SDK> -ToolchainBin <MIPS bin>`. Unicode export directories use an ASCII Windows short alias; if unavailable on that volume, move the complete export to an ASCII directory. SDK/tool installations still require ASCII paths without spaces. See the [runtime build instructions](../runtime/README.md). Generated scene data is a snapshot; continue authoring original scenes and scripts in the game project.
 
-Only the UniQo runtime is covered by the included UniQo MIT license. User-authored game scripts and assets retain their owners' chosen licenses. Third-party runtime notices accompany the export.
+Only the Epok runtime is covered by the included Epok MIT license. User-authored game scripts and assets retain their owners' chosen licenses. Third-party runtime notices accompany the export.
 
 ## Visual Blueprints
 

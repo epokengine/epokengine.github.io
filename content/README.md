@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="resources/branding/uniqo.png" alt="UniQo — interlocking UQ monogram" width="160" height="160" />
+  <img src="resources/branding/epok-lockup.png" alt="Epok Engine — geometric E emblem" width="640" />
 </p>
 
-<h1 align="center">UniQo</h1>
+<h1 align="center">Epok Engine</h1>
 
 <p align="center">
   <strong>A desktop game engine for the original PlayStation.</strong><br />
@@ -14,26 +14,27 @@
 </p>
 
 <p align="center">
-  <a href="https://uniqoengine.github.io/">Website</a> &nbsp;·&nbsp;
   <a href="#getting-started">Get started</a> &nbsp;·&nbsp;
   <a href="#features">Features</a> &nbsp;·&nbsp;
   <a href="#blueprints">Blueprints</a> &nbsp;·&nbsp;
   <a href="#examples">Examples</a> &nbsp;·&nbsp;
   <a href="#ai-assisted-development">AI assistants</a> &nbsp;·&nbsp;
-  <a href="https://uniqoengine.github.io/docs/">Documentation</a>
+  <a href="docs/getting-started.md">Documentation</a>
 </p>
 
 ---
 
-UniQo brings a visual editor workflow to PSX development. Create a project, arrange a scene, import assets, connect Blueprint graphs or write C++ behaviours, and press **Play**. Your game compiles to a native MIPS executable and runs inside an integrated PCSX-Redux Game view.
+Epok brings a visual editor workflow to PSX development. Create a project, arrange a scene, import assets, connect Blueprint graphs or write C++ behaviours, and press **Play**. Your game compiles to a native MIPS executable and runs inside an integrated PCSX-Redux Game view.
 
 **Windows x64 and macOS Apple Silicon · Experimental · MIT-licensed original code.** The editor and runtime are in active development. Emulator validation is available; physical-console validation is pending.
 
-![UniQo editor with the UQ monogram, editable 2.5D courtyard, scene hierarchy and component inspector](docs/images/uniqo-editor.png)
+![Epok editor with the scene viewport, editable 2.5D courtyard, scene hierarchy and component inspector](docs/images/epok-editor.png)
 
 <p align="center"><sub>The included 2.5D courtyard, open in the real editor. Screenshots in this README show the working application.</sub></p>
 
 ## Features
+
+![Epok Engine project Hub](docs/images/epok-hub.png)
 
 | | What you can do |
 | --- | --- |
@@ -55,7 +56,7 @@ node editor with Components, My Blueprint and a contextual Details panel.
 Reflected C++ methods and Blueprint functions share typed pins; child classes
 inherit defaults and behavior, override events and explicitly Call Parent.
 
-![UniQo Blueprint editor with component hierarchy, inherited variables, typed graph connections and contextual Details](docs/images/blueprint-editor.png)
+![Epok Blueprint editor with component hierarchy, inherited variables, typed graph connections and contextual Details](docs/images/blueprint-editor.png)
 
 <p align="center"><sub>A compiled interaction Blueprint in the real Windows editor. Original editable nodes and controls, not a mockup.</sub></p>
 
@@ -66,12 +67,14 @@ release builds omit debugger instrumentation. Exported C++ projects rebuild
 without the editor or reflection extractor.
 
 Read the [Blueprint guide](docs/blueprints.md) for the workflow, reproducible
-examples and console-side limits. Blueprints use UniQo's own asset format and
+examples and console-side limits. Blueprints use Epok's own asset format and
 bounded native backend; Unreal assets/APIs and live native-code patching are not
 supported. Blueprint reflection/authoring currently requires the Windows x64
 toolchain; general macOS editor support does not yet include that runtime.
 
 ## Getting started
+
+Clone the Epok source repository, then run the commands below.
 
 ### Prerequisites
 
@@ -83,8 +86,8 @@ toolchain; general macOS editor support does not yet include that runtime.
 Clone into a path without spaces, then run setup:
 
 ```powershell
-git clone https://github.com/franadoriv/UniQo.git
-cd UniQo
+git clone https://github.com/franadoriv/epok-engine.git Epok
+cd Epok
 powershell -ExecutionPolicy Bypass -File tools/setup.ps1
 cargo run --locked
 ```
@@ -99,7 +102,7 @@ xcode-select --install
 make run
 ```
 
-The setup script installs Rust and the upstream MIPS toolchain with Homebrew, builds pinned host audio/disc utilities under `.tools/macos/`, and writes an untracked `uniqo.local.json`. Start UniQo with `make run` or `./tools/run-macos.sh`; neither command requires changing your shell PATH. The first launch of PCSX-Redux may require approving the unsigned application in macOS Privacy & Security.
+The setup script installs Rust and the upstream MIPS toolchain with Homebrew, builds pinned host audio/disc utilities under `.tools/macos/`, and writes an untracked `Local.epokconfig`. Start Epok with `make run` or `./tools/run-macos.sh`; neither command requires changing your shell PATH. The first launch of PCSX-Redux may require approving the unsigned application in macOS Privacy & Security.
 
 ### Your first game
 
@@ -131,7 +134,7 @@ A release build produces the editor executable; distributable application packag
 
 ### Sprites, textured environments and portrait UI
 
-![A game built with UniQo showing a sprite character, textured forest and portrait dialogue UI](docs/images/forest-dialogue.png)
+![A game built with Epok showing a sprite character, textured forest and portrait dialogue UI](docs/images/forest-dialogue.png)
 
 <p align="center"><sub>Native 640 × 480 output captured in PCSX-Redux. A visual showcase of world sprites, textured geometry and HUD rendering. Character and environment artwork was created with AI image generation and prepared for PSX textures.</sub></p>
 
@@ -141,7 +144,7 @@ See [Sprites and particles](docs/sprites-particles.md), [Textures](docs/textures
 
 The [included demo](examples/rpg-2-5d-demo/README.md) combines a courtyard and night scene with textured geometry, lit animated sprites, collision, particles, a portal, HUD text, scrolling water and shared resources.
 
-![The UniQo 2.5D demo running natively in PCSX-Redux](examples/rpg-2-5d-demo/preview.png)
+![The Epok 2.5D demo running natively in PCSX-Redux](examples/rpg-2-5d-demo/preview.png)
 
 Move with the D-pad, trigger effects and switch scenes. The demo README documents its controls. Engine APIs are documented under [Input and collision](docs/input-collision.md), [Sprites and particles](docs/sprites-particles.md), [HUD](docs/hud.md) and [Runtime services](docs/runtime-services.md).
 
@@ -154,7 +157,7 @@ Try **Assets → Import sample character (FBX)…**, select the imported **Model
 <details>
 <summary><strong>See the skeletal animation workflow</strong></summary>
 
-![UniQo skeletal preview with the original mannequin, animation controls and bone overlay](docs/images/skeletal-preview.png)
+![Epok skeletal preview with the original mannequin, animation controls and bone overlay](docs/images/skeletal-preview.png)
 
 The included mannequin has 96 vertices, 144 triangles and Idle/Walk clips. The PSX skeletal profile uses one bone per vertex, quantized 30 Hz animation samples and flat material colors. See [Skeletal characters](docs/skeletal.md) for the workflow and limits.
 
@@ -162,18 +165,18 @@ The included mannequin has 96 vertices, 144 triangles and Idle/Walk clips. The P
 
 ## AI-assisted development
 
-Connect an MCP-compatible assistant to work directly with the running editor. UniQo exposes **20 tools** for scenes, assets, scripts, screenshots, builds and emulator controls.
+Connect an MCP-compatible assistant to work directly with the running editor. Epok exposes **20 tools** for scenes, assets, scripts, screenshots, builds and emulator controls.
 
 An assistant can arrange entities, move the Scene camera, capture Scene/Game/HUD/editor views, inspect build logs and control Play, Pause and Step. Scene batches support Undo/Redo and revision checks; file replacements retain local backups.
 
 > “Inspect this scene, add a blue cube beside the platform, frame it and show me a screenshot. Then build the game and check the logs.”
 
-Enable **Edit → Editor Preferences → AI / MCP → Enable MCP Server → Apply**, then copy the HTTP or stdio client configuration. MCP is **off by default**, uses a local access key and listens only on your computer. UniQo does not require an AI account or a specific provider.
+Enable **Edit → Editor Preferences → AI / MCP → Enable MCP Server → Apply**, then copy the HTTP or stdio client configuration. MCP is **off by default**, uses a local access key and listens only on your computer. Epok does not require an AI account or a specific provider.
 
 <details>
 <summary><strong>View the connection settings</strong></summary>
 
-![UniQo AI / MCP preferences with the optional server disabled](docs/images/mcp-preferences.png)
+![Epok AI / MCP preferences with the optional server disabled](docs/images/mcp-preferences.png)
 
 </details>
 
@@ -181,7 +184,7 @@ See the [MCP guide](docs/mcp.md) for setup, the full tool list and current limit
 
 ## Documentation
 
-Browse the **[UniQo documentation](https://uniqoengine.github.io/docs/)** for searchable guides, workflows and API references. The Markdown sources are also linked below.
+Browse the **[Epok documentation](docs/getting-started.md)** for guides, workflows and API references. The Markdown sources are also linked below.
 
 | Area | Guides |
 | --- | --- |
@@ -194,7 +197,7 @@ Browse the **[UniQo documentation](https://uniqoengine.github.io/docs/)** for se
 
 ## Current limits
 
-UniQo targets the original hardware's constraints. Keep these boundaries in mind when planning a project:
+Epok targets the original hardware's constraints. Keep these boundaries in mind when planning a project:
 
 - **Animation:** rigid skeletal deformation is supported; skeletal textures, blended skin weights and animation blending remain future work.
 - **Editing:** Blueprint graphs/templates, Blockout geometry and MCP scene batches have Undo/Redo. Entity multiselection remains future work.
@@ -211,6 +214,8 @@ See [Contributing](CONTRIBUTING.md) for setup, local checks and change guideline
 
 ## License and credits
 
-UniQo's original code and included mannequin are [MIT licensed](LICENSE). Fonts, SDKs and other dependencies retain their own licenses; see [third-party notices](THIRD_PARTY_NOTICES.md) and [runtime notices](runtime/THIRD_PARTY_NOTICES.md).
+Epok's original code and included mannequin are [MIT licensed](LICENSE). Fonts, SDKs and other dependencies retain their own licenses; see [third-party notices](THIRD_PARTY_NOTICES.md) and [runtime notices](runtime/THIRD_PARTY_NOTICES.md).
 
 Built with Rust, Dear ImGui, PsyQo and PCSX-Redux. Proprietary PlayStation BIOS images are not bundled.
+
+Python validation and migration tools require `python -m pip install -r tools/requirements.txt`. See [document formats](docs/formats.md) for YAML and the UniQo-to-Epok migration.

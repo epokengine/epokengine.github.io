@@ -1,6 +1,6 @@
 # Native PSX performance
 
-`uniqo::performance_stats` contains the last completed frame. Timings use the runtime scanline counter (approximately 64 microseconds per unit), rather than Windows or editor FPS. `uniqo::time.frame_microseconds` measures the interval between runtime frames. GPU rasterization and presentation are not independently measured.
+`epok::performance_stats` contains the last completed frame. Timings use the runtime scanline counter (approximately 64 microseconds per unit), rather than Windows or editor FPS. `epok::time.frame_microseconds` measures the interval between runtime frames. GPU rasterization and presentation are not independently measured.
 
 ## Counters and timing
 
@@ -10,17 +10,17 @@ Timings are nested: simulation includes its world/collision queries, collision i
 
 Work counters report simulation steps, synchronization calls, local/world matrix rebuilds, collider-bound rebuilds and GTE/software vertex counts. A synchronization call does not imply a matrix rebuild.
 
-Additional fields report mesh chunks tested/visible, backfaces, clipped polygons, emitted triangles, frame work before and after mesh rendering (`prepare`, `finish`), retained triangles and retained-packet rebuilds. With `UNIQO_PROFILE_DETAIL=1`, per-quad shade/fog/emit timers, chunk setup and camera/sprite/HUD timers are also populated. Release builds leave those detail fields at zero. Reading extra timers adds work, so detail-build timings are not release measurements.
+Additional fields report mesh chunks tested/visible, backfaces, clipped polygons, emitted triangles, frame work before and after mesh rendering (`prepare`, `finish`), retained triangles and retained-packet rebuilds. With `EPOK_PROFILE_DETAIL=1`, per-quad shade/fog/emit timers, chunk setup and camera/sprite/HUD timers are also populated. Release builds leave those detail fields at zero. Reading extra timers adds work, so detail-build timings are not release measurements.
 
 The descriptive `streamed_chunks` counter is collected only with
-`UNIQO_PROFILE_DETAIL=1` (`tools/profile_runtime.py --detail`). Ordinary builds
+`EPOK_PROFILE_DETAIL=1` (`tools/profile_runtime.py --detail`). Ordinary builds
 store `UINT32_MAX` in its existing field; profiler JSON exposes this as `null`
 (not collected), not zero streamed chunks. This preserves the runtime ABI.
 Read, failure, timeout and dropped-geometry counters remain active independently
 of this diagnostic. Compare builds with matching instrumentation; `--detail`
 adds timing and counter overhead and is not a release FPS measurement.
 
-GTE validation counters are populated only with `UNIQO_VALIDATE_GTE=1`. Validation compares GTE and software results within the runtime's coordinate and screen tolerances; its extra work also affects timing.
+GTE validation counters are populated only with `EPOK_VALIDATE_GTE=1`. Validation compares GTE and software results within the runtime's coordinate and screen tolerances; its extra work also affects timing.
 
 ## Precomputed chunk visibility
 
@@ -52,7 +52,7 @@ inspect dropped-triangle counters when changing the budget.
 
 ## Compilation and measurement
 
-Release builds optimize the runtime's `main.o` with `-O2`; PsyQo and game scripts retain their configured options. `UNIQO_RUNTIME_OPT=-Os` permits comparison. Rebuild `main.o` after changing optimization, detail or validation flags.
+Release builds optimize the runtime's `main.o` with `-O2`; PsyQo and game scripts retain their configured options. `EPOK_RUNTIME_OPT=-Os` permits comparison. Rebuild `main.o` after changing optimization, detail or validation flags.
 
 When using the editor, rebuild it after runtime source changes because it embeds those sources. Standalone C++ exports contain their own runtime snapshot and are rebuilt with their included Makefile.
 

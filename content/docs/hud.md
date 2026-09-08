@@ -1,6 +1,6 @@
 # HUD and 2D entities
 
-Create Canvas, Panel, Image, Text or Progress Bar through GameObject > UI or Hierarchy's context menu. UniQo adds a Canvas automatically when necessary. These are ordinary scene entities with hierarchy, scripts, renaming, duplication and persistence.
+Create Canvas, Panel, Image, Text or Progress Bar through GameObject > UI or Hierarchy's context menu. Epok adds a Canvas automatically when necessary. These are ordinary scene entities with hierarchy, scripts, renaming, duplication and persistence.
 
 Panel combines RectTransform and Image. Text and ProgressBar are independent graphics components. Add Component can add Canvas to an empty root entity, RectTransform to a UI child, and graphics to an entity with RectTransform.
 
@@ -17,30 +17,30 @@ Graphics clip to the Canvas, not their parent's rectangle. Text is limited to it
 ## Native component access
 
 ```cpp
-if (auto* bar = entity().get<uniqo::ProgressBar>())
+if (auto* bar = entity().get<epok::ProgressBar>())
     bar->value = 0.5;
-if (auto* label = uniqo::find_entity("Score"))
-    if (auto* text = label->get<uniqo::Text>())
+if (auto* label = epok::find_entity("Score"))
+    if (auto* text = label->get<epok::Text>())
         text->set_text("SCORE 00100");
 ```
 
 Entities and components can also be created in C++:
 
 ```cpp
-auto* canvas = uniqo::create_entity("HUD");
+auto* canvas = epok::create_entity("HUD");
 if (!canvas) return;
-canvas->add<uniqo::Canvas>();
+canvas->add<epok::Canvas>();
 
-auto* label = uniqo::create_entity("Score", canvas);
+auto* label = epok::create_entity("Score", canvas);
 if (!label) return;
-auto& rect = label->add<uniqo::RectTransform>();
+auto& rect = label->add<epok::RectTransform>();
 rect.anchor_min[0] = rect.anchor_max[0] = rect.pivot[0] = 0.0;
 rect.anchor_min[1] = rect.anchor_max[1] = rect.pivot[1] = 1.0;
 rect.position[0] = 12.0;
 rect.position[1] = -12.0;
 rect.size[0] = 160.0;
 rect.size[1] = 16.0;
-label->add<uniqo::Text>().set_text("SCORE 00000");
+label->add<epok::Text>().set_text("SCORE 00000");
 ```
 
 Add RectTransform before graphics, beneath a Canvas or another RectTransform. Use `EntityHandle` for references that must detect destruction or scene changes. `destroy_entity` releases a runtime slot for reuse; creation returns null when all 32 additional slots are occupied. Play changes are not saved into authored scene files.

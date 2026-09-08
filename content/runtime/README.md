@@ -1,11 +1,11 @@
-# UniQo C++ runtime
+# Epok C++ runtime
 
 This runtime executes exported scenes and C++ components natively on PlayStation using PsyQo, Q12 fixed-point arithmetic, Gouraud triangles and ordering tables.
 
 See [native performance](docs/performance.md) in a standalone export for frame
 counters, transform/collision caching, GTE geometry, clipping paths and profiling.
 
-Inside the UniQo repository, build through the editor or `cargo run --locked -- --project examples/sample-game --build-psx`. The instructions below apply to a **generated standalone export**, which includes `scene.hh`, `sources.mk`, `scene.uniqo.json` and a `scripts/` directory. The unexported runtime directory alone is not a complete game project.
+Inside the Epok repository, build through the editor or `cargo run --locked -- --project examples/sample-game --build-psx`. The instructions below apply to a **generated standalone export**, which includes `scene.hh`, `sources.mk`, `scene.epokmap` and a `scripts/` directory. The unexported runtime directory alone is not a complete game project.
 
 ## Build an exported project
 
@@ -23,7 +23,7 @@ make BUILD=Release NUGGET_DIR=third_party/nugget
 
 Do not initialize Nugget's nested submodules recursively. They are not required by this PsyQo build, and this mirror revision contains an unrelated invalid submodule path.
 
-Output is `uniqo.ps-exe`. The ELF and map files support debugging. The exported Makefile requires an explicit `NUGGET_DIR` when the SDK is elsewhere. For an existing portable UniQo setup, prepend its `.tools/mips/bin` to the current shell's PATH and point `NUGGET_DIR` to its `third_party/nugget`.
+Output is `epok.ps-exe`. The ELF and map files support debugging. The exported Makefile requires an explicit `NUGGET_DIR` when the SDK is elsewhere. For an existing portable Epok setup, prepend its `.tools/mips/bin` to the current shell's PATH and point `NUGGET_DIR` to its `third_party/nugget`.
 
 The exported game does not require the Rust editor or Lua. Run the PS-X executable using a compatible emulator or a suitable console loading method. Music-enabled or geometry-streaming exports require the generated CD image as described below. Hardware validation is still pending.
 
@@ -56,7 +56,7 @@ EditableMesh assets compile into linked spatial `MeshGeometry` chunks with relat
 `mesh_stats` reports tested/visible chunks, transformed vertices, rejected backfaces and clipped input triangles. Use it with `lighting_stats.dropped_triangles` and frame timing to profile a level. The clipping reserve is bounded; capacity limits do not guarantee frame rate. See the editor's Blockout guide for authoring limits.
 
 `performance_stats.streamed_chunks` is descriptive and collected only with
-`UNIQO_PROFILE_DETAIL=1`. Ordinary builds store `UINT32_MAX` (not collected),
+`EPOK_PROFILE_DETAIL=1`. Ordinary builds store `UINT32_MAX` (not collected),
 which the editor profiler exposes as JSON `null`. Read, failure and dropped
 geometry counters stay active. The profiler's existing `--detail` option enables
 this diagnostic and extra timers; its overhead makes those timings unsuitable
@@ -106,16 +106,16 @@ Imported PNGs compile into 8-bit PSX palettes and texture banks. Transparent tex
 
 ## Licensing
 
-UniQo runtime sources are MIT licensed. A generated export includes `LICENSE`, `THIRD_PARTY_NOTICES.md` and `licenses/`. User-authored game scripts/assets retain their owners' chosen licenses. SDK components and the system font retain their own notices.
+Epok runtime sources are MIT licensed. A generated export includes `LICENSE`, `THIRD_PARTY_NOTICES.md` and `licenses/`. User-authored game scripts/assets retain their owners' chosen licenses. SDK components and the system font retain their own notices.
 
 PsyQo: https://github.com/pcsx-redux/nugget/tree/main/psyqo
-UniQo: https://github.com/franadoriv/UniQo
+Epok Engine: see the editor distribution for project documentation.
 
 ## Audio
 
 Exports include `audio.hpp`, `music.hpp` and a generated `audio-bank.hh`. SFX clips are resident mono SPU-ADPCM; the editor rejects banks above 508 KiB. Music clips are XA files in `music/` and do not consume that bank. Source recordings and editor import packages are not shipped to the console.
 
-Access an assigned source with `entity().get<uniqo::AudioSource>()`. Both profiles support play/stop, looping, volume and priority. SFX provides 24 voices and pitch control. XA provides one CD stream at fixed pitch; a higher/equal-priority music request can switch tracks. Music loops and changes include a CD seek, so seamless playback is not guaranteed. The CD controller is owned by the music service. `uniqo::music_stats` reports playback state and errors.
+Access an assigned source with `entity().get<epok::AudioSource>()`. Both profiles support play/stop, looping, volume and priority. SFX provides 24 voices and pitch control. XA provides one CD stream at fixed pitch; a higher/equal-priority music request can switch tracks. Music loops and changes include a CD seek, so seamless playback is not guaranteed. The CD controller is owned by the music service. `epok::music_stats` reports playback state and errors.
 
 When the export contains `disc.xml`, first compile the executable, then use [mkpsxiso 2.30](https://github.com/Lameguy64/mkpsxiso/releases/tag/v2.30) in the export directory:
 
@@ -123,7 +123,7 @@ When the export contains `disc.xml`, first compile the executable, then use [mkp
 mkpsxiso -y disc.xml
 ```
 
-Outputs are `uniqo.bin` and `uniqo.cue`. Boot the CUE in a compatible emulator, retaining the neighboring BIN. This image uses `SYSTEM.CNF` to load `UNIQO.EXE`; OpenBIOS boot and XA playback are covered by integration tests. No proprietary Sony license sectors or BIOS are distributed; real-console boot depends on the user's loading setup and is not verified. The XA converter is only needed when importing/regenerating assets, not when building a complete export.
+Outputs are `epok.bin` and `epok.cue`. Boot the CUE in a compatible emulator, retaining the neighboring BIN. This image uses `SYSTEM.CNF` to load `EPOK.EXE`; OpenBIOS boot and XA playback are covered by integration tests. No proprietary Sony license sectors or BIOS are distributed; real-console boot depends on the user's loading setup and is not verified. The XA converter is only needed when importing/regenerating assets, not when building a complete export.
 
 
 Skeletal meshes use `Animator` for clip selection/play/pause/resume/stop. Geometry, skeletons and quantized 30 Hz clips are shared; one bone transforms each vertex. No FBX parser runs on the console. See the editor repository `docs/skeletal.md` for the profile and authoring limits.

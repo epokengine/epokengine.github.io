@@ -1,6 +1,6 @@
 # PNG textures and materials
 
-Copy a PNG into the project's `assets/` directory, then import it in **Imports and Assets**. Texture packages retain the PNG snapshot and stable UUID, so moving a project or losing the external PNG does not break an exported game. Reimport can use either the linked source or the stored snapshot. The CLI equivalent is `--project <folder> --import-texture assets/art.png --asset assets/art.uniqoasset`.
+Copy a PNG into the project's `assets/` directory, then import it in **Imports and Assets**. Texture packages retain the PNG snapshot and stable UUID, so moving a project or losing the external PNG does not break an exported game. Reimport can use either the linked source or the stored snapshot. The CLI equivalent is `--project <folder> --import-texture assets/art.png --asset assets/art.epokasset`.
 
 PNG images must be 1–256 pixels on each axis. Import converts RGB to PSX RGB555 and uses an 8-bit palette with one transparent entry and up to 255 visible colors. Alpha below 128 becomes transparent. Opaque black remains visible. Images with more colors use deterministic nearest-color quantization; the inspector and Scene preview show the converted colors. Sampling is nearest-neighbor.
 

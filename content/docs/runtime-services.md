@@ -1,9 +1,10 @@
 # Runtime services and scene banks
 
-Project Settings > Maps & Build registers additional scenes in `ProjectSettings/scenes.json`:
+Project Settings > Maps & Build registers additional scenes in `ProjectSettings/Maps.epoksettings`:
 
-```json
-{"scenes":["assets/scenes/Night.uniqo.json"]}
+```yaml
+scenes:
+  - assets/scenes/Night.epokmap
 ```
 
 The exported startup scene is bank 0. Names must be unique; paths must remain inside `assets/scenes`. Up to 15 additional banks are supported. `request_scene("Night")` or `request_scene(size_t(1))` queues a transition at the next frame boundary. `current_scene()` and `scene_loading()` report state.

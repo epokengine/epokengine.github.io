@@ -10,35 +10,35 @@ their conservative bounds rather than an oriented narrow phase.
 Local extents must be at least one Q12 unit (1/4096); validation also checks the
 transformed size and ±512 world bounds. The same data is written to the exported
 C++ scene banks. A collider can be attached, enabled, disabled or removed through
-`entity().add<uniqo::Collider>()`, `get<Collider>()` and `remove<Collider>()`.
+`entity().add<epok::Collider>()`, `get<Collider>()` and `remove<Collider>()`.
 
 ## Controller and simulation
 
-`uniqo::input` reads both ports through PsyQo AdvancedPad. Port arguments are
+`epok::input` reads both ports through PsyQo AdvancedPad. Port arguments are
 zero-based and default to the first port. `held`, `pressed`, and `released` take
-a `uniqo::Button` (`Cross`, `Start`, `Up`, `Left`, etc.). A disconnection releases
+a `epok::Button` (`Cross`, `Start`, `Up`, `Left`, etc.). A disconnection releases
 all held buttons. Edges are buffered until a simulation update runs and delivered
 once, including when several fixed updates catch up during a rendered frame.
 
 The runtime measures PsyQo GPU time in microseconds and advances simulation at
 60 Hz. Catch-up is bounded to eight steps per rendered frame; excess steps are
-dropped and counted by `uniqo::time.dropped_steps`. Q12 `dt` alternates between
+dropped and counted by `epok::time.dropped_steps`. Q12 `dt` alternates between
 68 and 69 raw units, totaling exactly one second every 60 simulation steps.
 Animation and particles advance during simulation, independently of rendering.
 
-`uniqo::time.set_paused(true)` pauses simulation. `Behaviour::frame_update` still
+`epok::time.set_paused(true)` pauses simulation. `Behaviour::frame_update` still
 runs once per rendered frame and receives unscaled elapsed microseconds. Use
 `input.frame_pressed()` and `frame_released()` there for pause menus. Paused input
 edges are discarded so resuming does not replay gameplay actions.
 
 ```cpp
-void frame_update(uniqo::Transform&, uint32_t) override {
-    if (uniqo::input.frame_pressed(uniqo::Button::Start))
-        uniqo::time.set_paused(!uniqo::time.paused());
+void frame_update(epok::Transform&, uint32_t) override {
+    if (epok::input.frame_pressed(epok::Button::Start))
+        epok::time.set_paused(!epok::time.paused());
 }
 
-void update(uniqo::Transform&, uniqo::Fixed dt) override {
-    using namespace uniqo;
+void update(epok::Transform&, epok::Fixed dt) override {
+    using namespace epok;
     Fixed movement[3] = {0.0, Fixed(-6.0) * dt, 0.0};
     if (input.held(Button::Left)) movement[0] -= Fixed(3.0) * dt;
     if (input.held(Button::Right)) movement[0] += Fixed(3.0) * dt;

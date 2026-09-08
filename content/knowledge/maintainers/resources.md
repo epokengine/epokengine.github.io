@@ -6,7 +6,7 @@ Fonts and icons in `resources/editor/` are editor installation resources. They a
 
 `codicon.ttf` contains only the private-use codepoints referenced by the Rust editor. It is a subset of Microsoft's Codicons 0.0.46-24 font. Preserve its CC BY 4.0 notice and the modification notice in THIRD_PARTY_NOTICES.md.
 
-When adding an icon, regenerate from the original full font, not from the existing subset. From the repository root, use the maintenance script below. It requires fonttools 4.60.1, which is not needed to build or run UniQo:
+When adding an icon, regenerate from the original full font, not from the existing subset. From the repository root, use the maintenance script below. It requires fonttools 4.60.1, which is not needed to build or run Epok:
 
 ```powershell
 python -m venv .tools/font-maintenance

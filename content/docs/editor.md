@@ -57,7 +57,7 @@ Click Game to give it keyboard focus. Escape, a tab change or loss of focus rele
 | 1 / 3 | L2 / R2 |
 | Enter / Backspace | Start / Select |
 
-The bridge delivers these inputs to the emulated controller. The sample Spinner does not use them, and a UniQo C++ input API is not implemented yet.
+The bridge delivers these inputs to the emulated controller. The sample Spinner does not use them, and an Epok C++ input API is not implemented yet.
 
 Pause/Resume controls execution. Step advances one VBlank and pauses the CPU again. A game that renders across several VBlanks may need several steps before its image changes. The emulated image uses nearest filtering and integer scale when space permits.
 

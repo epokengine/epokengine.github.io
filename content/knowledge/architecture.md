@@ -1,6 +1,6 @@
 # Architecture and repository layout
 
-UniQo has two compilation targets: a Rust desktop editor and a native C++ PlayStation runtime. They share scene semantics and are maintained together so changes to serialization, generated code and runtime behavior can be reviewed as one change.
+Epok has two compilation targets: a Rust desktop editor and a native C++ PlayStation runtime. They share scene semantics and are maintained together so changes to serialization, generated code and runtime behavior can be reviewed as one change.
 
 ## Ownership
 
@@ -9,20 +9,20 @@ UniQo has two compilation targets: a Rust desktop editor and a native C++ PlaySt
 | `src/` | Desktop editor, scene data, preview rendering and build orchestration |
 | `resources/editor/` | Editor-owned fonts and icons, embedded in the Rust executable |
 | `examples/sample-game/` | Independent demo project and embedded sample-template source |
-| `runtime/` | UniQo C++ runtime sources staged into builds and exports |
+| `runtime/` | Epok C++ runtime sources staged into builds and exports |
 | `integrations/pcsx-redux/` | Host-side Lua adapter for the external emulator |
 | `third_party/nugget/` | Pinned upstream SDK submodule; no local source patches |
 | `tools/` | Portable dependency setup and resource regeneration |
 | `tests/integration/` | Explicit local checks using the MIPS compiler and emulator |
 | `docs/images/` | Curated product screenshots |
 | `.tools/` | Ignored downloaded tools and archives |
-| `<game>/.uniqo/` | Ignored build staging, emulator state and project lock |
+| `<game>/.epok/` | Ignored build staging, emulator state and project lock |
 | `<game>/UserSettings/` | Ignored per-project editor layout |
 | `artifacts/` | Ignored verification logs, screenshots and memory captures |
 | `exports/` | Ignored generated standalone C++ projects |
 | `target/` | Ignored Cargo build output |
 
-The repository is the editor installation/development root. New games are identified by one root `.uniqoproject` descriptor; legacy `ProjectSettings/project.json` remains readable and migrates only explicitly. Games own their assets, caches, layout and exports. Folder/file aliases resolve to one canonical root before locking/reflection. Startup without a project shows the Hub.
+The repository is the editor installation/development root. New games are identified by one root `.epokproject` descriptor; legacy `ProjectSettings/project.json` remains readable and migrates only explicitly. Games own their assets, caches, layout and exports. Folder/file aliases resolve to one canonical root before locking/reflection. Startup without a project shows the Hub.
 
 `reflection_schema`, `header_tool`, `header_extract` and `reflection` define the versioned semantic C++ extraction boundary. libclang runs in a pinned host process, not in the editor or PSX game. `blueprint` exposes the shared picker/Inspector registry; `scripts` adapts legacy metadata and creates native classes; `script_values` handles typed overrides; `script_backend` separates authoring capabilities/artifacts from execution declaration, binding and reset. Non-native/Lua execution remains unavailable with preserved serialized data and explicit diagnostics. See the [foundation status](initiatives/blueprints/foundation-status.md).
 
@@ -53,7 +53,7 @@ MCP runs an authenticated Streamable HTTP service on a dedicated current-thread 
 
 1. Resolve the startup scene and registered scene banks, EditableMesh/Texture UUIDs and source documents; validate each bank and prepare stale vertex-lighting bakes.
 2. Compile editable faces and UVs into spatial chunks, share immutable texture/audio sources, validate each bank's VRAM and component budgets, stage XA music sectors, and generate `audio-bank.hh`, `scene.hh` and an explicit `sources.mk`.
-3. Stage the runtime and original scripts into `.uniqo/build/`.
+3. Stage the runtime and original scripts into `.epok/build/`.
 4. Run Make with the configured MIPS tools and Nugget SDK.
 5. Validate the PS-X EXE header, then launch the owned emulator for Play.
 
@@ -65,7 +65,7 @@ Export stages the same runtime and generated scene into the selected game's `exp
 
 Scene is a wgpu editor preview with depth buffering. Game is the actual emulator display, delivered by the adapter through `PCSX.GPU.takeScreenShot()`, including active-buffer dimensions and 16/24-bit RGB formats.
 
-PCSX-Redux runs externally with OpenBIOS, a software GPU, interpreter CPU and 2 MB RAM. UniQo does not link the emulator into the Rust executable or modify its distribution.
+PCSX-Redux runs externally with OpenBIOS, a software GPU, interpreter CPU and 2 MB RAM. Epok does not link the emulator into the Rust executable or modify its distribution.
 
 The adapter uses loopback TCP with an OS-assigned port and a per-session identifier. It keeps one request in flight and only the newest video frame. Lua executes on the host inside PCSX-Redux; it is never linked into the PSX game. HTTP controls compilation verification and emulator execution state.
 

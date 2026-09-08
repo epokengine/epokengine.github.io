@@ -1,6 +1,6 @@
 # Memory Card service
 
-`uniqo::memory_card` exposes asynchronous save operations to Behaviours. The
+`epok::memory_card` exposes asynchronous save operations to Behaviours. The
 runtime owns the service for the application's lifetime, including scene changes.
 Requests copy payloads, filenames, titles and icons before returning. Completions
 update service status rather than calling a Behaviour that might have unloaded.
@@ -12,7 +12,7 @@ the shared controller/card bus. Ports are zero-based: `0` is the first physical
 card slot, `1` is the second. Controller polling maps to AdvancedPad indices
 `Pad1a=0` and `Pad2a=4`. While a filesystem transaction owns the bus, controller
 readings retain their last sampled state. A save screen can pause gameplay via
-`uniqo::time.set_paused()` and continue polling card status in `frame_update()`.
+`epok::time.set_paused()` and continue polling card status in `frame_update()`.
 
 | Request | Behavior |
 | --- | --- |
@@ -33,15 +33,15 @@ which request finished. `card_error_message(error)` provides a readable message.
 // Serialize your own versioned payload into bytes; avoid pointers or native
 // struct padding in a persistent file format.
 uint8_t payload[4] = {1, 0, 0, 42};
-bool accepted = uniqo::memory_card.write(
+bool accepted = epok::memory_card.write(
     "BASLUS-99999SAVE", "Adventure Save", payload, sizeof(payload));
 
 // Later, in frame_update (which also runs while simulation is paused):
-const auto& status = uniqo::memory_card.status();
-if (status.state == uniqo::CardState::Succeeded) {
+const auto& status = epok::memory_card.status();
+if (status.state == epok::CardState::Succeeded) {
     // Record status.completed so this completion is handled only once.
-} else if (status.state == uniqo::CardState::Failed) {
-    // Display uniqo::card_error_message(status.error).
+} else if (status.state == epok::CardState::Failed) {
+    // Display epok::card_error_message(status.error).
 }
 ```
 

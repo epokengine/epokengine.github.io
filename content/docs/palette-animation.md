@@ -17,7 +17,7 @@ order, so check the selected range after reimporting. Rotation preserves the
 original quantized values and transparency/semitransparency flags.
 
 ```cpp
-auto& cycle = entity().add<uniqo::PaletteAnimator>();
+auto& cycle = entity().add<epok::PaletteAnimator>();
 // The Inspector normally assigns the Texture asset reference.
 cycle.first = 1;
 cycle.last = 4;
@@ -36,7 +36,7 @@ component state.
 The runtime updates only changed CLUTs. Each update uploads 256 16-bit palette
 entries (512 bytes) after waiting for the previous GPU chain to finish, before
 submitting the current frame. Uploads block until completion, so the temporary
-palette buffer cannot be reused while DMA still reads it. `uniqo::palette_stats`
+palette buffer cannot be reused while DMA still reads it. `epok::palette_stats`
 reports per-frame uploads, bytes and duplicate runtime-controller conflicts.
 If scripts dynamically attach conflicting controllers, the first active entity
 controls the texture and the conflict counter increases.

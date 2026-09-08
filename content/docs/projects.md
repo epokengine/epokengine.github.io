@@ -1,6 +1,6 @@
 # Independent game projects
 
-UniQo starts in **Projects**. Create a project with a name, parent folder and template, or open an existing project folder. Recent projects are shortcuts to their folders; **Remove from list** forgets a shortcut without deleting the game. **Basic PSX** contains a camera and an empty scene; **Sample game** copies the bundled demo and native behaviours. The default location is `Documents/UniQo Projects`, outside the editor installation.
+Epok starts in **Projects**. Create a project with a name, parent folder and template, or open an existing project folder. Recent projects are shortcuts to their folders; **Remove from list** forgets a shortcut without deleting the game. **Basic PSX** contains a camera and an empty scene; **Sample game** copies the bundled demo and native behaviours. The default location is `Documents/Epok Projects`, outside the editor installation.
 
 Use **File > Projects... (New / Open / Close)** to return to the selector. Unsaved scenes offer Save and close, Discard changes and Cancel. Closing a project stops its owned build/emulator before releasing its lock. A failed open stays in the selector and displays the error; it never substitutes a sample scene or overwrites a damaged project.
 
@@ -12,25 +12,25 @@ The dark Hub opens on a searchable project list. Search matches names and paths;
 
 ```text
 My Game/
-  My Game.uniqoproject              # Versioned project identity and settings
-  assets/scenes/Main.uniqo.json      # Original scenes
-  assets/scripts/                   # Original C++ and .script.json metadata
-  assets/Audio/*.uniqoasset          # Imported assets with UUIDs and source snapshots
+  My Game.epokproject              # Versioned project identity and settings
+  assets/scenes/Main.epokmap      # Original scenes
+  assets/scripts/                   # Original C++ and .epokscript metadata
+  assets/Audio/*.epokasset          # Imported assets with UUIDs and source snapshots
   .gitignore
-  .uniqo/                           # Regenerable build/emulator data; ignored
+  .epok/                           # Regenerable build/emulator data; ignored
   UserSettings/                     # Local editor layout; ignored
   exports/                          # Standalone C++ exports; ignored
 ```
 
-The root-level `.uniqoproject` descriptor contains `format_version`, `editor_version`, `name`, `startup_scene`, `auto_build` and `rendering`. It is the single writable owner of these settings; it is not an archive and does not contain assets. Open **Edit > Project Settings** to edit it. Rendering defaults to 640 x 480 interlaced NTSC when omitted. The startup scene is a relative path within `assets/scenes`; there is no fixed SampleScene path. Format/version mismatches are rejected. Existing `ProjectSettings/project.json` projects remain readable and migrate only through `--migrate-project <folder>`; reading never rewrites them. Projects with both active formats, or multiple root descriptors, are rejected until recovered.
+The root-level `.epokproject` descriptor contains `format_version`, `editor_version`, `name`, `startup_scene`, `auto_build` and `rendering`. It is the single writable owner of these settings; it is not an archive and does not contain assets. Open **Edit > Project Settings** to edit it. Rendering defaults to 640 x 480 interlaced NTSC when omitted. The startup scene is a relative path within `assets/scenes`; there is no fixed SampleScene path. Format/version mismatches are rejected. Existing `ProjectSettings/project.json` projects remain readable and migrate only through `--migrate-project <folder>`; reading never rewrites them. Projects with both active formats, or multiple root descriptors, are rejected until recovered.
 
-Track the root `.uniqoproject` descriptor, `assets/`, `ProjectSettings/` and `.gitignore` in the game's own repository. Moving or copying this content preserves the game; `.uniqo/` can be removed while closed and regenerated on the next build. Preserve `.uniqo/migrations/` backups separately before deleting that cache if needed for recovery. Creation requires a new destination and never merges with existing files. A failed creation retains its partial directory for inspection; choose a fresh destination after correcting the cause.
+Track the root `.epokproject` descriptor, `assets/`, `ProjectSettings/` and `.gitignore` in the game's own repository. Moving or copying this content preserves the game; `.epok/` can be removed while closed and regenerated on the next build. Preserve `.epok/migrations/` backups separately before deleting that cache if needed for recovery. Creation requires a new destination and never merges with existing files. A failed creation retains its partial directory for inspection; choose a fresh destination after correcting the cause.
 
 The editor executable embeds its runtime source snapshot, templates, fonts and emulator adapter. Only generated C++ builds and exports receive runtime copies. Projects do not need editor Rust sources, `runtime/`, `resources/`, `third_party/` or `.tools/`.
 
-Tool configuration belongs to the editor installation: `uniqo.config.json`, optionally replaced by `uniqo.local.json`. Installation discovery uses `UNIQO_EDITOR_HOME`, then executable ancestors with `uniqo.config.json`, then the development checkout recorded at compilation. It does not use the working directory. Relative tool paths resolve against that installation. An optional, untracked project `uniqo.local.json` replaces the machine configuration and resolves its paths against the project. The manifest owns the initial Auto compile setting.
+Tool configuration belongs to the editor installation: `Editor.epokconfig`, optionally replaced by `Local.epokconfig`. Installation discovery uses `EPOK_EDITOR_HOME`, then executable ancestors with `Editor.epokconfig`, then the development checkout recorded at compilation. It does not use the working directory. Relative tool paths resolve against that installation. An optional, untracked project `Local.epokconfig` replaces the machine configuration and resolves its paths against the project. The manifest owns the initial Auto compile setting.
 
-The Hub stores recent folders in `%LOCALAPPDATA%/UniQo/projects.json`, separate from both the editor repository and shared game files. Layout belongs to `UserSettings/editor-layout-v2.ini`. An OS-backed `.uniqo/project.lock` prevents simultaneous editing/building through UniQo; a crash releases the lock automatically, so a leftover file is harmless.
+The Hub stores recent folders in `%LOCALAPPDATA%/Epok/RecentProjects.epokprefs`, separate from both the editor repository and shared game files. Layout belongs to `UserSettings/editor-layout-v2.ini`. An OS-backed `.epok/project.lock` prevents simultaneous editing/building through Epok; a crash releases the lock automatically, so a leftover file is harmless.
 
 ## Command line
 
@@ -39,7 +39,7 @@ cargo run --locked
 cargo run --locked -- --create-project "D:/Games/My Game" --template basic
 cargo run --locked -- --create-project "D:/Games/My Demo" --template sample --name "My Demo"
 cargo run --locked -- --project "D:/Games/My Game"
-cargo run --locked -- --project "D:/Games/My Game/My Game.uniqoproject"
+cargo run --locked -- --project "D:/Games/My Game/My Game.epokproject"
 cargo run --locked -- --project "D:/Games/My Game" --build-psx
 cargo run --locked -- --project examples/sample-game --play-psx --stop-after 10
 ```
@@ -50,20 +50,20 @@ The old repository-root sample lives in `examples/sample-game/`. It is an ordina
 
 ## Runtime and asset contract
 
-UniQo ships one matched PsyQo runtime; `editor_version` pins that contract. Dependency resolution, package installation and multi-editor upgrades remain future work.
+Epok ships one matched PsyQo runtime; `editor_version` pins that contract. Dependency resolution, package installation and multi-editor upgrades remain future work.
 
-Imported AudioClips use UUID references and portable `.uniqoasset` packages with embedded source snapshots. Their index and conversions are disposable; moves are reconciled on opening and while running. See [Assets and audio](assets.md). Native script bindings support stable class/member IDs; old name-based bindings remain readable through the [scripting compatibility adapter](scripting.md).
+Imported AudioClips use UUID references and portable `.epokasset` packages with embedded source snapshots. Their index and conversions are disposable; moves are reconciled on opening and while running. See [Assets and audio](assets.md). Native script bindings support stable class/member IDs; old name-based bindings remain readable through the [scripting compatibility adapter](scripting.md).
 
 ## Migration and recovery
 
-Opening never rewrites a legacy manifest. Close the project, then run `uniqo-editor --migrate-project <folder>`. Migration validates settings/startup scene, takes the canonical-root lock, publishes the descriptor exclusively, and preserves legacy bytes in a uniquely named `.uniqo/migrations/*.backup` file.
+Opening never rewrites a legacy manifest. Close the project, then run `epok-editor --migrate-project <folder>`. Migration validates settings/startup scene, takes the canonical-root lock, publishes the descriptor exclusively, and preserves legacy bytes in a uniquely named `.epok/migrations/*.backup` file.
 
-If interrupted, both formats may remain active. Choose deliberately: `uniqo-editor --recover-project <folder> --prefer legacy` or `--prefer descriptor`. The selected format must validate; the other is preserved as a backup. Multiple descriptors are never arbitrarily selected: move unwanted descriptors outside the root before opening. No automatic merge is performed.
+If interrupted, both formats may remain active. Choose deliberately: `epok-editor --recover-project <folder> --prefer legacy` or `--prefer descriptor`. The selected format must validate; the other is preserved as a backup. Multiple descriptors are never arbitrarily selected: move unwanted descriptors outside the root before opening. No automatic merge is performed.
 
-The Hub's **Open project** accepts a path and offers separate **File...** and **Folder...** browsers. Folder, `--project <descriptor>`, and positional `uniqo-editor "My Game.uniqoproject"` launches use the same root, settings, lock, and recent entry.
+The Hub's **Open project** accepts a path and offers separate **File...** and **Folder...** browsers. Folder, `--project <descriptor>`, and positional `epok-editor "My Game.epokproject"` launches use the same root, settings, lock, and recent entry.
 
 ## Optional Windows file association
 
-After installing both host executables and the dependency distribution, run `tools/register-project.ps1 -EditorPath "C:/UniQo/uniqo-editor.exe"` to register the quoted open command and application icon for the current user. `tools/setup.ps1 -RegisterProjectFiles -EditorPath <exe>` provides the same optional setup step. Existing non-UniQo defaults are respected; choose UniQo in Windows Default Apps if necessary.
+After installing both host executables and the dependency distribution, run `tools/register-project.ps1 -EditorPath "C:/Epok/epok-editor.exe"` to register the quoted open command and application icon for the current user. `tools/setup.ps1 -RegisterProjectFiles -EditorPath <exe>` provides the same optional setup step. Existing non-Epok defaults are respected; choose Epok in Windows Default Apps if necessary.
 
 Use the same command with `-Unregister` before removing that installation. It removes only registrations owned by that executable and leaves other applications' associations intact. `-WhatIf` previews registration/removal. Portable builds need no registration and never register themselves on launch. Double-clicking the descriptor opens the folder-based project, not a scene or archive.

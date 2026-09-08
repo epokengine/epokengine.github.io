@@ -1,6 +1,6 @@
 # 2.5D engine acceptance scene
 
-Open this project in UniQo and build Game, or run `uniqo-editor --project examples/rpg-2-5d-demo --build-psx` from the engine checkout.
+Open this project in Epok and build Game, or run `epok-editor --project examples/rpg-2-5d-demo --build-psx` from the engine checkout.
 
 ![The exported demo running in PCSX-Redux at 640 × 480](preview.png)
 

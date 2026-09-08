@@ -1,4 +1,4 @@
-# Local testing for UniQo maintainers
+# Local testing for Epok maintainers
 
 Run checks from the repository root. GitHub Actions is not configured; validation is performed locally.
 
@@ -21,7 +21,7 @@ After SDK setup, `python tools/extract_hud_font.py --check` verifies that the co
 
 ## MCP integration
 
-After `cargo build --locked`, run `python tests/integration/mcp.py` to launch an isolated editor project and exercise HTTP/stdio negotiation, scene edits, Undo/Redo, camera changes, real Scene/HUD/editor screenshots and audio import. Add `--emulator` to compile and run the sample in PCSX-Redux, send controller input, Pause/Step, capture Game and Stop. `--editor <path>` selects an alternate binary, including a release build. These checks need a desktop GPU; the emulator option also requires SDK setup. Preferences and captures stay in the test's `.uniqo/mcp-integration-*/` directory, leaving the user's MCP preference unchanged.
+After `cargo build --locked`, run `python tests/integration/mcp.py` to launch an isolated editor project and exercise HTTP/stdio negotiation, scene edits, Undo/Redo, camera changes, real Scene/HUD/editor screenshots and audio import. Add `--emulator` to compile and run the sample in PCSX-Redux, send controller input, Pause/Step, capture Game and Stop. `--editor <path>` selects an alternate binary, including a release build. These checks need a desktop GPU; the emulator option also requires SDK setup. Preferences and captures stay in the test's `.epok/mcp-integration-*/` directory, leaving the user's MCP preference unchanged.
 
 Unit tests also cover disabled defaults, key migration, port conflicts, Host/Origin/authentication rejection, listener shutdown, stale edits, atomic batch failure, file backups and cancelled/expired queued requests. `--screenshot-mcp-settings` opens the AI / MCP preference page for visual checks.
 
@@ -65,7 +65,7 @@ are documented under [Sprites and particles](../../docs/sprites-particles.md),
 [Cameras and resources](../../docs/camera-resources.md), [Runtime services](../../docs/runtime-services.md)
 and [Input and collision](../../docs/input-collision.md).
 
-Run dependency setup first. Integration scripts use Python 3.10 or newer and its standard library; no Python packages are required. The scripts default to `target/debug/uniqo-editor.exe`. Close a running editor before rebuilding that executable.
+Run dependency setup first. Integration scripts use Python 3.10 or newer and its standard library; no Python packages are required. The scripts default to `target/debug/epok-editor.exe`. Close a running editor before rebuilding that executable.
 
 ```powershell
 cargo run --locked -- --project examples/sample-game --build-psx
@@ -95,7 +95,7 @@ Run these **sequentially**, with no other Play session using port 8077.
 | Blockout | Mesh UUID relocation/conflicts, material slots and instance overrides, window openings, chunk rejection, near-plane clipping, backface rejection and sloped baked/GTE normal agreement measured from native VRAM/RAM |
 | Live bridge | Changing video, controller press/release, stable pause, one-VBlank step and process cleanup |
 
-Hierarchy, HUD and lighting accept `--exe <path>` for an alternate editor build. Verification creates isolated temporary game projects under `.uniqo/`; the pipeline check also builds the sample project. Reports, screenshots and memory captures go to ignored `artifacts/`.
+Hierarchy, HUD and lighting accept `--exe <path>` for an alternate editor build. Verification creates isolated temporary game projects under `.epok/`; the pipeline check also builds the sample project. Reports, screenshots and memory captures go to ignored `artifacts/`.
 
 ## Blueprint acceptance
 
@@ -116,7 +116,7 @@ python tests/integration/verify_blueprint_performance.py --keep --emulator
 Serialize emulator tests. The runtime harness runs host contract assertions and
 compiles actual pinned MIPS/PsyQo/EASTL headers; the Lua protocol harness mocks
 emulator services and is not a real-breakpoint acceptance substitute.
-For that acceptance, set `UNIQO_BP_DEBUG_PROJECT` to the retained inheritance
+For that acceptance, set `EPOK_BP_DEBUG_PROJECT` to the retained inheritance
 fixture's relocated project, then run
 `cargo test live_blueprint_breakpoint_snapshot_step_resume_and_cleanup -- --ignored --nocapture`.
 
@@ -152,7 +152,7 @@ Blockout keyboard tests cover E/Q extrusion, inward displacement, edge picking, 
 
 ## Native runtime profiling
 
-The included profiler defaults to `examples/rpg-2-5d-demo`. It uses that project's optional `uniqo.local.json`, otherwise the engine's local or default tool configuration. Build the editor first and keep the selected project and emulator port free during each run.
+The included profiler defaults to `examples/rpg-2-5d-demo`. It uses that project's optional `Local.epokconfig`, otherwise the engine's local or default tool configuration. Build the editor first and keep the selected project and emulator port free during each run.
 
 ```powershell
 cargo build --locked
@@ -178,3 +178,5 @@ After validation, verify that generated files remain ignored and Nugget source r
 
 
 Skeletal validation: `cargo test --locked skeletal_tests` compares quantized poses with the FBX evaluator and checks reimport consistency. `python tests/integration/verify_skeletal.py` compiles for MIPS, compares native poses, verifies changing GPU output in PCSX-Redux and captures the UI.
+
+Python validation and migration tools require `python -m pip install -r tools/requirements.txt`. See [document formats](../../docs/formats.md) for YAML and the UniQo-to-Epok migration.

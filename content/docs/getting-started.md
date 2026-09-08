@@ -9,8 +9,8 @@ Use a checkout path without spaces. The upstream MIPS Makefiles do not escape ev
 ## Install and run
 
 ```powershell
-git clone https://github.com/franadoriv/UniQo.git
-cd UniQo
+git clone https://github.com/franadoriv/epok-engine.git Epok
+cd Epok
 powershell -ExecutionPolicy Bypass -File tools/setup.ps1
 cargo build --locked --bins
 cargo run --locked
@@ -26,11 +26,11 @@ xcode-select --install
 make run
 ```
 
-The script installs Rust and the MIPS compiler through Homebrew, builds `psxavenc` and mkpsxiso from their pinned source revisions, and writes an ignored `uniqo.local.json` containing the native executable paths. It does not change the shell PATH: use `make run` or `./tools/run-macos.sh` to start the editor.
+The script installs Rust and the MIPS compiler through Homebrew, builds `psxavenc` and mkpsxiso from their pinned source revisions, and writes an ignored `Local.epokconfig` containing the native executable paths. It does not change the shell PATH: use `make run` or `./tools/run-macos.sh` to start the editor.
 
 Exact SDK and download versions are recorded in [dependencies.json](../tools/dependencies.json). Setup verifies archive SHA-256 hashes and checks installed distribution files against those archives, including DLLs, headers and licenses. Existing source changes or a different Nugget revision produce an error rather than being overwritten.
 
-Build/distribute both `uniqo-editor` and `uniqo-header-tool`; native reflection uses pinned host libclang from setup. It is not included in PSX games. New projects have a root `.uniqoproject` descriptor. See [Projects](projects.md) for folder/file opening, explicit legacy migration and optional Windows file association. No registration is required for portable use.
+Build/distribute both `epok-editor` and `epok-header-tool`; native reflection uses pinned host libclang from setup. It is not included in PSX games. New projects have a root `.epokproject` descriptor. See [Projects](projects.md) for folder/file opening, explicit legacy migration and optional Windows file association. No registration is required for portable use.
 
 If an installation was interrupted or its distribution files changed, preserve any intentional edits and run:
 
@@ -81,7 +81,7 @@ make build-psx PROJECT=examples/sample-game
 
 Run Make from the repository root, or use `make -C <checkout> ...`. Relative project and capture paths resolve from that root. Cargo's normal environment configuration remains available, including `CARGO_TARGET_DIR`.
 
-With the default Cargo target directory, `make release` writes `target/release/uniqo-editor.exe` on Windows. Unix host builds use `target/release/uniqo-editor` without `.exe`. This command builds the editor for the current host; it does not cross-compile or assemble a portable release ZIP, bundle PSX tools or create an installer. Those packaging steps are separate future work.
+With the default Cargo target directory, `make release` writes `target/release/epok-editor.exe` on Windows. Unix host builds use `target/release/epok-editor` without `.exe`. This command builds the editor for the current host; it does not cross-compile or assemble a portable release ZIP, bundle PSX tools or create an installer. Those packaging steps are separate future work.
 
 ## First session
 
@@ -96,7 +96,7 @@ A failed build does not launch an older executable. Changes made to C++ during P
 
 ## Configuration
 
-The checked-in `uniqo.config.json` points to the portable tools. To use machine-specific paths, copy it to `uniqo.local.json` and edit the copy. That file is ignored by Git.
+The checked-in `Editor.epokconfig` points to the portable tools. To use machine-specific paths, copy it to `Local.epokconfig` and edit the copy. That file is ignored by Git.
 
 The local file **replaces** the editor installation configuration; the two JSON files are not merged. Missing fields use built-in defaults.
 
@@ -112,9 +112,9 @@ The local file **replaces** the editor installation configuration; the two JSON 
 | `web_port` | Emulator HTTP port, normally 8077 |
 | `auto_build` | Fallback; the game manifest owns the initial Auto compile setting |
 
-Relative paths resolve from the editor installation. An optional game-local `uniqo.local.json` instead resolves its overrides from that game folder. Executable names without separators can be resolved through PATH. Port 8077 must be available; UniQo refuses to control a pre-existing emulator session.
+Relative paths resolve from the editor installation. An optional game-local `Local.epokconfig` instead resolves its overrides from that game folder. Executable names without separators can be resolved through PATH. Port 8077 must be available; Epok refuses to control a pre-existing emulator session.
 
-Start without arguments to create/open projects, or use `--project <directory>`. Games contain assets and `ProjectSettings/project.json`; runtime and tools stay with the editor. See [Projects](projects.md) for command-line creation, project versioning and portability.
+Start without arguments to create/open projects, or use `--project <directory>`. Games contain assets and a root `.epokproject` YAML descriptor; runtime and tools stay with the editor. See [Projects](projects.md) for command-line creation, project versioning and portability.
 
 ## Build without opening the editor
 
@@ -122,7 +122,7 @@ Start without arguments to create/open projects, or use `--project <directory>`.
 cargo run --locked -- --project examples/sample-game --build-psx
 ```
 
-Output is written to the selected project's `.uniqo/build/uniqo.ps-exe`, with ELF and map files beside it. Edit `assets/scripts/`, not the staged copies under `.uniqo/build/`.
+Output is written to the selected project's `.epok/build/epok.ps-exe`, with ELF and map files beside it. Edit `assets/scripts/`, not the staged copies under `.epok/build/`.
 
 For a bounded emulator run:
 
@@ -139,3 +139,5 @@ cargo run --locked -- --project examples/sample-game --play-psx --stop-after 10
 - **Layout unusable:** use Layout > Default or Window > Reset Layout.
 - **Executable locked during compilation:** close the running editor before rebuilding it.
 - **No suitable graphics adapter:** on Windows, verify DirectX 12 support and graphics drivers; on macOS, verify Metal support and macOS updates. GPU-free unit tests can still run.
+
+Python validation and migration tools require `python -m pip install -r tools/requirements.txt`. See [document formats](formats.md) for YAML and the UniQo-to-Epok migration.

@@ -29,7 +29,7 @@ Hide, isolate and lock belong to the editing session. They do not remove geometr
 ```text
 Scene
 └── Building (entity: Transform + EditableMesh)
-    │   asset UUID → assets/Meshes/Building.uniqoasset
+    │   asset UUID → assets/Meshes/Building.epokasset
     │   material overrides: slot UUID → color / Unlit
     └── Door (separate entity when it needs movement or behavior)
 
@@ -47,7 +47,7 @@ Duplicating an entity shares its asset. Edits to the asset affect its instances,
 
 ## Saving, external moves and recovery
 
-Every successful geometry command saves atomically to the `.uniqoasset` package. **Ctrl+Z**, **Ctrl+Y** or **Ctrl+Shift+Z**, and the Undo/Redo buttons, restore up to 32 recent geometry edits. This is geometry history for the open asset, not global scene history. It resets when reopening the asset or accepting an external source change. Closing without saving the scene does not discard already saved geometry.
+Every successful geometry command saves atomically to the `.epokasset` package. **Ctrl+Z**, **Ctrl+Y** or **Ctrl+Shift+Z**, and the Undo/Redo buttons, restore up to 32 recent geometry edits. This is geometry history for the open asset, not global scene history. It resets when reopening the asset or accepting an external source change. Closing without saving the scene does not discard already saved geometry.
 
 The package contains the asset UUID and editable JSON source together. It has no external import recording or sidecar to keep synchronized. **Asset / Budget > Move / Rename asset**, or an external move while the editor is closed, preserves references. An external copy retaining the same UUID creates a reported conflict; **Make independent copy** deliberately assigns a new one. Missing/conflicting references retain their UUID and prevent a build instead of silently substituting a cube.
 
@@ -55,7 +55,7 @@ The watcher updates paths and reloads external geometry changes. A revision chec
 
 ## PSX compilation and limits
 
-The source remains editable. Builds resolve the package by UUID and generate derived `MeshGeometry`/`MeshQuad` arrays in `.uniqo/build/scene.hh`; exports include those arrays. Regeneration does not rewrite the source mesh or scene references.
+The source remains editable. Builds resolve the package by UUID and generate derived `MeshGeometry`/`MeshQuad` arrays in `.epok/build/scene.hh`; exports include those arrays. Regeneration does not rewrite the source mesh or scene references.
 
 The compiler subdivides surfaces spanning more than four local units, quantizes positions to Q12, partitions by four-unit spatial cells, and shares indexed positions within each chunk. A chunk contains at most 96 quads and 384 positions. Materials and baked color offsets survive partitioning. Authoring groups never force separate rendering batches.
 
@@ -70,7 +70,7 @@ The native renderer checks transformed chunk bounds against the camera frustum b
 | Extra clipping capacity | 512 triangles, in addition to runtime-object reserve |
 | Geometry history | 32 commands for the current asset |
 
-**Asset / Budget** displays full authored/compiled counts even while groups are hidden. These are capacity limits, not a frame-rate promise. `uniqo::mesh_stats` reports tested/visible chunks, transformed vertices, rejected backfaces and clipped input triangles; `lighting_stats` reports submitted/dropped triangles and frame timing. Reduce visible geometry or split a large level into separately managed sections when needed. Real-console validation remains pending.
+**Asset / Budget** displays full authored/compiled counts even while groups are hidden. These are capacity limits, not a frame-rate promise. `epok::mesh_stats` reports tested/visible chunks, transformed vertices, rejected backfaces and clipped input triangles; `lighting_stats` reports submitted/dropped triangles and frame timing. Reduce visible geometry or split a large level into separately managed sections when needed. Real-console validation remains pending.
 
 Baked lighting uses the actual faces, including shadows between parts of the same asset. Realtime lighting uses arbitrary face normals with inverse-transpose transformation; the existing one-directional/one-point-light selection remains per entity, so baked lighting is preferable for large rooms. Blob shadows still require the legacy horizontal Ground primitive.
 

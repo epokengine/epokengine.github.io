@@ -1,8 +1,8 @@
-# UniQo website
+# Epok website
 
-Public website and documentation for [UniQo](https://github.com/franadoriv/UniQo), a desktop game engine for the original PlayStation.
+Public website and documentation for [Epok](https://github.com/franadoriv/epok-engine), a desktop game engine for the original PlayStation.
 
-Live site: **https://uniqoengine.github.io/**
+Live site: **https://epokengine.github.io/**
 
 ## Develop
 
@@ -24,7 +24,7 @@ The Markdown and screenshots in `content/` are a snapshot of published engine do
 After fetching the engine repository, sync from its published branch:
 
 ```sh
-python tools/sync-content.py /path/to/UniQo origin/main
+python tools/sync-content.py /path/to/Epok origin/main
 npm run build
 npm run check
 ```
@@ -39,4 +39,4 @@ Search runs in the browser against a bundled index. No accounts, analytics, API 
 
 ## License and attribution
 
-Website source is MIT licensed. Documentation, screenshots and the UQ mark come from the UniQo project; see [its license](content/LICENSE), [branding provenance](content/resources/branding/README.md), [third-party notices](content/THIRD_PARTY_NOTICES.md) and [runtime notices](content/runtime/THIRD_PARTY_NOTICES.md). The forest showcase contains AI-generated game artwork, as described in the engine README. UniQo is independent homebrew software and is not affiliated with Sony Interactive Entertainment.
+Website source is MIT licensed. Documentation, screenshots and the Epok mark come from the Epok project; see [its license](content/LICENSE), [branding provenance](content/resources/branding/README.md), [third-party notices](content/THIRD_PARTY_NOTICES.md) and [runtime notices](content/runtime/THIRD_PARTY_NOTICES.md). The forest showcase contains AI-generated game artwork, as described in the engine README. Epok is independent homebrew software and is not affiliated with Sony Interactive Entertainment.

@@ -1,4 +1,4 @@
-# Lighting in UniQo
+# Lighting in Epok
 
 The editor, exported C++ project and PSX executable now support a bounded lighting pipeline. Scene is an interactive preview. Game displays the actual emulator output, including PSX quantization and painter ordering.
 
@@ -37,8 +37,8 @@ Add **Blob Shadow** to a moving entity. Its radius, strength and maximum distanc
 ## C++ components
 
 ```cpp
-#include "uniqo.hpp"
-using namespace uniqo;
+#include "epok.hpp"
+using namespace epok;
 
 void Player::start(Transform&) {
     if (auto* lamp = create_entity("Player light", &entity())) {
@@ -67,4 +67,4 @@ Use `get<Light>()`, `get<MeshLighting>()`, `get<BlobShadow>()` and `remove<T>()`
 
 `tests/integration/verify_lighting.py` builds isolated projects, runs their native PSX executables and reads actual VRAM/RAM. It checks baked/GTE color agreement, the light budget, inverse-transpose normals, point range, C++ creation parity, static shadows, blob shadows, saved bake caches and target operation/timing counters. It leaves the user's scene untouched and writes results to `artifacts/lighting-verification.txt`.
 
-Headless baking: `uniqo-editor --project <project> --bake-lighting`. This explicitly saves the prepared scene. `--screenshot-lighting --screenshot <image.png>` opens the Lighting window for an editor capture.
+Headless baking: `epok-editor --project <project> --bake-lighting`. This explicitly saves the prepared scene. `--screenshot-lighting --screenshot <image.png>` opens the Lighting window for an editor capture.

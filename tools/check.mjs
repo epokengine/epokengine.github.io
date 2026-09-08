@@ -14,7 +14,7 @@ for (const file of files) {
   for (const [, attr, raw] of html.matchAll(/\b(href|src)="([^"]+)"/g)) {
     const href = decode(raw);
     if (/^(?:[a-z][a-z\d+.-]*:|\/\/)/i.test(href)) continue;
-    const url = new URL(href, `https://uniqoengine.github.io/${file.replaceAll('\\', '/')}`);
+    const url = new URL(href, `https://epokengine.github.io/${file.replaceAll('\\', '/')}`);
     let target = path.join(root, decodeURIComponent(url.pathname));
     if (url.pathname.endsWith('/')) target = path.join(target, 'index.html');
     if (!fs.existsSync(target)) { errors.push(`${file}: missing ${attr} ${href}`); continue; }

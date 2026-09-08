@@ -1,12 +1,12 @@
 # Blueprints
 
-Blueprints are original `.blueprint.json` class assets, not generated C++ files.
+Blueprints are original `.epokbp` class assets, not generated C++ files.
 They derive from a reflected native C++ class or another Blueprint. Generated
 C++ runs through the native MIPS/PsyQo backend: no graph interpreter, C++ RTTI,
 exceptions, Lua VM, or host-computed C++ member offsets are shipped to the PSX.
 
 The current reflection/Blueprint toolchain is provisioned and validated on
-Windows x64. It requires the pinned libclang and a built `uniqo-header-tool`
+Windows x64. It requires the pinned libclang and a built `epok-header-tool`
 beside the editor. General macOS editor support does not yet provision that
 Blueprint extractor runtime; Blueprint authoring is not currently supported
 there. Existing legacy-script workflows are separate from this requirement.
@@ -170,11 +170,11 @@ Reports are written under ignored `artifacts/blueprints/`.
 ## Command line
 
 ```powershell
-uniqo-editor.exe --project "D:\Games\Example" --new-blueprint BP_Enemy --parent Enemy
-uniqo-editor.exe --project "D:\Games\Example" --compile-blueprints
-uniqo-editor.exe --project "D:\Games\Example" --build-psx
-uniqo-editor.exe --project "D:\Games\Example" --play-psx --blueprint-debug
-uniqo-editor.exe --project "D:\Games\Example" --export-psx
+epok-editor.exe --project "D:\Games\Example" --new-blueprint BP_Enemy --parent Enemy
+epok-editor.exe --project "D:\Games\Example" --compile-blueprints
+epok-editor.exe --project "D:\Games\Example" --build-psx
+epok-editor.exe --project "D:\Games\Example" --play-psx --blueprint-debug
+epok-editor.exe --project "D:\Games\Example" --export-psx
 ```
 
 The native canvas uses compact node headers, typed pins and curved execution/data
