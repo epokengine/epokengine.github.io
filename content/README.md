@@ -25,7 +25,7 @@
 
 UniQo brings a visual editor workflow to PSX development. Create a project, arrange a scene, import assets, write C++ behaviours and press **Play**. Your game compiles to a native MIPS executable and runs inside an integrated PCSX-Redux Game view.
 
-**Windows x64 · Experimental · MIT-licensed original code.** The editor and runtime are in active development. Emulator validation is available; physical-console validation is pending.
+**Windows x64 and macOS Apple Silicon · Experimental · MIT-licensed original code.** The editor and runtime are in active development. Emulator validation is available; physical-console validation is pending.
 
 ![UniQo editor with the UQ monogram, editable 2.5D courtyard, scene hierarchy and component inspector](docs/images/uniqo-editor.png)
 
@@ -49,9 +49,10 @@ Projects live independently of the editor. Scenes, scripts and imported assets s
 
 ### Prerequisites
 
-- **Windows x64**
+- **Windows x64** or **macOS 11+ on Apple Silicon**
 - [Git](https://git-scm.com/) and [Rust through rustup](https://rustup.rs/)
-- Visual Studio Build Tools with **Desktop development with C++** and a **Windows SDK**
+- On Windows: Visual Studio Build Tools with **Desktop development with C++** and a **Windows SDK**
+- On macOS: Xcode Command Line Tools and [Homebrew](https://brew.sh/)
 
 Clone into a path without spaces, then run setup:
 
@@ -63,6 +64,16 @@ cargo run --locked
 ```
 
 Setup initializes the pinned Nugget SDK and installs verified portable MIPS tools, PCSX-Redux, psxavenc and mkpsxiso under `.tools/`. Rustup selects the repository's pinned toolchain. Setup does not change your global PATH.
+
+On macOS, download the macOS Arm build of PCSX-Redux and move it to `/Applications/PCSX-Redux.app`, then run:
+
+```sh
+xcode-select --install
+./tools/setup-macos.sh
+make run
+```
+
+The setup script installs Rust and the upstream MIPS toolchain with Homebrew, builds pinned host audio/disc utilities under `.tools/macos/`, and writes an untracked `uniqo.local.json`. Start UniQo with `make run` or `./tools/run-macos.sh`; neither command requires changing your shell PATH. The first launch of PCSX-Redux may require approving the unsigned application in macOS Privacy & Security.
 
 ### Your first game
 
