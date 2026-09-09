@@ -12,11 +12,12 @@ checkout = Path(sys.argv[1]).resolve()
 ref = sys.argv[2] if len(sys.argv) > 2 else "origin/main"
 commit = subprocess.check_output(["git", "-C", str(checkout), "rev-parse", ref], text=True).strip()
 paths = ["docs", "knowledge/architecture.md", "knowledge/maintainers/resources.md", "knowledge/maintainers/testing.md", "README.md", "LICENSE", "THIRD_PARTY_NOTICES.md", "runtime/README.md", "runtime/THIRD_PARTY_NOTICES.md", "examples/rpg-2-5d-demo/README.md", "examples/rpg-2-5d-demo/preview.png", "resources/branding/epok.png", "resources/branding/epok-lockup.png", "resources/branding/README.md"]
+paths.append("examples/timeline-spell/README.md")
 # These captures predate the public identity and contain obsolete UI branding.
 retired_captures = {"editor.png", "blueprint-editor.png", "mcp-preferences.png", "skeletal-preview.png", "third-person-arena.png"}
 
 def public_document(text):
-    text = re.sub(r"!\[[^\]]*\]\([^\n)]+\)", lambda match: "" if any(name in match.group() for name in retired_captures) else match.group(), text)
+    text = re.sub(r"!\[[^\]]*\]\(([^\n)]+)\)", lambda match: "" if PurePosixPath(match.group(1).split("#", 1)[0]).name in retired_captures else match.group(), text)
     text = re.sub(r"UniQo-to-Epok migration", "migration to Epok Engine", text, flags=re.I)
     text = re.sub(r"Migrating a UniQo game", "Migrating an existing game", text, flags=re.I)
     text = text.replace("The website will be linked when published.", "The website is https://epokengine.github.io/.")

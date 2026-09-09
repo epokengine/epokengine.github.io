@@ -31,6 +31,12 @@ npm run check
 
 When adding a guide, register its navigation entry in `tools/build.mjs`. Keep the homepage feature descriptions and current-limits section consistent with the documented revision. Internal guide links become website links; references to engine source files point to the matching GitHub revision.
 
+The documentation index offers three learning paths: a first Blueprint, VFX
+authoring, and a marker-driven spell. Keep introductory tutorials separate from
+the Blueprint and Timeline references. The Timelines & VFX group also includes
+the playable example and a shared troubleshooting guide. Search, navigation,
+table-of-contents anchors and the new editor captures are checked by `npm run check`.
+
 ## Publish
 
 Push to `main`. The GitHub Actions workflow builds, validates and publishes the static artifact to GitHub Pages. Repository Settings → Pages must use **GitHub Actions** as the source. Hosting uses the free GitHub Pages service for this public repository; no paid services or custom domain are required.

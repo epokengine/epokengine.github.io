@@ -31,3 +31,4 @@
 .gallery-rotation{min-width:66px;min-height:44px;background:transparent;color:var(--text);border:1px solid var(--line);border-radius:5px;font-size:.875rem;cursor:pointer}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
 @media(max-width:600px){.gallery-footer{flex-direction:column;align-items:flex-start;padding:12px}.gallery-controls{width:100%;justify-content:flex-end}.gallery-count{margin-right:auto}.gallery-previous{left:6px}.gallery-next{right:6px}.gallery-arrow{width:40px;height:44px}}
+.learning-paths{margin-top:38px}.learning-paths>h2{font-size:1.6rem;margin-bottom:24px}.learning-paths h3{font-size:1.15rem;margin:0 0 12px}.learning-paths .guide-group>p:not(.eyebrow){color:var(--muted);font-size:.95rem;line-height:1.6}

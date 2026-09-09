@@ -98,6 +98,29 @@ A failed build does not launch an older executable. Changes made to C++ during P
 
 The checked-in `Editor.epokconfig` points to the portable tools. To use machine-specific paths, copy it to `Local.epokconfig` and edit the copy. That file is ignored by Git.
 
+The Hub and editor check dependency paths at startup and warn about missing tools,
+showing which features need them. Open **Dependencies** in the Hub or
+**Edit > Editor Preferences > Dependencies** to inspect the results, edit paths,
+or browse for an executable or directory on Windows. **Apply** saves the effective
+installation or project `Local.epokconfig`; changes apply to subsequent builds and
+imports without restarting. The first replaced local configuration is backed up
+under `.epok/dependencies/Local.epokconfig.bak`.
+
+On Windows, **Use bundled paths** selects tools in the current editor installation
+and repairs stale path settings after moving a checkout. **Install / Repair**
+downloads and verifies only the selected bundled package in the background using
+the pinned manifest and SHA-256 checks (Nugget uses its pinned Git revision).
+It restores package distribution files, preserves extra local files, and reports
+progress or failure in the installation log. Apply the proposed path after a
+successful install. Build/Play and dependency changes wait for installation to
+finish. On macOS, run `tools/setup-macos.sh`, then **Reload saved paths**.
+Repair preserves a package directory junction or symbolic link as a
+`.link-backup-*` sibling and installs a real local directory, so links left behind
+by a moved installation do not break extraction. Its previous target is untouched.
+Installing the MIPS package updates both the GNU Make and compiler path fields.
+Discovery checks file presence (and executable permissions on Unix), not binary
+compatibility; the build still validates tools when using them.
+
 The local file **replaces** the editor installation configuration; the two JSON files are not merged. Missing fields use built-in defaults.
 
 | Field | Purpose |
@@ -107,6 +130,7 @@ The local file **replaces** the editor installation configuration; the two JSON 
 | `nugget` | Nugget SDK directory |
 | `emulator` | PCSX-Redux executable |
 | `psxavenc` | XA audio encoder executable |
+| `libclang` | C++ reflection library directory; empty uses the bundled library |
 | `mkpsxiso` | CD image builder executable |
 | `code` | VS Code executable; empty enables discovery |
 | `web_port` | Emulator HTTP port, normally 8077 |

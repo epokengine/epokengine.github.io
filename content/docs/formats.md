@@ -47,6 +47,15 @@ Clang's `compile_commands.json`, PCSX-Redux configuration, the dependency bootst
 manifest `tools/dependencies.json`, and explicitly JSON diagnostic reports.
 These do not acquire Epok extensions merely because they are in this checkout.
 
+`Scripts.epokmanifest` v2 is generated provenance. `files` and `native_sources`
+are relative to the manifest directory (`file_base: manifest`); `dependencies`
+are relative to the authoring project (`dependency_base: project`). All use
+forward slashes. Dependencies describe the original inputs; standalone builds
+use the staged files and do not require those authoring paths. Regenerating a
+build/export replaces generated v1 host-path manifests with v2 without changing
+source files. Provider dependencies outside the project are rejected before
+writing artifacts.
+
 ## Migrating an existing game
 
 The original engine checkout and existing games are not automatically modified.

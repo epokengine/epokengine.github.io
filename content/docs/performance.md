@@ -10,6 +10,16 @@ Timings are nested: simulation includes its world/collision queries, collision i
 
 Work counters report simulation steps, synchronization calls, local/world matrix rebuilds, collider-bound rebuilds and GTE/software vertex counts. A synchronization call does not imply a matrix rebuild.
 
+The general profiler also reads linked `sequence_stats`, `effect_stats` and
+`particle_stats`. Its `playback` report includes active/alive and peak counts,
+completed/cancelled work, skipped bindings/events, dropped effects/particles and
+diagnostic overflow. Unlinked services are reported as unavailable. Counts come
+from each sampled RAM snapshot; they are not separate completed-frame timers.
+The report separates current gauges from cumulative counters, preserves startup
+totals, reports capture deltas and flags observed resets and saturation. Sampled
+maxima can miss activity between samples; runtime peak counters retain their own
+high-water marks. A saturated drop counter cannot quantify further lost work.
+
 Additional fields report mesh chunks tested/visible, backfaces, clipped polygons, emitted triangles, frame work before and after mesh rendering (`prepare`, `finish`), retained triangles and retained-packet rebuilds. With `EPOK_PROFILE_DETAIL=1`, per-quad shade/fog/emit timers, chunk setup and camera/sprite/HUD timers are also populated. Release builds leave those detail fields at zero. Reading extra timers adds work, so detail-build timings are not release measurements.
 
 The descriptive `streamed_chunks` counter is collected only with

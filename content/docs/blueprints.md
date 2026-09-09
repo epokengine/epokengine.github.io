@@ -1,5 +1,11 @@
 # Blueprints
 
+Start with [Your first Blueprint](blueprints-tutorial.md) for a guided editor
+exercise. This page is the reference for types, inheritance and execution.
+For visual gameplay, continue with [VFX authoring](vfx-editor.md) and the
+[marker-driven spell tutorial](spell-tutorial.md). Keep
+[troubleshooting](blueprints-vfx-troubleshooting.md) nearby when repairing graphs.
+
 Blueprints are original `.epokbp` class assets, not generated C++ files.
 They derive from a reflected native C++ class or another Blueprint. Generated
 C++ runs through the native MIPS/PsyQo backend: no graph interpreter, C++ RTTI,
@@ -96,6 +102,20 @@ paused simulation freeze timers. Destruction, reused handles and scene changes
 cancel stale work. Timeline uses bounded, strictly increasing Q12 time/value
 keys and exposes Updated/Finished outputs; looping and Stop Timeline are explicit.
 
+Sequence and Effect nodes also play the shared [TimelineAsset system](timelines.md).
+Their typed playback handles are runtime values with null defaults, never saved
+slots or generations. Marker/completion waits share the existing eight latent
+slots, preserve results across pause and playback-slot reuse, and use explicit
+Completed/Cancelled outcomes. Blueprint source v3 adds these nodes; opening v1/v2
+documents migrates in memory and preserves their original bytes until Save.
+Direct asset Play/Spawn nodes select a persistent asset UUID and expose its typed
+external binding slots. Slot renames/reordering retain connections; removed slots
+remain visible as stale connections until repaired. Subscribe to marker delivers
+future crossings through that same continuation table, retaining a compact
+backlog while the reached branch suspends. See [Timeline playback](timelines.md)
+for owner, pause, completion and cancellation rules, and open the
+`timeline-spell` example's `BP_Fireball` for an authored combat graph.
+
 ## Entity templates and construction
 
 The class's template defines a stable-ID root and component/child hierarchy.
@@ -144,11 +164,25 @@ debug build invalidate source navigation until rebuilding; there is no live
 native-code or object-layout patching. Pause freezes the owned emulator, not
 other running emulator instances.
 
-Graph source changes during Play queue a later build. Stop, save and Play again
-to restart from authored defaults; runtime state is deliberately not preserved.
+Saved graph or native source changes stop outdated Play. With Auto compile
+enabled, the editor rebuilds and restarts from authored defaults after the old
+worker finishes and edits settle. Invalid sources leave Play stopped until repair;
+an explicit Stop cancels automatic restart. Save or discard an open modified
+graph, timeline or effect before Build/Play. Runtime state is not preserved.
 Layout-only node moves do not change the semantic C++ cache key. Export produces
 standalone native sources and a build script; neither the editor nor the
 reflection extractor is required to rebuild the exported game.
+
+Successful persisted-source compilations record their dependency footprints in
+the host artifact graph under `.epok/ArtifactDependencies.json`. These include
+reflected class/function contracts, inherited debugger property layouts, parent
+and called Blueprints, imported resources, and referenced timelines, effects and
+markers. The compiler captures the same source snapshots used for generation;
+validating an unsaved canvas does not publish a project artifact. Removed or
+invalid dependencies retain the previous generated signature with stale reasons.
+The dependency viewer also covers scenes, generated output, staging and export.
+Builds validate current sources and reject stale output; restoring an earlier
+source does not certify a retained executable without fresh staging.
 
 ## Reproducible examples and acceptance
 
@@ -179,5 +213,6 @@ epok-editor.exe --project "D:\Games\Example" --export-psx
 
 The native canvas uses compact node headers, typed pins and curved execution/data
 wires. Its Unreal-inspired visual language does not imply Unreal API or asset compatibility.
-Lua is a separately reserved provider. The post-Blueprint VFX/sequencing editor
-is tracked separately from scalar Blueprint timelines.
+Lua is a separately reserved provider. The reusable TimelineAsset and VFX editors
+are available alongside the older scalar Blueprint Timeline node; see
+[Using the VFX editor](vfx-editor.md) for their authoring workflow.

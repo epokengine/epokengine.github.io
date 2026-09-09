@@ -26,8 +26,15 @@ for (const file of files) {
   }
 }
 const search = JSON.parse(fs.readFileSync(path.join(root, 'assets/search.json'), 'utf8'));
-for (const query of ['textures', 'collision', 'mcp', 'blueprint']) if (!search.some(d => `${d.title} ${d.text}`.toLowerCase().includes(query))) errors.push(`Search index missing ${query}`);
+for (const query of ['textures', 'collision', 'mcp', 'blueprint', 'vfx', 'marker', 'cancellation']) if (!search.some(d => `${d.title} ${d.text}`.toLowerCase().includes(query))) errors.push(`Search index missing ${query}`);
+const documentationIndex = fs.readFileSync(path.join(root, 'docs/index.html'), 'utf8');
+for (const slug of ['blueprints-tutorial', 'vfx-editor', 'timelines', 'spell-tutorial', 'blueprints-vfx-troubleshooting']) {
+  if (!documentationIndex.includes(`/docs/${slug}/`) || !search.some(d => d.url === `/docs/${slug}/`)) errors.push(`Learning guide is not discoverable: ${slug}`);
+}
 const homepage = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+for (const [slug, image] of [['vfx-editor', 'vfx-editor.png'], ['spell-tutorial', 'blueprint-fireball.png']]) {
+  if (!fs.readFileSync(path.join(root, `docs/${slug}/index.html`), 'utf8').includes(`/media/docs/images/${image}`)) errors.push(`Guide is missing its editor capture: ${slug}`);
+}
 if (!homepage.includes('id="blueprints"') || !homepage.includes('/docs/blueprints/')) errors.push('Homepage is missing Blueprint documentation access');
 if (!homepage.includes('/media/resources/branding/epok-lockup.png')) errors.push('Homepage is missing the Epok Engine wordmark');
 for (const file of [...files, 'assets/search.json']) {

@@ -28,7 +28,7 @@ Epok brings a visual editor workflow to PSX development. Create a project, arran
 
 **Windows x64 and macOS Apple Silicon · Experimental · MIT-licensed original code.** The editor and runtime are in active development. Emulator validation is available; physical-console validation is pending.
 
-
+![Epok editor with the scene viewport, editable 2.5D courtyard, scene hierarchy and component inspector](docs/images/epok-editor.png)
 
 <p align="center"><sub>The included 2.5D courtyard, open in the real editor. Screenshots in this README show the working application.</sub></p>
 
@@ -40,12 +40,12 @@ Epok brings a visual editor workflow to PSX development. Create a project, arran
 | --- | --- |
 | **Build your world** | Arrange entities in a dockable editor with transform gizmos, parenting and a component Inspector. Create and edit geometry with [Blockout](docs/blockout.md), including extrusion, bevels and geometry Undo/Redo. |
 | **Bring in your assets** | Import [PNG textures](docs/textures.md), [OBJ/MTL models](docs/static-mesh-import.md) and [FBX characters](docs/skeletal.md). Asset identities survive moves and reimports. |
-| **Animate and add effects** | Use rigid skeletal animation, atlas sprites, billboards, flipbooks and bounded [particle emitters](docs/sprites-particles.md). Add [fog, scrolling water](docs/environment-effects.md) and [palette cycling](docs/palette-animation.md). |
+| **Animate and add effects** | Build layered effects in the [VFX editor](docs/vfx-editor.md) with presets, Q12 curves, bursts and preview controls. Reuse [timelines](docs/timelines.md) for scene sequences and connect their markers to Blueprint gameplay. Use sprites, flipbooks, [particle emitters](docs/sprites-particles.md), fog and palette cycling. |
 | **Write native gameplay** | Author C++20 behaviours with Inspector properties. Connect [input and collision](docs/input-collision.md), [scene transitions and object lifecycle](docs/runtime-services.md), cameras, tweens and [Memory Card storage](docs/memory-card.md). |
 | **Build visual gameplay** | Create [Blueprint classes](docs/blueprints.md) with native or visual parents, inherited defaults, typed graph nodes, functions, event overrides and Call Parent. Author entity templates, spawn classes and debug node execution. Graphs compile ahead of time to native C++; no graph VM runs on the PSX. |
 | **Light and render** | Combine baked vertex lighting, bounded realtime GTE lighting, static shadows and blob shadows. Author for PSX rendering limits with native [performance counters](docs/performance.md). |
 | **Add audio and UI** | Import WAV, MP3, FLAC or OGG for SPU sound effects and XA music. Build [HUDs](docs/hud.md) with text, atlases, nine-slice images, progress bars and navigation. |
-| **Play and export** | Run, pause and step games in PCSX-Redux. Build PS-X executables and BIN/CUE disc images, or [export a standalone PsyQo project](runtime/README.md). |
+| **Play and export** | Run, pause and step games in PCSX-Redux. Build PS-X executables, package physical-disc BIN/CUE or ISO images with a user-supplied system-area license, or [export a standalone PsyQo project](runtime/README.md). |
 
 Projects live independently of the editor. Scenes, scripts and imported assets stay in your game folder; the engine owns the runtime and development tools.
 
@@ -66,8 +66,9 @@ calls. Instrumented Play supports node breakpoints, stepping and typed values;
 release builds omit debugger instrumentation. Exported C++ projects rebuild
 without the editor or reflection extractor.
 
-Read the [Blueprint guide](docs/blueprints.md) for the workflow, reproducible
-examples and console-side limits. Blueprints use Epok's own asset format and
+Start with [Your first Blueprint](docs/blueprints-tutorial.md), then connect an
+effect with the [spell tutorial](docs/spell-tutorial.md). The [Blueprint reference](docs/blueprints.md)
+documents execution and console-side limits. Blueprints use Epok's own asset format and
 bounded native backend; Unreal assets/APIs and live native-code patching are not
 supported. Blueprint reflection/authoring currently requires the Windows x64
 toolchain; general macOS editor support does not yet include that runtime.

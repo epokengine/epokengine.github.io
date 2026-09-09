@@ -25,7 +25,23 @@ Do not initialize Nugget's nested submodules recursively. They are not required 
 
 Output is `epok.ps-exe`. The ELF and map files support debugging. The exported Makefile requires an explicit `NUGGET_DIR` when the SDK is elsewhere. For an existing portable Epok setup, prepend its `.tools/mips/bin` to the current shell's PATH and point `NUGGET_DIR` to its `third_party/nugget`.
 
+The default standalone Make target dispatches to `build.ps1` on Windows or
+`build.sh` on Unix. These launchers rebuild current SDK sources into private
+objects and a fresh archive, then rebuild the application. They preserve existing
+shared SDK objects and libraries and do not depend on editor caches or file
+timestamps to detect changes. Generated private SDK object directories remain in
+the SDK folder for diagnosis; SDK archives stay under the export's `sdk/` folder.
+Run native builds sequentially against a given SDK. Explicit `make all` bypasses
+the standalone launcher and retains Nugget's ordinary incremental behavior.
+
 The exported game does not require the Rust editor or Lua. Run the PS-X executable using a compatible emulator or a suitable console loading method. Music-enabled or geometry-streaming exports require the generated CD image as described below. Hardware validation is still pending.
+
+`Scripts.epokmanifest` v2 lists emitted files relative to its own directory and
+authoring dependencies relative to the original project. Those dependencies are
+provenance, not inputs that standalone Make must reopen. Copy the complete export
+when changing folders; use the selected SDK/toolchain paths for the new build.
+Exports include the [Timeline/VFX guide](docs/timelines.md) and
+[Blueprint guide](docs/blueprints.md) alongside the compiled runtime sources.
 
 ## Scene and scripts
 
@@ -124,6 +140,8 @@ mkpsxiso -y disc.xml
 ```
 
 Outputs are `epok.bin` and `epok.cue`. Boot the CUE in a compatible emulator, retaining the neighboring BIN. This image uses `SYSTEM.CNF` to load `EPOK.EXE`; OpenBIOS boot and XA playback are covered by integration tests. No proprietary Sony license sectors or BIOS are distributed; real-console boot depends on the user's loading setup and is not verified. The XA converter is only needed when importing/regenerating assets, not when building a complete export.
+
+From the editor, **File > Package PSX Disc...** packages a physical-disc target even when the game has no XA music or streaming data. Choose the target region and output format, then provide a system-area license file you are authorized to use. Epok stores this local path in `UserSettings/DiscExport.epokprefs`, which is not part of the project source. BIN/CUE is the recommended format for PlayStation CD-Rs; ISO is provided for burners that accept only that extension. A compatible loader or modchip is still required for CD-R media because its SCEx pregroove cannot be written by ordinary CD burners.
 
 
 Skeletal meshes use `Animator` for clip selection/play/pause/resume/stop. Geometry, skeletons and quantized 30 Hz clips are shared; one bone transforms each vertex. No FBX parser runs on the console. See the editor repository `docs/skeletal.md` for the profile and authoring limits.
