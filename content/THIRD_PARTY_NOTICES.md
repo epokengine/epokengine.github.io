@@ -7,6 +7,8 @@ Epok's original source code is MIT licensed. This does not replace the licenses 
 | Resource | Attribution and license | Included notice |
 | --- | --- | --- |
 | Codicons, version 0.0.46-24 | Microsoft and contributors; icon/content license CC BY 4.0, repository code MIT | [Codicons license](resources/editor/LICENSE-codicons.txt) |
+| Roboto Regular and Bold | Google and contributors; Apache License 2.0 | [Roboto license](resources/editor/LICENSE-roboto.txt) |
+| Material Design Icons function glyph, version 7.4.47 | Pictogrammers and contributors; Apache License 2.0 | [MDI license](resources/editor/LICENSE-blueprint-function-icon.txt) |
 | Font Awesome Free desktop font | Fonticons, Inc.; SIL Open Font License 1.1 for the font | [Font Awesome license](resources/editor/LICENSE-fontawesome.txt) |
 | mig68000 HUD bitmap font | Zingot Games; attribution retained from the pinned PsyQo source, author lists FontPack as CC BY 4.0 | [HUD font notice](resources/editor/LICENSE-psx-font.txt) |
 
@@ -15,6 +17,8 @@ Codicons legal notices distinguish content from code: https://github.com/microso
 The included Codicons font is a subset of version 0.0.46-24 containing the glyphs used by the editor. Unused glyphs and glyph-name metadata were removed with fonttools 4.60.1; the retained designs are unchanged. See [resource maintenance](knowledge/maintainers/resources.md) for regeneration.
 
 Font Awesome's distribution includes different licenses for different formats. Epok uses the TTF font: https://fontawesome.com/license/free
+
+The Blueprint action menu uses unmodified Roboto fonts from googlefonts/roboto-2, revision `38062f4b4a0be4346d07a928408da21602545e9e`. Its function icon is the unmodified `function` design from `@mdi/font` 7.4.47, subset to one glyph and remapped from U+F0295 to U+E900 for ImGui's 16-bit font atlas. These open fonts and icons are independent of Epic's artwork. Codicons was regenerated for the action-menu symbols on 2026-09-10.
 
 The HUD bitmap is decoded from the pinned PsyQo system font for matching editor/console glyphs. Its representation was converted; credit remains with Zingot Games. Author: https://www.zingot.com/ and https://zingot.itch.io/fontpack
 

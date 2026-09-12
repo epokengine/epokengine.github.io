@@ -6,21 +6,27 @@ const root = path.resolve(import.meta.dirname, '..');
 const out = path.join(root, 'dist');
 const content = path.join(root, 'content');
 const manifest = JSON.parse(fs.readFileSync(path.join(root, 'content-manifest.json'), 'utf8'));
+const guideNotes = JSON.parse(fs.readFileSync(path.join(root, 'web-guide-notes.json'), 'utf8'));
 const repo = manifest.repository;
 const origin = 'https://epokengine.github.io';
 const esc = (s = '') => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const groups = [
-  ['Start here', [['getting-started', 'Getting started'], ['projects', 'Projects'], ['editor', 'The editor'], ['settings', 'Settings'], ['formats', 'File formats & migration']]],
+  ['Start here', [['getting-started', 'Getting started'], ['features', 'Complete feature catalog'], ['projects', 'Projects'], ['editor', 'The editor'], ['content-browser', 'Content Browser'], ['settings', 'Settings'], ['formats', 'File formats & migration']]],
   ['Create your world', [['blockout', 'Blockout modeling'], ['third-person', 'Third Person template'], ['static-mesh-import', 'Importing models'], ['skeletal', 'Skeletal characters'], ['textures', 'Textures']]],
-  ['Render & animate', [['lighting', 'Lighting & shadows'], ['environment-effects', 'Environment effects'], ['palette-animation', 'Palette animation'], ['streaming', 'Geometry streaming']]],
+  ['Render & animate', [['lighting', 'Lighting & shadows'], ['environment-effects', 'Environment effects'], ['palette-animation', 'Palette animation']]],
   ['Build gameplay', [['blueprints-tutorial', 'Your first Blueprint'], ['blueprints', 'Blueprint reference'], ['scripting', 'C++ scripting'], ['input-collision', 'Input & collision'], ['runtime-services', 'Runtime services'], ['camera-resources', 'Cameras'], ['resources', 'Shared resources'], ['memory-card', 'Memory Card']]],
   ['Timelines & VFX', [['vfx-editor', 'Using the VFX editor'], ['timelines', 'Timeline reference'], ['spell-tutorial', 'Connect a spell to gameplay'], ['spell-example', 'RPG spell example'], ['sprites-particles', 'Sprites & particles'], ['blueprints-vfx-troubleshooting', 'Blueprint & VFX troubleshooting']]],
   ['Sound & interface', [['assets', 'Assets & audio'], ['hud', 'HUD & UI']]],
-  ['Extend & understand', [['mcp', 'AI / MCP'], ['architecture', 'Architecture'], ['performance', 'Performance'], ['testing', 'Testing'], ['runtime', 'Standalone runtime'], ['demo', '2.5D example']]],
+  ['Build, run & ship', [['play', 'Play targets & loading'], ['performance', 'Performance'], ['streaming', 'Geometry streaming'], ['runtime', 'Standalone runtime'], ['release-process', 'Release process']]],
+  ['Extend & understand', [['mcp', 'AI / MCP'], ['architecture', 'Architecture'], ['testing', 'Testing'], ['demo', '2.5D example']]],
   ['Project', [['license', 'License'], ['credits', 'Third-party notices'], ['runtime-credits', 'Runtime notices']]],
 ];
 const special = { architecture: 'knowledge/architecture.md', resources: 'knowledge/maintainers/resources.md', testing: 'knowledge/maintainers/testing.md', runtime: 'runtime/README.md', demo: 'examples/rpg-2-5d-demo/README.md', 'spell-example': 'examples/timeline-spell/README.md', license: 'LICENSE', credits: 'THIRD_PARTY_NOTICES.md', 'runtime-credits': 'runtime/THIRD_PARTY_NOTICES.md' };
 const docs = groups.flatMap(([group, entries]) => entries.map(([slug, label]) => ({ slug, label, group, file: special[slug] || `docs/${slug}.md` })));
+const noteExemptions = new Set(['license', 'credits', 'runtime-credits']);
+for (const doc of docs) {
+  if (!noteExemptions.has(doc.slug) && !guideNotes[doc.slug]) throw new Error(`Missing beginner guide notes for ${doc.slug}`);
+}
 const routes = new Map(docs.map(d => [d.file, `/docs/${d.slug}/`]));
 routes.set('README.md', '/');
 function write(file, text) { const dest = path.join(out, file); fs.mkdirSync(path.dirname(dest), { recursive: true }); fs.writeFileSync(dest, text); }
@@ -51,6 +57,13 @@ function render(markdown, file) {
   const html = marked.parse(markdown, { renderer, gfm: true });
   return { html, headings };
 }
+function guidePrimer(doc) {
+  const note = guideNotes[doc.slug];
+  if (!note) return '';
+  const flow = note.flow.map((step, index) => `<li><span class="flow-number mono">${String(index + 1).padStart(2, '0')}</span><span>${esc(step)}</span></li>`).join('');
+  const details = note.details.map(detail => `<li>${esc(detail)}</li>`).join('');
+  return `<section class="guide-primer" aria-label="Beginner overview"><p class="eyebrow">START WITH THE BIG PICTURE</p><h2>What does this part of Epok do?</h2><p class="primer-lead">${esc(note.plain)}</p><aside class="mental-model"><p class="primer-label">A useful mental model</p><p>${esc(note.analogy)}</p></aside><ol class="concept-flow" aria-label="Feature flow">${flow}</ol><div class="primer-details"><h3>What is happening under the hood?</h3><ul>${details}</ul></div><p class="field-note"><strong>Field note:</strong> ${esc(note.tip)}</p></section>`;
+}
 function header(active = '') {
   return `<a class="skip" href="#main">Skip to content</a><header class="header"><div class="header-inner"><a class="brand" href="/" aria-label="Epok home"><img src="/media/resources/branding/epok.png" width="36" height="36" alt=""><span>Epok Engine</span></a><nav aria-label="Main navigation"><a href="/#features">Features</a><a href="/docs/" ${active === 'docs' ? 'aria-current="page"' : ''}>Documentation</a><a class="github" href="${repo}">GitHub <span aria-hidden="true">↗</span></a></nav></div></header>`;
 }
@@ -64,12 +77,15 @@ for (const file of manifest.files) if (/\.(png|jpg|jpeg|svg|webp|gif)$/i.test(fi
 fs.cpSync(path.join(root, 'assets'), path.join(out, 'assets'), { recursive: true });
 const arrow = '<span aria-hidden="true">↗</span>';
 const features = [
-  ['01', 'Shape your world', 'A dockable scene editor, transform gizmos and editable Blockout geometry. Build levels from the first platform up.', 'blockout'],
-  ['02', 'Bring your art', 'Import PNG textures, OBJ environments and FBX characters. Preview rigid skeletal animation before you build.', 'skeletal'],
-  ['03', 'Connect your gameplay', 'Typed Blueprint graphs or reflected C++20 behaviours. Inherit classes, override events and compile both to native MIPS code.', 'blueprints'],
-  ['04', 'Animate your effects', 'Build layered VFX with presets, curves and bursts. Connect timeline markers to Blueprint gameplay and preview the result.', 'vfx-editor'],
-  ['05', 'Play, inspect, export', 'An integrated PCSX-Redux Game view with Pause and Step. Export a PS-X executable, BIN/CUE or standalone project.', 'runtime'],
-  ['06', 'Work with an assistant', 'Optional local MCP tools for scenes, assets, scripts, captures and builds. Connect your own compatible assistant.', 'mcp'],
+  ['01', 'Shape your world', 'A dockable Scene View, hierarchy, Inspector, transform gizmos and editable Blockout geometry.', 'blockout'],
+  ['02', 'Browse real project files', 'A native Content Browser with search, collections, safe moves, recoverable trash and inline image, audio and model previews.', 'content-browser'],
+  ['03', 'Bring your art', 'Import PNG textures, OBJ environments, FBX characters and WAV, MP3, FLAC or OGG audio into portable assets.', 'assets'],
+  ['04', 'Connect your gameplay', 'Typed Blueprint graphs or reflected C++20 behaviours compile ahead of time to native MIPS code.', 'blueprints'],
+  ['05', 'Animate timelines and VFX', 'Build layered effects with presets, Q12 curves and bursts, then connect markers and completion to gameplay.', 'vfx-editor'],
+  ['06', 'Play where you choose', 'Run the current scene or whole game in the embedded emulator, a separate window or a PSX through serial.', 'play'],
+  ['07', 'Inspect every byte', 'Analyze RAM, VRAM, SPU, scratchpad and output files with attributed tables and an interactive treemap.', 'play'],
+  ['08', 'Stream, package and export', 'Use bounded CD or PC geometry pages, package PS-X EXE or BIN/CUE, or export a standalone PsyQo project.', 'runtime'],
+  ['09', 'Work with an assistant', 'Twenty optional local MCP tools cover guarded scene and file edits, assets, captures, builds and Play.', 'mcp'],
 ];
 const editorGallery = `<section class="editor-shot editor-gallery" data-gallery aria-label="Epok Engine editor gallery" aria-roledescription="carousel">
 <div class="window-bar"><span>Epok Engine / Editor</span><span class="live-label">REAL EDITOR CAPTURES</span></div>
@@ -96,7 +112,14 @@ powershell -ExecutionPolicy Bypass -File tools/setup.ps1
 cargo run --locked</code></pre><p>Windows commands shown; <a href="/docs/getting-started/#install-and-run">macOS setup is documented too</a>.<br>Use a checkout path without spaces.</p></div></section><section class="status-note wrap"><span class="status-dot"></span><div><h3>Built in the open. Still evolving.</h3><p>Epok is experimental. Builds and emulator execution are validated; physical-console validation is pending. Original code is MIT licensed. <a href="/docs/#limits">Read the current limits →</a></p></div></section></main>`;
 const blueprintShowcase = `<section id="blueprints" class="section wrap"><div class="section-heading"><div><p class="eyebrow">BLUEPRINTS / NATIVE GAMEPLAY</p><h2>Wire the logic.<br>Keep it native.</h2></div><p>Visual classes, typed connections and reusable entity templates.<br>Compiled C++ for the same PlayStation runtime.</p></div><figure class="editor-shot"><div class="window-bar"><span>Epok Engine / Blueprint Editor</span><span class="live-label">REAL EDITOR CAPTURE</span></div><a href="/assets/captures/epok-blueprints.png" aria-label="Open the full-size Epok Blueprint editor capture"><img src="/assets/captures/epok-blueprints.png" width="1581" height="917" alt="Epok Blueprint editor showing components, inherited variables, typed connections, branches and a Delay node" loading="lazy"></a><figcaption>Native Blueprint authoring in Epok Engine. A compiled interaction graph with typed data and execution connections.</figcaption></figure><a class="text-link blueprint-doc-link" href="/docs/blueprints/">Explore Blueprints ${arrow}</a><div class="tags" aria-label="Blueprint capabilities"><a href="/docs/blueprints/#inheritance-and-identity">C++ / Blueprint inheritance</a><a href="/docs/blueprints/#execution-and-types">Typed visual scripting</a><a href="/docs/blueprints/#entity-templates-and-construction">Reusable entity templates</a><a href="/docs/blueprints/#debugging-and-iteration">Node breakpoints &amp; stepping</a></div><p class="small muted blueprint-platform">Blueprint reflection and authoring currently require Windows x64. General macOS editor support does not yet include the Blueprint toolchain.</p></section>`;
 const sceneShowcase = `<section id="scene-view" class="showcase section wrap"><figure><a href="/assets/captures/epok-scene-view.png" aria-label="Open the full-size Scene View capture"><img src="/assets/captures/epok-scene-view.png" width="960" height="600" alt="Epok Scene View displaying the courtyard with textured geometry, characters and particles" loading="lazy"></a><figcaption>Scene View captured directly from the Epok renderer.</figcaption></figure><div><p class="eyebrow">SCENE VIEW</p><h2>See your world<br>take shape.</h2><p>Arrange objects, adjust lighting, and preview your world as you build.</p><a class="text-link" href="/docs/editor/">Explore the editor ${arrow}</a></div></section>`;
-const homeWithBlueprints = home.replace('<section class="showcase section wrap">', `${sceneShowcase}${blueprintShowcase}<section class="showcase section wrap">`);
+const homeWithBlueprints = home
+  .replace('Explore the docs', 'See every feature')
+  .replace('href="/docs/">See every feature', 'href="/docs/features/">See every feature')
+  .replace('THE WORKFLOW', 'THE COMPLETE WORKFLOW')
+  .replace('From an empty scene<br>to a world of your own.', 'From an empty scene<br>to original hardware.')
+  .replace('Author visually, work within PSX limits,<br>and run native MIPS code.', 'Author visually, inspect every budget,<br>and run native MIPS code.')
+  .replace('</div></section><section class="showcase section wrap">', '</div><p class="feature-catalog-link"><a class="text-link" href="/docs/features/">Browse the source-mapped feature catalog ↗</a></p></section><section class="showcase section wrap">')
+  .replace('<section class="showcase section wrap">', `${sceneShowcase}${blueprintShowcase}<section class="showcase section wrap">`);
 write('index.html', page('Epok Engine — Build games for the original PlayStation', 'A standalone visual editor and native PSX runtime. Build worlds and create gameplay with Blueprints or C++ for the original PlayStation.', '/', homeWithBlueprints));
 const searchItems = [];
 for (let i = 0; i < docs.length; i++) {
@@ -104,18 +127,23 @@ for (let i = 0; i < docs.length; i++) {
   let md = fs.readFileSync(path.join(content, doc.file), 'utf8');
   if (doc.slug === 'license') md = '# License\n\n```text\n' + md + '\n```\n';
   const { html, headings } = render(md, doc.file);
-  const plain = md.replace(/```[\s\S]*?```/g, '').replace(/<[^>]*>/g, '').replace(/[#*`\[\]]/g, '').replace(/\s+/g, ' ').trim();
+  const expandedHtml = html.replace('</h1>', `</h1>${guidePrimer(doc)}`);
+  const note = guideNotes[doc.slug];
+  const noteText = note ? [note.plain, note.analogy, ...note.flow, ...note.details, note.tip].join(' ') : '';
+  const plain = `${noteText} ${md}`.replace(/```[\s\S]*?```/g, '').replace(/<[^>]*>/g, '').replace(/[#*`\[\]]/g, '').replace(/\s+/g, ' ').trim();
   searchItems.push({ title: doc.label, group: doc.group, url: `/docs/${doc.slug}/`, text: plain });
   const sidebar = `<aside class="sidebar" aria-label="Documentation navigation"><a class="docs-home" href="/docs/">Documentation <span aria-hidden="true">↗</span></a><a class="search-shortcut" href="/docs/#search">Find a guide <span aria-hidden="true">⌕</span></a>${groups.map(([group, entries]) => `<div class="nav-group"><p>${group}</p>${entries.map(([slug, label]) => `<a href="/docs/${slug}/"${slug === doc.slug ? ' aria-current="page"' : ''}>${esc(label)}</a>`).join('')}</div>`).join('')}</aside>`;
   const prev = docs[i - 1], next = docs[i + 1];
   const pager = `<nav class="pager" aria-label="Adjacent guides">${prev ? `<a href="/docs/${prev.slug}/"><span>← Previous</span>${esc(prev.label)}</a>` : '<span></span>'}${next ? `<a href="/docs/${next.slug}/"><span>Next →</span>${esc(next.label)}</a>` : ''}</nav>`;
-  const body = `<div class="docs-layout">${sidebar}<main id="main" class="doc-main"><div class="doc-top"><a href="/docs/">Documentation</a><span>/</span><span>${esc(doc.group)}</span></div><div class="mobile-doc-nav"><a href="/docs/">← All guides</a><details><summary>On this page</summary>${headings.filter(h => h.depth === 2).map(h => `<a href="#${esc(h.id)}">${esc(h.label)}</a>`).join('')}</details></div><article class="prose">${html}</article><div class="source-note">From the published engine documentation · <a href="${repo}/blob/${manifest.commit}/${doc.file}">View source ${arrow}</a></div>${pager}</main><aside class="toc" aria-label="On this page"><p>ON THIS PAGE</p>${headings.map(h => `<a class="depth-${h.depth}" href="#${esc(h.id)}">${esc(h.label)}</a>`).join('')}</aside></div>`;
+  const body = `<div class="docs-layout">${sidebar}<main id="main" class="doc-main"><div class="doc-top"><a href="/docs/">Documentation</a><span>/</span><span>${esc(doc.group)}</span></div><div class="mobile-doc-nav"><a href="/docs/">← All guides</a><details><summary>On this page</summary>${headings.filter(h => h.depth === 2).map(h => `<a href="#${esc(h.id)}">${esc(h.label)}</a>`).join('')}</details></div><article class="prose">${expandedHtml}</article><div class="source-note">Expanded for the web from the published engine documentation · <a href="${repo}/blob/${manifest.commit}/${doc.file}">View technical source ${arrow}</a></div>${pager}</main><aside class="toc" aria-label="On this page"><p>ON THIS PAGE</p>${headings.map(h => `<a class="depth-${h.depth}" href="#${esc(h.id)}">${esc(h.label)}</a>`).join('')}</aside></div>`;
   write(`docs/${doc.slug}/index.html`, page(`${doc.label} — Epok Docs`, `${doc.label}: guides and reference for the Epok PlayStation game engine.`, `/docs/${doc.slug}/`, body, 'docs'));
 }
 const docGroups = groups.map(([group, entries], i) => `<section class="guide-group"><p class="eyebrow">${String(i + 1).padStart(2, '0')}</p><h2>${group}</h2>${entries.map(([slug, label]) => `<a href="/docs/${slug}/">${esc(label)} <span aria-hidden="true">→</span></a>`).join('')}</section>`).join('');
 const index = `<main id="main" class="wrap docs-index"><p class="eyebrow">EPOK DOCUMENTATION</p><h1>Build your first world.<br><span>Then go deeper.</span></h1><p class="lead">Setup, workflows and native APIs for the original PlayStation.</p><form class="search-form" role="search" action="/docs/"><label for="search">Search the documentation</label><div class="search-box"><span aria-hidden="true">⌕</span><input id="search" name="q" type="search" placeholder="Try Blueprints, textures or collision…" autocomplete="off"><button type="reset">Clear</button></div></form><p class="search-status small muted" role="status" aria-live="polite"></p><div class="search-results" hidden></div><div class="guide-grid">${docGroups}</div><section id="limits" class="limits"><p class="eyebrow">BEFORE YOU BUILD</p><h2>Know the current limits.</h2><ul><li><strong>Experimental, Windows x64 and macOS Apple Silicon.</strong> Builds and emulator execution are verified. Blueprint reflection and authoring currently require Windows x64. Physical-console validation is pending.</li><li><strong>Rigid skeletal animation.</strong> Skeletal textures, blended skin weights and animation blending remain future work.</li><li><strong>Focused editing tools.</strong> Blueprint graphs/templates, timelines, effects, Blockout geometry and MCP scene batches have Undo/Redo. Entity multiselection remains future work.</li><li><strong>PSX rendering constraints.</strong> Intersecting polygons can still produce sorting artifacts. Capacity limits are not frame-rate guarantees.</li><li><strong>Bounded simulation and resources.</strong> Fixed 60 Hz steps, conservative AABB collision and resident data that must fit PSX RAM. Optional <a href="/docs/streaming/">editable-mesh geometry streaming</a> uses bounded CD pages; required reads may stall rendering and restart XA music. It is off by default, not general-purpose map or texture streaming.</li><li><strong>Build from source.</strong> A release build creates the editor executable; portable application packaging is not yet provided.</li></ul><p class="small muted">Documentation snapshot: <a href="${repo}/tree/${manifest.commit}">${manifest.commit.slice(0, 7)}</a>. Updated from committed engine documentation.</p></section></main>`;
 const learningPaths = `<section class="learning-paths" aria-labelledby="learning-paths"><h2 id="learning-paths">Learn by doing</h2><div class="guide-grid"><section class="guide-group"><p class="eyebrow">01 / VISUAL GAMEPLAY</p><h3>Build your first Blueprint</h3><p>Find the editor controls, connect typed pins and inspect a running behaviour.</p><a href="/docs/blueprints-tutorial/">Start the Blueprint tutorial <span aria-hidden="true">→</span></a><a href="/docs/blueprints/">Keep the reference nearby <span aria-hidden="true">→</span></a></section><section class="guide-group"><p class="eyebrow">02 / VISUAL EFFECTS</p><h3>Create and animate an effect</h3><p>Choose layers, tune emission, edit curves and preview a repeatable effect.</p><a href="/docs/vfx-editor/">Open the VFX editor guide <span aria-hidden="true">→</span></a><a href="/docs/timelines/">Explore scene timelines <span aria-hidden="true">→</span></a></section><section class="guide-group"><p class="eyebrow">03 / PUT IT TOGETHER</p><h3>Make a playable spell</h3><p>Spawn an effect, apply damage at Impact and handle completion or cancellation.</p><a href="/docs/spell-tutorial/">Follow the spell tutorial <span aria-hidden="true">→</span></a><a href="/docs/blueprints-vfx-troubleshooting/">Troubleshoot your result <span aria-hidden="true">→</span></a></section></div></section>`;
-const indexWithPaths = index.replace('<form class="search-form"', `${learningPaths}<form class="search-form"`);
+const indexWithPaths = index
+  .replace('Setup, workflows and native APIs for the original PlayStation.', 'Setup, workflows, native APIs and a source-mapped catalog of every implemented feature.')
+  .replace('<form class="search-form"', `${learningPaths}<form class="search-form"`);
 write('docs/index.html', page('Documentation — Epok', 'Learn Epok: installation, editor workflows, assets, Blueprint visual scripting, C++ and the native PlayStation runtime.', '/docs/', indexWithPaths, 'docs'));
 write('assets/search.json', JSON.stringify(searchItems));
 write('404.html', page('Page not found — Epok', 'Find your way back to the Epok documentation.', '/404.html', '<main id="main" class="wrap not-found"><p class="eyebrow">404 / OUTSIDE THE SCENE</p><h1>This page is missing.</h1><p>The guide may have moved. Find it in the documentation.</p><a class="button primary" href="/docs/">Browse the docs →</a></main>'));

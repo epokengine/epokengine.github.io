@@ -1,5 +1,10 @@
 # Local testing for Epok maintainers
 
+Use debug builds for local development and iteration: `cargo build --locked --bins`.
+Development desktop shortcuts must point to `target/debug/epok-editor.exe` on
+Windows (or `target/debug/epok-editor` on other hosts). Build release only when
+explicitly requested for release validation or distribution.
+
 The reusable timeline component library has a dedicated acceptance command:
 `python tests/integration/verify_timeline_adapters.py`. It installs project-owned
 adapter source, uses the real Clang extractor and native/Blueprint ancestry,
@@ -24,7 +29,8 @@ template script value before full MIPS staging; both audio banks must remain
 unchanged. Focused Rust tests cover script member IDs/override bookkeeping,
 missing-class identity, native metadata failure/repair and independent banks.
 
-Run checks from the repository root. GitHub Actions is not configured; validation is performed locally.
+Run checks from the repository root. Full validation is performed locally;
+GitHub Actions enforces the release branch and version policy.
 
 `make check` runs the four editor checks below sequentially and stops on the first failure. On Windows after setup, use `.\.tools\mips\bin\make.exe check` if Make is not on PATH. The root Makefile also exposes `test`, `lint`, `fmt-check`, `build` and `release` individually; native emulator checks remain separate.
 
@@ -57,6 +63,36 @@ After `cargo build --locked`, run `python tests/integration/mcp.py` to launch an
 Unit tests also cover disabled defaults, key migration, port conflicts, Host/Origin/authentication rejection, listener shutdown, stale edits, atomic batch failure, file backups and cancelled/expired queued requests. `--screenshot-mcp-settings` opens the AI / MCP preference page for visual checks.
 
 ## Native PSX checks
+
+`python tests/integration/verify_memory.py` builds an isolated project using the
+saved serial Play profile without opening a serial port or emulator. It checks
+current-scene versus whole-game MIPS outputs, shared texture deduplication, BSS
+accounting, SPU residency, exclusion of stale cached payloads and unchanged-build
+repeatability. Reports and real editor captures of the analyzer and Play menu are
+kept under `artifacts/memory/<timestamp>`. `--screenshot-memory` opens an existing
+report for visual QA; `--screenshot-play-menu` opens the toolbar menu.
+
+Default tests also verify treemap area/containment, malformed ELF rejection,
+symbol alias accounting, complete/fragmented NOTPSXSerial progress records, and
+the compact modal's size, continued workspace rendering and keyboard/MCP lock.
+
+`python tests/runtime/verify_frame_clear.py` checks the real PsyQo clear packets
+for all ten video modes and both buffer parities. Interlaced rendering clears
+with a rectangle at `(0,0)` and preserves the displayed field; progressive
+rendering retains the alternating 240-line buffers. This checks packet contents
+and VRAM bounds; field timing still needs testing on physical hardware.
+
+On 2026-09-11, the user tested the isolated Ironwood title through Unirom serial
+on a Japanese SCPH-7500 with composite AV into an HDMI converter. The 640 x 480i
+build still flickered and turned white after the field-clear fix. The adapted
+320 x 240p build (`ironwood_menu_240p.exe`, SHA-256
+`7712b6649358ef76c13fec659157974e256c9c4f1257ab9df1ed741ead769da1`)
+was reported stable, with cropping at the top and bottom. This is evidence for
+that title and output chain, not acceptance of all video modes or proof that
+the converter caused the interlaced failure. The next comparison moves the
+diagnostic counter and help text inside 16-pixel vertical margins while keeping
+the same 320 x 240p GPU setup. These isolated title tests omit XA music and other
+scene banks. Emulator captures alone do not validate analog output timing.
 
 Safe native iteration is exercised with a real editor state and its existing
 build/Play worker (no GPU window is needed):
@@ -513,6 +549,11 @@ with frame costs. Startup work remains visible in the first/last cumulative
 values even when the sampled frames start after the spell has completed.
 
 ## Clean-checkout verification
+
+`python tests/integration/verify_splash.py` captures the real 640 × 400 project
+splash, a restored 1024 × 720 editor and the Hub after a failed open. It checks
+window proportions at the monitor's DPI and keeps captures under `artifacts/splash`.
+Manually check opening from a maximized Hub and on a secondary monitor as well.
 
 Before publishing structural or dependency changes, validate a separate checkout or source snapshot containing only publishable files. Run setup with an empty `.tools/`, initialize the pinned SDK without nested recursion, and build with a fresh Cargo target directory.
 

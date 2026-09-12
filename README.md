@@ -24,12 +24,12 @@ The Markdown and screenshots in `content/` come from published engine documentat
 After fetching the engine repository, sync from its published branch:
 
 ```sh
-python tools/sync-content.py /path/to/Epok origin/main
+python tools/sync-content.py /path/to/Epok origin/develop
 npm run build
 npm run check
 ```
 
-When adding a guide, register its navigation entry in `tools/build.mjs`. Keep the homepage feature descriptions and current-limits section consistent with the documented revision. Internal guide links become website links; references to engine source files point to the matching GitHub revision.
+When adding a guide, register its navigation entry in `tools/build.mjs`. Keep the homepage feature descriptions and current-limits section consistent with the documented revision. Internal guide links become website links; references to engine source files point to the matching GitHub revision. The complete feature catalog is the source-mapped inventory; keep its source coverage tables current when production modules or runtime headers are added.
 
 The documentation index offers three learning paths: a first Blueprint, VFX
 authoring, and a marker-driven spell. Keep introductory tutorials separate from

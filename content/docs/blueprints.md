@@ -43,6 +43,73 @@ Comments and reroutes are authoring-only. **Compile** checks the current draft,
 shows diagnostics with node navigation, and can show generated native code.
 Save before building; unsaved drafts are never silently replaced by disk code.
 
+Behaviour Blueprints start with **On Start**, **On Update**, and **On Trigger**
+in one event canvas. These map to the PSX runtime's `start`, `update`, and
+`on_trigger`; Trigger provides the other entity and Enter/Stay/Exit phase.
+The corresponding collider must be configured as a trigger to receive overlaps.
+Opening an older Blueprint adds missing supported events as an undoable draft
+edit; save to retain them. Existing event graphs are preserved. Implemented
+parent events receive a **Call Parent** node so inherited logic keeps running.
+Other lifecycle events remain available through **Add > Override event**.
+
+Double-click a data or execution wire to insert a **Reroute** point. Drag its
+center to organize the wire, or connect to its sides to add branches. The point
+retains the wire's type and has no runtime operation. Splitting a wire and
+moving its point are separate undo steps. **Layout > Reroute** also adds one
+from the action menu. This follows Epic's documented
+[Blueprint reroute interaction](https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-foundations).
+
+## Split and recombine pins
+
+Right-click an unconnected Vector2, Vector3, Transform or native struct pin and
+choose **Split Struct Pin**. Inputs and outputs expose typed member pins; a
+Transform exposes Position, Rotation and Scale, each of which can split again
+into X, Y and Z. Edit input defaults in Details or connect compatible outputs.
+Right-click any child and choose **Recombine Struct Pin** to restore its parent.
+Disconnect all children of that parent first; recombining preserves their values.
+Both operations support undo/redo, save/reopen and copy/paste.
+
+The **Pin Actions** menu also offers **Promote to Variable**. An unconnected
+input creates a typed variable preserving its literal default and a connected
+Get node. An output creates a variable and a connected Set node; an existing
+Next execution connection is routed through that Set. For a pure source,
+connect the new Set to the desired execution flow. Names are made unique and
+the whole operation is one undo step. This follows Epic's
+[Promote to Variable behavior](https://dev.epicgames.com/documentation/en-us/unreal-engine/nodes-in-unreal-engine).
+
+Click a numeric value directly on a node to edit it, then press Enter or click
+away to commit; Escape cancels. Vector2 and Vector3 display separate X/Y(/Z)
+fields even before splitting. Split scalar fields use the same editor,
+including fields of nested native structs. Fixed, signed and unsigned integers
+retain their type/range checks, and committing a value is one undo step.
+Connected pins show their wire instead of a default-value editor. These rules
+are driven by each pin's type and connection state, independently of node kind.
+
+While dragging a wire over a compatible pin, the endpoint snaps to its center,
+the pin glows and fills, and the preview wire draws above the nodes. Releasing
+the mouse makes the connection. Hovering alone never changes the graph. The
+preview uses the same type, scope, cycle and occupied-pin checks as connecting.
+Connecting to a literal input replaces its default; an existing wire must be
+disconnected explicitly. Click-to-start/click-to-connect remains available.
+
+Drop a dragged pin on empty canvas to open the action menu with **Context
+Sensitive** enabled. It shows actions with at least one connectable opposite pin,
+using the same validation as hover and connection. Choosing an action places it
+at the drop position and wires the best matching pin automatically; exact types
+take priority. This also works when dragging from an input to create an upstream
+node, including typed reroutes. Creation and wiring undo together. Escape or
+dismissing the menu cancels the pending wire without changing the graph.
+
+Native function parameters and return values expose public fields of plain C++
+structs, including nested structs, supported scalars, enums and Fixed[2/3] arrays.
+Structs with bases, constructors, destructors, virtual methods, private/const
+fields, bitfields, pointers or unsupported containers cannot be split. Opaque
+runtime handles have no exposed fields. Mutable-reference **inputs** require
+whole writable storage and cannot split; event outputs can expose their fields.
+Split pins compile to native field access and value construction, without
+introducing runtime graph nodes. The interaction follows Epic's
+[struct pin documentation](https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprint-struct-variables-in-unreal-engine).
+
 ## Inheritance and identity
 
 Class, variable, function, node, pin, and link identities are stable. A class
@@ -60,6 +127,13 @@ Overriding an event replaces that implementation unless the graph calls
 the same override. Ordinary non-overridden behavior remains inherited.
 
 ## Execution and types
+
+Compilation follows execution wires from each event/function entry and includes
+the upstream data nodes consumed by that live execution. Disconnected islands
+remain editable but produce no code, asset cooking requirements, or diagnostics
+for unfinished pins and missing callable/asset references. Connecting them makes
+their validation active again. Reading an impure result still requires its
+execution input to be connected and to run before the consumer.
 
 Supported authoring values include bool, signed/unsigned 32-bit integers,
 Fixed Q12, reflected enums, bounded Fixed vectors, entity handles, imported

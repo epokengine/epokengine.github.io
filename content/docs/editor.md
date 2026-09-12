@@ -1,12 +1,20 @@
 # Using the editor
 
+Numeric fields support both keyboard entry and mouse adjustment: click and release without dragging to edit the text; hold and drag horizontally to change the value. The pointer shows horizontal arrows during the drag, including vector components, and returns to its normal cursor on release. Enter commits text and Escape cancels text editing. This applies to component values, transforms, scripts, asset tools and numeric editor settings. Existing per-field speeds, limits and validation remain in place. The behavior follows the combined text/spin control described in Epic's [SNumericEntryBox documentation](https://dev.epicgames.com/documentation/en-us/unreal-engine/API/Runtime/Slate/SNumericEntryBox), using Dear ImGui's native click-to-input mode rather than a separate overlay.
+
+Selecting a file in Project shows its metadata in the Inspector with a resizable preview below, following the separation of properties and previews described in Unity's [Inspector manual](https://docs.unity3d.com/Manual/InspectorOptions.html). See [Content Browser](content-browser.md) for supported previews and controls.
+
 **Edit > Project Settings** opens project identity, startup scene, automatic compilation and native resolution options. **Edit > Editor Preferences** opens local navigation and Game/emulator display preferences. Both have category navigation, search and explicit Apply. See [Settings](settings.md).
+
+## Console
+
+Console output is a read-only text area. Drag to select parts of a line or several lines, double-click to select a word, use Ctrl+A to select all and Ctrl+C to copy. Typing, paste and Delete cannot change the output or edit scene objects while the console text is active. Click a compiler diagnostic, then **Open source** to navigate to its file and line; **Clear** empties the log. New output preserves the selection when appended.
 
 ## Scene navigation
 
 The Hierarchy, Scene, Game, Inspector, Project and Console panels can be docked inside the editor window. Layout is stored in the selected project's `UserSettings/editor-layout-v2.ini`. Use Layout > Default or Window > Reset Layout to restore the initial arrangement. Use File > Projects to save/close the current project and create or open another.
 
-Editor panels and tool windows share a charcoal theme with blue selection and focus accents. Toolbars wrap when space is limited; Inspector labels move above their fields in narrow panels. Project lists show asset names and types, with locations in wider panels and full paths on hover. Hover truncated hierarchy names or status messages to read them in full. The skeletal preview expands with its window.
+Editor panels and tool windows share a charcoal theme with blue selection and focus accents. Toolbars wrap when space is limited; Inspector labels move above their fields in narrow panels. Project uses a Content Browser with a folder tree, gold folder tiles, breadcrumbs, Favorites and Collections. Settings switches between tiles and a table with asset types and paths. Hover truncated names or status messages to read them in full. The skeletal preview expands with its window. See [Content Browser](content-browser.md) for navigation and file operations.
 
 | Input | Scene action |
 | --- | --- |

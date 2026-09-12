@@ -9,7 +9,7 @@ These settings live in the root `.epokproject` YAML descriptor and travel with t
 | Category | Options |
 | --- | --- |
 | Project / Description | Project name shown in the Hub |
-| Project / Maps & Build | Startup scene and automatic compilation |
+| Project / Maps & Build | Startup scene, automatic compilation, [Play profile and loading transitions](play.md) |
 | Engine / Rendering | Native output resolution, retained packets and precomputed visibility |
 | Engine / Streaming | Geometry streaming, page pool, RAM budget and disc music behavior |
 
@@ -73,7 +73,17 @@ runtime behavior.
 
 Resolution changes apply on the next build. The generated `display.hh` travels with standalone C++ exports; runtime GPU setup, projection, clipping and blob-shadow projection use that configuration. The image keeps the same camera field of view and is presented at 4:3, including modes with nonsquare pixels.
 
+The output mode currently applies to every scene in the build. Per-scene modes
+and runtime resolution changes are not implemented; choosing 512 x 240 here
+also changes the title and gameplay scenes, not just menus.
+
 HUD coordinates are native output pixels. Anchors follow the selected canvas size; text remains an 8 x 16 bitmap font. A centered panel stays centered when resolution changes, but an authored 100-pixel width remains 100 pixels. The editor's 2D HUD canvas follows the selected resolution too.
+
+Analog displays and video converters may crop the outer lines. Keep important
+HUD content inside margins and verify it on the intended display; backgrounds
+can still reach the edges. Changing the GPU display range changes the visible
+region, not the pixel size, so it does not automatically scale a HUD to fit.
+See the [PSX display range reference](https://psx-spx.consoledev.net/graphicsprocessingunitgpu/#display-startend).
 
 640 x 480 contains four times the pixels of 320 x 240. The higher mode costs more GPU fill work; it does not increase geometry or animation budgets. Interlaced modes can flicker on a CRT. Measured elapsed time drives fixed 60 Hz simulation with at most eight catch-up steps per rendered frame; see [input and time](input-collision.md). Hardware validation is pending.
 

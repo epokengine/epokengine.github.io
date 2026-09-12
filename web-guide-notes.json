@@ -1,0 +1,282 @@
+{
+  "getting-started": {
+    "plain": "This is the shortest route from a fresh computer to a game running in Epok. You do not need to understand the PlayStation GPU or MIPS assembly before you begin.",
+    "analogy": "Think of it like the first playable room in a tutorial: install the tools, open the sample, press Play, then learn one control at a time.",
+    "flow": ["Install the pinned tools", "Create or open a project", "Press Play and change one thing"],
+    "details": ["The editor is built from source with a pinned Rust toolchain.", "Console builds use the bundled setup and the Nugget/PsyQo toolchain.", "Windows x64 and Apple Silicon macOS have different setup paths, both documented below."],
+    "tip": "If a path problem appears, move the checkout to a short folder without spaces. Old build tools are surprisingly picky houseguests."
+  },
+  "features": {
+    "plain": "This is the big map of Epok: editor tools, content pipelines, gameplay systems, Play targets and the native runtime. Use it to discover what already exists before building a system from scratch.",
+    "analogy": "It is the world map rather than a single level. Every landmark links to a focused guide, and the source map at the end shows where the implementation lives.",
+    "flow": ["Choose a capability", "Open its focused guide", "Check its PSX budget and limits"],
+    "details": ["Every production Rust module is represented in the source coverage table.", "Every native runtime header is mapped to a capability area.", "Experimental and partial boundaries are stated explicitly instead of being marketed as finished."],
+    "tip": "Start with what your game needs this week. Reading all 500 lines in one sitting is an optional boss fight."
+  },
+  "projects": {
+    "plain": "A project is your game folder, not a secret database inside the editor. You can back it up, move it and build it without mixing it with another game.",
+    "analogy": "Like separate save slots in a game, each project owns its scenes, scripts, settings and generated output.",
+    "flow": ["Pick or create a folder", "Open its .epokproject descriptor", "Edit, build and export inside that root"],
+    "details": ["Canonical paths and a lock prevent two editors from writing the same project.", "The descriptor records startup, Play and transition choices in YAML.", "Legacy manifests migrate explicitly and keep recovery data."],
+    "tip": "Keep source projects in version control; keep generated `.epok/`, exports and user layout data out of commits."
+  },
+  "editor": {
+    "plain": "The editor is where you arrange the world, inspect components and watch the real game output. Most panels can be docked, resized or restored without changing game data.",
+    "analogy": "If Super Mario 64 gave you its camera rig, object list and property panel, this workspace would be the workshop around them—not the game itself.",
+    "flow": ["Select an entity", "Edit it in the Inspector or gizmo", "Save and test in Game view"],
+    "details": ["Scene View is a host GPU preview; Game view is the emulator framebuffer.", "Hierarchy transforms are local to the parent.", "Console, Project and specialized editors share one dockable workspace."],
+    "tip": "When the Game view has controller focus, clicking elsewhere releases held buttons. No permanently stuck D-pad—one tiny miracle of modern tooling."
+  },
+  "content-browser": {
+    "plain": "The Content Browser shows the files that truly exist under your project's `assets/` folder. It adds safe organization and previews without hiding where the data lives.",
+    "analogy": "It works like a game inventory crossed with a file manager: icons tell you the type, previews show what is inside, and UUIDs keep references stable when items move.",
+    "flow": ["Browse, search or filter", "Single-click to inspect and preview", "Double-click to open or drag to use"],
+    "details": ["Images, audio, FBX/OBJ and imported packages preview without editing the scene.", "Moves are preflighted and the last move can be undone.", "Deletion goes to recoverable project trash; identity-sensitive copies receive new UUIDs or are rejected."],
+    "tip": "Single-click inspects; double-click opens. The first click is a handshake, not a marriage proposal."
+  },
+  "settings": {
+    "plain": "Project Settings change what the game builds; Editor Preferences change how this computer works with Epok. Keeping those two scopes separate makes projects portable.",
+    "analogy": "Project Settings are the rules printed on the cartridge. Editor Preferences are your controller and desk setup.",
+    "flow": ["Choose the correct settings window", "Review validation and memory impact", "Apply and rebuild when required"],
+    "details": ["Rendering settings select supported NTSC dimensions and resource budgets.", "Maps, Play profiles, streaming and transitions travel with the project.", "MCP, emulator and serial choices stay with the local user."],
+    "tip": "If a teammate should receive the change, it probably belongs in Project Settings."
+  },
+  "formats": {
+    "plain": "Epok documents are designed to be readable, versionable and recoverable. This guide explains which files are authored, generated or local-only.",
+    "analogy": "Treat authored YAML and asset packages like level source files; treat `.epok/` like the temporary cache a game rebuilds after loading.",
+    "flow": ["Identify the file type", "Edit through its owning tool", "Let Epok migrate or regenerate derived data"],
+    "details": ["Unknown fields are generally rejected where silent loss would be dangerous.", "Writes use atomic replacement or explicit recovery paths.", "Legacy JSON remains readable but migration is never an invisible background rewrite."],
+    "tip": "Do not hand-edit UUIDs unless you enjoy side quests about broken references."
+  },
+  "blockout": {
+    "plain": "Blockout lets you build playable spaces from simple editable geometry before final art exists. It is ideal for answering: is this jump, corridor or arena actually fun at the correct scale?",
+    "analogy": "Classic 3D games often began as gray boxes and ramps. This is your digital cardboard-and-tape stage before the castle gets textures.",
+    "flow": ["Create a primitive", "Shape faces and vertices", "Assign materials, collision and lighting"],
+    "details": ["Box, Plane, Ramp and Stairs create EditableMesh assets.", "Extrude, inset, bevel and subdivision operations have scoped Undo/Redo.", "Compilation converts faces into bounded spatial PSX chunks."],
+    "tip": "Play the gray version early. A beautiful hallway can still be a boring hallway."
+  },
+  "third-person": {
+    "plain": "The Third Person template is a ready-made arena for learning movement, camera follow, collision and editable level geometry. It is a starting point, not a genre lock.",
+    "analogy": "Imagine the safe practice courtyard before a larger adventure: enough walls and ramps to learn the controls without a hundred assets getting in the way.",
+    "flow": ["Create the template", "Play the arena", "Reshape platforms and behavior"],
+    "details": ["The scene is built from ordinary EditableMesh and components.", "Movement and camera behavior live in scripts you can replace.", "Geometry and object counts stay visible through PSX resource counters."],
+    "tip": "Change one platform and one movement value first; small experiments make cause and effect obvious."
+  },
+  "static-mesh-import": {
+    "plain": "OBJ import turns simple model files into editable Epok geometry. Use it for environment pieces that do not need bones or animation.",
+    "analogy": "OBJ is the delivery crate; EditableMesh is the unpacked prop that Epok can inspect, light and compile for the console.",
+    "flow": ["Prepare triangulated/quad OBJ and MTL", "Import with the right scale", "Inspect and place the EditableMesh"],
+    "details": ["The source is bounded and parsed with explicit material handling.", "Imported geometry receives a portable asset UUID.", "PSX vertex, face and coordinate limits are validated before build."],
+    "tip": "If a model arrives the size of a planet, check export units before blaming the tiny PlayStation."
+  },
+  "skeletal": {
+    "plain": "FBX import brings in a character mesh, skeleton and animation clips, then lets you preview and place them as linked assets. The current console profile favors predictable, low-cost rigid skinning.",
+    "analogy": "Think early 3D character rigs: a small hierarchy of bones moving deliberately, closer to the economy of Crash Bandicoot than a modern film rig.",
+    "flow": ["Import the FBX package", "Inspect skeleton and clips", "Add the character and choose animation"],
+    "details": ["Limits are 64 bones, 512 vertices and 1,024 triangles per combined model.", "Each vertex follows its strongest single bone and clips are sampled at 30 Hz.", "Geometry and clips are shared; each placed character owns only Animator state."],
+    "tip": "Rigid weights are a constraint, but good segmentation and strong poses can turn constraints into style."
+  },
+  "textures": {
+    "plain": "Texture import converts PNG artwork into the indexed colors and VRAM layout the original PlayStation expects. What you preview is much closer to the final console resource than the source PNG.",
+    "analogy": "It is like packing a travel suitcase: the picture, palette and framebuffer all compete for the same small VRAM closet.",
+    "flow": ["Import PNG", "Review palette conversion", "Assign material region and blend mode"],
+    "details": ["Textures use 8-bit indexed pixels plus a 256-color CLUT.", "Each scene bank gets an independently validated 1 MiB VRAM layout.", "Cutout and four hardware semitransparency modes are supported."],
+    "tip": "Large empty transparent borders still take space. Trim them; VRAM does not appreciate decorative air."
+  },
+  "lighting": {
+    "plain": "Epok combines cheap baked vertex light with a bounded set of realtime lights and blob shadows. The goal is readable scenes with costs you can predict.",
+    "analogy": "Many classic games painted light into vertices and reserved realtime work for important objects—the same stage-lighting trick, with stricter electricity bills.",
+    "flow": ["Place and tune lights", "Choose baked/realtime reception", "Bake, inspect counters and test"],
+    "details": ["Directional and point lights support Baked, Realtime and Mixed modes.", "Bake fingerprints prevent stale lighting from passing as current.", "Realtime selection, subdivisions and shadow triangles are bounded and counted."],
+    "tip": "Use light to guide the player before using it to impress the screenshot."
+  },
+  "environment-effects": {
+    "plain": "Fog, scrolling UVs and screen fades add motion and depth without a modern shader stack. They are small tools that can make a compact scene feel much larger.",
+    "analogy": "Silent Hill made fog famous for mood and distance; here it also helps you design within a limited draw range—atmosphere doing two jobs.",
+    "flow": ["Set environment fog", "Animate selected material UVs", "Use screen fade directly or in transitions"],
+    "details": ["Depth fog blends supported geometry toward a scene color.", "UV scroll uses authored speed and measured runtime time.", "Screen fade is a resident runtime value shared with scene transitions."],
+    "tip": "Fog is seasoning, not soup. Start subtle, then test on the actual output resolution."
+  },
+  "palette-animation": {
+    "plain": "Palette animation changes colors without uploading a whole texture. It is useful for water, lights, magic and other repeating motion.",
+    "analogy": "Old games could make a waterfall shimmer by rotating colors in its palette—the visual equivalent of moving labels on paint pots instead of repainting the wall.",
+    "flow": ["Import an indexed texture", "Choose a palette range and speed", "Preview and monitor uploads"],
+    "details": ["The animator cycles selected CLUT entries at runtime.", "Uploads wait for the GPU chain and update 16-bit palette words.", "Texture identity and palette placement are validated before use."],
+    "tip": "A tiny palette loop can look alive for almost no geometry cost. That is premium retro wizardry."
+  },
+  "blueprints-tutorial": {
+    "plain": "This hands-on guide teaches one Blueprint by reading it, changing it and watching the result. No prior visual-scripting experience is assumed.",
+    "analogy": "A Blueprint graph is a subway map: white execution wires show where the train goes; typed data wires show what each station carries.",
+    "flow": ["Open the example graph", "Trace execution and values", "Change, compile and debug"],
+    "details": ["Graphs compile to C++ and native MIPS rather than running in a console VM.", "Pin colors/types prevent many invalid connections before build.", "Undo, diagnostics and debugger traces support small safe experiments."],
+    "tip": "Follow the execution wire from the event first. Reading every node at once is how graph spaghetti wins."
+  },
+  "blueprints": {
+    "plain": "Blueprints provide reusable gameplay classes through typed visual graphs, inheritance and entity templates. They share the same native runtime and reflected component model as C++.",
+    "analogy": "Think of a Blueprint as a character recipe plus a flowchart: what components it owns, what values it starts with and what happens when events arrive.",
+    "flow": ["Choose a parent class", "Build typed functions/events and a template", "Compile, place and debug instances"],
+    "details": ["Composite pins split/recombine and contextual wire creation filters compatible actions.", "Functions, overrides, Call Parent, casts and cross-instance calls are statically validated.", "Dynamic class spawning uses a bounded native pool; debug builds add traces and breakpoints only when requested."],
+    "tip": "Name functions after intent—`OpenDoor` beats `DoThing2`, even if the door is very understanding."
+  },
+  "scripting": {
+    "plain": "C++ Behaviours are the direct native-code route for gameplay. Epok reflects selected classes and properties so the editor can expose them safely.",
+    "analogy": "The header is the contract, the Inspector fills in the knobs, and the MIPS compiler turns the final behavior into code the console runs directly.",
+    "flow": ["Create a Behaviour class", "Expose typed properties/functions", "Build and run native callbacks"],
+    "details": ["Pinned libclang extraction records class identity, inheritance and callable types.", "Lifecycle state is initialized before start/on_enable and reset on scene reload.", "Standalone exports include generated and original sources without needing the editor."],
+    "tip": "Keep per-frame code boring and bounded. On original hardware, boring code is often hero code."
+  },
+  "input-collision": {
+    "plain": "Input tells you what the player did; collision tells you what the world allowed. Epok keeps both deterministic and deliberately simpler than a full physics engine.",
+    "analogy": "Picture a classic platformer: the D-pad has crisp edges, and invisible boxes answer practical questions like ‘did I touch the door?’",
+    "flow": ["Read held/pressed/released input", "Move or query an AABB", "React to solid hits or trigger phases"],
+    "details": ["Two controller ports expose frame and fixed-tick edges.", "Simulation advances at a measured fixed 60 Hz with bounded catch-up.", "Collision supports overlap, swept movement and Enter/Stay/Exit triggers with masks."],
+    "tip": "Use triggers for meaning and solids for blocking. A treasure chest does not need to solve Newton's laws."
+  },
+  "runtime-services": {
+    "plain": "Runtime services manage scene changes, object lifetime and small reusable gameplay helpers after the executable reaches the console. They make common work explicit and bounded.",
+    "analogy": "A scene bank is like loading the next area in Resident Evil: the active room changes, shared resources stay useful, and a transition hides the handoff.",
+    "flow": ["Request a scene or object change", "Finish the current frame safely", "Activate the new bank and lifecycle callbacks"],
+    "details": ["Generation-checked handles detect destroyed and reused entity slots.", "One object pool is sized for the largest bank plus bounded dynamic slots.", "Tween, EventQueue, Sequence and Focus helpers allocate no hidden heap storage."],
+    "tip": "Never keep a raw entity pointer across a scene change; use a handle that can admit when its friend has left."
+  },
+  "camera-resources": {
+    "plain": "Cameras decide what the player sees; counters explain what that view costs. This short reference connects framing choices to console budgets.",
+    "analogy": "A camera is both director and accountant: a dramatic wide shot may invite many more objects to submit geometry.",
+    "flow": ["Choose or activate a camera", "Project and render the view", "Read counters and simplify hotspots"],
+    "details": ["The first active camera is the default and gameplay may switch it.", "FOV and world-to-screen projection are available to scripts.", "Resource statistics expose geometry, sprites, particles, lighting, HUD and dropped work."],
+    "tip": "If the frame is crowded, a smarter camera angle can be cheaper than optimizing every object."
+  },
+  "resources": {
+    "plain": "This maintainer guide explains which fonts, icons, images and generated assets belong to the editor or runtime. It protects reproducibility and attribution.",
+    "analogy": "It is the prop-room ledger: what ships, who owns it, how it was made and how to rebuild it.",
+    "flow": ["Identify the resource owner", "Regenerate with the recorded tool", "Verify license and binary output"],
+    "details": ["Editor fonts/icons are embedded in the Rust executable.", "Runtime font data and branding have separate generation paths.", "Third-party licenses remain beside or referenced by the shipped resource."],
+    "tip": "Never ‘just replace the font’ without checking its license and regeneration script. Fonts remember."
+  },
+  "memory-card": {
+    "plain": "The Memory Card service saves and loads player data without tying an operation to the lifetime of one scene object. It is asynchronous because real card I/O takes time.",
+    "analogy": "Like the save screens players remember from PSX games, the game asks, waits and reports success or a useful error—it never pretends the card is instant.",
+    "flow": ["Probe and choose a card/file", "Read, write or list asynchronously", "Handle completion or recovery"],
+    "details": ["Operations are serialized through one process-owned service.", "Names, capacity, title and icon data are validated.", "Interrupted replacement preserves recovery information instead of silently losing the old save."],
+    "tip": "Always show the player when saving is in progress. Pulling a card mid-write is the original quick-time event."
+  },
+  "vfx-editor": {
+    "plain": "The VFX editor builds a reusable effect from layers, particles and an embedded timeline, then previews the same bounded behavior the runtime will use.",
+    "analogy": "A magic spell is a tiny stage show: one layer emits sparks, another flashes, and the timeline tells everyone when to enter.",
+    "flow": ["Choose a preset or add layers", "Tune particles and curves", "Preview, budget and place the effect"],
+    "details": ["An effect contains at most eight layers and shares the global particle pool.", "Q12 curves, bursts, markers and typed overrides compile into fixed tables.", "The host preview calls the native C++ kernels rather than maintaining a second simulator."],
+    "tip": "A few well-timed particles usually read better than 256 particles all shouting at once."
+  },
+  "timelines": {
+    "plain": "Timelines change typed properties and call events over time. They power cutscene-like motion, reusable sequences and the internal choreography of effects.",
+    "analogy": "Think of a video editor timeline, except tracks can move an entity, change a color or call gameplay code instead of only cutting footage.",
+    "flow": ["Bind slots to targets", "Add property curves, markers and events", "Compile and play through a scene or Blueprint"],
+    "details": ["Curves use fixed-point ticks with five interpolation modes.", "Reflection validates property/function types and required components.", "Bounded directors report skipped events, invalid targets, capacity and conflicts instead of allocating freely."],
+    "tip": "Use markers for moments gameplay cares about; use curves for everything that merely needs to look smooth."
+  },
+  "spell-tutorial": {
+    "plain": "This tutorial connects a Blueprint decision to a Timeline-driven effect and gameplay impact. It focuses on the full chain, including cancellation and repeated markers.",
+    "analogy": "It is the difference between pressing a button and a complete spell: anticipation, launch, impact, feedback and cleanup all have to agree.",
+    "flow": ["Start playback from Blueprint", "Wait for the Impact marker", "Apply gameplay and handle completion/cancel"],
+    "details": ["Slots bind the reusable asset to scene targets.", "Marker revisions avoid missing or double-consuming repeated signals.", "Completion and cancellation follow owner/generation lifetime rules."],
+    "tip": "Always design the cancelled path. Players are exceptionally talented at leaving halfway through your perfect animation."
+  },
+  "spell-example": {
+    "plain": "The Timeline Spell example is a small playable project showing how effect assets, markers, Blueprints and C++ fit together. Read it after the tutorial when you want real files to copy and modify.",
+    "analogy": "This is the sample level after the training room: the same ideas, now wired into a complete encounter.",
+    "flow": ["Run the included project", "Trace Blueprint, Timeline and effect assets", "Replace one binding or timing value"],
+    "details": ["The example includes reusable effect and Timeline documents.", "Impact and presentation logic are separated by typed events.", "Build checks exercise the same assets through editor and headless paths."],
+    "tip": "Copy patterns, not UUIDs. Your new asset wants its own identity."
+  },
+  "sprites-particles": {
+    "plain": "Sprites put textured planes into the 3D world; particles create many short-lived sprites from bounded emitters. Together they cover characters, foliage, sparks, smoke and more.",
+    "analogy": "Games from Doom to Final Fantasy VII mixed flat images with 3D spaces. The trick is not hiding the flatness—it is choosing when it looks best.",
+    "flow": ["Choose billboard orientation and texture region", "Animate frames or configure an emitter", "Test clipping, sorting and particle budgets"],
+    "details": ["Fixed, upright and spherical orientations are supported.", "Flipbooks expose events, looping and completion.", "All emitters share a 256-particle pool and report dropped work."],
+    "tip": "Transparent effects still cost fill rate. Invisible pixels are tiny freeloaders."
+  },
+  "blueprints-vfx-troubleshooting": {
+    "plain": "Use this when a graph compiles but the effect does not appear, a marker never arrives or an old build seems to be running. The checks move from identity and binding to timing and capacity.",
+    "analogy": "Debugging is detective work: first confirm the right suspect, then the right place, then the right time.",
+    "flow": ["Read the first diagnostic", "Verify asset/class identity and slot bindings", "Check playback state, capacity and rebuilt output"],
+    "details": ["Missing or duplicate UUIDs are different from invalid graph wiring.", "Used source changes invalidate transitive generated artifacts.", "Runtime counters distinguish capacity drops from visual placement problems."],
+    "tip": "Fix the first error first. Later errors often exist only because the first one knocked over the furniture."
+  },
+  "assets": {
+    "plain": "Imported assets are portable packages with a stable UUID, source snapshot and conversion settings. This guide also explains resident sound effects and disc-based XA music.",
+    "analogy": "The package is both the cooked ingredient and its recipe card, so the project can preview or rebuild it after the original source moves.",
+    "flow": ["Choose a source and settings", "Import into a UUID package", "Reference, reimport or recover it safely"],
+    "details": ["Texture, audio, model and editable documents share identity/revision rules.", "SFX becomes SPU ADPCM in a validated resident bank.", "Music becomes XA sectors and uses asynchronous CD playback outside the SFX bank."],
+    "tip": "Keep the imported package in version control even if the original art source lives elsewhere."
+  },
+  "hud": {
+    "plain": "HUD components draw screen-space information such as portraits, labels, bars and menus. Their layout is separate from the 3D camera.",
+    "analogy": "Think health bars in Metal Gear Solid or dialogue boxes in Final Fantasy: the world camera moves, but the interface stays anchored to the screen.",
+    "flow": ["Create a Canvas hierarchy", "Anchor images, text and bars", "Preview in 2D/HUD and check budgets"],
+    "details": ["RectTransform resolves anchors, pivot, position and size through parents.", "Images support atlas regions and nine-slice borders.", "Layout, rectangle, text and glyph capacities are project-configurable and validated."],
+    "tip": "Design inside the TV-safe area. CRT edges have eaten many innocent subtitles."
+  },
+  "play": {
+    "plain": "Play is a saved three-part choice: where the game runs, how much game content is included and where optional geometry data comes from. The same profile drives the Memory Analyzer.",
+    "analogy": "It is a launch menu, not one magic button: test one room quickly, start the whole adventure, or send the build to original hardware.",
+    "flow": ["Choose destination, content and data", "Build the exact selected snapshot", "Run, upload or analyze"],
+    "details": ["Destinations are embedded emulator, emulator window and PSX via serial.", "Current scene includes unsaved scene edits; whole game starts at the registered startup scene.", "Memory analysis attributes RAM, VRAM, SPU, scratchpad and files without launching or opening a serial port."],
+    "tip": "When debugging a room, choose Current scene. When testing doors between rooms, choose Whole game."
+  },
+  "performance": {
+    "plain": "Performance work in Epok begins with counters and repeatable captures, not guesses. The guide explains which CPU, GPU and memory costs the runtime can measure.",
+    "analogy": "A smooth PSX game is a plate-spinning act: geometry, lighting, fill rate, audio and simulation all need a budget before one plate wobbles.",
+    "flow": ["Capture a repeatable scene or route", "Read counters and compare output", "Change one bottleneck and measure again"],
+    "details": ["Transform, visibility and retained-packet caches reduce repeated work.", "Clipped, dropped and submitted geometry remain visible in statistics.", "Deterministic profiling tools compare runtime and VRAM captures across changes."],
+    "tip": "Optimize the measured bottleneck. The console does not award points for making already-fast code emotionally faster."
+  },
+  "streaming": {
+    "plain": "Geometry streaming moves selected EditableMesh pages outside the executable and loads them from CD or PCDrv into a fixed RAM pool. It is optional and deliberately narrow.",
+    "analogy": "Large PSX games often loaded the next area through a corridor or door. Epok exposes the page pool and loading cost instead of pretending the data teleports.",
+    "flow": ["Enable streaming and choose a pool", "Build 64 KiB geometry pages", "Prefetch/warm or load required pages"],
+    "details": ["Only EditableMesh geometry uses this archive; maps, textures and audio do not.", "Pages are hashed, reserved, pinned and released through a bounded pool.", "Required synchronous reads may stall rendering and CD access can interact with XA music."],
+    "tip": "Streaming saves resident memory, not time. Measure both sides of that trade."
+  },
+  "runtime": {
+    "plain": "A standalone export contains the native runtime, generated scene data, scripts and build launchers needed to rebuild without the Rust editor. This guide is the contract for that exported folder.",
+    "analogy": "The editor is the level workshop; the export is the cartridge project you can carry to another build machine.",
+    "flow": ["Export the selected game", "Point to MIPS tools and Nugget", "Build PS-X EXE and optional disc data"],
+    "details": ["Generated source manifests use portable relative paths.", "Private SDK objects and archives avoid trusting stale shared builds.", "Exports include runtime notices plus Blueprint and Timeline guides."],
+    "tip": "Copy the entire export folder. Moving only the EXE is fine for running, not for rebuilding."
+  },
+  "release-process": {
+    "plain": "The release policy separates daily development from published versions and makes the version number machine-checkable. It is for maintainers preparing a real release.",
+    "analogy": "`develop` is the workshop; `release` is the pressed disc master. You do not scribble on the master between copies.",
+    "flow": ["Finish and test on develop", "Raise VERSION and Cargo metadata", "Promote to release and let automation tag"],
+    "details": ["`VERSION` is the authoritative SemVer value.", "Release checks require the new version to exceed prior release tags.", "Local Make workflows record successful build state separately from Git."],
+    "tip": "Tags describe merged release commits, not hopeful intentions."
+  },
+  "mcp": {
+    "plain": "MCP lets a compatible assistant inspect and operate the project already open in Epok. It is optional, local-only by default and guarded by revisions, schemas and an access key.",
+    "analogy": "Treat the assistant like a co-op player with a very detailed controller: it can act quickly, but the game still validates every move.",
+    "flow": ["Enable the local server", "Let the client read state and revision", "Apply guarded edits, capture and verify"],
+    "details": ["Twenty tools cover scenes, files, assets, screenshots, builds, Play and serial preparation.", "Scene batches are atomic; file writes require SHA-256 revisions and keep backups.", "There is no LAN listener, shell tool or unrestricted computer filesystem access."],
+    "tip": "Ask for a screenshot after a visual change. Trust is good; pixels are excellent."
+  },
+  "architecture": {
+    "plain": "This page explains which part of the repository owns each responsibility and how data travels from an authored scene to native console code. It is useful before changing engine internals.",
+    "analogy": "Think of a theater: the editor designs the set, generators prepare cues, the runtime performs, and the emulator is the camera showing the performance.",
+    "flow": ["Author and validate in Rust", "Generate/stage C++ and resources", "Compile and execute through PsyQo"],
+    "details": ["The Rust editor and C++ runtime are versioned together.", "Reflection is a host build-time boundary, not console runtime work.", "Artifact provenance prevents changed inputs from certifying old executables."],
+    "tip": "Follow ownership before adding a module. Two systems solving the same job is how architecture grows a second final boss."
+  },
+  "testing": {
+    "plain": "Epok tests pure editor logic, native runtime kernels, full build pipelines and visual output at different layers. Choose the smallest check that proves your change, then expand for risky paths.",
+    "analogy": "Unit tests check the jump button; integration tests play the level; captures confirm the camera was actually pointing at the level.",
+    "flow": ["Run focused unit/runtime tests", "Run affected integration checks", "Compare visual or performance artifacts"],
+    "details": ["Rust tests include real ImGui interaction harnesses.", "C++ host tests exercise bounded runtime structures without an emulator.", "Python checks drive tools, MIPS builds, PCSX-Redux and reproducible captures."],
+    "tip": "A passing unrelated test is comforting, but it is not evidence. Pick the check that touches the behavior you changed."
+  },
+  "demo": {
+    "plain": "The 2.5D demo combines two scenes, textured geometry, animated sprites, collision, particles, HUD, audio and transitions in one playable route. It is a practical feature cross-section.",
+    "analogy": "Like a vertical slice shown during game development, it is small enough to understand and complete enough to expose integration problems.",
+    "flow": ["Run and learn the controls", "Inspect the active scene and scripts", "Trace a portal, effect or HUD feature back to its guide"],
+    "details": ["Courtyard and Night exercise registered scene banks.", "The route combines sprite characters with editable 3D geometry.", "Runtime counters and deterministic tooling make it useful for performance validation."],
+    "tip": "Use the demo as a reference, not as a closet for unrelated experiments."
+  }
+}

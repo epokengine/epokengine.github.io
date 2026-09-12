@@ -2,6 +2,11 @@
 
 Epok exposes the open game project through the Model Context Protocol. An MCP client can inspect and edit scenes, components, assets and C++ scripts, control the editor and emulator, and receive PNG screenshots from the actual renderer.
 
+`editor_control` also accepts `serial_connection` to open adapter setup and
+`serial_prepare` to install or repair Epok's managed serial components. Neither
+uploads a program. `editor_state.serial` reports the setup window, component
+directory, adapter and setup result; `play` uses the project's saved destination.
+
 The server is **off by default**. No AI account or provider SDK is needed.
 
 ## Connect

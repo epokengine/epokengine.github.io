@@ -9,9 +9,21 @@ scenes:
 
 The exported startup scene is bank 0. Names must be unique; paths must remain inside `assets/scenes`. Up to 15 additional banks are supported. `request_scene("Night")` or `request_scene(size_t(1))` queues a transition at the next frame boundary. `current_scene()` and `scene_loading()` report state.
 
+Editor Play defaults to the open scene only, including unsaved edits, as bank 0.
+Choose Whole game to start at the project startup scene and include registered
+maps. An open registered map uses its unsaved snapshot. Duplicate map paths are
+included only once; different files with duplicate scene names remain an error.
+See [Play profiles and transitions](play.md) for targets and customization.
+
 Banks are prelinked into the executable, so immutable source geometry, scripts and texture data must fit PSX main RAM. One object pool is sized for the largest bank plus 32 reusable slots. Shared texture pixels and palettes are emitted once; each bank has an independently validated VRAM layout that replaces the previous bank on activation. Shared resident SFX remain bounded by SPU capacity. This profile does not stream arbitrary large maps from CD.
 
-Transitions stop outgoing audio, wait for outstanding XA seek/stop callbacks, invalidate outgoing handles, call Behaviour disable/destroy hooks, clear particle and spatial caches, restore initial entity data/properties, and run incoming scripts. Prelinked transitions make no CD reads, so they never compete with the XA drive owner. New requests from teardown/start callbacks remain queued for a subsequent frame boundary. Game-owned C++ globals survive a scene switch; Behaviour member state resets.
+Transitions fade picture and audio out before stopping outgoing audio, waiting
+for XA callbacks, invalidating handles and calling Behaviour disable/destroy
+hooks. They clear caches, restore initial data/properties and run incoming scripts.
+A resident loading overlay remains visible during loading, followed by a picture
+and audio fade in. Geometry warmup can read CD or PC data when streaming is enabled.
+Lifecycle callback requests queue behind the current fade. Game-owned C++ globals
+survive scene switches; Behaviour member state resets.
 
 ## Object lifetime
 

@@ -6,6 +6,13 @@ Use **File > Projects... (New / Open / Close)** to return to the selector. Unsav
 
 The dark Hub opens on a searchable project list. Search matches names and paths; the sort button switches between recently opened and alphabetical order. Each row shows its folder, PlayStation target and compatible editor version. Click a row to open it, or use its **...** menu to open or remove the shortcut. Unavailable projects remain visible so their errors can be inspected. **New project** opens the template and project details view; **Open project** accepts a folder path or the native folder browser. The Hub has its own typography and palette, preserved when returning from the editor.
 
+Opening a project shows a centered, borderless 640 × 400 splash with abstract
+retro artwork, the original Epok logo, the project name and live loading stage.
+Its activity bar does not invent a percentage. Once loading finishes, the window
+restores the Hub/editor size, position and maximized state. A failed open restores
+the Hub and displays the error. Startup does not add an artificial splash delay.
+The artwork is embedded, so it works outside the installation's working directory.
+
 ## Ownership and format
 
 **Third Person** adds an editable arena with grey platforms, ramps, blue cubes and a static mannequin. It is currently a level placeholder; movement and collisions are not included. See [Third Person arena](third-person.md) for its layout and PSX rendering details. The command-line template name is `third-person`.

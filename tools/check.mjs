@@ -26,9 +26,18 @@ for (const file of files) {
   }
 }
 const search = JSON.parse(fs.readFileSync(path.join(root, 'assets/search.json'), 'utf8'));
+const primerExemptions = new Set(['license', 'credits', 'runtime-credits']);
+for (const item of search) {
+  const slug = item.url.split('/').filter(Boolean).at(-1);
+  if (primerExemptions.has(slug)) continue;
+  const html = fs.readFileSync(path.join(root, `docs/${slug}/index.html`), 'utf8');
+  const primer = html.indexOf('class="guide-primer"');
+  if (primer < 0 || !html.includes('class="mental-model"') || !html.includes('class="concept-flow"') || !html.includes('class="field-note"')) errors.push(`${slug}: missing beginner explanation, mental model, diagram or field note`);
+  if (html.indexOf('<h1') > primer) errors.push(`${slug}: beginner overview appears before the guide title`);
+}
 for (const query of ['textures', 'collision', 'mcp', 'blueprint', 'vfx', 'marker', 'cancellation']) if (!search.some(d => `${d.title} ${d.text}`.toLowerCase().includes(query))) errors.push(`Search index missing ${query}`);
 const documentationIndex = fs.readFileSync(path.join(root, 'docs/index.html'), 'utf8');
-for (const slug of ['blueprints-tutorial', 'vfx-editor', 'timelines', 'spell-tutorial', 'blueprints-vfx-troubleshooting']) {
+for (const slug of ['features', 'content-browser', 'play', 'blueprints-tutorial', 'vfx-editor', 'timelines', 'spell-tutorial', 'blueprints-vfx-troubleshooting']) {
   if (!documentationIndex.includes(`/docs/${slug}/`) || !search.some(d => d.url === `/docs/${slug}/`)) errors.push(`Learning guide is not discoverable: ${slug}`);
 }
 const homepage = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
@@ -36,6 +45,7 @@ for (const [slug, image] of [['vfx-editor', 'vfx-editor.png'], ['spell-tutorial'
   if (!fs.readFileSync(path.join(root, `docs/${slug}/index.html`), 'utf8').includes(`/media/docs/images/${image}`)) errors.push(`Guide is missing its editor capture: ${slug}`);
 }
 if (!homepage.includes('id="blueprints"') || !homepage.includes('/docs/blueprints/')) errors.push('Homepage is missing Blueprint documentation access');
+if (!homepage.includes('/docs/features/') || !homepage.includes('/docs/content-browser/') || !homepage.includes('/docs/play/')) errors.push('Homepage is missing access to the feature catalog, Content Browser or Play guides');
 if (!homepage.includes('/media/resources/branding/epok-lockup.png')) errors.push('Homepage is missing the Epok Engine wordmark');
 for (const file of [...files, 'assets/search.json']) {
   if (/uniqu?o|unicore|eraengine/i.test(fs.readFileSync(path.join(root, file), 'utf8'))) errors.push(`${file}: obsolete engine branding`);

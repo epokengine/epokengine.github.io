@@ -16,6 +16,7 @@
 <p align="center">
   <a href="#getting-started">Get started</a> &nbsp;·&nbsp;
   <a href="#features">Features</a> &nbsp;·&nbsp;
+  <a href="docs/features.md">Complete catalog</a> &nbsp;·&nbsp;
   <a href="#blueprints">Blueprints</a> &nbsp;·&nbsp;
   <a href="#examples">Examples</a> &nbsp;·&nbsp;
   <a href="#ai-assisted-development">AI assistants</a> &nbsp;·&nbsp;
@@ -34,6 +35,10 @@ Epok brings a visual editor workflow to PSX development. Create a project, arran
 
 ## Features
 
+For the exhaustive, source-mapped inventory of implemented editor, asset,
+gameplay, runtime, build, Play, serial, analysis and automation capabilities, see
+the **[complete feature catalog](docs/features.md)**.
+
 ![Epok Engine project Hub](docs/images/epok-hub.png)
 
 | | What you can do |
@@ -45,7 +50,7 @@ Epok brings a visual editor workflow to PSX development. Create a project, arran
 | **Build visual gameplay** | Create [Blueprint classes](docs/blueprints.md) with native or visual parents, inherited defaults, typed graph nodes, functions, event overrides and Call Parent. Author entity templates, spawn classes and debug node execution. Graphs compile ahead of time to native C++; no graph VM runs on the PSX. |
 | **Light and render** | Combine baked vertex lighting, bounded realtime GTE lighting, static shadows and blob shadows. Author for PSX rendering limits with native [performance counters](docs/performance.md). |
 | **Add audio and UI** | Import WAV, MP3, FLAC or OGG for SPU sound effects and XA music. Build [HUDs](docs/hud.md) with text, atlases, nine-slice images, progress bars and navigation. |
-| **Play and export** | Run, pause and step games in PCSX-Redux. Build PS-X executables, package physical-disc BIN/CUE or ISO images with a user-supplied system-area license, or [export a standalone PsyQo project](runtime/README.md). |
+| **Play and export** | Choose [embedded/windowed PCSX-Redux or PSX through NOTPSXSerial](docs/play.md), the current scene or whole game, and resident/CD/PC geometry. Customize loading transitions with synchronized picture/audio fades. Build PS-X executables, package physical-disc BIN/CUE or ISO images with a user-supplied system-area license, or [export a standalone PsyQo project](runtime/README.md). |
 
 Projects live independently of the editor. Scenes, scripts and imported assets stay in your game folder; the engine owns the runtime and development tools.
 
@@ -189,7 +194,7 @@ Browse the **[Epok documentation](docs/getting-started.md)** for guides, workflo
 
 | Area | Guides |
 | --- | --- |
-| **Start and configure** | [Getting started](docs/getting-started.md) · [Projects](docs/projects.md) · [Settings](docs/settings.md) · [Editor](docs/editor.md) |
+| **Start and configure** | [Complete feature catalog](docs/features.md) · [Getting started](docs/getting-started.md) · [Projects](docs/projects.md) · [Settings](docs/settings.md) · [Editor](docs/editor.md) |
 | **Create content** | [Blockout](docs/blockout.md) · [Third Person arena](docs/third-person.md) · [Static model import](docs/static-mesh-import.md) · [Skeletal characters](docs/skeletal.md) |
 | **Render and animate** | [Textures](docs/textures.md) · [Lighting](docs/lighting.md) · [Sprites and particles](docs/sprites-particles.md) · [Environment effects](docs/environment-effects.md) · [Palette animation](docs/palette-animation.md) |
 | **Build gameplay** | [Blueprints](docs/blueprints.md) · [C++ scripting](docs/scripting.md) · [Input and collision](docs/input-collision.md) · [Runtime services](docs/runtime-services.md) · [Cameras and resources](docs/camera-resources.md) · [Memory Card](docs/memory-card.md) |
@@ -211,7 +216,9 @@ See [Textures](docs/textures.md), [Sprites and particles](docs/sprites-particles
 
 ## Contributing
 
-See [Contributing](CONTRIBUTING.md) for setup, local checks and change guidelines. Validation runs locally; GitHub Actions is not configured.
+See [Contributing](CONTRIBUTING.md) for setup, local checks and change guidelines.
+Full validation runs locally; GitHub Actions enforces the release branch and
+version policy.
 
 ## License and credits
 
