@@ -60,6 +60,7 @@ for (const [slug, image] of [['vfx-editor', 'vfx-editor.png'], ['spell-tutorial'
 }
 if (!homepage.includes('id="blueprints"') || !homepage.includes('/docs/blueprints/')) errors.push('Homepage is missing Blueprint documentation access');
 if (!homepage.includes('/docs/features/') || !homepage.includes('/docs/content-browser/') || !homepage.includes('/docs/play/')) errors.push('Homepage is missing access to the feature catalog, Content Browser or Play guides');
+if (!homepage.includes('<a href="/docs/api/"')) errors.push('Main navigation is missing the API Reference link');
 if (!homepage.includes('/media/resources/branding/epok-lockup.png')) errors.push('Homepage is missing the Epok Engine wordmark');
 if (!homepage.includes('Linux x86_64')) errors.push('Homepage is missing Linux x86_64 support');
 if (!documentationIndex.includes('Linux x86_64')) errors.push('Documentation index is missing Linux x86_64 support');
