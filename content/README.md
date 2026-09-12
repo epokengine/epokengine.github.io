@@ -211,6 +211,7 @@ Browse the **[Epok documentation](docs/getting-started.md)** for guides, workflo
 | **Create content** | [Blockout](docs/blockout.md) · [Third Person arena](docs/third-person.md) · [Static model import](docs/static-mesh-import.md) · [Skeletal characters](docs/skeletal.md) |
 | **Render and animate** | [Textures](docs/textures.md) · [Lighting](docs/lighting.md) · [Sprites and particles](docs/sprites-particles.md) · [Environment effects](docs/environment-effects.md) · [Palette animation](docs/palette-animation.md) |
 | **Build gameplay** | [Blueprints](docs/blueprints.md) · [C++ scripting](docs/scripting.md) · [Input and collision](docs/input-collision.md) · [Runtime services](docs/runtime-services.md) · [Cameras and resources](docs/camera-resources.md) · [Memory Card](docs/memory-card.md) |
+| **Look up C++ APIs** | [Complete API reference](docs/api/index.md) · [Epok runtime API](docs/api/epok.md) · [PsyQo API](docs/api/psyqo.md) |
 | **Sound and interface** | [Assets and audio](docs/assets.md) · [HUD](docs/hud.md) |
 | **Extend and verify** | [AI / MCP](docs/mcp.md) · [Architecture](knowledge/architecture.md) · [Performance](docs/performance.md) · [Testing](knowledge/maintainers/testing.md) · [Runtime and export](runtime/README.md) |
 

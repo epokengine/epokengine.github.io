@@ -19,15 +19,25 @@ const groups = [
   ['Sound & interface', [['assets', 'Assets & audio'], ['hud', 'HUD & UI']]],
   ['Build, run & ship', [['play', 'Play targets & loading'], ['performance', 'Performance'], ['streaming', 'Geometry streaming'], ['runtime', 'Standalone runtime'], ['release-process', 'Release process']]],
   ['Extend & understand', [['mcp', 'AI / MCP'], ['architecture', 'Architecture'], ['testing', 'Testing'], ['demo', '2.5D example']]],
+  ['API reference', [['api', 'C++ API reference'], ['api/epok', 'Epok runtime API'], ['api/psyqo', 'PsyQo API']]],
   ['Project', [['license', 'License'], ['credits', 'Third-party notices'], ['runtime-credits', 'Runtime notices']]],
 ];
-const special = { architecture: 'knowledge/architecture.md', resources: 'knowledge/maintainers/resources.md', testing: 'knowledge/maintainers/testing.md', runtime: 'runtime/README.md', demo: 'examples/rpg-2-5d-demo/README.md', 'spell-example': 'examples/timeline-spell/README.md', license: 'LICENSE', credits: 'THIRD_PARTY_NOTICES.md', 'runtime-credits': 'runtime/THIRD_PARTY_NOTICES.md' };
-const docs = groups.flatMap(([group, entries]) => entries.map(([slug, label]) => ({ slug, label, group, file: special[slug] || `docs/${slug}.md` })));
+const special = { architecture: 'knowledge/architecture.md', resources: 'knowledge/maintainers/resources.md', testing: 'knowledge/maintainers/testing.md', runtime: 'runtime/README.md', demo: 'examples/rpg-2-5d-demo/README.md', 'spell-example': 'examples/timeline-spell/README.md', api: 'docs/api/index.md', 'api/epok': 'docs/api/epok.md', 'api/psyqo': 'docs/api/psyqo.md', license: 'LICENSE', credits: 'THIRD_PARTY_NOTICES.md', 'runtime-credits': 'runtime/THIRD_PARTY_NOTICES.md' };
+const docs = groups.flatMap(([group, entries]) => entries.map(([slug, label]) => ({ slug, label, group, file: special[slug] || `docs/${slug}.md`, api: slug === 'api' || slug.startsWith('api/') })));
+const apiCoverage = JSON.parse(fs.readFileSync(path.join(content, 'docs/api/coverage.json'), 'utf8'));
+const apiModules = apiCoverage.modules.map(module => ({
+  slug: `api/${module.family}/${module.slug}`,
+  label: module.header,
+  group: module.family === 'epok' ? 'Epok API modules' : 'PsyQo API modules',
+  file: `docs/api/${module.family}/${module.slug}.md`,
+  api: true,
+}));
+const allDocs = [...docs, ...apiModules];
 const noteExemptions = new Set(['license', 'credits', 'runtime-credits']);
 for (const doc of docs) {
-  if (!noteExemptions.has(doc.slug) && !guideNotes[doc.slug]) throw new Error(`Missing beginner guide notes for ${doc.slug}`);
+  if (!doc.api && !noteExemptions.has(doc.slug) && !guideNotes[doc.slug]) throw new Error(`Missing beginner guide notes for ${doc.slug}`);
 }
-const routes = new Map(docs.map(d => [d.file, `/docs/${d.slug}/`]));
+const routes = new Map(allDocs.map(d => [d.file, `/docs/${d.slug}/`]));
 routes.set('README.md', '/');
 function write(file, text) { const dest = path.join(out, file); fs.mkdirSync(path.dirname(dest), { recursive: true }); fs.writeFileSync(dest, text); }
 function urlFor(href, file) {
@@ -122,20 +132,22 @@ const homeWithBlueprints = home
   .replace('<section class="showcase section wrap">', `${sceneShowcase}${blueprintShowcase}<section class="showcase section wrap">`);
 write('index.html', page('Epok Engine — Build games for the original PlayStation', 'A standalone visual editor and native PSX runtime. Build worlds and create gameplay with Blueprints or C++ for the original PlayStation.', '/', homeWithBlueprints));
 const searchItems = [];
-for (let i = 0; i < docs.length; i++) {
-  const doc = docs[i];
+for (let i = 0; i < allDocs.length; i++) {
+  const doc = allDocs[i];
   let md = fs.readFileSync(path.join(content, doc.file), 'utf8');
   if (doc.slug === 'license') md = '# License\n\n```text\n' + md + '\n```\n';
   const { html, headings } = render(md, doc.file);
   const expandedHtml = html.replace('</h1>', `</h1>${guidePrimer(doc)}`);
   const note = guideNotes[doc.slug];
   const noteText = note ? [note.plain, note.analogy, ...note.flow, ...note.details, note.tip].join(' ') : '';
-  const plain = `${noteText} ${md}`.replace(/```[\s\S]*?```/g, '').replace(/<[^>]*>/g, '').replace(/[#*`\[\]]/g, '').replace(/\s+/g, ' ').trim();
-  searchItems.push({ title: doc.label, group: doc.group, url: `/docs/${doc.slug}/`, text: plain });
+  const searchableMarkdown = doc.api ? md.replace(/```(?:[\w+-]+)?/g, '') : md.replace(/```[\s\S]*?```/g, '');
+  const plain = `${noteText} ${searchableMarkdown}`.replace(/<[^>]*>/g, '').replace(/[#*`\[\]]/g, '').replace(/\s+/g, ' ').trim();
+  searchItems.push({ title: doc.label, group: doc.group, url: `/docs/${doc.slug}/`, text: plain, api: Boolean(doc.api) });
   const sidebar = `<aside class="sidebar" aria-label="Documentation navigation"><a class="docs-home" href="/docs/">Documentation <span aria-hidden="true">↗</span></a><a class="search-shortcut" href="/docs/#search">Find a guide <span aria-hidden="true">⌕</span></a>${groups.map(([group, entries]) => `<div class="nav-group"><p>${group}</p>${entries.map(([slug, label]) => `<a href="/docs/${slug}/"${slug === doc.slug ? ' aria-current="page"' : ''}>${esc(label)}</a>`).join('')}</div>`).join('')}</aside>`;
-  const prev = docs[i - 1], next = docs[i + 1];
+  const prev = allDocs[i - 1], next = allDocs[i + 1];
   const pager = `<nav class="pager" aria-label="Adjacent guides">${prev ? `<a href="/docs/${prev.slug}/"><span>← Previous</span>${esc(prev.label)}</a>` : '<span></span>'}${next ? `<a href="/docs/${next.slug}/"><span>Next →</span>${esc(next.label)}</a>` : ''}</nav>`;
-  const body = `<div class="docs-layout">${sidebar}<main id="main" class="doc-main"><div class="doc-top"><a href="/docs/">Documentation</a><span>/</span><span>${esc(doc.group)}</span></div><div class="mobile-doc-nav"><a href="/docs/">← All guides</a><details><summary>On this page</summary>${headings.filter(h => h.depth === 2).map(h => `<a href="#${esc(h.id)}">${esc(h.label)}</a>`).join('')}</details></div><article class="prose">${expandedHtml}</article><div class="source-note">Expanded for the web from the published engine documentation · <a href="${repo}/blob/${manifest.commit}/${doc.file}">View technical source ${arrow}</a></div>${pager}</main><aside class="toc" aria-label="On this page"><p>ON THIS PAGE</p>${headings.map(h => `<a class="depth-${h.depth}" href="#${esc(h.id)}">${esc(h.label)}</a>`).join('')}</aside></div>`;
+  const tocHeadings = doc.api ? headings.filter(h => h.depth === 2).slice(0, 40) : headings;
+  const body = `<div class="docs-layout">${sidebar}<main id="main" class="doc-main"><div class="doc-top"><a href="/docs/">Documentation</a><span>/</span><span>${esc(doc.group)}</span></div><div class="mobile-doc-nav"><a href="/docs/">← All guides</a><details><summary>On this page</summary>${tocHeadings.map(h => `<a href="#${esc(h.id)}">${esc(h.label)}</a>`).join('')}</details></div><article class="prose">${expandedHtml}</article><div class="source-note">Expanded for the web from the published engine documentation · <a href="${repo}/blob/${manifest.commit}/${doc.file}">View technical source ${arrow}</a></div>${pager}</main><aside class="toc" aria-label="On this page"><p>ON THIS PAGE</p>${tocHeadings.map(h => `<a class="depth-${h.depth}" href="#${esc(h.id)}">${esc(h.label)}</a>`).join('')}</aside></div>`;
   write(`docs/${doc.slug}/index.html`, page(`${doc.label} — Epok Docs`, `${doc.label}: guides and reference for the Epok PlayStation game engine.`, `/docs/${doc.slug}/`, body, 'docs'));
 }
 const docGroups = groups.map(([group, entries], i) => `<section class="guide-group"><p class="eyebrow">${String(i + 1).padStart(2, '0')}</p><h2>${group}</h2>${entries.map(([slug, label]) => `<a href="/docs/${slug}/">${esc(label)} <span aria-hidden="true">→</span></a>`).join('')}</section>`).join('');
@@ -149,5 +161,5 @@ write('assets/search.json', JSON.stringify(searchItems));
 write('404.html', page('Page not found — Epok', 'Find your way back to the Epok documentation.', '/404.html', '<main id="main" class="wrap not-found"><p class="eyebrow">404 / OUTSIDE THE SCENE</p><h1>This page is missing.</h1><p>The guide may have moved. Find it in the documentation.</p><a class="button primary" href="/docs/">Browse the docs →</a></main>'));
 write('.nojekyll', '');
 write('robots.txt', `User-agent: *\nAllow: /\nSitemap: ${origin}/sitemap.xml\n`);
-write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${['/', '/docs/', ...docs.map(d => `/docs/${d.slug}/`)].map(url => `<url><loc>${origin}${url}</loc></url>`).join('')}</urlset>`);
-console.log(`Built homepage, documentation index, ${docs.length} guides and 404 page.`);
+write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${['/', '/docs/', ...allDocs.map(d => `/docs/${d.slug}/`)].map(url => `<url><loc>${origin}${url}</loc></url>`).join('')}</urlset>`);
+console.log(`Built homepage, documentation index, ${docs.length} guides, ${apiModules.length} API modules and 404 page.`);

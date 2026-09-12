@@ -29,13 +29,27 @@ const search = JSON.parse(fs.readFileSync(path.join(root, 'assets/search.json'),
 const primerExemptions = new Set(['license', 'credits', 'runtime-credits']);
 for (const item of search) {
   const slug = item.url.split('/').filter(Boolean).at(-1);
-  if (primerExemptions.has(slug)) continue;
-  const html = fs.readFileSync(path.join(root, `docs/${slug}/index.html`), 'utf8');
+  if (item.api || primerExemptions.has(slug)) continue;
+  const route = item.url.replace(/^\/+|\/+$/g, '');
+  const html = fs.readFileSync(path.join(root, route, 'index.html'), 'utf8');
   const primer = html.indexOf('class="guide-primer"');
   if (primer < 0 || !html.includes('class="mental-model"') || !html.includes('class="concept-flow"') || !html.includes('class="field-note"')) errors.push(`${slug}: missing beginner explanation, mental model, diagram or field note`);
   if (html.indexOf('<h1') > primer) errors.push(`${slug}: beginner overview appears before the guide title`);
 }
 for (const query of ['textures', 'collision', 'mcp', 'blueprint', 'vfx', 'marker', 'cancellation']) if (!search.some(d => `${d.title} ${d.text}`.toLowerCase().includes(query))) errors.push(`Search index missing ${query}`);
+for (const query of ['epok::raycast', 'psyqo::gpu', 'sendprimitive', 'memory card callback']) if (!search.some(d => d.api && `${d.title} ${d.text}`.toLowerCase().includes(query))) errors.push(`API search index missing ${query}`);
+const coverage = JSON.parse(fs.readFileSync(path.join(root, '../content/docs/api/coverage.json'), 'utf8'));
+const expectedApiPages = coverage.modules.length + 3;
+const apiSearch = search.filter(item => item.api);
+if (apiSearch.length !== expectedApiPages) errors.push(`Expected ${expectedApiPages} API search pages, found ${apiSearch.length}`);
+for (const family of ['epok', 'psyqo']) {
+  const moduleTotal = coverage.modules.filter(module => module.family === family).reduce((sum, module) => sum + module.callables, 0);
+  if (coverage[family].callables !== moduleTotal) errors.push(`API coverage total does not match its modules: ${family}`);
+}
+for (const module of coverage.modules) {
+  const html = fs.readFileSync(path.join(root, `docs/api/${module.family}/${module.slug}/index.html`), 'utf8');
+  if (module.callables > 0 && (!html.includes('Exact declaration') || !html.includes('Usage pattern') || !html.includes('Trade-offs and warnings'))) errors.push(`Incomplete API module: ${module.family}/${module.slug}`);
+}
 const documentationIndex = fs.readFileSync(path.join(root, 'docs/index.html'), 'utf8');
 for (const slug of ['features', 'content-browser', 'play', 'blueprints-tutorial', 'vfx-editor', 'timelines', 'spell-tutorial', 'blueprints-vfx-troubleshooting']) {
   if (!documentationIndex.includes(`/docs/${slug}/`) || !search.some(d => d.url === `/docs/${slug}/`)) errors.push(`Learning guide is not discoverable: ${slug}`);

@@ -1,0 +1,949 @@
+{
+  "nugget_revision": "6186b131aacc5853a9161fb076ed34ffe504552d",
+  "epok": {
+    "headers": 51,
+    "callables": 529
+  },
+  "psyqo": {
+    "headers": 53,
+    "callables": 969
+  },
+  "modules": [
+    {
+      "family": "epok",
+      "header": "affine.hpp",
+      "slug": "affine",
+      "callables": 4,
+      "types": 1,
+      "source_sha256": "b2fcc9bb39cc923e30ed0320547e0ac99724ecfd97105f90bc5ad0c6d8329cd6",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "audio.hpp",
+      "slug": "audio",
+      "callables": 7,
+      "types": 2,
+      "source_sha256": "e9c9188cdfe2b67d7c73efdeae33daa189b83def2dca5832050a06f0fb7ee526",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "blueprint_api.hpp",
+      "slug": "blueprint-api",
+      "callables": 34,
+      "types": 0,
+      "source_sha256": "0bcae93603f3e2fac30767fd8df61a2ac0cc5225284d5b357dd213070400cd86",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "blueprint_debug.hpp",
+      "slug": "blueprint-debug",
+      "callables": 0,
+      "types": 0,
+      "source_sha256": "5c4df498890a582cb1f7f9e8e0075b2c4fe9cefa9234a9791c757924a6466c84",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "blueprint_playback_service.hpp",
+      "slug": "blueprint-playback-service",
+      "callables": 0,
+      "types": 0,
+      "source_sha256": "93f77c9f6bc21b732fe1f957b193cbaf337ef7fb2f7ffe227099969de796f1ef",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "blueprint_runtime.hpp",
+      "slug": "blueprint-runtime",
+      "callables": 63,
+      "types": 11,
+      "source_sha256": "74e3977fd7923cd2b07d47c17eaba538d499be14bc4a92cbf61c733a73f2d6b9",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "blueprint_spawn.hpp",
+      "slug": "blueprint-spawn",
+      "callables": 22,
+      "types": 6,
+      "source_sha256": "6c4cf97441c30cf05bfeed9988e67c035d05b66abb707ba4fbd165e4563d2bac",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "blueprint_template.hpp",
+      "slug": "blueprint-template",
+      "callables": 1,
+      "types": 1,
+      "source_sha256": "f3b4be8029e7b4e0b09bff49ad2b21573e29b0b9526b0435d84f380982a2837d",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "collision.hpp",
+      "slug": "collision",
+      "callables": 16,
+      "types": 7,
+      "source_sha256": "c7ea8c760acee246da419b5fbe648ce3362d37791a6d30beb9acaeefd1dcf9c9",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "effect_types.hpp",
+      "slug": "effect-types",
+      "callables": 3,
+      "types": 2,
+      "source_sha256": "a8e1340e59ba121b46c7ef5f9d7b72bf294bcc9ceddaf4ab2ccb9e26710ed382",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "effects.hpp",
+      "slug": "effects",
+      "callables": 2,
+      "types": 2,
+      "source_sha256": "fa2a2b49c0c3682b2f7903a27eeeb649e3b7b574cf57f48e35a10c81017e0531",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "epok.hpp",
+      "slug": "epok",
+      "callables": 50,
+      "types": 38,
+      "source_sha256": "349f729c15ebc915e3222d897eba72f3cce57c675cdb0eaad0576af3b2999412",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "frame_clear.hpp",
+      "slug": "frame-clear",
+      "callables": 2,
+      "types": 1,
+      "source_sha256": "0a5363b24087ee68021d555b95ab2d9c8d17aeb944d85296aa17620ebb1367f7",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "frustum.hpp",
+      "slug": "frustum",
+      "callables": 6,
+      "types": 0,
+      "source_sha256": "0b77c65a488fb049c3c2fbc0136c2ddd06f5e050d324452f81015fb545740c5a",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "gte_geometry.hpp",
+      "slug": "gte-geometry",
+      "callables": 5,
+      "types": 0,
+      "source_sha256": "456692cb4c0d85e723d5e9164357c7f24be337b24bd03ff7e8356632a822a8d1",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "hud.hpp",
+      "slug": "hud",
+      "callables": 3,
+      "types": 1,
+      "source_sha256": "83adaab10794987ad942763678bd4967c8d07ee967148896feeb37c1f8c56fdd",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "input.hpp",
+      "slug": "input",
+      "callables": 12,
+      "types": 2,
+      "source_sha256": "8b3530e253a322cd05981d3d2874804b56fe2d90490352886811d8b90099b60c",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "lifecycle.hpp",
+      "slug": "lifecycle",
+      "callables": 3,
+      "types": 0,
+      "source_sha256": "07d094b0cbbd7525808377a307ef01e7d76da1196d0611fbe23bdf53d305c49e",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "lighting.hpp",
+      "slug": "lighting",
+      "callables": 16,
+      "types": 5,
+      "source_sha256": "ce6de5e8ca85c29ae193d424c5f3ae30eb61121112612810fc30266319f6f909",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "loading_renderer.hpp",
+      "slug": "loading-renderer",
+      "callables": 1,
+      "types": 1,
+      "source_sha256": "c2557b1077694762230b42cecdd7fac562a7e4294541690b4e33689c725a4579",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "memory_card.hpp",
+      "slug": "memory-card",
+      "callables": 20,
+      "types": 9,
+      "source_sha256": "22418755e4716e7d24ffe411e14dd0c872c865c288ad7c90929d1e92d8ccd25b",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "memory_card_backend.hpp",
+      "slug": "memory-card-backend",
+      "callables": 6,
+      "types": 1,
+      "source_sha256": "04a94350d9a11332bce18eabc6a9f71799a1a71283179ebfdd3f478f64326e4d",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "music.hpp",
+      "slug": "music",
+      "callables": 10,
+      "types": 2,
+      "source_sha256": "84f35ad30c430db3ad392c56b8b7cd3fe85578c28e2dfb70bf8331a42745cc7f",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "palette.hpp",
+      "slug": "palette",
+      "callables": 2,
+      "types": 1,
+      "source_sha256": "70158d8896728b39759bea97bcaf8fad01ac0ef6afe14bf4efd77a8c5cf0431f",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "palette_types.hpp",
+      "slug": "palette-types",
+      "callables": 4,
+      "types": 3,
+      "source_sha256": "ff3e249638384816b9aeab84b2b56b71c39f65aef7935ac30757868b0f238084",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "particle_effect_runtime.hpp",
+      "slug": "particle-effect-runtime",
+      "callables": 22,
+      "types": 6,
+      "source_sha256": "a15ed0d15119e88ec5a0872a254125f99ee7360cf41b054e29858b1709f4ff87",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "particle_effect_service.hpp",
+      "slug": "particle-effect-service",
+      "callables": 14,
+      "types": 1,
+      "source_sha256": "209404b09adf0fe7fba3bd7facf11dfbe194c784f3ec7605783518bf0be8cfb0",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "particle_types.hpp",
+      "slug": "particle-types",
+      "callables": 3,
+      "types": 2,
+      "source_sha256": "22bd4039afd7c49fd37f396eae570b529e3d134904ad8cc1ce5dfa8d9d77a31b",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "particles.hpp",
+      "slug": "particles",
+      "callables": 10,
+      "types": 2,
+      "source_sha256": "c2de974f0f0c7aac3402595b82e7d27275e67137812ee1b645d7b2e5efcf5985",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "playback_types.hpp",
+      "slug": "playback-types",
+      "callables": 9,
+      "types": 8,
+      "source_sha256": "705f82300824c2b860b293d15018c0600aaf9691aa3f89d019755474e33d498a",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "polygon.hpp",
+      "slug": "polygon",
+      "callables": 11,
+      "types": 6,
+      "source_sha256": "4b831ae91e5d05c78644f2970b558d83e360b8aa7748d85c9f8645bcfec56d05",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "resources.hpp",
+      "slug": "resources",
+      "callables": 0,
+      "types": 1,
+      "source_sha256": "e9be9efbbddded70283b80943791720e673e6070a137d9edba2a7f3c31841219",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "retained.hpp",
+      "slug": "retained",
+      "callables": 8,
+      "types": 5,
+      "source_sha256": "8446d4b6cb87336c3c7cd3f15238b314cbb655af86ceae73c77933444693c6d2",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "scene_service.hpp",
+      "slug": "scene-service",
+      "callables": 1,
+      "types": 1,
+      "source_sha256": "c9b56391b34f471ce7af242a79fe6a64a693eaef6913c322b2fafc3ffbd4eb72",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "shadows.hpp",
+      "slug": "shadows",
+      "callables": 1,
+      "types": 1,
+      "source_sha256": "91c0d880f092c5683ef6753f11ea5dc0b432f47421ba705c6b147d7a584ea7b6",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "skeletal.hpp",
+      "slug": "skeletal",
+      "callables": 2,
+      "types": 1,
+      "source_sha256": "713c186758e07df9c32d39008a691a41b12d0c40e2749b6b4df362c1fd4d2b89",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "sprite_types.hpp",
+      "slug": "sprite-types",
+      "callables": 8,
+      "types": 7,
+      "source_sha256": "5024d28805d8f7b1c6b90c13ef633a6ee5bc18c10d16d632fe4229349ea4982d",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "sprites.hpp",
+      "slug": "sprites",
+      "callables": 5,
+      "types": 2,
+      "source_sha256": "a5853ebe17779855e7a951497f33c8eeaecb9e1220eacc8457e767ed104af8ca",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "streaming.hpp",
+      "slug": "streaming",
+      "callables": 34,
+      "types": 6,
+      "source_sha256": "144cace2fc9aa556420cb12f913526bc3c9b90a7e3b54753727cdb9849b76e57",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "streaming_pool.hpp",
+      "slug": "streaming-pool",
+      "callables": 13,
+      "types": 1,
+      "source_sha256": "a8d8cfe15cd65701265fbcd66698a6555cb84e77b3b3c5feb25022334c01b7de",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "text.hpp",
+      "slug": "text",
+      "callables": 1,
+      "types": 2,
+      "source_sha256": "3f84490294858946cf09e6775ae206b27e68a5a58a480b9d075d8633b075103f",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "texture.hpp",
+      "slug": "texture",
+      "callables": 5,
+      "types": 0,
+      "source_sha256": "8534d626f9cded8c54fbc0f0c873a7bdb860fb4768a585084b36c35cede4da86",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "texture_types.hpp",
+      "slug": "texture-types",
+      "callables": 0,
+      "types": 2,
+      "source_sha256": "5b18bc9f694d27bb9a933d80ec83ead4fa1f8b1f7ff63da03f068b1be5b57082",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "time.hpp",
+      "slug": "time",
+      "callables": 7,
+      "types": 1,
+      "source_sha256": "dc0a1db196f46d1a81242430319967bb9def3da50bc648bed9e6bc88e18902a5",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "timeline.hpp",
+      "slug": "timeline",
+      "callables": 3,
+      "types": 6,
+      "source_sha256": "dd3e4b902bd5faaf4eceeb14ba5012c68ac19d0734170c93be0a0e32fe1c7269",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "timeline_runtime.hpp",
+      "slug": "timeline-runtime",
+      "callables": 25,
+      "types": 11,
+      "source_sha256": "a82d01c2c9ae970fdf0639ff4b9d66f18fce8d6bc4c4f512886ccaf5626a3e93",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "timeline_service.hpp",
+      "slug": "timeline-service",
+      "callables": 9,
+      "types": 1,
+      "source_sha256": "a5fd6024cb4c9ba31ce5bc92cc1c2dd2624fa45372672364b82883965e1bdf6b",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "transform_cache.hpp",
+      "slug": "transform-cache",
+      "callables": 3,
+      "types": 1,
+      "source_sha256": "ee6a8abad02c872f2b60270d7a8b277fc86202913fcab0b763e02fcd04c32803",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "transition.hpp",
+      "slug": "transition",
+      "callables": 7,
+      "types": 5,
+      "source_sha256": "a4260851e19c3065b3e284f45ed88fee22c636192a4a8301905216d75ee3918e",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "utility.hpp",
+      "slug": "utility",
+      "callables": 23,
+      "types": 7,
+      "source_sha256": "cafca7853fde2120e67cdd4309d9d113cfa7990496985b05216a3f9532f042fb",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "visibility.hpp",
+      "slug": "visibility",
+      "callables": 13,
+      "types": 5,
+      "source_sha256": "a315c9a0f4440e3da445fc88356cd638e5ab7dbd3d0d43da57cc5bdb1d57c6c3",
+      "diagnostics": []
+    },
+    {
+      "family": "psyqo",
+      "header": "adler32.hh",
+      "slug": "adler32",
+      "callables": 3,
+      "types": 0,
+      "source_sha256": "5b19345dd6bf70a175acc1cb3a7c6fbcdb0022ffb01580df696b244a4ecf667a",
+      "diagnostics": []
+    },
+    {
+      "family": "psyqo",
+      "header": "advancedpad.hh",
+      "slug": "advancedpad",
+      "callables": 11,
+      "types": 8,
+      "source_sha256": "5f63abafb4bf2088a5defab28199533933342002a075579bb4824acf5164bc6f",
+      "diagnostics": []
+    },
+    {
+      "family": "psyqo",
+      "header": "application.hh",
+      "slug": "application",
+      "callables": 10,
+      "types": 2,
+      "source_sha256": "e00cb603b3ec340d1bab954f5d08f0784bf2f7c95dd3a80f902a9ff91b263169",
+      "diagnostics": []
+    },
+    {
+      "family": "psyqo",
+      "header": "bezier.hh",
+      "slug": "bezier",
+      "callables": 2,
+      "types": 0,
+      "source_sha256": "ba065d2b46fa7577753347b7635dbc6fdb400d8966aa98360b4a0eb24e8fea4c",
+      "diagnostics": []
+    },
+    {
+      "family": "psyqo",
+      "header": "buffer.hh",
+      "slug": "buffer",
+      "callables": 4,
+      "types": 2,
+      "source_sha256": "55576de7d254eafff169e8a6e502183fba1d61bac6dd24813ca64c0bac75b5ea",
+      "diagnostics": []
+    },
+    {
+      "family": "psyqo",
+      "header": "bump-allocator.hh",
+      "slug": "bump-allocator",
+      "callables": 5,
+      "types": 1,
+      "source_sha256": "3883c7e6f5c40bdbd5873b3412d776e2e58168519e3303594d8ce40cf6431640",
+      "diagnostics": []
+    },
+    {
+      "family": "psyqo",
+      "header": "cdrom-commandbuffer.hh",
+      "slug": "cdrom-commandbuffer",
+      "callables": 1,
+      "types": 1,
+      "source_sha256": "d4bbc519796057574b8540014173c10f9696645ec30533b11875ff5df7f15295",
+      "diagnostics": []
+    },
+    {
+      "family": "psyqo",
+      "header": "cdrom-device.hh",
+      "slug": "cdrom-device",
+      "callables": 69,
+      "types": 11,
+      "source_sha256": "ce7021ca34ed9186cab2de88af715834ea932fa33d1320fc0fa1c13e8f608927",
+      "diagnostics": []
+    },
+    {
+      "family": "psyqo",
+      "header": "cdrom-pcdrv.hh",
+      "slug": "cdrom-pcdrv",
+      "callables": 3,
+      "types": 1,
+      "source_sha256": "833eb86fa8381bb9c887f2ab6940b6c4935cba3a89219615997a2740dd29cf0a",
+      "diagnostics": []
+    },
+    {
+      "family": "psyqo",
+      "header": "cdrom.hh",
+      "slug": "cdrom",
+      "callables": 10,
+      "types": 2,
+      "source_sha256": "8daaf45a94ee293b31f2e15c4d179784b8b07f18b737804e7fad40d569d54ae7",
+      "diagnostics": []
+    },
+    {
+      "family": "psyqo",
+      "header": "coroutine.hh",
+      "slug": "coroutine",
+      "callables": 44,
+      "types": 7,
+      "source_sha256": "7a125eb582d4189954e1d5ce0dc6d6353ae98440219b28a2cc71f7407beeaac6",
+      "diagnostics": []
+    },
+    {
+      "family": "psyqo",
+      "header": "fixed-point.hh",
+      "slug": "fixed-point",
+      "callables": 50,
+      "types": 2,
+      "source_sha256": "44a1a263832936c119e11fa3f251b3eaae4f25a35cc20f09ceb91489ea3aed8d",
+      "diagnostics": []
+    },
+    {
+      "family": "psyqo",
+      "header": "font.hh",
+      "slug": "font",
+      "callables": 18,
+      "types": 2,
+      "source_sha256": "1c4caa5e62043e54c602c1e4614a9773b1087209dc68df6512b52efb1f32e4a3",
+      "diagnostics": []
+    },
+    {
+      "family": "psyqo",
+      "header": "fragment-concept.hh",
+      "slug": "fragment-concept",
+      "callables": 0,
+      "types": 1,
+      "source_sha256": "1aaac3d0e196d360964d58c8cbcf306c997c59e53d787218f0a38f2e366d0945",
+      "diagnostics": []
+    },
+    {
+      "family": "psyqo",
+      "header": "fragments.hh",
+      "slug": "fragments",
+      "callables": 16,
+      "types": 6,
+      "source_sha256": "65c0711723982de3dc2503eb842631447579df7a97270572b8cb046a2d5674e4",
+      "diagnostics": []
+    },
+    {
+      "family": "psyqo",
+      "header": "gpu.hh",
+      "slug": "gpu",
+      "callables": 51,
+      "types": 7,
+      "source_sha256": "4b1efadbb6ffcf7df63ef5a77fdec7889a4a85f34a92306f521cf70128c6cc88",
+      "diagnostics": []
+    },
+    {
+      "family": "psyqo",
+      "header": "gte-kernels.hh",
+      "slug": "gte-kernels",
+      "callables": 74,
+      "types": 5,
+      "source_sha256": "ba52957196576fd9de1eee900f3ddc0df289f31ccb0a031e2128d8925ad926eb",
+      "diagnostics": []
+    },
+    {
+      "family": "psyqo",
+      "header": "gte-math.hh",
+      "slug": "gte-math",
+      "callables": 11,
+      "types": 0,
+      "source_sha256": "702a65748070a1c4ee48b94e8eef331d564dd247bfbe1b72524780816d50a6d8",
+      "diagnostics": []
+    },
+    {
+      "family": "psyqo",
+      "header": "gte-registers.hh",
+      "slug": "gte-registers",
+      "callables": 101,
+      "types": 4,
+      "source_sha256": "f01f1ccf76ef9a8a45035a7a9a171ac4b70e9d0b9a266c3786cff97340c45142",
+      "diagnostics": []
+    },
+    {
+      "family": "psyqo",
+      "header": "hardware/cdrom.hh",
+      "slug": "hardware-cdrom",
+      "callables": 4,
+      "types": 3,
+      "source_sha256": "44dc588834f4a37613200a1d5004658afe4a97375d6ddd453d0550136d1760a4",
+      "diagnostics": []
+    },
+    {
+      "family": "psyqo",
+      "header": "hardware/cpu.hh",
+      "slug": "hardware-cpu",
+      "callables": 5,
+      "types": 2,
+      "source_sha256": "f8566fa5bed48bb1863fa1c407ef8a95fa039df490c279e87247f5ddbcf5dcb0",
+      "diagnostics": []
+    },
+    {
+      "family": "psyqo",
+      "header": "hardware/gpu.hh",
+      "slug": "hardware-gpu",
+      "callables": 0,
+      "types": 0,
+      "source_sha256": "0f4d3494ee554ad4c19ba2cdf61807da0dce1416fe5e1887ae2b8bcf8fe9714a",
+      "diagnostics": []
+    },
+    {
+      "family": "psyqo",
+      "header": "hardware/hwregs.hh",
+      "slug": "hardware-hwregs",
+      "callables": 41,
+      "types": 3,
+      "source_sha256": "27b5a6c1a9741ff4f881c3d1389a479fb3e3ad01c02b52d1bcd541c4f6482a71",
+      "diagnostics": []
+    },
+    {
+      "family": "psyqo",
+      "header": "hardware/sbus.hh",
+      "slug": "hardware-sbus",
+      "callables": 0,
+      "types": 0,
+      "source_sha256": "82db90d57087e7808a10610ea69485985902c3fe4c22f0ba28856d4e01467eeb",
+      "diagnostics": []
+    },
+    {
+      "family": "psyqo",
+      "header": "hardware/sio.hh",
+      "slug": "hardware-sio",
+      "callables": 0,
+      "types": 2,
+      "source_sha256": "1896e339261d0604b683f2583ed489883c98c1de9f831d676690ed1044d8d846",
+      "diagnostics": []
+    },
+    {
+      "family": "psyqo",
+      "header": "internal/gpu/configuration.hh",
+      "slug": "internal-gpu-configuration",
+      "callables": 5,
+      "types": 1,
+      "source_sha256": "d8aed45348032adba61fd670fd50456d0e5c6680d6f59c8480199f194de38f89",
+      "diagnostics": []
+    },
+    {
+      "family": "psyqo",
+      "header": "iso9660-parser.hh",
+      "slug": "iso9660-parser",
+      "callables": 18,
+      "types": 6,
+      "source_sha256": "963cc66d156c8e24a878c00b74a8be8f2efd60e7f47166581d45df087328581e",
+      "diagnostics": []
+    },
+    {
+      "family": "psyqo",
+      "header": "kernel.hh",
+      "slug": "kernel",
+      "callables": 29,
+      "types": 4,
+      "source_sha256": "fa7b498634dc73182a2820870210372a6ca6130030d2238787a6a1eb124f0047",
+      "diagnostics": []
+    },
+    {
+      "family": "psyqo",
+      "header": "matrix.hh",
+      "slug": "matrix",
+      "callables": 0,
+      "types": 1,
+      "source_sha256": "d2dfb7816dca5c395e71d47e4542032abfb35ec147091f96abae90797dd0c511",
+      "diagnostics": []
+    },
+    {
+      "family": "psyqo",
+      "header": "memory-card-filesystem.hh",
+      "slug": "memory-card-filesystem",
+      "callables": 20,
+      "types": 7,
+      "source_sha256": "b4d4294289aab2901158dc5995631661baa13aed7b083c5db96e13f1aee33008",
+      "diagnostics": []
+    },
+    {
+      "family": "psyqo",
+      "header": "memory-card.hh",
+      "slug": "memory-card",
+      "callables": 23,
+      "types": 6,
+      "source_sha256": "a28c36417279187dfa3c11fbb15c4620684fae5cc46a7207915cceb3544b2277",
+      "diagnostics": []
+    },
+    {
+      "family": "psyqo",
+      "header": "msf.hh",
+      "slug": "msf",
+      "callables": 13,
+      "types": 2,
+      "source_sha256": "16fda296b6343b01acf86301ec7e6fea62d2c70b259b4cd6ce7b03f69d8afd1d",
+      "diagnostics": []
+    },
+    {
+      "family": "psyqo",
+      "header": "ordering-table.hh",
+      "slug": "ordering-table",
+      "callables": 4,
+      "types": 3,
+      "source_sha256": "be6e402f91c979cd9fb983d7c3cbd71d493914eb8df83b9a6964a733d5bd98a3",
+      "diagnostics": []
+    },
+    {
+      "family": "psyqo",
+      "header": "primitive-concept.hh",
+      "slug": "primitive-concept",
+      "callables": 0,
+      "types": 0,
+      "source_sha256": "9a8e01b9376ec8aa71a2445963f22d2ab7698da9087e5e1900ef70439abdc9ec",
+      "diagnostics": []
+    },
+    {
+      "family": "psyqo",
+      "header": "primitives/common.hh",
+      "slug": "primitives-common",
+      "callables": 27,
+      "types": 13,
+      "source_sha256": "7ca36138380b2eec16267dc78dbc59d58469af27bd24a4e22dd2713b05a9f58b",
+      "diagnostics": []
+    },
+    {
+      "family": "psyqo",
+      "header": "primitives/control.hh",
+      "slug": "primitives-control",
+      "callables": 14,
+      "types": 9,
+      "source_sha256": "9a14a42894ff63ad0ef3c36b8f8d0ebcb32422a9d02691e1f85f7d736ce64e8d",
+      "diagnostics": []
+    },
+    {
+      "family": "psyqo",
+      "header": "primitives/lines.hh",
+      "slug": "primitives-lines",
+      "callables": 23,
+      "types": 5,
+      "source_sha256": "ffb34c6c2aa8fe608147646271f650b467bbff3decb6292c292ce35046d36a57",
+      "diagnostics": []
+    },
+    {
+      "family": "psyqo",
+      "header": "primitives/misc.hh",
+      "slug": "primitives-misc",
+      "callables": 4,
+      "types": 2,
+      "source_sha256": "6d379c32fe2e9560312ec0d7ee87f822ed70fb807e39fe82331b8ab43b53657b",
+      "diagnostics": []
+    },
+    {
+      "family": "psyqo",
+      "header": "primitives/quads.hh",
+      "slug": "primitives-quads",
+      "callables": 60,
+      "types": 4,
+      "source_sha256": "87076c5514d03d4108240a39133285112310e3aa0d58074c26d9873279707d83",
+      "diagnostics": []
+    },
+    {
+      "family": "psyqo",
+      "header": "primitives/rectangles.hh",
+      "slug": "primitives-rectangles",
+      "callables": 20,
+      "types": 4,
+      "source_sha256": "05671399d83438c0a97b41d6ed3332713a061d424a3149377392a39bcaa78a5e",
+      "diagnostics": []
+    },
+    {
+      "family": "psyqo",
+      "header": "primitives/sprites.hh",
+      "slug": "primitives-sprites",
+      "callables": 20,
+      "types": 4,
+      "source_sha256": "621328710619dfa86bef3de01c4ad6d1b9f75791906bb02b1f295564a29836c5",
+      "diagnostics": []
+    },
+    {
+      "family": "psyqo",
+      "header": "primitives/triangles.hh",
+      "slug": "primitives-triangles",
+      "callables": 54,
+      "types": 4,
+      "source_sha256": "142923b72b5f8bbd033009150bc413643ed4373bb650fd73be21b0fc87691a0c",
+      "diagnostics": []
+    },
+    {
+      "family": "psyqo",
+      "header": "primitives.hh",
+      "slug": "primitives",
+      "callables": 0,
+      "types": 0,
+      "source_sha256": "ee935f504b99e961aea6ffe37610892e899071471f717bfd0b57bbe345ea2192",
+      "diagnostics": []
+    },
+    {
+      "family": "psyqo",
+      "header": "scene.hh",
+      "slug": "scene",
+      "callables": 4,
+      "types": 4,
+      "source_sha256": "dff686aac2ea9a7e16463c53a5f573fa6fe092f977510c9cdc95f321dbcd716d",
+      "diagnostics": []
+    },
+    {
+      "family": "psyqo",
+      "header": "shared.hh",
+      "slug": "shared",
+      "callables": 0,
+      "types": 1,
+      "source_sha256": "db09c6682d74428ccc51db03b864f110a7fb747c529a2049b1a5fd502a68f6ba",
+      "diagnostics": []
+    },
+    {
+      "family": "psyqo",
+      "header": "simplepad.hh",
+      "slug": "simplepad",
+      "callables": 4,
+      "types": 5,
+      "source_sha256": "c8e8c8f5acf72254268e45ae9db2348ed03dace81d8a5c15a210b2bee9dd3a56",
+      "diagnostics": []
+    },
+    {
+      "family": "psyqo",
+      "header": "sio0-bus.hh",
+      "slug": "sio0-bus",
+      "callables": 7,
+      "types": 2,
+      "source_sha256": "7eed20a89f172355ef42ca8184e073b511d6588b526f85397041e5f290b114bc",
+      "diagnostics": []
+    },
+    {
+      "family": "psyqo",
+      "header": "soft-math.hh",
+      "slug": "soft-math",
+      "callables": 30,
+      "types": 1,
+      "source_sha256": "957083db0d5809e72185161e085d9fcd78c61a0a6daabcb03947c50b4eeebccf",
+      "diagnostics": []
+    },
+    {
+      "family": "psyqo",
+      "header": "spu.hh",
+      "slug": "spu",
+      "callables": 7,
+      "types": 2,
+      "source_sha256": "f868e78a108130119ecd2ffde35d4d600aef472f49c57a39c387a5e64c852451",
+      "diagnostics": []
+    },
+    {
+      "family": "psyqo",
+      "header": "strings-helpers.hh",
+      "slug": "strings-helpers",
+      "callables": 1,
+      "types": 0,
+      "source_sha256": "b7a7fd7c44bfa5c5801d22242eea0b9f2f6c5e9d13e269bb14250e37743c28d8",
+      "diagnostics": []
+    },
+    {
+      "family": "psyqo",
+      "header": "task.hh",
+      "slug": "task",
+      "callables": 19,
+      "types": 3,
+      "source_sha256": "5c4b5c5467be9e0704eef116ae2dda8ce0cbc1c0c511e63d62d1f218ae24165e",
+      "diagnostics": []
+    },
+    {
+      "family": "psyqo",
+      "header": "trigonometry.hh",
+      "slug": "trigonometry",
+      "callables": 5,
+      "types": 1,
+      "source_sha256": "e82032435da4d0841b75807b003b9b02828069aa2d64e6290698811df0f0eafa",
+      "diagnostics": []
+    },
+    {
+      "family": "psyqo",
+      "header": "vector.hh",
+      "slug": "vector",
+      "callables": 25,
+      "types": 3,
+      "source_sha256": "4a00cb2404873d69227d75a9d575f72fc09cf18c5b2e33ecad3ebb96f56a87e2",
+      "diagnostics": []
+    }
+  ]
+}
