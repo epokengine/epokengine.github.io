@@ -1,10 +1,13 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { createHash } from 'node:crypto';
 import { marked } from 'marked';
+import { buildApiReference } from './api-reference.mjs';
 
 const root = path.resolve(import.meta.dirname, '..');
 const out = path.join(root, 'dist');
 const content = path.join(root, 'content');
+const assetVersion = createHash('sha1').update(fs.readFileSync(path.join(root, 'assets/site.css'))).update(fs.readFileSync(path.join(root, 'assets/site.js'))).digest('hex').slice(0, 12);
 const manifest = JSON.parse(fs.readFileSync(path.join(root, 'content-manifest.json'), 'utf8'));
 const guideNotes = JSON.parse(fs.readFileSync(path.join(root, 'web-guide-notes.json'), 'utf8'));
 const repo = manifest.repository;
@@ -24,20 +27,14 @@ const groups = [
 ];
 const special = { architecture: 'knowledge/architecture.md', resources: 'knowledge/maintainers/resources.md', testing: 'knowledge/maintainers/testing.md', runtime: 'runtime/README.md', demo: 'examples/rpg-2-5d-demo/README.md', 'spell-example': 'examples/timeline-spell/README.md', api: 'docs/api/index.md', 'api/epok': 'docs/api/epok.md', 'api/psyqo': 'docs/api/psyqo.md', license: 'LICENSE', credits: 'THIRD_PARTY_NOTICES.md', 'runtime-credits': 'runtime/THIRD_PARTY_NOTICES.md' };
 const docs = groups.flatMap(([group, entries]) => entries.map(([slug, label]) => ({ slug, label, group, file: special[slug] || `docs/${slug}.md`, api: slug === 'api' || slug.startsWith('api/') })));
-const apiCoverage = JSON.parse(fs.readFileSync(path.join(content, 'docs/api/coverage.json'), 'utf8'));
-const apiModules = apiCoverage.modules.map(module => ({
-  slug: `api/${module.family}/${module.slug}`,
-  label: module.header,
-  group: module.family === 'epok' ? 'Epok API modules' : 'PsyQo API modules',
-  file: `docs/api/${module.family}/${module.slug}.md`,
-  api: true,
-}));
-const allDocs = [...docs, ...apiModules];
+const apiCatalog = JSON.parse(fs.readFileSync(path.join(content, 'docs/api/catalog.json'), 'utf8'));
+const guideDocs = docs.filter(doc => !doc.api);
 const noteExemptions = new Set(['license', 'credits', 'runtime-credits']);
 for (const doc of docs) {
   if (!doc.api && !noteExemptions.has(doc.slug) && !guideNotes[doc.slug]) throw new Error(`Missing beginner guide notes for ${doc.slug}`);
 }
-const routes = new Map(allDocs.map(d => [d.file, `/docs/${d.slug}/`]));
+const routes = new Map(docs.map(d => [d.file, `/docs/${d.slug}/`]));
+for (const module of apiCatalog.modules) routes.set(`docs/api/${module.family}/${module.module}.md`, `/docs/api/${module.family}/${module.module}/`);
 routes.set('README.md', '/');
 function write(file, text) { const dest = path.join(out, file); fs.mkdirSync(path.dirname(dest), { recursive: true }); fs.writeFileSync(dest, text); }
 function urlFor(href, file) {
@@ -79,7 +76,7 @@ function header(active = '') {
 }
 function footer() { return `<footer class="footer"><a class="brand" href="/">Epok Engine<span class="footer-tag">Original hardware. Original worlds.</span></a><div><a href="/docs/license/">MIT license</a><a href="/docs/credits/">Credits</a><a href="${repo}">Source ↗</a></div><p>Independent homebrew software. Not affiliated with Sony Interactive Entertainment.</p></footer>`; }
 function page(title, description, url, body, active = '') {
-  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="dark"><title>${esc(title)}</title><meta name="description" content="${esc(description)}"><link rel="canonical" href="${origin}${url}"><meta property="og:type" content="website"><meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(description)}"><meta property="og:url" content="${origin}${url}"><meta name="theme-color" content="#101214"><link rel="icon" type="image/png" href="/media/resources/branding/epok.png"><link rel="stylesheet" href="/assets/site.css"><script src="/assets/site.js" defer></script><script src="/assets/gallery.js" defer></script></head><body>${header(active)}${body}${footer()}</body></html>`;
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="dark"><title>${esc(title)}</title><meta name="description" content="${esc(description)}"><link rel="canonical" href="${origin}${url}"><meta property="og:type" content="website"><meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(description)}"><meta property="og:url" content="${origin}${url}"><meta name="theme-color" content="#101214"><link rel="icon" type="image/png" href="/media/resources/branding/epok.png"><link rel="stylesheet" href="/assets/site.css?v=${assetVersion}"><script src="/assets/site.js?v=${assetVersion}" defer></script><script src="/assets/gallery.js?v=${assetVersion}" defer></script></head><body>${header(active)}${body}${footer()}</body></html>`;
 }
 if (fs.existsSync(out)) fs.rmSync(out, { recursive: true });
 fs.mkdirSync(out, { recursive: true });
@@ -132,24 +129,26 @@ const homeWithBlueprints = home
   .replace('<section class="showcase section wrap">', `${sceneShowcase}${blueprintShowcase}<section class="showcase section wrap">`);
 write('index.html', page('Epok Engine — Build games for the original PlayStation', 'A standalone visual editor and native PSX runtime. Build worlds and create gameplay with Blueprints or C++ for the original PlayStation.', '/', homeWithBlueprints));
 const searchItems = [];
-for (let i = 0; i < allDocs.length; i++) {
-  const doc = allDocs[i];
+for (let i = 0; i < guideDocs.length; i++) {
+  const doc = guideDocs[i];
   let md = fs.readFileSync(path.join(content, doc.file), 'utf8');
   if (doc.slug === 'license') md = '# License\n\n```text\n' + md + '\n```\n';
   const { html, headings } = render(md, doc.file);
   const expandedHtml = html.replace('</h1>', `</h1>${guidePrimer(doc)}`);
   const note = guideNotes[doc.slug];
   const noteText = note ? [note.plain, note.analogy, ...note.flow, ...note.details, note.tip].join(' ') : '';
-  const searchableMarkdown = doc.api ? md.replace(/```(?:[\w+-]+)?/g, '') : md.replace(/```[\s\S]*?```/g, '');
+  const searchableMarkdown = md.replace(/```[\s\S]*?```/g, '');
   const plain = `${noteText} ${searchableMarkdown}`.replace(/<[^>]*>/g, '').replace(/[#*`\[\]]/g, '').replace(/\s+/g, ' ').trim();
   searchItems.push({ title: doc.label, group: doc.group, url: `/docs/${doc.slug}/`, text: plain, api: Boolean(doc.api) });
   const sidebar = `<aside class="sidebar" aria-label="Documentation navigation"><a class="docs-home" href="/docs/">Documentation <span aria-hidden="true">↗</span></a><a class="search-shortcut" href="/docs/#search">Find a guide <span aria-hidden="true">⌕</span></a>${groups.map(([group, entries]) => `<div class="nav-group"><p>${group}</p>${entries.map(([slug, label]) => `<a href="/docs/${slug}/"${slug === doc.slug ? ' aria-current="page"' : ''}>${esc(label)}</a>`).join('')}</div>`).join('')}</aside>`;
-  const prev = allDocs[i - 1], next = allDocs[i + 1];
+  const prev = guideDocs[i - 1], next = guideDocs[i + 1];
   const pager = `<nav class="pager" aria-label="Adjacent guides">${prev ? `<a href="/docs/${prev.slug}/"><span>← Previous</span>${esc(prev.label)}</a>` : '<span></span>'}${next ? `<a href="/docs/${next.slug}/"><span>Next →</span>${esc(next.label)}</a>` : ''}</nav>`;
-  const tocHeadings = doc.api ? headings.filter(h => h.depth === 2).slice(0, 40) : headings;
+  const tocHeadings = headings;
   const body = `<div class="docs-layout">${sidebar}<main id="main" class="doc-main"><div class="doc-top"><a href="/docs/">Documentation</a><span>/</span><span>${esc(doc.group)}</span></div><div class="mobile-doc-nav"><a href="/docs/">← All guides</a><details><summary>On this page</summary>${tocHeadings.map(h => `<a href="#${esc(h.id)}">${esc(h.label)}</a>`).join('')}</details></div><article class="prose">${expandedHtml}</article><div class="source-note">Expanded for the web from the published engine documentation · <a href="${repo}/blob/${manifest.commit}/${doc.file}">View technical source ${arrow}</a></div>${pager}</main><aside class="toc" aria-label="On this page"><p>ON THIS PAGE</p>${tocHeadings.map(h => `<a class="depth-${h.depth}" href="#${esc(h.id)}">${esc(h.label)}</a>`).join('')}</aside></div>`;
-  write(`docs/${doc.slug}/index.html`, page(`${doc.label} — Epok Docs`, `${doc.label}: guides and reference for the Epok PlayStation game engine.`, `/docs/${doc.slug}/`, body, doc.api ? 'api' : 'docs'));
+  write(`docs/${doc.slug}/index.html`, page(`${doc.label} — Epok Docs`, `${doc.label}: guides and reference for the Epok PlayStation game engine.`, `/docs/${doc.slug}/`, body, 'docs'));
 }
+const apiBuild = buildApiReference({ catalog: apiCatalog, manifest, repo, write, page, esc, arrow });
+searchItems.push(...apiBuild.searchItems);
 const docGroups = groups.map(([group, entries], i) => `<section class="guide-group"><p class="eyebrow">${String(i + 1).padStart(2, '0')}</p><h2>${group}</h2>${entries.map(([slug, label]) => `<a href="/docs/${slug}/">${esc(label)} <span aria-hidden="true">→</span></a>`).join('')}</section>`).join('');
 const index = `<main id="main" class="wrap docs-index"><p class="eyebrow">EPOK DOCUMENTATION</p><h1>Build your first world.<br><span>Then go deeper.</span></h1><p class="lead">Setup, workflows and native APIs for the original PlayStation.</p><form class="search-form" role="search" action="/docs/"><label for="search">Search the documentation</label><div class="search-box"><span aria-hidden="true">⌕</span><input id="search" name="q" type="search" placeholder="Try Blueprints, textures or collision…" autocomplete="off"><button type="reset">Clear</button></div></form><p class="search-status small muted" role="status" aria-live="polite"></p><div class="search-results" hidden></div><div class="guide-grid">${docGroups}</div><section id="limits" class="limits"><p class="eyebrow">BEFORE YOU BUILD</p><h2>Know the current limits.</h2><ul><li><strong>Experimental on Windows x64, macOS Apple Silicon and Linux x86_64.</strong> Builds and emulator execution are verified. Blueprint reflection and authoring are available on Windows and Linux; macOS does not yet include that toolchain. Physical-console validation is pending.</li><li><strong>Rigid skeletal animation.</strong> Skeletal textures, blended skin weights and animation blending remain future work.</li><li><strong>Focused editing tools.</strong> Blueprint graphs/templates, timelines, effects, Blockout geometry and MCP scene batches have Undo/Redo. Entity multiselection remains future work.</li><li><strong>PSX rendering constraints.</strong> Intersecting polygons can still produce sorting artifacts. Capacity limits are not frame-rate guarantees.</li><li><strong>Bounded simulation and resources.</strong> Fixed 60 Hz steps, conservative AABB collision and resident data that must fit PSX RAM. Optional <a href="/docs/streaming/">editable-mesh geometry streaming</a> uses bounded CD pages; required reads may stall rendering and restart XA music. It is off by default, not general-purpose map or texture streaming.</li><li><strong>Build from source.</strong> A release build creates the editor executable; portable application packaging is not yet provided.</li></ul><p class="small muted">Documentation snapshot: <a href="${repo}/tree/${manifest.commit}">${manifest.commit.slice(0, 7)}</a>. Updated from committed engine documentation.</p></section></main>`;
 const learningPaths = `<section class="learning-paths" aria-labelledby="learning-paths"><h2 id="learning-paths">Learn by doing</h2><div class="guide-grid"><section class="guide-group"><p class="eyebrow">01 / VISUAL GAMEPLAY</p><h3>Build your first Blueprint</h3><p>Find the editor controls, connect typed pins and inspect a running behaviour.</p><a href="/docs/blueprints-tutorial/">Start the Blueprint tutorial <span aria-hidden="true">→</span></a><a href="/docs/blueprints/">Keep the reference nearby <span aria-hidden="true">→</span></a></section><section class="guide-group"><p class="eyebrow">02 / VISUAL EFFECTS</p><h3>Create and animate an effect</h3><p>Choose layers, tune emission, edit curves and preview a repeatable effect.</p><a href="/docs/vfx-editor/">Open the VFX editor guide <span aria-hidden="true">→</span></a><a href="/docs/timelines/">Explore scene timelines <span aria-hidden="true">→</span></a></section><section class="guide-group"><p class="eyebrow">03 / PUT IT TOGETHER</p><h3>Make a playable spell</h3><p>Spawn an effect, apply damage at Impact and handle completion or cancellation.</p><a href="/docs/spell-tutorial/">Follow the spell tutorial <span aria-hidden="true">→</span></a><a href="/docs/blueprints-vfx-troubleshooting/">Troubleshoot your result <span aria-hidden="true">→</span></a></section></div></section>`;
@@ -158,8 +157,9 @@ const indexWithPaths = index
   .replace('<form class="search-form"', `${learningPaths}<form class="search-form"`);
 write('docs/index.html', page('Documentation — Epok', 'Learn Epok: installation, editor workflows, assets, Blueprint visual scripting, C++ and the native PlayStation runtime.', '/docs/', indexWithPaths, 'docs'));
 write('assets/search.json', JSON.stringify(searchItems));
+write('assets/api-search.json', JSON.stringify(apiBuild.searchItems));
 write('404.html', page('Page not found — Epok', 'Find your way back to the Epok documentation.', '/404.html', '<main id="main" class="wrap not-found"><p class="eyebrow">404 / OUTSIDE THE SCENE</p><h1>This page is missing.</h1><p>The guide may have moved. Find it in the documentation.</p><a class="button primary" href="/docs/">Browse the docs →</a></main>'));
 write('.nojekyll', '');
 write('robots.txt', `User-agent: *\nAllow: /\nSitemap: ${origin}/sitemap.xml\n`);
-write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${['/', '/docs/', ...allDocs.map(d => `/docs/${d.slug}/`)].map(url => `<url><loc>${origin}${url}</loc></url>`).join('')}</urlset>`);
-console.log(`Built homepage, documentation index, ${docs.length} guides, ${apiModules.length} API modules and 404 page.`);
+write('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${['/', '/docs/', ...guideDocs.map(d => `/docs/${d.slug}/`), ...apiBuild.urls].map(url => `<url><loc>${origin}${url}</loc></url>`).join('')}</urlset>`);
+console.log(`Built homepage, documentation index, ${guideDocs.length} guides, ${apiBuild.urls.length} API pages and 404 page.`);

@@ -1,10 +1,11 @@
 {
   "repository": "https://github.com/franadoriv/epok-engine",
-  "commit": "838556302493a7f4a4f718b9904482838897d20e",
+  "commit": "dc1729b140a56a1ebe5db221bc5ccd820b5c5f53",
   "files": [
     "LICENSE",
     "README.md",
     "THIRD_PARTY_NOTICES.md",
+    "docs/api/catalog.json",
     "docs/api/coverage.json",
     "docs/api/epok.md",
     "docs/api/epok/affine.md",

@@ -37,18 +37,20 @@ for (const item of search) {
   if (html.indexOf('<h1') > primer) errors.push(`${slug}: beginner overview appears before the guide title`);
 }
 for (const query of ['textures', 'collision', 'mcp', 'blueprint', 'vfx', 'marker', 'cancellation']) if (!search.some(d => `${d.title} ${d.text}`.toLowerCase().includes(query))) errors.push(`Search index missing ${query}`);
-for (const query of ['epok::raycast', 'psyqo::gpu', 'sendprimitive', 'memory card callback']) if (!search.some(d => d.api && `${d.title} ${d.text}`.toLowerCase().includes(query))) errors.push(`API search index missing ${query}`);
-const coverage = JSON.parse(fs.readFileSync(path.join(root, '../content/docs/api/coverage.json'), 'utf8'));
-const expectedApiPages = coverage.modules.length + 3;
-const apiSearch = search.filter(item => item.api);
-if (apiSearch.length !== expectedApiPages) errors.push(`Expected ${expectedApiPages} API search pages, found ${apiSearch.length}`);
-for (const family of ['epok', 'psyqo']) {
-  const moduleTotal = coverage.modules.filter(module => module.family === family).reduce((sum, module) => sum + module.callables, 0);
-  if (coverage[family].callables !== moduleTotal) errors.push(`API coverage total does not match its modules: ${family}`);
-}
-for (const module of coverage.modules) {
-  const html = fs.readFileSync(path.join(root, `docs/api/${module.family}/${module.slug}/index.html`), 'utf8');
-  if (module.callables > 0 && (!html.includes('Exact declaration') || !html.includes('Usage pattern') || !html.includes('Trade-offs and warnings'))) errors.push(`Incomplete API module: ${module.family}/${module.slug}`);
+const apiSearch = JSON.parse(fs.readFileSync(path.join(root, 'assets/api-search.json'), 'utf8'));
+for (const query of ['epok::raycast', 'psyqo::gpu', 'sendprimitive', 'memory card']) if (!apiSearch.some(d => `${d.title} ${d.text}`.toLowerCase().includes(query))) errors.push(`API search index missing ${query}`);
+const catalog = JSON.parse(fs.readFileSync(path.join(root, '../content/docs/api/catalog.json'), 'utf8'));
+const callableGroups = new Set(catalog.callables.map(item => `${item.family}|${item.qualified}`)).size;
+const propertyGroups = new Set(catalog.properties.map(item => `${item.family}|${item.qualified}`)).size;
+const namespaces = new Set([...catalog.types, ...catalog.callables, ...catalog.properties].map(item => `${item.family}|${item.namespace || item.family}`)).size;
+const expectedApiPages = catalog.modules.length + catalog.types.length + callableGroups + propertyGroups + namespaces + 3;
+if (apiSearch.length !== expectedApiPages) errors.push(`Expected ${expectedApiPages} API search entries, found ${apiSearch.length}`);
+if (!fs.readFileSync(path.join(root, 'docs/api/index.html'), 'utf8').includes('data-api-search')) errors.push('API homepage is missing dedicated symbol search');
+for (const item of apiSearch) {
+  const route = item.url.replace(/^\/+|\/+$/g, '');
+  const html = fs.readFileSync(path.join(root, route, 'index.html'), 'utf8');
+  if (!['Index', 'API family', 'Namespace'].includes(item.kind) && !html.includes('class="api-code"')) errors.push(`${item.title}: missing code example`);
+  if (['Function', 'Function template', 'Method', 'Constructor', 'Destructor', 'Conversion operator', 'Field', 'Variable', 'Enum value'].includes(item.kind) && !html.includes('Trade-offs and warnings')) errors.push(`${item.title}: missing trade-offs and warnings`);
 }
 const documentationIndex = fs.readFileSync(path.join(root, 'docs/index.html'), 'utf8');
 for (const slug of ['features', 'content-browser', 'play', 'blueprints-tutorial', 'vfx-editor', 'timelines', 'spell-tutorial', 'blueprints-vfx-troubleshooting']) {

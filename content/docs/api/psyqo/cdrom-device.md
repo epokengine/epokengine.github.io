@@ -2,7 +2,7 @@
 
 > **Header:** `"psyqo/cdrom-device.hh"` · **Tier:** Pinned PsyQo API · **Source:** [open header](https://github.com/pcsx-redux/nugget/blob/6186b131aacc5853a9161fb076ed34ffe504552d/psyqo/cdrom-device.hh)
 
-This module covers the cdrom device module. It documents 69 public callables declared directly in this header.
+This module covers the cdrom device module. It documents 64 public callables declared directly in this header.
 
 PsyQo is pinned through Nugget revision `6186b131aacc5853a9161fb076ed34ffe504552d`. Signatures and comments below come from that exact revision, not from whichever upstream version happens to be newest.
 
@@ -12,9 +12,6 @@ PsyQo is pinned through Nugget revision `6186b131aacc5853a9161fb076ed34ffe504552
 
 ## Callable index
 
-- [`psyqo::CDRomDevice::ActionBase::name`](#psyqo-cdromdevice-actionbase-name-1) — Performs `name` as part of the cdrom device module.
-- [`psyqo::CDRomDevice::BlockingAction::BlockingAction`](#psyqo-cdromdevice-blockingaction-blockingaction-1) — Constructs `psyqo::CDRomDevice::BlockingAction` for the cdrom device module.
-- [`psyqo::CDRomDevice::BlockingAction::~BlockingAction`](#psyqo-cdromdevice-blockingaction-blockingaction-2) — Releases the resources owned by `psyqo::CDRomDevice::BlockingAction`.
 - [`psyqo::CDRomDevice::getPlaybackLocation`](#psyqo-cdromdevice-getplaybacklocation-1) — Returns playback location as part of the cdrom device module.
 - [`psyqo::CDRomDevice::getPlaybackLocation`](#psyqo-cdromdevice-getplaybacklocation-2) — Get the Playback location of the CDDA audio.
 - [`psyqo::CDRomDevice::getPlaybackLocation`](#psyqo-cdromdevice-getplaybacklocation-3) — Returns playback location as part of the cdrom device module.
@@ -30,8 +27,6 @@ PsyQo is pinned through Nugget revision `6186b131aacc5853a9161fb076ed34ffe504552
 - [`psyqo::CDRomDevice::GetTOCSizeAwaiter::GetTOCSizeAwaiter`](#psyqo-cdromdevice-gettocsizeawaiter-gettocsizeawaiter-1) — Constructs `psyqo::CDRomDevice::GetTOCSizeAwaiter` for the cdrom device module.
 - [`psyqo::CDRomDevice::getTOCSizeBlocking`](#psyqo-cdromdevice-gettocsizeblocking-1) — Returns tocsize blocking as part of the cdrom device module.
 - [`psyqo::CDRomDevice::isIdle`](#psyqo-cdromdevice-isidle-1) — Checks if the CDROM device is in idle state.
-- [`psyqo::CDRomDevice::MaskedIRQ::MaskedIRQ`](#psyqo-cdromdevice-maskedirq-maskedirq-1) — Constructs `psyqo::CDRomDevice::MaskedIRQ` for the cdrom device module.
-- [`psyqo::CDRomDevice::MaskedIRQ::~MaskedIRQ`](#psyqo-cdromdevice-maskedirq-maskedirq-2) — Releases the resources owned by `psyqo::CDRomDevice::MaskedIRQ`.
 - [`psyqo::CDRomDevice::mute`](#psyqo-cdromdevice-mute-1) — Performs `mute` as part of the cdrom device module.
 - [`psyqo::CDRomDevice::mute`](#psyqo-cdromdevice-mute-2) — Mutes the CD audio for both CDDA and CDXA.
 - [`psyqo::CDRomDevice::MuteAwaiter::await_ready`](#psyqo-cdromdevice-muteawaiter-await-ready-1) — Performs `await ready` as part of the cdrom device module.
@@ -81,108 +76,6 @@ PsyQo is pinned through Nugget revision `6186b131aacc5853a9161fb076ed34ffe504552
 - [`psyqo::CDRomDevice::UnmuteAwaiter::UnmuteAwaiter`](#psyqo-cdromdevice-unmuteawaiter-unmuteawaiter-1) — Constructs `psyqo::CDRomDevice::UnmuteAwaiter` for the cdrom device module.
 - [`psyqo::CDRomDevice::unmuteBlocking`](#psyqo-cdromdevice-unmuteblocking-1) — Performs `unmute blocking` as part of the cdrom device module.
 - [`psyqo::CDRomDevice::~CDRomDevice`](#psyqo-cdromdevice-cdromdevice-1) — Releases the resources owned by `psyqo::CDRomDevice`.
-
-<a id="psyqo-cdromdevice-actionbase-name-1"></a>
-
-## `psyqo::CDRomDevice::ActionBase::name`
-
-**Purpose.** Performs `name` as part of the cdrom device module.
-
-**Exact declaration**
-
-```cpp
-const char *name() const
-```
-
-- **Declared at:** [line 197](https://github.com/pcsx-redux/nugget/blob/6186b131aacc5853a9161fb076ed34ffe504552d/psyqo/cdrom-device.hh#L197)
-- **Kind:** `cxx method`; qualifiers: `const`
-
-**Returns.** Returns `const char *`. Check the purpose and failure notes before using the value.
-
-**Use it when.** You need the cdrom device module and the preconditions in the declaration are already satisfied.
-
-**Usage pattern**
-
-```cpp
-#include "psyqo/cdrom-device.hh"
-
-psyqo::CDRomDevice::ActionBase& object = /* obtain a valid instance */;
-
-auto result = object.name();
-```
-
-**Why choose it.** The method is `const`, so it does not mutate the object through this API surface. The API exposes the hardware service without hiding latency or bounded memory.
-
-**Trade-offs and warnings.** Treat device absence, busy state and I/O failure as expected outcomes; do not block the frame loop waiting for hardware.
-
-<a id="psyqo-cdromdevice-blockingaction-blockingaction-1"></a>
-
-## `psyqo::CDRomDevice::BlockingAction::BlockingAction`
-
-**Purpose.** Constructs `psyqo::CDRomDevice::BlockingAction` for the cdrom device module.
-
-**Exact declaration**
-
-```cpp
-BlockingAction(CDRomDevice *, GPU &)
-```
-
-- **Declared at:** [line 473](https://github.com/pcsx-redux/nugget/blob/6186b131aacc5853a9161fb076ed34ffe504552d/psyqo/cdrom-device.hh#L473)
-- **Kind:** `constructor`
-
-**Parameters**
-
-| Name | Type | Role | Meaning |
-| --- | --- | --- | --- |
-| `arg1` | `CDRomDevice *` | Input/output; inspect the function contract | Value supplied for `arg1`. See the exact type and module contract. |
-| `arg2` | `GPU &` | Input/output; inspect the function contract | Value supplied for `arg2`. See the exact type and module contract. |
-
-**Use it when.** You need the cdrom device module and the preconditions in the declaration are already satisfied.
-
-**Usage pattern**
-
-```cpp
-#include "psyqo/cdrom-device.hh"
-
-// Assume these named values have been initialized with valid data:
-// CDRomDevice * arg1
-// GPU & arg2
-
-psyqo::CDRomDevice::BlockingAction value(arg1, arg2);
-```
-
-**Why choose it.** The API exposes the hardware service without hiding latency or bounded memory.
-
-**Trade-offs and warnings.** Treat device absence, busy state and I/O failure as expected outcomes; do not block the frame loop waiting for hardware. Pointer/reference arguments are borrowed unless the source contract says otherwise; keep them valid for the complete operation and never assume null is accepted.
-
-<a id="psyqo-cdromdevice-blockingaction-blockingaction-2"></a>
-
-## `psyqo::CDRomDevice::BlockingAction::~BlockingAction`
-
-**Purpose.** Releases the resources owned by `psyqo::CDRomDevice::BlockingAction`.
-
-**Exact declaration**
-
-```cpp
-~BlockingAction()
-```
-
-- **Declared at:** [line 474](https://github.com/pcsx-redux/nugget/blob/6186b131aacc5853a9161fb076ed34ffe504552d/psyqo/cdrom-device.hh#L474)
-- **Kind:** `destructor`
-
-**Use it when.** You need the cdrom device module and the preconditions in the declaration are already satisfied.
-
-**Usage pattern**
-
-```cpp
-#include "psyqo/cdrom-device.hh"
-
-// `psyqo::CDRomDevice::BlockingAction` cleans up when its owning scope ends.
-```
-
-**Why choose it.** The API exposes the hardware service without hiding latency or bounded memory.
-
-**Trade-offs and warnings.** Treat device absence, busy state and I/O failure as expected outcomes; do not block the frame loop waiting for hardware.
 
 <a id="psyqo-cdromdevice-getplaybacklocation-1"></a>
 
@@ -754,64 +647,6 @@ auto result = object.isIdle();
 **Why choose it.** The method is `const`, so it does not mutate the object through this API surface. The boolean result makes success, availability or state explicit without exceptions. The API exposes the hardware service without hiding latency or bounded memory.
 
 **Trade-offs and warnings.** Check the return value; `false` is part of normal control flow for many PSX resource operations. Treat device absence, busy state and I/O failure as expected outcomes; do not block the frame loop waiting for hardware.
-
-<a id="psyqo-cdromdevice-maskedirq-maskedirq-1"></a>
-
-## `psyqo::CDRomDevice::MaskedIRQ::MaskedIRQ`
-
-**Purpose.** Constructs `psyqo::CDRomDevice::MaskedIRQ` for the cdrom device module.
-
-**Exact declaration**
-
-```cpp
-MaskedIRQ()
-```
-
-- **Declared at:** [line 482](https://github.com/pcsx-redux/nugget/blob/6186b131aacc5853a9161fb076ed34ffe504552d/psyqo/cdrom-device.hh#L482)
-- **Kind:** `constructor`
-
-**Use it when.** You need the cdrom device module and the preconditions in the declaration are already satisfied.
-
-**Usage pattern**
-
-```cpp
-#include "psyqo/cdrom-device.hh"
-
-psyqo::CDRomDevice::MaskedIRQ value();
-```
-
-**Why choose it.** The API exposes the hardware service without hiding latency or bounded memory.
-
-**Trade-offs and warnings.** Treat device absence, busy state and I/O failure as expected outcomes; do not block the frame loop waiting for hardware.
-
-<a id="psyqo-cdromdevice-maskedirq-maskedirq-2"></a>
-
-## `psyqo::CDRomDevice::MaskedIRQ::~MaskedIRQ`
-
-**Purpose.** Releases the resources owned by `psyqo::CDRomDevice::MaskedIRQ`.
-
-**Exact declaration**
-
-```cpp
-~MaskedIRQ()
-```
-
-- **Declared at:** [line 483](https://github.com/pcsx-redux/nugget/blob/6186b131aacc5853a9161fb076ed34ffe504552d/psyqo/cdrom-device.hh#L483)
-- **Kind:** `destructor`
-
-**Use it when.** You need the cdrom device module and the preconditions in the declaration are already satisfied.
-
-**Usage pattern**
-
-```cpp
-#include "psyqo/cdrom-device.hh"
-
-// `psyqo::CDRomDevice::MaskedIRQ` cleans up when its owning scope ends.
-```
-
-**Why choose it.** The API exposes the hardware service without hiding latency or bounded memory.
-
-**Trade-offs and warnings.** Treat device absence, busy state and I/O failure as expected outcomes; do not block the frame loop waiting for hardware.
 
 <a id="psyqo-cdromdevice-mute-1"></a>
 
