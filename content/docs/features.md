@@ -484,9 +484,10 @@ See [Testing](../knowledge/maintainers/testing.md) and
 These are deliberate descriptions of the present implementation, not promised
 features:
 
-- Windows x64 and macOS Apple Silicon are the supported editor targets. Blueprint
-  reflection/authoring currently requires Windows x64. Linux serial helpers are
-  experimental rather than a supported editor release.
+- Windows x64, macOS Apple Silicon and Linux x86_64 are the supported editor
+  targets. Blueprint reflection/authoring is available on Windows and Linux;
+  macOS does not yet provision that toolchain. Linux editor and Play support,
+  plus serial hardware paths outside Windows, remain experimental.
 - Console builds and PCSX-Redux execution are validated. Physical-console timing,
   controllers, serial paths on every host and real Memory Card media still need
   hardware validation.

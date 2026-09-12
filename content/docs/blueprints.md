@@ -11,8 +11,8 @@ They derive from a reflected native C++ class or another Blueprint. Generated
 C++ runs through the native MIPS/PsyQo backend: no graph interpreter, C++ RTTI,
 exceptions, Lua VM, or host-computed C++ member offsets are shipped to the PSX.
 
-The current reflection/Blueprint toolchain is provisioned and validated on
-Windows x64. It requires the pinned libclang and a built `epok-header-tool`
+The current reflection/Blueprint toolchain is provisioned on Windows x64 and
+Linux x86_64. It requires the pinned libclang and a built `epok-header-tool`
 beside the editor. General macOS editor support does not yet provision that
 Blueprint extractor runtime; Blueprint authoring is not currently supported
 there. Existing legacy-script workflows are separate from this requirement.

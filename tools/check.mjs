@@ -47,8 +47,16 @@ for (const [slug, image] of [['vfx-editor', 'vfx-editor.png'], ['spell-tutorial'
 if (!homepage.includes('id="blueprints"') || !homepage.includes('/docs/blueprints/')) errors.push('Homepage is missing Blueprint documentation access');
 if (!homepage.includes('/docs/features/') || !homepage.includes('/docs/content-browser/') || !homepage.includes('/docs/play/')) errors.push('Homepage is missing access to the feature catalog, Content Browser or Play guides');
 if (!homepage.includes('/media/resources/branding/epok-lockup.png')) errors.push('Homepage is missing the Epok Engine wordmark');
+if (!homepage.includes('Linux x86_64')) errors.push('Homepage is missing Linux x86_64 support');
+if (!documentationIndex.includes('Linux x86_64')) errors.push('Documentation index is missing Linux x86_64 support');
+const gettingStarted = fs.readFileSync(path.join(root, 'docs/getting-started/index.html'), 'utf8');
+if (!gettingStarted.includes('setup-linux.sh')) errors.push('Getting started is missing the Linux setup command');
 for (const file of [...files, 'assets/search.json']) {
-  if (/uniqu?o|unicore|eraengine/i.test(fs.readFileSync(path.join(root, file), 'utf8'))) errors.push(`${file}: obsolete engine branding`);
+  const built = fs.readFileSync(path.join(root, file), 'utf8');
+  if (/uniqu?o|unicore|eraengine/i.test(built)) errors.push(`${file}: obsolete engine branding`);
+  for (const obsolete of ['Windows x64 and macOS Apple Silicon', 'Windows x64 + macOS Apple Silicon <span>', 'Linux provisioning is not implemented']) {
+    if (built.includes(obsolete)) errors.push(`${file}: obsolete two-platform claim: ${obsolete}`);
+  }
 }
 for (const image of ['epok-editor.png', 'epok-scene-view.png', 'epok-blueprints.png']) {
   if (!homepage.includes(`/assets/captures/${image}`)) errors.push(`Homepage is missing ${image}`);

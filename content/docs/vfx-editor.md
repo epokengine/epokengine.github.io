@@ -6,8 +6,8 @@ embedded TimelineAsset. The same timeline system also drives scene sequences.
 
 Start here for visual authoring. Continue with [the spell tutorial](spell-tutorial.md)
 to trigger the effect from Blueprints, or [Timeline reference](timelines.md) for
-typed scene bindings and runtime rules. Authoring uses the Windows reflection
-toolchain described in [Getting started](getting-started.md).
+typed scene bindings and runtime rules. Authoring uses the Windows or Linux
+reflection toolchain described in [Getting started](getting-started.md).
 
 ## Open a working effect
 

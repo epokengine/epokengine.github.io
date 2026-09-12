@@ -66,7 +66,7 @@ fast mode also depends on the adapter and Unirom.
 | --- | --- |
 | Windows x86/x64 | Windows 10 1809+ for the private ConPTY terminal; .NET Framework 4.7.2+; accessible COM port |
 | macOS | Compatible Mono runtime and accessible serial adapter; the editor discovers Homebrew/Mono outside PATH and can install Mono through existing Homebrew. The project setup currently targets Apple Silicon. |
-| Linux | Experimental: compatible Mono, PTY access and serial-device permissions supplied by the distribution. No automatic sudo, group or driver changes. |
+| Linux | Experimental: Linux x86_64 setup can download editor packages and build the local MIPS compiler; compatible Mono, PTY access and serial-device permissions are still supplied by the distribution. No automatic sudo, group or driver changes. |
 
 The launcher tests actual runtime/terminal capability before opening the serial
 port. Other architectures report missing automatic support and preserve the

@@ -27,7 +27,7 @@
 
 Epok brings a visual editor workflow to PSX development. Create a project, arrange a scene, import assets, connect Blueprint graphs or write C++ behaviours, and press **Play**. Your game compiles to a native MIPS executable and runs inside an integrated PCSX-Redux Game view.
 
-**Windows x64 and macOS Apple Silicon · Experimental · MIT-licensed original code.** The editor and runtime are in active development. Emulator validation is available; physical-console validation is pending.
+**Windows x64, macOS Apple Silicon and Linux x86_64 · Experimental · MIT-licensed original code.** The editor and runtime are in active development. Emulator validation is available; physical-console validation is pending.
 
 ![Epok editor with the scene viewport, editable 2.5D courtyard, scene hierarchy and component inspector](docs/images/epok-editor.png)
 
@@ -75,8 +75,8 @@ Start with [Your first Blueprint](docs/blueprints-tutorial.md), then connect an
 effect with the [spell tutorial](docs/spell-tutorial.md). The [Blueprint reference](docs/blueprints.md)
 documents execution and console-side limits. Blueprints use Epok's own asset format and
 bounded native backend; Unreal assets/APIs and live native-code patching are not
-supported. Blueprint reflection/authoring currently requires the Windows x64
-toolchain; general macOS editor support does not yet include that runtime.
+supported. Blueprint reflection/authoring is available on Windows x64 and Linux
+x86_64; general macOS editor support does not yet include that runtime.
 
 ## Getting started
 
@@ -84,10 +84,11 @@ Clone the Epok source repository, then run the commands below.
 
 ### Prerequisites
 
-- **Windows x64** or **macOS 11+ on Apple Silicon**
+- **Windows x64**, **macOS 11+ on Apple Silicon**, or **Linux x86_64**
 - [Git](https://git-scm.com/) and [Rust through rustup](https://rustup.rs/)
 - On Windows: Visual Studio Build Tools with **Desktop development with C++** and a **Windows SDK**
 - On macOS: Xcode Command Line Tools and [Homebrew](https://brew.sh/)
+- On Linux: a native C/C++ compiler, Make, curl, Python 3, tar, xz and bzip2
 
 Clone into a path without spaces, then run setup:
 
@@ -109,6 +110,18 @@ make run
 ```
 
 The setup script installs Rust and the upstream MIPS toolchain with Homebrew, builds pinned host audio/disc utilities under `.tools/macos/`, and writes an untracked `Local.epokconfig`. Start Epok with `make run` or `./tools/run-macos.sh`; neither command requires changing your shell PATH. The first launch of PCSX-Redux may require approving the unsigned application in macOS Privacy & Security.
+
+On Linux x86_64, run:
+
+```sh
+./tools/setup-linux.sh
+make run
+```
+
+Linux setup initializes Nugget, builds the pinned MIPS compiler under
+`.tools/linux/`, downloads verified PCSX-Redux, psxavenc, mkpsxiso and libclang
+packages, and writes `Local.epokconfig`. It does not require `sudo` or change the
+system `PATH`; the local compiler build can take several minutes.
 
 ### Your first game
 

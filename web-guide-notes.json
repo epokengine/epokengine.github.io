@@ -3,7 +3,7 @@
     "plain": "This is the shortest route from a fresh computer to a game running in Epok. You do not need to understand the PlayStation GPU or MIPS assembly before you begin.",
     "analogy": "Think of it like the first playable room in a tutorial: install the tools, open the sample, press Play, then learn one control at a time.",
     "flow": ["Install the pinned tools", "Create or open a project", "Press Play and change one thing"],
-    "details": ["The editor is built from source with a pinned Rust toolchain.", "Console builds use the bundled setup and the Nugget/PsyQo toolchain.", "Windows x64 and Apple Silicon macOS have different setup paths, both documented below."],
+    "details": ["The editor is built from source with a pinned Rust toolchain.", "Console builds use the bundled setup and the Nugget/PsyQo toolchain.", "Windows x64, Apple Silicon macOS and Linux x86_64 each have a documented setup path."],
     "tip": "If a path problem appears, move the checkout to a short folder without spaces. Old build tools are surprisingly picky houseguests."
   },
   "features": {

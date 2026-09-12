@@ -6,9 +6,10 @@ or [a spell driven by markers](spell-tutorial.md).
 
 ## Before you start
 
-Use Windows x64 with the editor's reflection dependencies installed. The
-`epok-header-tool` executable must be beside the editor; setup supplies the pinned
-libclang runtime. Blueprint authoring is not currently supported on macOS.
+Use Windows x64 or Linux x86_64 with the editor's reflection dependencies
+installed. The `epok-header-tool` executable must be beside the editor; setup
+supplies the pinned libclang runtime. Blueprint authoring is not currently
+supported on macOS.
 Follow [Getting started](getting-started.md) if classes or the extractor are missing.
 
 For a ready-made learning project, run this from the engine checkout after

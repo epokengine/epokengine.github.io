@@ -2,7 +2,7 @@
 
 ## Requirements
 
-Use Windows x64 or macOS 11+ on Apple Silicon. Install Git and rustup on either platform. Windows additionally needs Visual Studio Build Tools with the Desktop development with C++ workload and a Windows SDK. macOS additionally needs Xcode Command Line Tools and Homebrew. Python 3.10 or newer is needed only for the local verification scripts. VS Code is optional.
+Use Windows x64, macOS 11+ on Apple Silicon, or experimental Linux x86_64. Install Git and rustup on any host. Windows additionally needs Visual Studio Build Tools with the Desktop development with C++ workload and a Windows SDK. macOS additionally needs Xcode Command Line Tools and Homebrew. Linux setup builds the MIPS compiler locally and needs a native C/C++ compiler, Make, curl, Python 3, tar, xz and bzip2. Python 3.10 or newer is needed for local verification scripts. VS Code is optional.
 
 Use a checkout path without spaces. The upstream MIPS Makefiles do not escape every path. Other desktop platforms are not yet supported.
 
@@ -26,7 +26,19 @@ xcode-select --install
 make run
 ```
 
-The script installs Rust and the MIPS compiler through Homebrew, builds `psxavenc` and mkpsxiso from their pinned source revisions, and writes an ignored `Local.epokconfig` containing the native executable paths. It does not change the shell PATH: use `make run` or `./tools/run-macos.sh` to start the editor.
+The macOS script installs Rust and the MIPS compiler through Homebrew, builds `psxavenc` and mkpsxiso from their pinned source revisions, and writes an ignored `Local.epokconfig` containing the native executable paths. It does not change the shell PATH: use `make run` or `./tools/run-macos.sh` to start the editor.
+
+On Linux x86_64, run:
+
+```sh
+./tools/setup-linux.sh
+make run
+```
+
+The Linux installer initializes the pinned Nugget SDK, builds the pinned MIPS
+compiler under `.tools/linux/mips`, and downloads verified PCSX-Redux,
+psxavenc, mkpsxiso and libclang packages. The compiler build can take several
+minutes. It does not change the system PATH or require `sudo`.
 
 Exact SDK and download versions are recorded in [dependencies.json](../tools/dependencies.json). Setup verifies archive SHA-256 hashes and checks installed distribution files against those archives, including DLLs, headers and licenses. Existing source changes or a different Nugget revision produce an error rather than being overwritten.
 
@@ -44,7 +56,7 @@ Source ZIP downloads omit submodule content. Setup can fetch the same pinned Nug
 
 ## Common development commands
 
-The root `Makefile` provides the same Cargo-based commands across host systems. GNU Make is a convenience for developers; direct Cargo commands remain supported. `make setup` provisions Windows or macOS; Linux provisioning is not implemented. macOS support targets Apple Silicon and uses Metal through wgpu.
+The root `Makefile` provides the same Cargo-based commands across host systems. GNU Make is a convenience for developers; direct Cargo commands remain supported. `make setup` provisions Windows, macOS, or Linux x86_64. macOS support targets Apple Silicon and uses Metal through wgpu; Linux editor and Play support remain experimental.
 
 After setup, Windows already has GNU Make under `.tools/mips/bin/`. Use it directly, or add a session-local PowerShell alias:
 
@@ -68,7 +80,7 @@ The alias only affects the current PowerShell session. Before the first setup, u
 | `make check` | Check formatting, run default tests, strict Clippy and a debug build, stopping on failure |
 | `make test` / `make lint` | Run default tests or strict Clippy separately |
 | `make fmt` / `make fmt-check` | Apply formatting or check it without edits |
-| `make setup` / `make setup-repair` | Verify/install Windows or macOS PSX dependencies; `setup-repair` rebuilds macOS host tools |
+| `make setup` / `make setup-repair` | Verify/install host PSX dependencies; on Linux the pinned MIPS compiler is built locally |
 | `make build-psx` | Compile the sample game for PSX; override with `PROJECT=...` |
 
 `PROJECT` is optional for `run` and `run-release`; quote the assignment for a project path containing spaces. `ARGS` forwards additional editor arguments. For example:
@@ -106,8 +118,9 @@ installation or project `Local.epokconfig`; changes apply to subsequent builds a
 imports without restarting. The first replaced local configuration is backed up
 under `.epok/dependencies/Local.epokconfig.bak`.
 
-On Windows, **Use bundled paths** selects tools in the current editor installation
-and repairs stale path settings after moving a checkout. **Install / Repair**
+On Windows and Linux, **Use bundled paths** selects tools in the current editor
+installation and repairs stale path settings after moving a checkout.
+**Install / Repair**
 downloads and verifies only the selected bundled package in the background using
 the pinned manifest and SHA-256 checks (Nugget uses its pinned Git revision).
 It restores package distribution files, preserves extra local files, and reports
@@ -162,6 +175,6 @@ cargo run --locked -- --project examples/sample-game --play-psx --stop-after 10
 - **Port busy:** stop the other session or choose a free port in the local configuration. Integration scripts currently require 8077.
 - **Layout unusable:** use Layout > Default or Window > Reset Layout.
 - **Executable locked during compilation:** close the running editor before rebuilding it.
-- **No suitable graphics adapter:** on Windows, verify DirectX 12 support and graphics drivers; on macOS, verify Metal support and macOS updates. GPU-free unit tests can still run.
+- **No suitable graphics adapter:** on Windows, verify DirectX 12 support and graphics drivers; on macOS, verify Metal support and macOS updates; on Linux, install current Vulkan-capable drivers for your GPU. GPU-free unit tests can still run.
 
 Python validation and migration tools require `python -m pip install -r tools/requirements.txt`. See [document formats](formats.md) for YAML and the migration to Epok Engine.
