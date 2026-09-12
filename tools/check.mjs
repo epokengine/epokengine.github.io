@@ -72,6 +72,8 @@ for (const [slug, image] of [['vfx-editor', 'vfx-editor.png'], ['spell-tutorial'
   if (!fs.readFileSync(path.join(root, `docs/${slug}/index.html`), 'utf8').includes(`/media/docs/images/${image}`)) errors.push(`Guide is missing its editor capture: ${slug}`);
 }
 if (!homepage.includes('id="blueprints"') || !homepage.includes('/docs/blueprints/')) errors.push('Homepage is missing Blueprint documentation access');
+if (!homepage.includes('id="memory-analyzer"') || !homepage.includes('/assets/captures/epok-memory-analyzer.png') || !homepage.includes('/docs/play/#memory-analyzer')) errors.push('Homepage is missing the Memory Analyzer feature showcase');
+if (!homepage.includes('2 MiB Main RAM') || !homepage.includes('512 KiB SPU audio') || !homepage.includes('Runtime heap, stack and scene-transition peaks are not measured')) errors.push('Memory Analyzer showcase is missing its budgets or measurement limitation');
 if (!homepage.includes('/docs/features/') || !homepage.includes('/docs/content-browser/') || !homepage.includes('/docs/play/')) errors.push('Homepage is missing access to the feature catalog, Content Browser or Play guides');
 if (!homepage.includes('<a href="/docs/api/"')) errors.push('Main navigation is missing the API Reference link');
 if (!homepage.includes('/media/resources/branding/epok-lockup.png')) errors.push('Homepage is missing the Epok Engine wordmark');
@@ -86,7 +88,7 @@ for (const file of [...files, 'assets/search.json']) {
     if (built.includes(obsolete)) errors.push(`${file}: obsolete two-platform claim: ${obsolete}`);
   }
 }
-for (const image of ['epok-editor.png', 'epok-scene-view.png', 'epok-blueprints.png']) {
+for (const image of ['epok-editor.png', 'epok-scene-view.png', 'epok-blueprints.png', 'epok-memory-analyzer.png']) {
   if (!homepage.includes(`/assets/captures/${image}`)) errors.push(`Homepage is missing ${image}`);
 }
 if (!homepage.includes('/media/docs/images/forest-dialogue.png')) errors.push('Homepage must retain the ForestTest gameplay capture');

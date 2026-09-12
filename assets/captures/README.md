@@ -12,6 +12,10 @@ or AI generation were applied to the captures.
 by the project owner on 2026-09-09. It is preserved byte for byte and appears first
 in the homepage editor gallery. Its engine revision is not recorded.
 
+`epok-memory-analyzer.png` is the 1436 × 929 Memory Analyzer screenshot supplied
+by the project owner on 2026-09-12. It is preserved byte for byte and appears in
+the homepage hardware-budget feature. Its engine revision is not recorded.
+
 Run `tools/capture-editor.py /path/to/Epok` with the engine's Python requirements
 installed and its debug editor built to reproduce them. It creates isolated
 projects and preferences; no existing game is edited.
