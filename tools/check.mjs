@@ -45,7 +45,18 @@ const propertyGroups = new Set(catalog.properties.map(item => `${item.family}|${
 const namespaces = new Set([...catalog.types, ...catalog.callables, ...catalog.properties].map(item => `${item.family}|${item.namespace || item.family}`)).size;
 const expectedApiPages = catalog.modules.length + catalog.types.length + callableGroups + propertyGroups + namespaces + 3;
 if (apiSearch.length !== expectedApiPages) errors.push(`Expected ${expectedApiPages} API search entries, found ${apiSearch.length}`);
-if (!fs.readFileSync(path.join(root, 'docs/api/index.html'), 'utf8').includes('data-api-search')) errors.push('API homepage is missing dedicated symbol search');
+const apiHomepage = fs.readFileSync(path.join(root, 'docs/api/index.html'), 'utf8');
+if (!apiHomepage.includes('data-api-search')) errors.push('API homepage is missing dedicated symbol search');
+if (!apiHomepage.includes('data-api-navigation')) errors.push('API homepage is missing the complete navigation tree');
+const apiNavigation = JSON.parse(fs.readFileSync(path.join(root, 'assets/api-navigation.json'), 'utf8'));
+const navigationNamespaces = apiNavigation.families.flatMap(family => family.namespaces);
+const navigationTypes = navigationNamespaces.flatMap(namespace => namespace.types);
+const navigationMembers = navigationNamespaces.flatMap(namespace => [...namespace.functions, ...namespace.properties, ...namespace.types.flatMap(type => type.members)]);
+if (apiNavigation.families.length !== 2) errors.push(`Expected 2 API families in navigation, found ${apiNavigation.families.length}`);
+if (navigationNamespaces.length !== namespaces) errors.push(`Expected ${namespaces} namespaces in navigation, found ${navigationNamespaces.length}`);
+if (navigationTypes.length !== catalog.types.length) errors.push(`Expected ${catalog.types.length} types in navigation, found ${navigationTypes.length}`);
+if (navigationMembers.length !== callableGroups + propertyGroups) errors.push(`Expected ${callableGroups + propertyGroups} members in navigation, found ${navigationMembers.length}`);
+if (new Set([...navigationTypes, ...navigationMembers].map(item => item.url)).size !== catalog.types.length + callableGroups + propertyGroups) errors.push('API navigation has missing or duplicate symbol routes');
 for (const item of apiSearch) {
   const route = item.url.replace(/^\/+|\/+$/g, '');
   const html = fs.readFileSync(path.join(root, route, 'index.html'), 'utf8');

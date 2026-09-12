@@ -79,12 +79,12 @@ export function buildApiReference({ catalog, manifest, repo, write, page, esc, a
     ? 'The engine-facing runtime: scenes, input, collision, animation, assets, rendering helpers and gameplay services.'
     : 'The low-level PlayStation SDK used by Epok: GPU, CD-ROM, audio, pads, kernel services, fixed-point math and hardware abstractions.';
 
-  function apiSidebar(family = '') {
-    return `<aside class="api-sidebar" aria-label="API navigation"><a class="api-home-link" href="/docs/api/">API Reference <span aria-hidden="true">↗</span></a><form class="api-search-mini" role="search" action="/docs/api/"><label for="api-search-side">Search symbols</label><input id="api-search-side" name="q" type="search" placeholder="Class, method, property…"></form><nav><a${family === 'epok' ? ' aria-current="page"' : ''} href="/docs/api/epok/">Epok runtime</a><a${family === 'psyqo' ? ' aria-current="page"' : ''} href="/docs/api/psyqo/">PsyQo SDK</a></nav>${['epok', 'psyqo'].map(name => `<details${name === family ? ' open' : ''}><summary>${familyLabel(name)} namespaces</summary>${namespaces.filter(item => item.family === name).map(item => `<a href="${namespaceRoutes.get(`${name}|${item.namespace}`)}">${esc(item.namespace)}</a>`).join('')}</details>`).join('')}<a class="api-guide-link" href="/docs/scripting/">C++ scripting guide ${arrow}</a></aside>`;
+  function apiSidebar(family = '', active = {}) {
+    return `<aside class="api-sidebar" aria-label="API navigation"><a class="api-home-link" href="/docs/api/">API Reference <span aria-hidden="true">↗</span></a><form class="api-search-mini" role="search" action="/docs/api/"><label for="api-search-side">Search symbols</label><input id="api-search-side" name="q" type="search" placeholder="Class, method, property…"></form><nav><a${family === 'epok' && !active.namespace ? ' aria-current="page"' : ''} href="/docs/api/epok/">Epok runtime</a><a${family === 'psyqo' && !active.namespace ? ' aria-current="page"' : ''} href="/docs/api/psyqo/">PsyQo SDK</a></nav><div class="api-tree" data-api-navigation data-active-family="${esc(family)}" data-active-namespace="${esc(active.namespace || '')}" data-active-type="${esc(active.type || '')}" data-active-symbol="${esc(active.symbol || '')}"><p>Loading every namespace, type and member…</p></div><noscript><p class="api-tree-fallback">JavaScript is needed for the complete expandable tree. The <a href="/docs/api/">API index</a> remains fully navigable without it.</p></noscript><a class="api-guide-link" href="/docs/scripting/">C++ scripting guide ${arrow}</a></aside>`;
   }
-  function apiShell(title, subtitle, family, content, crumbs = []) {
+  function apiShell(title, subtitle, family, content, crumbs = [], active = {}) {
     const breadcrumb = `<nav class="api-breadcrumb" aria-label="Breadcrumb"><a href="/docs/api/">API Reference</a>${crumbs.map(crumb => `<span>/</span>${crumb.url ? `<a href="${crumb.url}">${esc(crumb.label)}</a>` : `<span>${esc(crumb.label)}</span>`}`).join('')}</nav>`;
-    return `<div class="api-layout">${apiSidebar(family)}<main id="main" class="api-main">${breadcrumb}<header class="api-title"><p class="eyebrow">${esc(family ? familyLabel(family).toUpperCase() : 'EPOK C++ SCRIPT REFERENCE')}</p><h1>${esc(title)}</h1><p>${esc(subtitle)}</p></header>${content}</main></div>`;
+    return `<div class="api-layout">${apiSidebar(family, active)}<main id="main" class="api-main">${breadcrumb}<header class="api-title"><p class="eyebrow">${esc(family ? familyLabel(family).toUpperCase() : 'EPOK C++ SCRIPT REFERENCE')}</p><h1>${esc(title)}</h1><p>${esc(subtitle)}</p></header>${content}</main></div>`;
   }
   function writeApi(url, title, descriptionText, body) {
     write(`${url.replace(/^\//, '')}index.html`, page(`${title} — Epok API`, descriptionText, url, body, 'api'));
@@ -136,7 +136,7 @@ export function buildApiReference({ catalog, manifest, repo, write, page, esc, a
     const namespaceProperties = [...propertyGroups.values()].map(items => items[0]).filter(item => item.family === family && (item.namespace || family) === namespace && !item.owner);
     const content = `<section class="api-section"><h2>Types</h2>${memberRows(namespaceTypes, typeRoutes, 'This namespace does not declare public types.')}</section><section class="api-section"><h2>Functions</h2>${memberRows(namespaceCallables, callableRoutes, 'This namespace does not declare free functions.')}</section><section class="api-section"><h2>Variables and constants</h2>${memberRows(namespaceProperties, propertyRoutes, 'This namespace does not expose public variables or constants.')}</section>`;
     const route = namespaceRoutes.get(`${family}|${namespace}`);
-    writeApi(route, `namespace ${namespace}`, `Browse public declarations in the ${namespace} namespace.`, apiShell(`namespace ${namespace}`, `${namespaceTypes.length} types, ${namespaceCallables.length} functions and ${namespaceProperties.length} data symbols.`, family, content, [{ label: familyLabel(family), url: `/docs/api/${family}/` }, { label: namespace }]));
+    writeApi(route, `namespace ${namespace}`, `Browse public declarations in the ${namespace} namespace.`, apiShell(`namespace ${namespace}`, `${namespaceTypes.length} types, ${namespaceCallables.length} functions and ${namespaceProperties.length} data symbols.`, family, content, [{ label: familyLabel(family), url: `/docs/api/${family}/` }, { label: namespace }], { namespace }));
     addSearch({ title: namespace, kind: 'Namespace', family, namespace, owner: '', url: route, text: `${namespace} namespace ${familyLabel(family)}` });
   }
 
@@ -157,7 +157,7 @@ export function buildApiReference({ catalog, manifest, repo, write, page, esc, a
     const section = (heading, items, routes, empty = '') => items.length ? `<section class="api-section"><h2>${heading}</h2>${memberRows(items, routes, empty)}</section>` : '';
     const content = `<section class="api-overview"><div><span class="api-kind">${esc(kindLabel(type.kind))}</span><p>${esc(description(type))}</p></div><dl class="api-meta"><div><dt>Namespace</dt><dd><a href="${namespaceRoutes.get(`${type.family}|${type.namespace || type.family}`)}"><code>${esc(type.namespace || type.family)}</code></a></dd></div><div><dt>Header</dt><dd><code>${esc(type.header)}</code></dd></div><div><dt>Include</dt><dd><code>${esc(type.include)}</code></dd></div><div><dt>Module</dt><dd>${esc(type.module)}</dd></div><div><dt>Source</dt><dd><a href="${sourceLink(type)}">${esc(type.source)}:${type.line} ${arrow}</a></dd></div></dl>${bases}</section><section class="api-section"><h2>Basic usage</h2><p>This minimal snippet shows the normal syntax for reaching the type. Open a member below for an operation-specific example.</p>${code(typeExample)}</section>${section('Nested types', nestedTypes, typeRoutes)}${section(type.kind === 'ENUM_DECL' ? 'Values' : 'Fields and constants', type.kind === 'ENUM_DECL' ? enumValues : fields, propertyRoutes)}${section('Constructors', constructors, callableRoutes)}${section('Public methods', methods, callableRoutes)}${section('Static methods', staticMethods, callableRoutes)}${section('Operators', operators, callableRoutes)}${section('Lifecycle', lifecycle, callableRoutes)}`;
     const route = typeRoutes.get(keyFor(type));
-    writeApi(route, type.qualified, description(type), apiShell(type.qualified, kindLabel(type.kind), type.family, content, [{ label: familyLabel(type.family), url: `/docs/api/${type.family}/` }, { label: type.namespace || type.family, url: namespaceRoutes.get(`${type.family}|${type.namespace || type.family}`) }, { label: type.name }]));
+    writeApi(route, type.qualified, description(type), apiShell(type.qualified, kindLabel(type.kind), type.family, content, [{ label: familyLabel(type.family), url: `/docs/api/${type.family}/` }, { label: type.namespace || type.family, url: namespaceRoutes.get(`${type.family}|${type.namespace || type.family}`) }, { label: type.name }], { namespace: type.namespace || type.family, type: type.qualified }));
     addSearch({ title: type.qualified, kind: kindLabel(type.kind), family: type.family, namespace: type.namespace, owner: type.owner, url: route, text: `${description(type)} ${type.context} ${type.header} ${type.bases?.join(' ') || ''}` });
   }
 
@@ -175,7 +175,7 @@ export function buildApiReference({ catalog, manifest, repo, write, page, esc, a
     const route = callableRoutes.get(key);
     const parentUrl = first.owner ? typeRoutes.get(`${first.family}|${first.owner}`) : namespaceRoutes.get(`${first.family}|${first.namespace || first.family}`);
     const parentLabel = first.owner || first.namespace || first.family;
-    writeApi(route, first.qualified, description(first), apiShell(first.qualified, `${kindLabel(first.kind)} · ${overloads.length} overload${overloads.length === 1 ? '' : 's'}`, first.family, content, [{ label: familyLabel(first.family), url: `/docs/api/${first.family}/` }, { label: parentLabel, url: parentUrl }, { label: first.name }]));
+    writeApi(route, first.qualified, description(first), apiShell(first.qualified, `${kindLabel(first.kind)} · ${overloads.length} overload${overloads.length === 1 ? '' : 's'}`, first.family, content, [{ label: familyLabel(first.family), url: `/docs/api/${first.family}/` }, { label: parentLabel, url: parentUrl }, { label: first.name }], { namespace: first.namespace || first.family, type: first.owner, symbol: first.qualified }));
     addSearch({ title: first.qualified, kind: kindLabel(first.kind), family: first.family, namespace: first.namespace, owner: first.owner, url: route, text: `${overloads.map(item => `${item.signature} ${description(item)} ${item.parameters.map(p => `${p.name} ${p.type}`).join(' ')}`).join(' ')} ${first.context}` });
   }
 
@@ -186,9 +186,44 @@ export function buildApiReference({ catalog, manifest, repo, write, page, esc, a
     const route = propertyRoutes.get(key);
     const parentUrl = first.owner ? typeRoutes.get(`${first.family}|${first.owner}`) : namespaceRoutes.get(`${first.family}|${first.namespace || first.family}`);
     const parentLabel = first.owner || first.namespace || first.family;
-    writeApi(route, first.qualified, description(first), apiShell(first.qualified, kindLabel(first.kind), first.family, content, [{ label: familyLabel(first.family), url: `/docs/api/${first.family}/` }, { label: parentLabel, url: parentUrl }, { label: first.name }]));
+    writeApi(route, first.qualified, description(first), apiShell(first.qualified, kindLabel(first.kind), first.family, content, [{ label: familyLabel(first.family), url: `/docs/api/${first.family}/` }, { label: parentLabel, url: parentUrl }, { label: first.name }], { namespace: first.namespace || first.family, type: first.owner, symbol: first.qualified }));
     addSearch({ title: first.qualified, kind: kindLabel(first.kind), family: first.family, namespace: first.namespace, owner: first.owner, url: route, text: `${declarations.map(item => `${declarationForProperty(item)} ${description(item)} ${item.value ?? ''}`).join(' ')} ${first.context}` });
   }
+
+  const navigation = {
+    families: ['epok', 'psyqo'].map(family => ({
+      name: family,
+      label: familyLabel(family),
+      url: `/docs/api/${family}/`,
+      namespaces: namespaces.filter(item => item.family === family).map(record => {
+        const namespace = record.namespace;
+        const freeCallables = [...callableGroups.values()].map(items => items[0]).filter(item => item.family === family && (item.namespace || family) === namespace && !item.owner);
+        const freeProperties = [...propertyGroups.values()].map(items => items[0]).filter(item => item.family === family && (item.namespace || family) === namespace && !item.owner);
+        const types = sortSymbols(catalog.types.filter(item => item.family === family && (item.namespace || family) === namespace)).map(type => {
+          const callables = [...callableGroups.values()].map(items => items[0]).filter(item => item.family === family && item.owner === type.qualified);
+          const properties = [...propertyGroups.values()].map(items => items[0]).filter(item => item.family === family && item.owner === type.qualified);
+          return {
+            name: type.name,
+            qualified: type.qualified,
+            kind: kindLabel(type.kind),
+            url: typeRoutes.get(keyFor(type)),
+            members: sortSymbols([
+              ...callables.map(item => ({ ...item, url: callableRoutes.get(keyFor(item)), displayKind: kindLabel(item.kind) })),
+              ...properties.map(item => ({ ...item, url: propertyRoutes.get(keyFor(item)), displayKind: kindLabel(item.kind) })),
+            ]).map(item => ({ name: item.name, qualified: item.qualified, kind: item.displayKind, url: item.url })),
+          };
+        });
+        return {
+          name: namespace,
+          url: namespaceRoutes.get(`${family}|${namespace}`),
+          types,
+          functions: sortSymbols(freeCallables).map(item => ({ name: item.name, qualified: item.qualified, kind: kindLabel(item.kind), url: callableRoutes.get(keyFor(item)) })),
+          properties: sortSymbols(freeProperties).map(item => ({ name: item.name, qualified: item.qualified, kind: kindLabel(item.kind), url: propertyRoutes.get(keyFor(item)) })),
+        };
+      }),
+    })),
+  };
+  write('assets/api-navigation.json', JSON.stringify(navigation));
 
   return { searchItems, urls, routes: { typeRoutes, callableRoutes, propertyRoutes, namespaceRoutes, moduleRoutes }, counts: { modules: catalog.modules.length, namespaces: namespaces.length, types: catalog.types.length, members: callableGroups.size, properties: propertyGroups.size } };
 }

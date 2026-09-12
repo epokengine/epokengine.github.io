@@ -20,6 +20,120 @@ document.querySelectorAll('[data-copy-code]').forEach(button => {
   });
 });
 
+const apiNavigationRoot = document.querySelector('[data-api-navigation]');
+if (apiNavigationRoot) {
+  const activeFamily = apiNavigationRoot.dataset.activeFamily;
+  const activeNamespace = apiNavigationRoot.dataset.activeNamespace;
+  const activeType = apiNavigationRoot.dataset.activeType;
+  const activeSymbol = apiNavigationRoot.dataset.activeSymbol;
+  const symbolLink = item => {
+    const link = document.createElement('a');
+    const name = document.createElement('code');
+    const kind = document.createElement('span');
+    link.href = item.url;
+    link.title = `${item.qualified || item.name} — ${item.kind}`;
+    name.textContent = item.name;
+    kind.textContent = item.kind;
+    link.append(name, kind);
+    if (item.qualified === activeSymbol) link.setAttribute('aria-current', 'page');
+    return link;
+  };
+  const symbolGroup = (label, items) => {
+    if (!items.length) return null;
+    const details = document.createElement('details');
+    const summary = document.createElement('summary');
+    const list = document.createElement('div');
+    details.className = 'api-tree-symbols';
+    summary.textContent = `${label} (${items.length})`;
+    for (const item of items) list.append(symbolLink(item));
+    details.append(summary, list);
+    if (items.some(item => item.qualified === activeSymbol)) details.open = true;
+    return details;
+  };
+  fetch('/assets/api-navigation.json').then(response => {
+    if (!response.ok) throw new Error('Navigation unavailable');
+    return response.json();
+  }).then(navigation => {
+    apiNavigationRoot.replaceChildren();
+    for (const family of navigation.families) {
+      const familyDetails = document.createElement('details');
+      const familySummary = document.createElement('summary');
+      const familyBody = document.createElement('div');
+      const familyOverview = document.createElement('a');
+      familyDetails.className = 'api-tree-family';
+      familySummary.textContent = family.label;
+      familyOverview.className = 'api-tree-overview';
+      familyOverview.href = family.url;
+      familyOverview.textContent = `${family.label} overview`;
+      familyBody.append(familyOverview);
+      familyDetails.open = family.name === activeFamily || (!activeFamily && family.name === 'epok');
+      for (const namespace of family.namespaces) {
+        const namespaceDetails = document.createElement('details');
+        const namespaceSummary = document.createElement('summary');
+        const namespaceBody = document.createElement('div');
+        const namespaceOverview = document.createElement('a');
+        namespaceDetails.className = 'api-tree-namespace';
+        namespaceSummary.textContent = namespace.name;
+        namespaceOverview.className = 'api-tree-overview';
+        namespaceOverview.href = namespace.url;
+        namespaceOverview.textContent = 'Namespace overview';
+        if (namespace.name === activeNamespace && !activeType && !activeSymbol) namespaceOverview.setAttribute('aria-current', 'page');
+        namespaceBody.append(namespaceOverview);
+        namespaceDetails.open = namespace.name === activeNamespace;
+        const functions = symbolGroup('Functions', namespace.functions);
+        const properties = symbolGroup('Variables and constants', namespace.properties);
+        if (functions) namespaceBody.append(functions);
+        if (properties) namespaceBody.append(properties);
+        if (namespace.types.length) {
+          const heading = document.createElement('p');
+          heading.className = 'api-tree-heading';
+          heading.textContent = `Types (${namespace.types.length})`;
+          namespaceBody.append(heading);
+        }
+        for (const type of namespace.types) {
+          const typeBlock = document.createElement('div');
+          const row = document.createElement('div');
+          const typeLink = symbolLink(type);
+          const members = document.createElement('div');
+          const expanded = type.qualified === activeType;
+          typeBlock.className = 'api-tree-type';
+          row.className = 'api-tree-type-row';
+          members.className = 'api-tree-members';
+          members.hidden = !expanded;
+          if (expanded && !activeSymbol) typeLink.setAttribute('aria-current', 'page');
+          row.append(typeLink);
+          if (type.members.length) {
+            const toggle = document.createElement('button');
+            toggle.type = 'button';
+            toggle.textContent = expanded ? '−' : '+';
+            toggle.setAttribute('aria-expanded', String(expanded));
+            toggle.setAttribute('aria-label', `${expanded ? 'Collapse' : 'Expand'} members of ${type.qualified}`);
+            toggle.addEventListener('click', () => {
+              const open = members.hidden;
+              members.hidden = !open;
+              toggle.textContent = open ? '−' : '+';
+              toggle.setAttribute('aria-expanded', String(open));
+              toggle.setAttribute('aria-label', `${open ? 'Collapse' : 'Expand'} members of ${type.qualified}`);
+            });
+            row.append(toggle);
+            for (const member of type.members) members.append(symbolLink(member));
+          }
+          typeBlock.append(row, members);
+          namespaceBody.append(typeBlock);
+        }
+        namespaceDetails.append(namespaceSummary, namespaceBody);
+        familyBody.append(namespaceDetails);
+      }
+      familyDetails.append(familySummary, familyBody);
+      apiNavigationRoot.append(familyDetails);
+    }
+    const current = apiNavigationRoot.querySelector('[aria-current="page"]');
+    if (current && matchMedia('(min-width: 761px)').matches) requestAnimationFrame(() => current.scrollIntoView({ block: 'center' }));
+  }).catch(() => {
+    apiNavigationRoot.innerHTML = '<p>The complete tree could not be loaded. Use the API search or family indexes.</p>';
+  });
+}
+
 const input = document.querySelector('#search');
 if (input) {
   const form = input.closest('form'), results = document.querySelector('.search-results'), grid = document.querySelector('.guide-grid'), status = document.querySelector('.search-status');
