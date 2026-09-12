@@ -57,8 +57,9 @@ unbounded or validated on every host and console. See [Known boundaries](#known-
 - **Numeric editing.** Numeric properties accept direct text entry and
   click-drag adjustment with the appropriate cursor feedback.
 - **Console.** Build, import, emulator and serial output is available in a
-  read-only selectable text view; native command-echo noise is filtered while
-  real compiler/transport output remains visible.
+  read-only selectable text view. Every displayed line carries a local timestamp
+  with millisecond precision; native command-echo noise is filtered while real
+  compiler/transport output remains visible.
 - **Artifact dependencies.** A read-only dependency view traces generated
   artifacts to authored scenes, assets, reflection data and native inputs. It
   retains stale reasons and supports cycle-safe transitive paths instead of

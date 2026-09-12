@@ -8,7 +8,13 @@ Selecting a file in Project shows its metadata in the Inspector with a resizable
 
 ## Console
 
-Console output is a read-only text area. Drag to select parts of a line or several lines, double-click to select a word, use Ctrl+A to select all and Ctrl+C to copy. Typing, paste and Delete cannot change the output or edit scene objects while the console text is active. Click a compiler diagnostic, then **Open source** to navigate to its file and line; **Clear** empties the log. New output preserves the selection when appended.
+Console output is a read-only text area. Every displayed line begins with a local
+`YYYY-MM-DD HH:MM:SS.mmm` timestamp; every line of a multiline message keeps the
+same event time. Drag to select parts of a line or several lines, double-click to
+select a word, use Ctrl+A to select all and Ctrl+C to copy. Typing, paste and
+Delete cannot change the output or edit scene objects while the console text is
+active. Click a compiler diagnostic, then **Open source** to navigate to its file
+and line; **Clear** empties the log. New output preserves the selection when appended.
 
 ## Scene navigation
 

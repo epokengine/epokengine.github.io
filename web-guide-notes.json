@@ -24,7 +24,7 @@
     "plain": "The editor is where you arrange the world, inspect components and watch the real game output. Most panels can be docked, resized or restored without changing game data.",
     "analogy": "If Super Mario 64 gave you its camera rig, object list and property panel, this workspace would be the workshop around them—not the game itself.",
     "flow": ["Select an entity", "Edit it in the Inspector or gizmo", "Save and test in Game view"],
-    "details": ["Scene View is a host GPU preview; Game view is the emulator framebuffer.", "Hierarchy transforms are local to the parent.", "Console, Project and specialized editors share one dockable workspace."],
+    "details": ["Scene View is a host GPU preview; Game view is the emulator framebuffer.", "Hierarchy transforms are local to the parent.", "The selectable read-only Console timestamps every line to the millisecond; Project and specialized editors share the dockable workspace."],
     "tip": "When the Game view has controller focus, clicking elsewhere releases held buttons. No permanently stuck D-pad—one tiny miracle of modern tooling."
   },
   "content-browser": {
