@@ -4,6 +4,9 @@ import path from 'node:path';
 const root = path.resolve(import.meta.dirname, '../dist');
 const files = fs.readdirSync(root, { recursive: true }).filter(f => f.endsWith('.html'));
 const errors = [];
+const engineRepository = 'https://github.com/epokengine/epok-engine';
+const contentManifest = JSON.parse(fs.readFileSync(path.join(root, '../content-manifest.json'), 'utf8'));
+if (contentManifest.repository !== engineRepository) errors.push('Engine repository URL is not the current organization URL');
 let checked = 0;
 const decode = s => s.replace(/&amp;/g, '&').replace(/&#39;/g, "'").replace(/&quot;/g, '"');
 for (const file of files) {
@@ -68,6 +71,7 @@ for (const slug of ['features', 'content-browser', 'play', 'blueprints-tutorial'
   if (!documentationIndex.includes(`/docs/${slug}/`) || !search.some(d => d.url === `/docs/${slug}/`)) errors.push(`Learning guide is not discoverable: ${slug}`);
 }
 const homepage = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+if (!homepage.includes(`href="${engineRepository}"`) || !homepage.includes(`git clone ${engineRepository}.git Epok`)) errors.push('Homepage source and clone links must use the current engine repository');
 const architectureSection = homepage.match(/<section id="architecture"[\s\S]*?<\/section>/)?.[0] || '';
 for (const required of ['architecture-diagram', 'architecture-flow', 'Epok Editor', 'Reflect. Cook. Build.', 'Epok Runtime', 'PsyQo / native MIPS', 'NEXT SIGNAL / UNDISCLOSED', 'PSX is the supported game target today;', '/docs/architecture/', 'architecture-caption']) if (!architectureSection.includes(required)) errors.push(`Architecture diagram missing ${required}`);
 if (/N64|Nintendo|Sega|Saturn|Dreamcast|GameCube|PS2/i.test(architectureSection)) errors.push('Architecture teaser must not disclose other console names');
@@ -109,8 +113,9 @@ if (!homepage.includes('Linux x86_64')) errors.push('Homepage is missing Linux x
 if (!documentationIndex.includes('Linux x86_64')) errors.push('Documentation index is missing Linux x86_64 support');
 const gettingStarted = fs.readFileSync(path.join(root, 'docs/getting-started/index.html'), 'utf8');
 if (!gettingStarted.includes('setup-linux.sh')) errors.push('Getting started is missing the Linux setup command');
-for (const file of [...files, 'assets/search.json']) {
+for (const file of [...files, 'assets/search.json', 'assets/api-search.json', 'assets/api-navigation.json', 'assets/features.json']) {
   const built = fs.readFileSync(path.join(root, file), 'utf8');
+  if (built.includes('github.com/franadoriv/epok-engine')) errors.push(`${file}: obsolete engine repository URL`);
   if (/uniqu?o|unicore|eraengine/i.test(built)) errors.push(`${file}: obsolete engine branding`);
   for (const obsolete of ['Windows x64 and macOS Apple Silicon', 'Windows x64 + macOS Apple Silicon <span>', 'Linux provisioning is not implemented']) {
     if (built.includes(obsolete)) errors.push(`${file}: obsolete two-platform claim: ${obsolete}`);

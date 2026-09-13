@@ -184,4 +184,4 @@ full cross-engine migration tool above.
 This refactor started from upstream `main` commit
 `811fcb4` (Replace Blueprint promo screenshot with cursor-free native capture).
 Epok is presented as an engine for the original PlayStation. The source repository
-is https://github.com/franadoriv/epok-engine. The website is https://epokengine.github.io/.
+is https://github.com/epokengine/epok-engine. The website is https://epokengine.github.io/.

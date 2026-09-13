@@ -9,7 +9,7 @@ Use a checkout path without spaces. The upstream MIPS Makefiles do not escape ev
 ## Install and run
 
 ```powershell
-git clone https://github.com/franadoriv/epok-engine.git Epok
+git clone https://github.com/epokengine/epok-engine.git Epok
 cd Epok
 powershell -ExecutionPolicy Bypass -File tools/setup.ps1
 cargo build --locked --bins

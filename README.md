@@ -1,6 +1,6 @@
 # Epok website
 
-Public website and documentation for [Epok](https://github.com/franadoriv/epok-engine), a desktop game engine for the original PlayStation.
+Public website and documentation for [Epok](https://github.com/epokengine/epok-engine), a desktop game engine for the original PlayStation.
 
 Live site: **https://epokengine.github.io/**
 

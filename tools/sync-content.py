@@ -17,6 +17,7 @@ paths.append("examples/timeline-spell/README.md")
 retired_captures = {"editor.png", "blueprint-editor.png", "mcp-preferences.png", "skeletal-preview.png", "third-person-arena.png"}
 
 def public_document(text):
+    text = text.replace("https://github.com/franadoriv/epok-engine", "https://github.com/epokengine/epok-engine")
     text = re.sub(r"!\[[^\]]*\]\(([^\n)]+)\)", lambda match: "" if PurePosixPath(match.group(1).split("#", 1)[0]).name in retired_captures else match.group(), text)
     text = re.sub(r"UniQo-to-Epok migration", "migration to Epok Engine", text, flags=re.I)
     text = re.sub(r"Migrating a UniQo game", "Migrating an existing game", text, flags=re.I)
@@ -55,5 +56,5 @@ for name, relative, data in prepared:
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_bytes(data)
     files.append(name)
-previous.write_text(json.dumps({"repository": "https://github.com/franadoriv/epok-engine", "commit": commit, "files": sorted(files)}, indent=2) + "\n", encoding="utf-8")
+previous.write_text(json.dumps({"repository": "https://github.com/epokengine/epok-engine", "commit": commit, "files": sorted(files)}, indent=2) + "\n", encoding="utf-8")
 print(f"Synced {len(files)} files from {commit[:12]}")

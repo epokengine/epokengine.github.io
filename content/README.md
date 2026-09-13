@@ -94,7 +94,7 @@ Clone the Epok source repository, then run the commands below.
 Clone into a path without spaces, then run setup:
 
 ```powershell
-git clone https://github.com/franadoriv/epok-engine.git Epok
+git clone https://github.com/epokengine/epok-engine.git Epok
 cd Epok
 powershell -ExecutionPolicy Bypass -File tools/setup.ps1
 cargo run --locked
