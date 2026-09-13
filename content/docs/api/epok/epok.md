@@ -2,11 +2,11 @@
 
 > **Header:** `"epok.hpp"` · **Tier:** Epok runtime API · **Source:** [open header](../../../runtime/epok.hpp)
 
-This module covers the epok module. It documents 50 public callables declared directly in this header.
+This module covers the epok module. It documents 51 public callables declared directly in this header.
 
 ## Declared types
 
-`epok::Aabb`, `epok::AnimationClip`, `epok::Animator`, `epok::AudioSource`, `epok::Behaviour`, `epok::Binding`, `epok::BlobShadow`, `epok::Bone`, `epok::BonePose`, `epok::BoneTrack`, `epok::CameraSettings`, `epok::Canvas`, `epok::ChunkVisibility`, `epok::Collider`, `epok::Entity`, `epok::EntityHandle`, `epok::Fixed`, `epok::Image`, `epok::Light`, `epok::LightingEnvironment`, `epok::LightingStats`, `epok::LightMode`, `epok::LightType`, `epok::Material`, `epok::MeshGeometry`, `epok::MeshLighting`, `epok::MeshQuad`, `epok::MeshStats`, `epok::MoveResult`, `epok::MusicStats`, `epok::Object`, `epok::PerformanceStats`, `epok::ProgressBar`, `epok::ReceiveLighting`, `epok::RectTransform`, `epok::SkeletalMesh`, `epok::SpatialHit`, `epok::Transform`
+`epok::Aabb`, `epok::AnimationClip`, `epok::Animator`, `epok::AudioSource`, `epok::Behaviour`, `epok::Binding`, `epok::BlobShadow`, `epok::Bone`, `epok::BonePose`, `epok::BoneTrack`, `epok::CameraSettings`, `epok::Canvas`, `epok::ChunkVisibility`, `epok::Collider`, `epok::Entity`, `epok::EntityHandle`, `epok::Fixed`, `epok::Image`, `epok::LegacyEntityStorage`, `epok::Light`, `epok::LightingEnvironment`, `epok::LightingStats`, `epok::LightMode`, `epok::LightType`, `epok::Material`, `epok::MeshGeometry`, `epok::MeshLighting`, `epok::MeshQuad`, `epok::MeshStats`, `epok::MoveResult`, `epok::MusicStats`, `epok::PerformanceStats`, `epok::ProgressBar`, `epok::ReceiveLighting`, `epok::RectTransform`, `epok::SkeletalMesh`, `epok::SpatialHit`, `epok::Transform`
 
 ## Callable index
 
@@ -42,12 +42,12 @@ This module covers the epok module. It documents 50 public callables declared di
 - [`epok::hit_entity`](#epok-hit-entity-1) — Performs `hit entity` as part of the epok module.
 - [`epok::is_active`](#epok-is-active-1) — Reports whether active as part of the epok module.
 - [`epok::is_active_slot`](#epok-is-active-slot-1) — Same test for a slot index; skips the pointer validation of is_active.
+- [`epok::LegacyEntityStorage::add`](#epok-legacyentitystorage-add-1) — Adds add as part of the epok module.
+- [`epok::LegacyEntityStorage::component`](#epok-legacyentitystorage-component-1) — Performs `component` as part of the epok module.
+- [`epok::LegacyEntityStorage::get`](#epok-legacyentitystorage-get-1) — Returns get as part of the epok module.
+- [`epok::LegacyEntityStorage::remove`](#epok-legacyentitystorage-remove-1) — Removes remove as part of the epok module.
+- [`epok::LegacyEntityStorage::set_name`](#epok-legacyentitystorage-set-name-1) — Sets name as part of the epok module.
 - [`epok::move_and_slide`](#epok-move-and-slide-1) — Performs `move and slide` as part of the epok module.
-- [`epok::Object::add`](#epok-object-add-1) — Adds add as part of the epok module.
-- [`epok::Object::component`](#epok-object-component-1) — Performs `component` as part of the epok module.
-- [`epok::Object::get`](#epok-object-get-1) — Returns get as part of the epok module.
-- [`epok::Object::remove`](#epok-object-remove-1) — Removes remove as part of the epok module.
-- [`epok::Object::set_name`](#epok-object-set-name-1) — Sets name as part of the epok module.
 - [`epok::overlap`](#epok-overlap-1) — Performs `overlap` as part of the epok module.
 - [`epok::query_ground`](#epok-query-ground-1) — Performs `query ground` as part of the epok module.
 - [`epok::raycast`](#epok-raycast-1) — Spatial queries use world coordinates.
@@ -56,6 +56,7 @@ This module covers the epok module. It documents 50 public callables declared di
 - [`epok::request_scene`](#epok-request-scene-2) — Requests scene as part of the epok module.
 - [`epok::request_scene`](#epok-request-scene-3) — Requests scene as part of the epok module.
 - [`epok::request_scene`](#epok-request-scene-4) — Requests scene as part of the epok module.
+- [`epok::reset_motion_interpolation`](#epok-reset-motion-interpolation-1) — Call after an intentional teleport/cut to snap visual position history.
 - [`epok::reset_runtime_services`](#epok-reset-runtime-services-1) — Resets runtime services as part of the epok module.
 - [`epok::scene_loading`](#epok-scene-loading-1) — Performs `scene loading` as part of the epok module.
 - [`epok::set_active`](#epok-set-active-1) — Sets active as part of the epok module.
@@ -419,7 +420,7 @@ object.stop();
 void bind(Entity& owner)
 ```
 
-- **Declared at:** [line 213](../../../runtime/epok.hpp#L213)
+- **Declared at:** [line 218](../../../runtime/epok.hpp#L218)
 - **Kind:** `cxx method`
 
 **Parameters**
@@ -461,7 +462,7 @@ object.bind(owner);
 Entity& entity()
 ```
 
-- **Declared at:** [line 214](../../../runtime/epok.hpp#L214)
+- **Declared at:** [line 219](../../../runtime/epok.hpp#L219)
 - **Kind:** `cxx method`
 
 **Returns.** Returns `Entity &`. Check the purpose and failure notes before using the value.
@@ -496,7 +497,7 @@ auto result = object.entity();
 virtual void frame_update(Transform&,uint32_t elapsed_microseconds)
 ```
 
-- **Declared at:** [line 233](../../../runtime/epok.hpp#L233)
+- **Declared at:** [line 238](../../../runtime/epok.hpp#L238)
 - **Kind:** `cxx method`; qualifiers: `virtual`
 
 **Parameters**
@@ -540,7 +541,7 @@ object.frame_update(arg1, elapsed_microseconds);
 virtual void on_destroy()
 ```
 
-- **Declared at:** [line 229](../../../runtime/epok.hpp#L229)
+- **Declared at:** [line 234](../../../runtime/epok.hpp#L234)
 - **Kind:** `cxx method`; qualifiers: `virtual`
 
 **Returns.** No value is returned; observe the documented state change or callback.
@@ -573,7 +574,7 @@ object.on_destroy();
 virtual void on_disable()
 ```
 
-- **Declared at:** [line 228](../../../runtime/epok.hpp#L228)
+- **Declared at:** [line 233](../../../runtime/epok.hpp#L233)
 - **Kind:** `cxx method`; qualifiers: `virtual`
 
 **Returns.** No value is returned; observe the documented state change or callback.
@@ -606,7 +607,7 @@ object.on_disable();
 virtual void on_enable()
 ```
 
-- **Declared at:** [line 227](../../../runtime/epok.hpp#L227)
+- **Declared at:** [line 232](../../../runtime/epok.hpp#L232)
 - **Kind:** `cxx method`; qualifiers: `virtual`
 
 **Returns.** No value is returned; observe the documented state change or callback.
@@ -639,7 +640,7 @@ object.on_enable();
 virtual void on_trigger(EntityHandle,TriggerPhase)
 ```
 
-- **Declared at:** [line 230](../../../runtime/epok.hpp#L230)
+- **Declared at:** [line 235](../../../runtime/epok.hpp#L235)
 - **Kind:** `cxx method`; qualifiers: `virtual`
 
 **Parameters**
@@ -683,7 +684,7 @@ object.on_trigger(arg1, arg2);
 virtual void start(Transform&)
 ```
 
-- **Declared at:** [line 226](../../../runtime/epok.hpp#L226)
+- **Declared at:** [line 231](../../../runtime/epok.hpp#L231)
 - **Kind:** `cxx method`; qualifiers: `virtual`
 
 **Parameters**
@@ -727,7 +728,7 @@ object.start(arg1);
 virtual void timeline_sync(uint64_t, bool)
 ```
 
-- **Declared at:** [line 218](../../../runtime/epok.hpp#L218)
+- **Declared at:** [line 223](../../../runtime/epok.hpp#L223)
 - **Kind:** `cxx method`; qualifiers: `virtual`
 
 **Parameters**
@@ -771,7 +772,7 @@ object.timeline_sync(arg1, arg2);
 virtual void update(Transform&, Fixed) = 0
 ```
 
-- **Declared at:** [line 234](../../../runtime/epok.hpp#L234)
+- **Declared at:** [line 239](../../../runtime/epok.hpp#L239)
 - **Kind:** `cxx method`; qualifiers: `virtual`
 
 **Parameters**
@@ -857,7 +858,7 @@ auto result = epok::camera_project(world_point, screen_xy);
 bool collider_aabb(const Entity& entity,Aabb& output)
 ```
 
-- **Declared at:** [line 204](../../../runtime/epok.hpp#L204)
+- **Declared at:** [line 206](../../../runtime/epok.hpp#L206)
 - **Kind:** `function decl`
 
 **Parameters**
@@ -1266,6 +1267,192 @@ auto result = epok::is_active_slot(index);
 
 **Trade-offs and warnings.** Check the return value; `false` is part of normal control flow for many PSX resource operations.
 
+<a id="epok-legacyentitystorage-add-1"></a>
+
+## `epok::LegacyEntityStorage::add`
+
+**Purpose.** Adds add as part of the epok module.
+
+**Exact declaration**
+
+```cpp
+template<class T>T& add()
+```
+
+- **Declared at:** [line 152](../../../runtime/epok.hpp#L152)
+- **Kind:** `function template`; qualifiers: `template`
+
+**Returns.** Returns `T &`. Check the purpose and failure notes before using the value.
+
+**Use it when.** You need the epok module and the preconditions in the declaration are already satisfied.
+
+**Usage pattern**
+
+```cpp
+#include "epok.hpp"
+
+// Replace these template arguments with types or values accepted by the declaration:
+// T
+
+epok::LegacyEntityStorage& object = /* obtain a valid instance */;
+
+auto result = object.add<T>();
+```
+
+**Why choose it.** Template dispatch is resolved at compile time and normally adds no runtime indirection.
+
+**Trade-offs and warnings.** Every instantiated type must satisfy the header's compile-time requirements; extra instantiations can increase code size.
+
+<a id="epok-legacyentitystorage-component-1"></a>
+
+## `epok::LegacyEntityStorage::component`
+
+**Purpose.** Performs `component` as part of the epok module.
+
+**Exact declaration**
+
+```cpp
+template<class T>T& component()
+```
+
+- **Declared at:** [line 150](../../../runtime/epok.hpp#L150)
+- **Kind:** `function template`; qualifiers: `template`
+
+**Returns.** Returns `T &`. Check the purpose and failure notes before using the value.
+
+**Use it when.** You need the epok module and the preconditions in the declaration are already satisfied.
+
+**Usage pattern**
+
+```cpp
+#include "epok.hpp"
+
+// Replace these template arguments with types or values accepted by the declaration:
+// T
+
+epok::LegacyEntityStorage& object = /* obtain a valid instance */;
+
+auto result = object.component<T>();
+```
+
+**Why choose it.** Template dispatch is resolved at compile time and normally adds no runtime indirection.
+
+**Trade-offs and warnings.** Every instantiated type must satisfy the header's compile-time requirements; extra instantiations can increase code size.
+
+<a id="epok-legacyentitystorage-get-1"></a>
+
+## `epok::LegacyEntityStorage::get`
+
+**Purpose.** Returns get as part of the epok module.
+
+**Exact declaration**
+
+```cpp
+template<class T>T* get()
+```
+
+- **Declared at:** [line 151](../../../runtime/epok.hpp#L151)
+- **Kind:** `function template`; qualifiers: `template`
+
+**Returns.** Returns `T *`. Check the purpose and failure notes before using the value.
+
+**Use it when.** You need the epok module and the preconditions in the declaration are already satisfied.
+
+**Usage pattern**
+
+```cpp
+#include "epok.hpp"
+
+// Replace these template arguments with types or values accepted by the declaration:
+// T
+
+epok::LegacyEntityStorage& object = /* obtain a valid instance */;
+
+auto result = object.get<T>();
+```
+
+**Why choose it.** Template dispatch is resolved at compile time and normally adds no runtime indirection.
+
+**Trade-offs and warnings.** Every instantiated type must satisfy the header's compile-time requirements; extra instantiations can increase code size.
+
+<a id="epok-legacyentitystorage-remove-1"></a>
+
+## `epok::LegacyEntityStorage::remove`
+
+**Purpose.** Removes remove as part of the epok module.
+
+**Exact declaration**
+
+```cpp
+template<class T>void remove()
+```
+
+- **Declared at:** [line 153](../../../runtime/epok.hpp#L153)
+- **Kind:** `function template`; qualifiers: `template`
+
+**Returns.** No value is returned; observe the documented state change or callback.
+
+**Use it when.** You need the epok module and the preconditions in the declaration are already satisfied.
+
+**Usage pattern**
+
+```cpp
+#include "epok.hpp"
+
+// Replace these template arguments with types or values accepted by the declaration:
+// T
+
+epok::LegacyEntityStorage& object = /* obtain a valid instance */;
+
+object.remove<T>();
+```
+
+**Why choose it.** Template dispatch is resolved at compile time and normally adds no runtime indirection.
+
+**Trade-offs and warnings.** Every instantiated type must satisfy the header's compile-time requirements; extra instantiations can increase code size.
+
+<a id="epok-legacyentitystorage-set-name-1"></a>
+
+## `epok::LegacyEntityStorage::set_name`
+
+**Purpose.** Sets name as part of the epok module.
+
+**Exact declaration**
+
+```cpp
+void set_name(const char* value)
+```
+
+- **Declared at:** [line 149](../../../runtime/epok.hpp#L149)
+- **Kind:** `cxx method`
+
+**Parameters**
+
+| Name | Type | Role | Meaning |
+| --- | --- | --- | --- |
+| `value` | `const char *` | Input | Value supplied for `value`. See the exact type and module contract. |
+
+**Returns.** No value is returned; observe the documented state change or callback.
+
+**Use it when.** You need the epok module and the preconditions in the declaration are already satisfied.
+
+**Usage pattern**
+
+```cpp
+#include "epok.hpp"
+
+// Assume these named values have been initialized with valid data:
+// const char * value
+
+epok::LegacyEntityStorage& object = /* obtain a valid instance */;
+
+object.set_name(value);
+```
+
+**Why choose it.** It provides direct, allocation-conscious access to the epok module. No exception-based error path is implied by the signature.
+
+**Trade-offs and warnings.** Pointer/reference arguments are borrowed unless the source contract says otherwise; keep them valid for the complete operation and never assume null is accepted.
+
 <a id="epok-move-and-slide-1"></a>
 
 ## `epok::move_and_slide`
@@ -1304,192 +1491,6 @@ MoveResult move_and_slide(Entity& entity,const Fixed* world_displacement,uint32_
 // uint32_t mask
 
 auto result = epok::move_and_slide(entity, world_displacement, mask);
-```
-
-**Why choose it.** It provides direct, allocation-conscious access to the epok module. No exception-based error path is implied by the signature.
-
-**Trade-offs and warnings.** Pointer/reference arguments are borrowed unless the source contract says otherwise; keep them valid for the complete operation and never assume null is accepted.
-
-<a id="epok-object-add-1"></a>
-
-## `epok::Object::add`
-
-**Purpose.** Adds add as part of the epok module.
-
-**Exact declaration**
-
-```cpp
-template<class T>T& add()
-```
-
-- **Declared at:** [line 152](../../../runtime/epok.hpp#L152)
-- **Kind:** `function template`; qualifiers: `template`
-
-**Returns.** Returns `T &`. Check the purpose and failure notes before using the value.
-
-**Use it when.** You need the epok module and the preconditions in the declaration are already satisfied.
-
-**Usage pattern**
-
-```cpp
-#include "epok.hpp"
-
-// Replace these template arguments with types or values accepted by the declaration:
-// T
-
-epok::Object& object = /* obtain a valid instance */;
-
-auto result = object.add<T>();
-```
-
-**Why choose it.** Template dispatch is resolved at compile time and normally adds no runtime indirection.
-
-**Trade-offs and warnings.** Every instantiated type must satisfy the header's compile-time requirements; extra instantiations can increase code size.
-
-<a id="epok-object-component-1"></a>
-
-## `epok::Object::component`
-
-**Purpose.** Performs `component` as part of the epok module.
-
-**Exact declaration**
-
-```cpp
-template<class T>T& component()
-```
-
-- **Declared at:** [line 150](../../../runtime/epok.hpp#L150)
-- **Kind:** `function template`; qualifiers: `template`
-
-**Returns.** Returns `T &`. Check the purpose and failure notes before using the value.
-
-**Use it when.** You need the epok module and the preconditions in the declaration are already satisfied.
-
-**Usage pattern**
-
-```cpp
-#include "epok.hpp"
-
-// Replace these template arguments with types or values accepted by the declaration:
-// T
-
-epok::Object& object = /* obtain a valid instance */;
-
-auto result = object.component<T>();
-```
-
-**Why choose it.** Template dispatch is resolved at compile time and normally adds no runtime indirection.
-
-**Trade-offs and warnings.** Every instantiated type must satisfy the header's compile-time requirements; extra instantiations can increase code size.
-
-<a id="epok-object-get-1"></a>
-
-## `epok::Object::get`
-
-**Purpose.** Returns get as part of the epok module.
-
-**Exact declaration**
-
-```cpp
-template<class T>T* get()
-```
-
-- **Declared at:** [line 151](../../../runtime/epok.hpp#L151)
-- **Kind:** `function template`; qualifiers: `template`
-
-**Returns.** Returns `T *`. Check the purpose and failure notes before using the value.
-
-**Use it when.** You need the epok module and the preconditions in the declaration are already satisfied.
-
-**Usage pattern**
-
-```cpp
-#include "epok.hpp"
-
-// Replace these template arguments with types or values accepted by the declaration:
-// T
-
-epok::Object& object = /* obtain a valid instance */;
-
-auto result = object.get<T>();
-```
-
-**Why choose it.** Template dispatch is resolved at compile time and normally adds no runtime indirection.
-
-**Trade-offs and warnings.** Every instantiated type must satisfy the header's compile-time requirements; extra instantiations can increase code size.
-
-<a id="epok-object-remove-1"></a>
-
-## `epok::Object::remove`
-
-**Purpose.** Removes remove as part of the epok module.
-
-**Exact declaration**
-
-```cpp
-template<class T>void remove()
-```
-
-- **Declared at:** [line 153](../../../runtime/epok.hpp#L153)
-- **Kind:** `function template`; qualifiers: `template`
-
-**Returns.** No value is returned; observe the documented state change or callback.
-
-**Use it when.** You need the epok module and the preconditions in the declaration are already satisfied.
-
-**Usage pattern**
-
-```cpp
-#include "epok.hpp"
-
-// Replace these template arguments with types or values accepted by the declaration:
-// T
-
-epok::Object& object = /* obtain a valid instance */;
-
-object.remove<T>();
-```
-
-**Why choose it.** Template dispatch is resolved at compile time and normally adds no runtime indirection.
-
-**Trade-offs and warnings.** Every instantiated type must satisfy the header's compile-time requirements; extra instantiations can increase code size.
-
-<a id="epok-object-set-name-1"></a>
-
-## `epok::Object::set_name`
-
-**Purpose.** Sets name as part of the epok module.
-
-**Exact declaration**
-
-```cpp
-void set_name(const char* value)
-```
-
-- **Declared at:** [line 149](../../../runtime/epok.hpp#L149)
-- **Kind:** `cxx method`
-
-**Parameters**
-
-| Name | Type | Role | Meaning |
-| --- | --- | --- | --- |
-| `value` | `const char *` | Input | Value supplied for `value`. See the exact type and module contract. |
-
-**Returns.** No value is returned; observe the documented state change or callback.
-
-**Use it when.** You need the epok module and the preconditions in the declaration are already satisfied.
-
-**Usage pattern**
-
-```cpp
-#include "epok.hpp"
-
-// Assume these named values have been initialized with valid data:
-// const char * value
-
-epok::Object& object = /* obtain a valid instance */;
-
-object.set_name(value);
 ```
 
 **Why choose it.** It provides direct, allocation-conscious access to the epok module. No exception-based error path is implied by the signature.
@@ -1652,7 +1653,7 @@ auto result = epok::raycast(origin, displacement, mask, ignore, triggers);
 void remove_runtime_owner(size_t index)
 ```
 
-- **Declared at:** [line 206](../../../runtime/epok.hpp#L206)
+- **Declared at:** [line 208](../../../runtime/epok.hpp#L208)
 - **Kind:** `function decl`
 
 **Parameters**
@@ -1844,6 +1845,37 @@ auto result = epok::request_scene(index, options);
 
 **Trade-offs and warnings.** Check the return value; `false` is part of normal control flow for many PSX resource operations. Pointer/reference arguments are borrowed unless the source contract says otherwise; keep them valid for the complete operation and never assume null is accepted.
 
+<a id="epok-reset-motion-interpolation-1"></a>
+
+## `epok::reset_motion_interpolation`
+
+**Purpose.** Call after an intentional teleport/cut to snap visual position history.
+
+**Exact declaration**
+
+```cpp
+void reset_motion_interpolation()
+```
+
+- **Declared at:** [line 205](../../../runtime/epok.hpp#L205)
+- **Kind:** `function decl`
+
+**Returns.** No value is returned; observe the documented state change or callback.
+
+**Use it when.** You need the epok module and the preconditions in the declaration are already satisfied.
+
+**Usage pattern**
+
+```cpp
+#include "epok.hpp"
+
+epok::reset_motion_interpolation();
+```
+
+**Why choose it.** It provides direct, allocation-conscious access to the epok module. No exception-based error path is implied by the signature.
+
+**Trade-offs and warnings.** Call it only in the lifecycle phase described by the module. Validate indices, capacities and object state before use.
+
 <a id="epok-reset-runtime-services-1"></a>
 
 ## `epok::reset_runtime_services`
@@ -1856,7 +1888,7 @@ auto result = epok::request_scene(index, options);
 void reset_runtime_services()
 ```
 
-- **Declared at:** [line 205](../../../runtime/epok.hpp#L205)
+- **Declared at:** [line 207](../../../runtime/epok.hpp#L207)
 - **Kind:** `function decl`
 
 **Returns.** No value is returned; observe the documented state change or callback.

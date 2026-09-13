@@ -16,6 +16,11 @@ in the homepage editor gallery. Its engine revision is not recorded.
 by the project owner on 2026-09-12. It is preserved byte for byte and appears in
 the homepage hardware-budget feature. Its engine revision is not recorded.
 
+`epok-third-person-editor.png` is the 1452 × 1068 Third Person arena screenshot
+supplied by the project owner on 2026-09-14. It is preserved byte for byte as the
+third slide in the homepage gallery. The capture's exact engine revision is not
+recorded; it is an editor view, not evidence of an in-game performance result.
+
 Run `tools/capture-editor.py /path/to/Epok` with the engine's Python requirements
 installed and its debug editor built to reproduce them. It creates isolated
 projects and preferences; no existing game is edited.

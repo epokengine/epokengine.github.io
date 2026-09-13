@@ -18,7 +18,7 @@ cargo run --locked
 
 Use a normal clone. Setup initializes only `third_party/nugget`; do not use recursive submodule initialization for this pinned SDK. Nugget's mirror contains an unrelated xmake submodule with an inconsistent path.
 
-On macOS, download the macOS Arm PCSX-Redux release to `/Applications/PCSX-Redux.app`, then run:
+On macOS Apple Silicon, run:
 
 ```sh
 xcode-select --install
@@ -26,7 +26,7 @@ xcode-select --install
 make run
 ```
 
-The macOS script installs Rust and the MIPS compiler through Homebrew, builds `psxavenc` and mkpsxiso from their pinned source revisions, and writes an ignored `Local.epokconfig` containing the native executable paths. It does not change the shell PATH: use `make run` or `./tools/run-macos.sh` to start the editor.
+The macOS script installs Rust and the MIPS compiler through Homebrew, builds `psxavenc` and mkpsxiso from their pinned source revisions, downloads PCSX-Redux into `.tools/macos/redux`, and writes an ignored `Local.epokconfig` containing the native executable paths. It does not change the shell PATH: use `make run` or `./tools/run-macos.sh` to start the editor.
 
 On Linux x86_64, run:
 
@@ -66,6 +66,7 @@ make help
 make run
 make run PROJECT=examples/sample-game
 make release
+make app
 make check
 ```
 
@@ -77,6 +78,7 @@ The alias only affects the current PowerShell session. Before the first setup, u
 | `make run-release` | Build and open the optimized editor |
 | `make build` | Compile the debug editor |
 | `make release` | Compile the optimized editor binary |
+| `make app` | On macOS, create `target/release/Epok Engine.app` and ask whether to copy/replace it on the Desktop |
 | `make check` | Check formatting, run default tests, strict Clippy and a debug build, stopping on failure |
 | `make test` / `make lint` | Run default tests or strict Clippy separately |
 | `make fmt` / `make fmt-check` | Apply formatting or check it without edits |
@@ -93,7 +95,7 @@ make build-psx PROJECT=examples/sample-game
 
 Run Make from the repository root, or use `make -C <checkout> ...`. Relative project and capture paths resolve from that root. Cargo's normal environment configuration remains available, including `CARGO_TARGET_DIR`.
 
-With the default Cargo target directory, `make release` writes `target/release/epok-editor.exe` on Windows. Unix host builds use `target/release/epok-editor` without `.exe`. This command builds the editor for the current host; it does not cross-compile or assemble a portable release ZIP, bundle PSX tools or create an installer. Those packaging steps are separate future work.
+With the default Cargo target directory, `make release` writes `target/release/epok-editor.exe` on Windows. Unix host builds use `target/release/epok-editor` without `.exe`. On Apple Silicon macOS, `make app` builds both host binaries and assembles `target/release/Epok Engine.app`, a single Finder item containing Epok's executable, reflection extractor, Nugget SDK and any locally built audio/disc tools. It asks before replacing `~/Desktop/Epok Engine.app`. Run `make setup` first for full Play support; it installs the Homebrew MIPS compiler and stores PCSX-Redux inside the app's local tools folder.
 
 ## First session
 
@@ -113,16 +115,22 @@ The checked-in `Editor.epokconfig` points to the portable tools. To use machine-
 The Hub and editor check dependency paths at startup and warn about missing tools,
 showing which features need them. Open **Dependencies** in the Hub or
 **Edit > Editor Preferences > Dependencies** to inspect the results, edit paths,
-or browse for an executable or directory on Windows. **Apply** saves the effective
+or browse for an executable or directory on Windows. **Install / Repair** is one
+non-overlapping operation that downloads or repairs all missing bundled packages
+on Windows and Linux; on macOS it runs the complete supported setup in the
+background. Its live log and completed dependency checks are visible in the
+editor. **Apply** saves the effective
 installation or project `Local.epokconfig`; changes apply to subsequent builds and
 imports without restarting. The first replaced local configuration is backed up
 under `.epok/dependencies/Local.epokconfig.bak`.
 
 On Windows and Linux, **Use bundled paths** selects tools in the current editor
 installation and repairs stale path settings after moving a checkout.
-**Install / Repair**
-downloads and verifies only the selected bundled package in the background using
-the pinned manifest and SHA-256 checks (Nugget uses its pinned Git revision).
+On macOS, **Install / Repair** runs the supported host setup, which repairs the
+shared Homebrew and local tools together and downloads PCSX-Redux into the local
+Epok tools folder when needed. Windows and Linux downloads verify the
+complete bundled setup in the background using the pinned manifest and SHA-256
+checks (Nugget uses its pinned Git revision).
 It restores package distribution files, preserves extra local files, and reports
 progress or failure in the installation log. Apply the proposed path after a
 successful install. Build/Play and dependency changes wait for installation to

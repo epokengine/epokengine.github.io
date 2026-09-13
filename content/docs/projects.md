@@ -59,6 +59,8 @@ The old repository-root sample lives in `examples/sample-game/`. It is an ordina
 
 Epok ships one matched PsyQo runtime; `editor_version` pins that contract. Dependency resolution, package installation and multi-editor upgrades remain future work.
 
+Maps can hold both the original entities and the newer [actors and components](actors.md). Opening an existing project changes nothing on disk; a map is written as scene document version 5 only once it actually contains an actor or a scene Blueprint, and an older editor refuses a version 5 map rather than opening it as empty — so keep a backup before the first such save. The project descriptor gains one optional setting, *Default Scene Blueprint Parent*, which only proposes a parent for maps that do not have a scene Blueprint yet. The actor model is host-validated; PSX build and emulator validation of actor content is pending on a machine with the PlayStation SDK. See [Migrating an existing project](migration-actors.md).
+
 Imported AudioClips use UUID references and portable `.epokasset` packages with embedded source snapshots. Their index and conversions are disposable; moves are reconciled on opening and while running. See [Assets and audio](assets.md). Native script bindings support stable class/member IDs; old name-based bindings remain readable through the [scripting compatibility adapter](scripting.md).
 
 ## Migration and recovery

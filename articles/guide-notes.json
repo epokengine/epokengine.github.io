@@ -1,0 +1,51 @@
+{
+  "actors": {
+    "plain": "Actors give a map's objects a class and identity. Components give each object individual jobs, with rules that prevent invalid combinations.",
+    "analogy": "A door is the Actor; its placement and creaking sound are separate components. One prop, several responsibilities.",
+    "flow": ["Choose a placeable class", "Edit compatible components and properties", "Cook bounded native instances"],
+    "details": ["3D, 2D and UI have distinct root contracts.", "Blueprint and C++ classes share reflected identity and type checks.", "Legacy entities remain usable without silent migration; dedicated Actor console acceptance is still incomplete."],
+    "tip": "Start with one simple Actor. Composition is a tool for clarity, not a contest to attach the most components."
+  },
+  "migration-actors": {
+    "plain": "Existing entity and Behaviour projects stay readable while the new Actor model is introduced. This guide explains compatibility, not an automatic rewrite of your game.",
+    "analogy": "It is an adapter for an old controller: the plug changes, but you should not lose your save file.",
+    "flow": ["Open without rewriting content", "Inspect derived Actor identities and diagnostics", "Make deliberate class or map changes"],
+    "details": ["Logical ownership and spatial attachment remain distinct.", "Mixed-domain legacy objects receive a conversion diagnostic instead of being split.", "MCP clients should read view_mode to distinguish 3D, world 2D and UI."],
+    "tip": "Keep a version-control checkpoint before a deliberate conversion and check your actual build afterward."
+  },
+  "worlds-2d": {
+    "plain": "3D, 2D and UI are separate editing contexts. World 2D now has a grid, zoom, placement picking and drag editing, alongside native camera and collision helpers.",
+    "analogy": "A side-scroller's character lives in the world; the health bar lives on the screen. They should not share an accidental coordinate system.",
+    "flow": ["Pick the object's domain", "Place it in the matching view", "Validate its runtime rendering and gameplay"],
+    "details": ["2D uses world units, with 32 pixels per unit at zoom 1.", "The current editor shows labeled Actor footprints, not a tilemap or textured sprite compositor.", "The native toolkit includes stable sorting, Camera2D and bounded collision; it is not a general physics engine."],
+    "tip": "Switching view modes does not convert an Actor or delete objects hidden by the domain filter."
+  },
+  "scene-blueprints": {
+    "plain": "A Scene Blueprint coordinates the objects and events of one map. It runs as a single map-owned SceneScriptActor rather than a manually placed object.",
+    "analogy": "Actors are the cast. The map script cues this particular scene's performance.",
+    "flow": ["Open Map Settings", "Edit the map's graph and local references", "Compile and test that scene bank"],
+    "details": ["Only SceneScriptActor subclasses qualify as map scripts.", "Local references use stable identity and type checks.", "Reusable object logic belongs in Actor/Component classes; map-specific coordination belongs here."],
+    "tip": "Keep reusable door logic in the door class, not copied into every level's opening sequence."
+  },
+  "music-sequences": {
+    "plain": "Import MIDI and a SoundFont or portable SoundBank, inspect the instrument mapping, and convert the result to sequenced SPU music with explicit quality and memory controls.",
+    "analogy": "MIDI is the sheet music; the SoundBank is the orchestra. The PSX stage has only 24 chairs, shared with your sound effects.",
+    "flow": ["Import the score and instruments", "Analyze and save a PSX recipe", "Compare previews, then test the game"],
+    "details": ["SF2/SF3 libraries keep their source snapshots; conversion selects required regions and layers.", "Compact/Balanced/High presets and an opt-in optimizer help fit budgets without silently dropping instruments.", "A host Target Preview does not reproduce hardware interpolation, interrupt latency or all runtime contention."],
+    "tip": "Reserve room for menu clicks and gameplay SFX before giving the entire SPU to the orchestra."
+  },
+  "native-hud-preview": {
+    "plain": "Native C++ menus can construct themselves automatically in the UI editor through a dedicated preview hook, without launching a PSX build.",
+    "analogy": "See the completed menu set before the opening curtain animation starts. The actors do not need to perform the whole play for a layout check.",
+    "flow": ["Share UI construction code", "Inspect the automatic edit preview", "Interact optionally, then verify on target"],
+    "details": ["A separate native process runs construction hooks; normal edit preview does not run gameplay lifecycle.", "The desktop and console paths share Q12 HUD layout and primitive generation.", "Blueprint logic, real audio/cards, scene loading and cycle-accurate performance are outside this preview."],
+    "tip": "Use UI mode, not world 2D. Earlier instructions used the old two-mode label."
+  },
+  "iteration": {
+    "plain": "Build manually, reuse only verified output, select a small group of scenes and inspect both static memory and runtime timing before adding more content.",
+    "analogy": "The memory report is the packing list; the Debug HUD is the lap timer. A light suitcase does not guarantee a fast race.",
+    "flow": ["Choose scenes, target and data source", "Build or reuse a matching receipt", "Measure the actual target workload"],
+    "details": ["Source observation invalidates stale output without automatically compiling a PSX game.", "Debug HUD metrics describe specific intervals or memory use; they are not additive hardware utilization percentages.", "Persistent serial control and dependency repair keep their ownership, acknowledgement and cancellation boundaries."],
+    "tip": "Position interpolation smooths motion; it does not create more FPS."
+  }
+}

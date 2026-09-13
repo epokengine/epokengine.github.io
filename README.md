@@ -31,6 +31,27 @@ npm run check
 
 When adding a guide, register its navigation entry in `tools/build.mjs`. Keep the homepage feature descriptions and current-limits section consistent with the documented revision. Internal guide links become website links; references to engine source files point to the matching GitHub revision. The complete feature catalog is the source-mapped inventory; keep its source coverage tables current when production modules or runtime headers are added.
 
+Web-specific long-form guides live in `articles/`; their introductory notes are in
+`articles/guide-notes.json`. Register their source attribution in `webArticles` in
+the build tool. Evidence-backed corrections to older synced prose live in
+`correctWebMarkdown`, never as unrecorded changes to the active engine checkout.
+
+The landing Feature Explorer is generated from the full committed feature catalog
+plus `feature-updates.json`. Add source paths, useful descriptions and guide links
+there; counts, static rows and the new-features article section are derived from
+the same data. Keep future ideas out of implemented-feature counts. The bounded
+widget supports category/search/new filters and a JavaScript-free disclosure view.
+
+The architecture graphic is semantic HTML in `tools/architecture-section.mjs`
+with responsive styling in `assets/architecture.css`. Solid connectors describe
+the current build path; the dashed undisclosed-target teaser is editorial, not
+an implemented backend. Discord navigation is shared across every generated page.
+
+If new runtime headers or declarations land, regenerate the API in an isolated
+engine worktree and import it with `node tools/refresh-api.mjs <worktree>` after
+syncing. The checked procedure, extraction fixture, source audit and design
+references are in [the September audit](notes/feature-audit-2026-09-14.md).
+
 The documentation index offers three learning paths: a first Blueprint, VFX
 authoring, and a marker-driven spell. Keep introductory tutorials separate from
 the Blueprint and Timeline references. The Timelines & VFX group also includes

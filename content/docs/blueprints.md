@@ -44,7 +44,9 @@ shows diagnostics with node navigation, and can show generated native code.
 Save before building; unsaved drafts are never silently replaced by disk code.
 
 Behaviour Blueprints start with **On Start**, **On Update**, and **On Trigger**
-in one event canvas. These map to the PSX runtime's `start`, `update`, and
+in one event canvas. Actor and Component Blueprints start with **Begin Play**,
+**Tick** and **End Play** instead; see [Class families](#class-families).
+These map to the PSX runtime's `start`, `update`, and
 `on_trigger`; Trigger provides the other entity and Enter/Stay/Exit phase.
 The corresponding collider must be configured as a trigger to receive overlaps.
 Opening an older Blueprint adds missing supported events as an undoable draft
@@ -126,6 +128,109 @@ Overriding an event replaces that implementation unless the graph calls
 **Call Parent**. Parent dispatch is a qualified native call, not redispatch into
 the same override. Ordinary non-overridden behavior remains inherited.
 
+## Class families
+
+A Blueprint joins the family of its parent, and a class never changes family. The
+three families you can author in are **Behaviour** (the original one), **Actor** and
+**Component**. [Actors and components](actors.md) is the reference for the model
+itself; this section is what the Blueprint editor does with it.
+
+| | Behaviour | Actor | Component |
+| --- | --- | --- | --- |
+| Parent picker | yes | yes | yes |
+| Events the new graph starts with | On Start, On Update, On Trigger | Begin Play, Tick, End Play | Begin Play, Tick, End Play |
+| `Self` is | the script bound to an entity | the actor | the component |
+| Owner access | `entity()` | the actor's own root, when its domain has one | **Get Owner**, returning a typed actor reference |
+
+**Parent eligibility.** The parent picker lists the classes you may actually derive
+from: same family, compatible domain, Blueprintable, not final, and no cycle.
+Abstract parents remain valid authoring parents. A C++ class may derive from a C++
+class and a Blueprint from either, but a C++ class may never derive from a
+Blueprint-generated class.
+
+**Reparenting** is checked against those rules *before* anything is compiled, so a
+refusal tells you which rule it broke — crossing families, an incompatible domain, a
+parent you cannot derive from, or a cycle — instead of surfacing as a compile error.
+The previous parent and the whole graph are restored on refusal, exactly as they
+already were for Behaviour Blueprints.
+
+An actor with no spatial domain — a scene script, or a domain-less logic actor — has
+no transform at all. Graph nodes that need one do nothing rather than dereferencing a
+missing owner, so a 2D or UI actor never faults on a node that expects a 3D slot.
+
+### Typed object references
+
+Three reference value types join entity and class references:
+
+| Type | Names | Assignable to |
+| --- | --- | --- |
+| `ActorRef<Class>` | one actor | a less derived `ActorRef`, or `ObjectRef` |
+| `ComponentRef<Class>` | one component | a less derived `ComponentRef`, or `ObjectRef` |
+| `ObjectRef` | either of the above | `ObjectRef` |
+
+They are identities, not pointers: a reference to something that has been destroyed
+fails its validity check and the node does nothing, the same guarantee entity handles
+give. A reference is never written into a saved document as a live value — persisted
+defaults carry the null identity — except for the map-scoped identities a scene
+Blueprint may name, described below. `EntityRef` keeps its existing meaning for
+legacy content.
+
+### Spawn Actor and Spawn Class
+
+**Spawn Actor** takes a class reference plus an optional logical parent and returns
+an `ActorRef` of that base. It is refused at compile time when the class does not
+resolve to the Actor family, naming the family it found, and it is not available in
+a Behaviour Blueprint. At run time it re-checks the class before constructing
+anything, so a stale class reference spawns nothing rather than the wrong type.
+
+**Spawn** and **Spawn Class** are unchanged. They still spawn Behaviour-bound
+entities from a fixed class or a typed `ClassRef<Base>`, including Behaviour bases,
+and existing graphs keep compiling to the same code.
+
+## Scene Blueprint
+
+Every map owns one **scene Blueprint**: a class that derives from
+`epok::SceneScriptActor`, is created by the level loader, and is never placed or
+spawned by hand. It is where the logic that belongs to a map lives — the door
+that only this level has, the sequence that starts when the level does.
+
+Open **Map Settings** (click the map root in the Hierarchy) to work with it. A map
+that does not have one yet is given the default as soon as it is opened: the
+parent is the project's *Default Scene Blueprint Parent* when that names a
+`SceneScriptActor` subclass, and `epok::SceneScriptActor` otherwise. Creating it
+is not an edit — the map is not marked as changed and the file on disk is not
+touched — so the default is written the next time the map is saved, like any
+other part of the document. On a host where the project's class model cannot be
+built at all, because the reflection toolchain is not provisioned there, no default
+is proposed; the map keeps working and simply has no scene Blueprint until it is
+opened on a host that has the toolchain.
+
+- **Parent** lists the project's `SceneScriptActor` subclasses and nothing else.
+  Changing it is transactional exactly like reparenting a Blueprint asset: the
+  whole project is validated and compiled first, and a refusal keeps the previous
+  parent with every default, event and wire intact. **Edit > Undo Scene Edit**
+  steps back through it, because the scene Blueprint is part of the map.
+- **Open Scene Blueprint** edits the graph in the Blueprint editor. The document
+  is the map's, not a `.epokbp` file: edits mark the *map* dirty, Undo and Redo
+  are the map's, and the editor's **Save** saves the map. The Blueprint editor's
+  Revert is unavailable for it; undo the map instead.
+- A scene Blueprint compiles even when no entity in the map carries a Behaviour,
+  and two maps may share one C++ `SceneScriptActor` base.
+
+Inside a scene Blueprint — and only there — a variable of an actor or entity
+reference type may name an actor, component or entity **of that same map** by
+identity. The reference is resolved when the project is compiled, against the map
+that owns the Blueprint; naming something that is not in the map is an error that
+reports the identity, and the same value in an ordinary `.epokbp` Blueprint is
+refused because such a Blueprint has no map. Nothing is ever looked up by name
+while the game runs. Map-scoped identities belong in variables, not in graph
+literals: a literal pin that carries one is refused with a note to promote it.
+
+Duplicating a map in the Project browser gives the copy its own identities: a new
+class for its scene Blueprint, new actors and entities, and every map-scoped
+reference rewritten to the copy. Shared content — textures, meshes, sounds — is
+referenced, not copied.
+
 ## Execution and types
 
 Compilation follows execution wires from each event/function entry and includes
@@ -137,7 +242,8 @@ execution input to be connected and to run before the consumer.
 
 Supported authoring values include bool, signed/unsigned 32-bit integers,
 Fixed Q12, reflected enums, bounded Fixed vectors, entity handles, imported
-Texture/AudioClip references, and class references. Pins reject incompatible
+Texture/AudioClip references, class references and the typed object, actor and
+component references described under [Class families](#class-families). Pins reject incompatible
 links; class/entity covariance follows the reflected ancestry. Unsafe raw
 pointers, arbitrary source text, dynamic containers, and open-ended recursion
 have no graph execution policy and are rejected.

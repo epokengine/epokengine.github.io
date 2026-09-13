@@ -8,12 +8,35 @@ These settings live in the root `.epokproject` YAML descriptor and travel with t
 
 | Category | Options |
 | --- | --- |
-| Project / Description | Project name shown in the Hub |
-| Project / Maps & Build | Startup scene, automatic compilation, [Play profile and loading transitions](play.md) |
+| Project / Description | Project name shown in the Hub, the default SoundBank and the default scene Blueprint parent |
+| Project / Maps & Build | Startup scene, automatic asset reports (on by default), [Build/Play profile, scene selection and loading transitions](play.md) |
 | Engine / Rendering | Native output resolution, retained packets and precomputed visibility |
 | Engine / Streaming | Geometry streaming, page pool, RAM budget and disc music behavior |
+| Engine / Debug | Independent runtime FPS, CPU, Geometry/GTE, GPU DMA and SPU RAM overlays |
+
+**Default Scene Blueprint Parent** names the class proposed in Map Settings when a map's
+scene Blueprint is created. It is a suggestion only: changing it never modifies a map that
+already has one, and each map can choose a different parent. Leaving it unset proposes
+`epok::SceneScriptActor`.
 
 The default is **640 x 480 interlaced NTSC**, including existing projects that do not yet have a `rendering` entry. Widths of 256, 320, 368, 512 and 640 are available at 240 progressive or 480 interlaced lines. PAL output is not exposed by this runtime yet.
+
+Debug overlays are off by default, persist in the descriptor's `debug` section,
+and apply on the next build. See [counter meanings and cost](performance.md#optional-on-screen-debug-hud).
+
+**Apply saves project settings without reopening the scene, refreshing script
+declarations or starting a build.** Existing compiled consumers are marked stale;
+the next Play/Build uses the new values. Compilation is always requested explicitly
+through Build, Play or memory analysis. Legacy `auto_build` fields are accepted for
+compatibility but never schedule compilation. Scene View updates independently.
+
+The Game view toolbar has **Fit (4:3)**, **Stretch**, and **Integer (4:3)**.
+Fit is the default: it fills the available width or height without cropping,
+leaving bars only on the other axis. Stretch fills both axes and may distort
+the image. Integer keeps whole scale factors when possible. These modes also
+appear under **Editor Preferences > Play > Game View** and are local display
+preferences: they work during Play and never change native resolution or build
+the game. Existing preference files start in Fit; Integer remains selectable.
 
 ```yaml
 rendering:
@@ -43,6 +66,16 @@ allocated quad, bounded by the per-frame triangle budget in streaming builds.
 adds conservative selection of editable-mesh chunks. Camera, object and parent
 transforms remain supported. It does not add occlusion or increase the visible
 range, and it may lower FPS.
+
+**Position Interpolation** (`motion_interpolation`, default on) under
+**Engine > Rendering > Movement** smooths entity and camera translations between
+the fixed 60 Hz simulation steps. It does not change movement speed, collision
+positions or input sampling. It adds up to one simulation tick (~16.7 ms) of
+visual delay, plus fixed RAM and CPU work; compare it on/off for your project.
+It does not interpolate rotation, scale, skeletal poses or particle positions.
+Camera cuts, scene changes and pauses reset the history. For a scripted teleport,
+call `epok::reset_motion_interpolation()` after changing the transform to snap
+immediately. The setting applies on the next build, including C++ exports.
 
 **Geometry Streaming — Experimental** (`streaming_geometry`, default off) stores
 immutable editable-mesh geometry in 64 KiB CD pages. It may lower FPS or stall

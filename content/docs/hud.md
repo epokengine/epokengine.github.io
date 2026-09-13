@@ -6,13 +6,28 @@ Panel combines RectTransform and Image. Text and ProgressBar are independent gra
 
 ## Layout
 
-Scene's **2D** button opens Canvas editing. Select an element to drag it, or resize it from its lower-right corner. Inspector exposes Anchor Min/Max, Pivot, Position and Size Delta with anchor presets.
+Scene's **UI** mode opens Canvas editing. It is one of the three authoring modes — **3D**, **2D** and **UI** — selected above the viewport; see [View modes](editor.md#view-modes). Select an element to drag it, or resize it from its lower-right corner. Inspector exposes Anchor Min/Max, Pivot, Position and Size Delta with anchor presets.
+
+The Hierarchy in UI mode lists this map's canvases and rect elements together with its UI actors. An element of another domain that still has UI children appears greyed out so the branch keeps its shape; those lines are labels only.
 
 Anchors and pivots range from 0 to 1. Positions use reference pixels with +Y pointing up. Size Delta adds to the space between anchors so elements can stretch with their parent. Reparenting with world preservation keeps the visible rectangle.
 
 The Canvas mode is **Screen Space - Overlay** at the resolution selected in [Project Settings](settings.md), 640 x 480 by default. Positions and sizes use native pixels; anchors follow the canvas size. PSX draws it after the 3D world. The 3D Transform does not change RectTransform layout. Draw order is parents before children and siblings in creation order.
 
 Graphics clip to the Canvas, not their parent's rectangle. Text is limited to its own width. Disabling Canvas hides its subtree; graphics also have Enabled flags.
+
+## UI actors
+
+A map can also hold **UI actors**: classes deriving from `epok::UIActor`, whose root
+component is a `epok::RectTransformComponent` and which follow the same anchored
+layout rules as the entities above. They are authored from the Actor submenu, appear
+in the UI mode of the Hierarchy, and may carry any component whose owners include the
+UI domain — `epok::AudioComponent` among them, which is how a menu sound and a world
+sound end up being the same kind of thing. See
+[Actors and components](actors.md) for the class model and its current limits.
+
+Canvas entities and UI actors coexist in one map. Nothing about the entities above
+changes, and the HUD budget covers both.
 
 ## Native component access
 
@@ -51,7 +66,7 @@ Image supports an imported Texture UUID and an atlas rectangle in pixels. Zero w
 
 Text uses the attributed mig68000 8 × 16 bitmap with derived Spanish glyphs: `áéíóúüñÁÉÍÓÚÜÑ¿¡`. It accepts up to 511 UTF-8 bytes, explicit newlines and optional character wrapping. Text clips to its own complete glyph cells and the screen. ProgressBar retains its fill/background colors.
 
-The scene's `hud_budget` configures layouts, rectangles, text components and glyphs. Defaults are 128 / 256 / 64 / 1024; maximums are 128 / 512 / 64 / 2048. Edit them in Project Settings > Rendering. Nine-slice images budget nine rectangles. The editor rejects authored over-budget scenes; dynamic excess is omitted and counted in `hud_stats.dropped`. Standalone builds reserve the maximum requested by their registered scenes.
+The scene's `hud_budget` configures layouts, rectangles, text components and glyphs. Defaults are 128 / 256 / 64 / 1024; maximums are 128 / 512 / 64 / 2048. Edit them in **Map Settings**, opened by clicking the map root at the top of the Hierarchy; Project Settings > Rendering keeps the heading and a button that opens it. Nine-slice images budget nine rectangles. The editor rejects authored over-budget scenes; dynamic excess is omitted and counted in `hud_stats.dropped`. Standalone builds reserve the maximum requested by their registered scenes.
 
 `utility.hpp` supplies generic `Focus`, `EventQueue`, and `layout_list` APIs. Focus skips inactive/destroyed handles, supports forward/reverse navigation, and emits activation/cancel events. These are primitives for the game's UI logic. Parent masks, rotated rectangles, scalable text and world-space Canvas remain outside this profile.
 

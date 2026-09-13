@@ -6,7 +6,7 @@ This module covers SPU sound playback and voice ownership. It documents 7 public
 
 ## Declared types
 
-`epok::AudioClip`, `epok::AudioVoice`
+`epok::AudioClip`, `epok::AudioVoice`, `epok::psx_audio::Sequence`
 
 ## Callable index
 
@@ -30,7 +30,7 @@ This module covers SPU sound playback and voice ownership. It documents 7 public
 inline bool audio_initialize(const AudioClip* clips,size_t count)
 ```
 
-- **Declared at:** [line 16](../../../runtime/audio.hpp#L16)
+- **Declared at:** [line 31](../../../runtime/audio.hpp#L31)
 - **Kind:** `function decl`
 
 **Parameters**
@@ -72,7 +72,7 @@ auto result = epok::audio_initialize(clips, count);
 inline void audio_keyoff(int voice)
 ```
 
-- **Declared at:** [line 52](../../../runtime/audio.hpp#L52)
+- **Declared at:** [line 63](../../../runtime/audio.hpp#L63)
 - **Kind:** `function decl`
 
 **Parameters**
@@ -112,7 +112,7 @@ epok::audio_keyoff(voice);
 inline void audio_parameters(int i)
 ```
 
-- **Declared at:** [line 58](../../../runtime/audio.hpp#L58)
+- **Declared at:** [line 79](../../../runtime/audio.hpp#L79)
 - **Kind:** `function decl`
 
 **Parameters**
@@ -152,7 +152,7 @@ epok::audio_parameters(i);
 inline void audio_tick()
 ```
 
-- **Declared at:** [line 89](../../../runtime/audio.hpp#L89)
+- **Declared at:** [line 124](../../../runtime/audio.hpp#L124)
 - **Kind:** `function decl`
 
 **Returns.** No value is returned; observe the documented state change or callback.
@@ -183,7 +183,7 @@ epok::audio_tick();
 bool music_is_playing(const AudioSource*)
 ```
 
-- **Declared at:** [line 8](../../../runtime/audio.hpp#L8)
+- **Declared at:** [line 13](../../../runtime/audio.hpp#L13)
 - **Kind:** `function decl`
 
 **Parameters**
@@ -223,7 +223,7 @@ auto result = epok::music_is_playing(arg1);
 void music_play(AudioSource*)
 ```
 
-- **Declared at:** [line 8](../../../runtime/audio.hpp#L8)
+- **Declared at:** [line 13](../../../runtime/audio.hpp#L13)
 - **Kind:** `function decl`
 
 **Parameters**
@@ -263,7 +263,7 @@ epok::music_play(arg1);
 void music_stop(AudioSource*)
 ```
 
-- **Declared at:** [line 8](../../../runtime/audio.hpp#L8)
+- **Declared at:** [line 13](../../../runtime/audio.hpp#L13)
 - **Kind:** `function decl`
 
 **Parameters**

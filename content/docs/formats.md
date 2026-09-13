@@ -56,6 +56,103 @@ build/export replaces generated v1 host-path manifests with v2 without changing
 source files. Provider dependencies outside the project are rejected before
 writing artifacts.
 
+## Document versions
+
+| Contract | Current version | Accepted on load |
+| --- | --- | --- |
+| Scene / map (`.epokmap`) | 5 | 1–5 |
+| Blueprint asset (`.epokbp`) | 4 | 1–4 |
+| Reflection manifest and cache | 8 | 8, plus 7 read with default actor metadata |
+
+A document whose version is **above** the current one is refused with a message
+naming both versions, and is never read as an empty document or re-saved over. A
+scene with version 0 keeps the older "unsupported scene version" refusal. Older
+versions are migrated in memory and the original bytes are preserved until you save.
+
+### Scene document version 5
+
+Version 5 adds two optional members to the scene document: `actors` and
+`scene_script`. Both are omitted when empty, so a map with neither is written
+exactly as version 3 or 4 was. The version rises to 5 only when actor content
+actually exists in the document being saved. See
+[Actors and components](actors.md) and
+[Migrating an existing project](migration-actors.md).
+
+The shape, shown as JSON (the file on disk is the same structure encoded as YAML):
+
+```json
+{
+  "version": 5,
+  "name": "SampleScene",
+  "entities": [ /* unchanged legacy entities */ ],
+  "actors": [
+    {
+      "id": "7d0f1c02-9f3a-4c0e-9d3a-6b1c2f7d4a11",
+      "class": { "name": "epok::Actor3D", "class_id": "fc24ce9b-558c-49de-bc35-e040f350e486" },
+      "name": "Hero",
+      "active": true,
+      "components": [
+        {
+          "id": "1a2b3c4d-0000-4000-8000-000000000001",
+          "class": { "name": "epok::SceneComponent3D", "class_id": "ed73d249-b6cb-4a3c-a0e8-696de55e286f" },
+          "name": "Transform",
+          "root": true,
+          "properties": { "position": [0.0, 0.5, 0.0], "rotation": [0.0, 0.0, 0.0], "scale": [1.0, 1.0, 1.0] },
+          "overrides": ["position", "rotation", "scale"]
+        },
+        {
+          "id": "1a2b3c4d-0000-4000-8000-000000000002",
+          "class": { "name": "epok::AudioComponent", "class_id": "7f0eb028-5301-4ac7-b93b-5665fab12b20" },
+          "name": "Footsteps"
+        }
+      ],
+      "properties": { "speed": 2.5 },
+      "overrides": ["speed"],
+      "legacy_entity": "2f1d7b60-4c8a-4d2e-8f10-9a4b6c1d2e30"
+    },
+    {
+      "id": "7d0f1c02-9f3a-4c0e-9d3a-6b1c2f7d4a12",
+      "class": { "name": "epok::UIActor", "class_id": "b09bd2fa-8b09-4c0f-a33a-c3ca08b21d8f" },
+      "name": "Health",
+      "active": true,
+      "logical_parent": "7d0f1c02-9f3a-4c0e-9d3a-6b1c2f7d4a11",
+      "components": [
+        {
+          "id": "1a2b3c4d-0000-4000-8000-000000000003",
+          "class": { "name": "epok::RectTransformComponent", "class_id": "dc805165-6c65-48dc-8ff8-4a638a5d21df" },
+          "name": "RectTransform",
+          "root": true
+        }
+      ]
+    }
+  ],
+  "scene_script": {
+    "parent": { "name": "epok::SceneScriptActor", "class_id": "b4c08aa0-fa85-4abf-8f45-7501e1c8a040" },
+    "blueprint": { "version": 4, "name": "SampleScene_SceneScript", "…": "a whole Blueprint asset" }
+  }
+}
+```
+
+- `properties` holds authored values and `overrides` records which of them are
+  explicit. A document with no `overrides` entry treats every persisted property as
+  an override, so values from a class that changed shape survive a load/save cycle
+  instead of being dropped.
+- `logical_parent` is the hierarchy you see; the separate `attach` member is spatial
+  attachment, and an absent `attach.component` means the target actor's root.
+- `legacy_entity` is provenance only: it names an entity of the same document that
+  this actor came from.
+- `scene_script.blueprint` is a complete Blueprint asset embedded in the map. The map
+  file is therefore the Blueprint's own source: diagnostics point at the map, and
+  saving the Blueprint saves the map.
+
+### Blueprint asset version 4
+
+Version 4 adds one optional `family` hint to a `.epokbp` document. The hint is
+advisory — the compiled class tree always wins, and a hint that disagrees with it is
+a compile diagnostic naming both families. Because the field is omitted when unset, a
+version 3 asset is written as exactly the bytes it had, so upgrading does not make
+any existing Blueprint look stale.
+
 ## Migrating an existing game
 
 The original engine checkout and existing games are not automatically modified.

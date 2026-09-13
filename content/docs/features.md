@@ -59,7 +59,8 @@ unbounded or validated on every host and console. See [Known boundaries](#known-
 - **Console.** Build, import, emulator and serial output is available in a
   read-only selectable text view. Every displayed line carries a local timestamp
   with millisecond precision; native command-echo noise is filtered while real
-  compiler/transport output remains visible.
+  compiler/transport output remains visible. Auto-scroll follows new output,
+  pauses when scrolling up, resumes at the bottom, and is forced during builds.
 - **Artifact dependencies.** A read-only dependency view traces generated
   artifacts to authored scenes, assets, reflection data and native inputs. It
   retains stale reasons and supports cycle-safe transitive paths instead of
@@ -140,6 +141,38 @@ The complete interaction and preview contract is in the
 - **Linked scene and template data.** Asset/template links refresh through the
   same typed component applicator used at authoring time, preserving explicit
   instance overrides.
+
+## Actors, components and the class model
+
+- **Object / Actor / Component classes.** A reflected class tree with four families
+  (Object, Actor, Component, Level/World) alongside the original Behaviour family.
+  `Actor3D`, `Actor2D` and `UIActor` are the placeable actors; `SceneScriptActor` is
+  the per-map script the level loader creates.
+- **Domains.** Each actor and component belongs to the 3D world, the 2D world, the UI
+  or none. The domain comes from the class, drives the editor's 3D/2D/UI hierarchy
+  filtering and gates which components an actor may own.
+- **Components with contracts.** A component declares its owner domains, whether it
+  can be an actor's root, its cardinality, its required/excluded companions and the
+  target capability it needs. `AudioComponent` is shared by all three domains.
+- **C++ and Blueprint chains.** `EPOK_CLASS(Blueprintable, Placeable, Spawnable,
+  Domain=World3D, Id="…")` and `EPOK_COMPONENT(Root, Name="…")` declare actors and
+  their default components; Blueprints derive from them with Begin Play / Tick /
+  End Play, typed actor/component references and a Spawn Actor node.
+- **Scene Blueprint per map.** Each map owns one `SceneScriptActor` class, edited
+  from Map Settings, compiled with the project, and able to name actors, components
+  and entities of its own map by identity.
+- **Legacy compatibility.** Existing entities and Behaviours are unchanged and are
+  additionally presented as a derived actor view; a Behaviour on an actor runs
+  through a compatibility component, and an entity carrying both 3D and UI data is
+  reported as a pending conversion rather than split.
+- **Cooked tables and counters.** Actors, components, overrides and the scene script
+  are cooked into per-bank tables with a bounded slot registry, and `actor_stats`
+  reports alive/peak/rejected/spawned/deferred counts.
+
+Host-validated in the editor and by the C++ host test suite; PSX build, export and
+emulator validation are pending on an SDK machine. See
+[Actors and components](actors.md) and
+[Migrating an existing project](migration-actors.md).
 
 ## Textures, materials and display
 
@@ -338,9 +371,10 @@ See [Input, time and collision](input-collision.md) and
 - **Owned external emulator.** Windowed mode uses the same built output while the
   editor tracks and cleans up only the process/session it launched.
 - **PSX over NOTPSXSerial.** Enumerate/select a serial adapter, install a pinned
-  hash-verified nops package, upload an executable and optionally keep a PCDrv
-  monitor/TTY session in the editor. Adapter identity and speed are user settings.
-  Direct upload and PC-on-demand use different completion checks.
+  hash-verified nops package and keep a resident debug/TTY session for executable
+  and PC-on-demand builds. Pause, Continue and Reset use the owned monitor;
+  PC-on-demand also serves PCDrv. Play verifies the handler after runtime startup.
+  Adapter identity and speed are user settings.
 - **Safe installation and transfer.** Downloads are cancellable, installed
   packages are replaced transactionally, an installation lock prevents competing
   repairs and offline serial bundles are supported. Epok does not install Unirom.
@@ -363,8 +397,10 @@ See [Play targets and loading](play.md).
 - **Private SDK builds.** The editor and standalone launchers build certified
   private Nugget objects/archives without overwriting shared SDK outputs; a host
   lock rejects conflicting builds.
-- **Memory Analyzer.** Build the current Play configuration without launching it
-  and inspect Main RAM, VRAM, SPU/audio, scratchpad and generated files. The UI
+- **Memory Analyzer.** Builds generate reports by default. Open the last report,
+  build first when needed, or analyze an existing compilation without launching it.
+  The status bar shows current EXE and external-data sizes; stale reports retain a warning.
+  Inspect Main RAM, VRAM, SPU/audio, scratchpad and generated files. The UI
   provides capacity bars, a clickable treemap, allocation table, breadcrumbs,
   symbol/source attribution, stale detection and asset location. JSON is written
   beside the build.
@@ -423,12 +459,13 @@ See [Memory Card service](memory-card.md).
 - **Optional local server.** Authenticated Streamable HTTP binds only to IPv4
   loopback; a stdio bridge connects clients to the already-running editor. The
   feature is disabled by default and requires no specific AI provider.
-- **Twenty tools.** `editor_state`, `logs_read`, `scene_read`, `scene_schema`,
-  `scene_apply`, `scene_history`, `scene_save`, `scene_open`, `entity_select`,
+- **Twenty-four tools.** `editor_state`, `logs_read`, `scene_read`, `scene_schema`,
+  `scene_apply`, `scene_actors`, `scene_add_actor`, `scene_remove_actor`,
+  `scene_set_actor`, `scene_history`, `scene_save`, `scene_open`, `entity_select`,
   `editor_view`, `viewer_screenshot`, `editor_control`, `game_input`,
   `project_settings`, `project_files`, `asset_list`, `asset_import`,
   `mesh_create`, `asset_document` and `asset_manage` cover inspection, guarded
-  scene/file edits, screenshots, imports, build/play and serial preparation.
+  scene/actor/file edits, screenshots, imports, build/play and serial preparation.
 - **Transactional guards.** Scene batches are atomic and revision-checked;
   project-file writes require SHA-256 revisions and keep backups; queues and
   responses have limits/timeouts; cancelled queued calls cannot mutate later.
@@ -450,7 +487,7 @@ The editor exposes the following implemented headless families. Run them with
 | Build and run | `--build-psx`, `--play-psx`, `--use-play-profile`, `--blueprint-debug`, `--analyze-memory`, `--export-psx` |
 | Projects | `--create-project`, `--template`, `--migrate-project`, `--recover-project` |
 | Assets | `--scan-assets`, `--import-texture`, `--import-obj`, `--import-fbx`, `--import-audio`, `--reimport-asset`, `--inspect-asset` |
-| Native gameplay | `--reflect`, `--new-script`, `--parent`, `--new-blueprint`, `--compile-blueprints` |
+| Native gameplay | `--reflect`, `--new-script`, `--parent`, `--new-blueprint`, `--compile-blueprints`, `--add-actor`, `--scene` |
 | Timeline and VFX | `--new-timeline`, `--compile-timelines`, `--install-timeline-adapters`, `--new-particle-effect`, `--preset`, `--validate-particle-effects`, `--preview-particle-effect` |
 | Editor/runtime QA | `--bake-lighting`, `--profile-scene`, `--profile-scene-cpu`, `--profile-editor`, screenshot commands and bounded `--steps` / `--stop-after` execution |
 | Integration | `--mcp-stdio`, `--prepare-serial-tools`, `--list-serial-ports` |
@@ -495,9 +532,15 @@ features:
   blended weights and animation blending are not implemented.
 - Collision is conservative AABB overlap/sweep with triggers, not a rigid-body
   physics engine.
-- Entity multiselection and general editor-wide Undo/Redo are not implemented.
-  Undo/Redo is scoped to Blueprint graphs/templates, Timelines/Effects, Blockout,
-  Content Browser moves and MCP scene batches as documented by each tool.
+- Entity multiselection is not implemented, and Undo/Redo is not editor-wide. It is
+  scoped to the open map's last 32 scene edits, Blueprint graphs/templates,
+  Timelines/Effects, Blockout, Content Browser moves and MCP scene batches as
+  documented by each tool.
+- The actor model has no Pawn/Character archetypes, no positional 2D or 3D audio,
+  and no 2D physics beyond axis-aligned colliders, raycasts, sliding movement and
+  triggers. Component add/remove and actor rename/duplicate/delete are not yet in
+  the Inspector. PSX build and emulator validation of actor content is pending on an
+  SDK machine.
 - Scene banks, textures, scripts and resident audio must fit PSX memory. Geometry
   streaming covers EditableMesh pages only; it is not arbitrary map, texture or
   audio streaming.
@@ -520,7 +563,8 @@ live beside the corresponding implementation and are summarized under
 | Settings/project UI | `settings`, `settings_ui`, `project`, `project_browser`, `console` |
 | Asset system | `assets`, `asset_manager`, `asset_ui`, `asset_inspector`, `content_preview`, `import_settings`, `artifact_dependencies`, `artifact_dependency_ui` |
 | Texture/model/audio import | `texture`, `model_import`, `obj_import`, `audio_decode`, `audio_import`, `preview_audio` |
-| Scene and preview | `scene`, `transform`, `viewport`, `scene_gpu`, `picking`, `gizmo`, `scene_bank`, `scene_dependencies` |
+| Scene and preview | `scene`, `transform`, `viewport`, `scene_gpu`, `picking`, `gizmo`, `scene_bank`, `scene_dependencies`, `scene_view_mode` |
+| Object/Actor model | `object_model`, `actor_document` |
 | Geometry and rendering | `mesh`, `mesh_ops`, `mesh_editor`, `mesh_compile`, `lighting`, `lighting_editor`, `shadows`, `effects`, `palette` |
 | Components and UI | `bitmap_font`, `collision`, `collision_editor`, `hud`, `hud_editor`, `sprites`, `sprites_editor`, `particles`, `skeletal`, `skeletal_compile`, `skeletal_ui`, `third_person` |
 | Native scripting/reflection | `scripts`, `script_values`, `script_backend`, `reflection`, `reflection_schema`, `header_extract`, `header_tool`, `native`, `native_metadata` |
@@ -534,6 +578,7 @@ live beside the corresponding implementation and are summarized under
 | Native runtime area | C++ runtime files |
 | --- | --- |
 | Core scene/lifetime | `epok.hpp`, `lifecycle.hpp`, `scene_service.hpp`, `affine.hpp`, `transform_cache.hpp`, `time.hpp`, `transition.hpp`, `loading_renderer.hpp`, `utility.hpp` |
+| Object/Actor model | `object_model.hpp`, `actor_tables.hpp`, `actor_blueprint.hpp`, `world2d.hpp` |
 | Rendering/resources | `frame_clear.hpp`, `gte_geometry.hpp`, `frustum.hpp`, `polygon.hpp`, `visibility.hpp`, `retained.hpp`, `texture_types.hpp`, `texture.hpp`, `resources.hpp`, `lighting.hpp`, `shadows.hpp` |
 | Visual content | `sprite_types.hpp`, `sprites.hpp`, `particle_types.hpp`, `particles.hpp`, `effect_types.hpp`, `effects.hpp`, `particle_effect_runtime.hpp`, `particle_effect_service.hpp`, `palette_types.hpp`, `palette.hpp`, `skeletal.hpp`, `hud.hpp`, `text.hpp` |
 | Gameplay services | `input.hpp`, `collision.hpp`, `audio.hpp`, `music.hpp`, `memory_card.hpp`, `memory_card_backend.hpp`, `streaming_pool.hpp`, `streaming.hpp` |

@@ -45,7 +45,7 @@ This module covers compiled Blueprint execution and object interaction. It docum
 void activate_spawn_audio(EntityHandle root)
 ```
 
-- **Declared at:** [line 89](../../../runtime/blueprint_spawn.hpp#L89)
+- **Declared at:** [line 90](../../../runtime/blueprint_spawn.hpp#L90)
 - **Kind:** `function decl`
 
 **Parameters**
@@ -85,7 +85,7 @@ epok::bp::activate_spawn_audio(root);
 Behaviour* authored_behaviour(EntityHandle owner)
 ```
 
-- **Declared at:** [line 87](../../../runtime/blueprint_spawn.hpp#L87)
+- **Declared at:** [line 88](../../../runtime/blueprint_spawn.hpp#L88)
 - **Kind:** `function decl`
 
 **Parameters**
@@ -125,7 +125,7 @@ auto result = epok::bp::authored_behaviour(owner);
 ClassId authored_class(EntityHandle owner)
 ```
 
-- **Declared at:** [line 88](../../../runtime/blueprint_spawn.hpp#L88)
+- **Declared at:** [line 89](../../../runtime/blueprint_spawn.hpp#L89)
 - **Kind:** `function decl`
 
 **Parameters**
@@ -165,7 +165,7 @@ auto result = epok::bp::authored_class(owner);
 inline Behaviour* behaviour(EntityHandle owner)
 ```
 
-- **Declared at:** [line 90](../../../runtime/blueprint_spawn.hpp#L90)
+- **Declared at:** [line 91](../../../runtime/blueprint_spawn.hpp#L91)
 - **Kind:** `function decl`
 
 **Parameters**
@@ -205,7 +205,7 @@ auto result = epok::bp::behaviour(owner);
 inline bool class_is_a(ClassId child, ClassId parent)
 ```
 
-- **Declared at:** [line 38](../../../runtime/blueprint_spawn.hpp#L38)
+- **Declared at:** [line 39](../../../runtime/blueprint_spawn.hpp#L39)
 - **Kind:** `function decl`
 
 **Parameters**
@@ -247,7 +247,7 @@ auto result = epok::bp::class_is_a(child, parent);
 DispatchScope(const DispatchScope&) = delete
 ```
 
-- **Declared at:** [line 73](../../../runtime/blueprint_spawn.hpp#L73)
+- **Declared at:** [line 74](../../../runtime/blueprint_spawn.hpp#L74)
 - **Kind:** `constructor`
 
 **Parameters**
@@ -285,7 +285,7 @@ epok::bp::DispatchScope value(arg1);
 explicit DispatchScope(DynamicBinding& value) : b
 ```
 
-- **Declared at:** [line 71](../../../runtime/blueprint_spawn.hpp#L71)
+- **Declared at:** [line 72](../../../runtime/blueprint_spawn.hpp#L72)
 - **Kind:** `constructor`
 
 **Parameters**
@@ -323,7 +323,7 @@ epok::bp::DispatchScope value(value);
 DispatchScope& operator=(const DispatchScope&) = delete
 ```
 
-- **Declared at:** [line 74](../../../runtime/blueprint_spawn.hpp#L74)
+- **Declared at:** [line 75](../../../runtime/blueprint_spawn.hpp#L75)
 - **Kind:** `cxx method`
 
 **Parameters**
@@ -365,7 +365,7 @@ auto result = object.operator=(arg1);
 ~DispatchScope()
 ```
 
-- **Declared at:** [line 72](../../../runtime/blueprint_spawn.hpp#L72)
+- **Declared at:** [line 73](../../../runtime/blueprint_spawn.hpp#L73)
 - **Kind:** `destructor`
 
 **Use it when.** You need compiled Blueprint execution and object interaction and the preconditions in the declaration are already satisfied.
@@ -394,7 +394,7 @@ auto result = object.operator=(arg1);
 inline DynamicBinding* find_binding(EntityHandle owner)
 ```
 
-- **Declared at:** [line 81](../../../runtime/blueprint_spawn.hpp#L81)
+- **Declared at:** [line 82](../../../runtime/blueprint_spawn.hpp#L82)
 - **Kind:** `function decl`
 
 **Parameters**
@@ -434,7 +434,7 @@ auto result = epok::bp::find_binding(owner);
 inline const ClassInfo* find_class(ClassId id)
 ```
 
-- **Declared at:** [line 34](../../../runtime/blueprint_spawn.hpp#L34)
+- **Declared at:** [line 35](../../../runtime/blueprint_spawn.hpp#L35)
 - **Kind:** `function decl`
 
 **Parameters**
@@ -474,7 +474,7 @@ auto result = epok::bp::find_class(id);
 inline void finish_release(DynamicBinding& binding)
 ```
 
-- **Declared at:** [line 61](../../../runtime/blueprint_spawn.hpp#L61)
+- **Declared at:** [line 62](../../../runtime/blueprint_spawn.hpp#L62)
 - **Kind:** `function decl`
 
 **Parameters**
@@ -514,7 +514,7 @@ epok::bp::finish_release(binding);
 inline bool is_a(EntityHandle owner, ClassId parent)
 ```
 
-- **Declared at:** [line 93](../../../runtime/blueprint_spawn.hpp#L93)
+- **Declared at:** [line 94](../../../runtime/blueprint_spawn.hpp#L94)
 - **Kind:** `function decl`
 
 **Parameters**
@@ -558,7 +558,7 @@ auto result = epok::bp::is_a(owner, parent);
 inline EntityHandle reserve(ClassId id, const char* name, Entity* parent = nullptr, EntityHandle batch = {})
 ```
 
-- **Declared at:** [line 133](../../../runtime/blueprint_spawn.hpp#L133)
+- **Declared at:** [line 134](../../../runtime/blueprint_spawn.hpp#L134)
 - **Kind:** `function decl`
 
 **Parameters**
@@ -604,7 +604,7 @@ auto result = epok::bp::reserve(id, name, parent, batch);
 inline void retire(const bool* doomed, const bool* active, size_t count)
 ```
 
-- **Declared at:** [line 111](../../../runtime/blueprint_spawn.hpp#L111)
+- **Declared at:** [line 112](../../../runtime/blueprint_spawn.hpp#L112)
 - **Kind:** `function decl`
 
 **Parameters**
@@ -648,7 +648,7 @@ epok::bp::retire(doomed, active, count);
 inline bool slot_quarantined(size_t index)
 ```
 
-- **Declared at:** [line 76](../../../runtime/blueprint_spawn.hpp#L76)
+- **Declared at:** [line 77](../../../runtime/blueprint_spawn.hpp#L77)
 - **Kind:** `function decl`
 
 **Parameters**
@@ -688,7 +688,7 @@ auto result = epok::bp::slot_quarantined(index);
 inline EntityHandle spawn(ClassId id, const char* name, Entity* parent = nullptr)
 ```
 
-- **Declared at:** [line 167](../../../runtime/blueprint_spawn.hpp#L167)
+- **Declared at:** [line 168](../../../runtime/blueprint_spawn.hpp#L168)
 - **Kind:** `function decl`
 
 **Parameters**
@@ -732,7 +732,7 @@ auto result = epok::bp::spawn(id, name, parent);
 inline void start_batch(EntityHandle root)
 ```
 
-- **Declared at:** [line 161](../../../runtime/blueprint_spawn.hpp#L161)
+- **Declared at:** [line 162](../../../runtime/blueprint_spawn.hpp#L162)
 - **Kind:** `function decl`
 
 **Parameters**
@@ -772,7 +772,7 @@ epok::bp::start_batch(root);
 inline void start_reserved(EntityHandle owner)
 ```
 
-- **Declared at:** [line 154](../../../runtime/blueprint_spawn.hpp#L154)
+- **Declared at:** [line 155](../../../runtime/blueprint_spawn.hpp#L155)
 - **Kind:** `function decl`
 
 **Parameters**
@@ -812,7 +812,7 @@ epok::bp::start_reserved(owner);
 static Behaviour* acquire()
 ```
 
-- **Declared at:** [line 22](../../../runtime/blueprint_spawn.hpp#L22)
+- **Declared at:** [line 23](../../../runtime/blueprint_spawn.hpp#L23)
 - **Kind:** `cxx method`; qualifiers: `static`
 
 **Returns.** Returns `Behaviour *`. Check the purpose and failure notes before using the value.
@@ -843,7 +843,7 @@ auto result = epok::bp::TypedPool::acquire();
 static void release(Behaviour* instance)
 ```
 
-- **Declared at:** [line 28](../../../runtime/blueprint_spawn.hpp#L28)
+- **Declared at:** [line 29](../../../runtime/blueprint_spawn.hpp#L29)
 - **Kind:** `cxx method`; qualifiers: `static`
 
 **Parameters**
@@ -885,7 +885,7 @@ epok::bp::TypedPool::release(instance);
 template<class Callback> inline void visit(Callback callback)
 ```
 
-- **Declared at:** [line 100](../../../runtime/blueprint_spawn.hpp#L100)
+- **Declared at:** [line 101](../../../runtime/blueprint_spawn.hpp#L101)
 - **Kind:** `function template`; qualifiers: `template`
 
 **Parameters**

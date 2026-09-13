@@ -59,15 +59,22 @@ Tools publish their argument schemas and descriptions through `tools/list`.
 | `scene_apply` | Atomically create, update, duplicate, delete, reparent or replace entities; edit transforms, scripts, HUD, audio, lighting, mesh and skeletal components; change the environment. |
 | `scene_history` | Undo/redo up to 32 MCP scene batches. |
 | `scene_save`, `scene_open` | Save or switch scenes. New scenes can be written under `assets/` before opening them. |
-| `entity_select`, `editor_view` | Change selection, frame an entity, orbit or reposition the Scene camera, toggle grid/wireframe or switch 2D/3D. |
+| `entity_select`, `editor_view` | Change selection, frame an entity, orbit or reposition the Scene camera, toggle grid/wireframe or switch the authoring mode. |
 | `viewer_screenshot` | Return PNG image content for `scene`, `hud`, `game` or the entire `editor`. |
 | `editor_control` | Build, Play, Stop, Pause, Resume, Step, bake lighting, export a standalone project, reset layout or open settings/imports. |
 | `game_input` | Send a PSX controller bitmask for a bounded duration, with automatic release. |
+| `scene_actors`, `scene_add_actor`, `scene_remove_actor`, `scene_set_actor` | Author the actor half of a scene: list actors and placeable classes, add, remove and edit them. See [Actors](#actors) below. |
 | `project_settings` | Read or edit project name, startup scene, output resolution and build preferences. |
 | `project_files` | List directories and read/write text or base64 files under `assets/`, including gameplay scripts and source media. Delete individual source files. |
 | `asset_list`, `asset_import` | Inspect asset UUIDs, metadata and pending imports; import/reimport FBX or audio sources through the normal pipeline. |
 | `mesh_create`, `asset_document` | Create Blockout primitives or custom geometry; read/edit mesh, skeleton, animation and material documents while preserving asset UUIDs. |
 | `asset_manage` | Move, duplicate or move imported assets to the existing recoverable trash. Referenced assets cannot be trashed. |
+
+`editor_view` takes `view_mode` with the value `"3d"`, `"2d"` or `"ui"`. The older `scene_2d`
+boolean still works and means the same thing it always did: `true` is the UI mode, `false` is
+3D. When both are sent, `view_mode` wins. `editor_state` reports both, so a client written
+against either spelling keeps working. The 2D mode reports `scene_2d: false`, because a 2D
+world is not the Canvas editor: read `view_mode` when the distinction matters.
 
 Read-only resources are also available at `epok://guide`, `epok://editor/state`, `epok://scene/current`, `epok://scene/schema` and `epok://project/settings`.
 
@@ -112,3 +119,46 @@ Build, Play, import and lighting bake run asynchronously. Poll `editor_state` an
 - This exposes current engine features; it does not add collision physics, texture import, animation blending or other unsupported runtime systems. MCP clients and transports are portable; the editor and emulator workflow supports Windows x64, macOS Apple Silicon and Linux x86_64. Linux editor and Play support remain experimental.
 
 The transport uses the [official Rust MCP SDK](https://github.com/modelcontextprotocol/rust-sdk). Local tests cover protocol negotiation, resources, real HTTP and stdio clients, revisions, atomic scene edits, file conflicts, authentication and listener lifecycle. See [Testing](../knowledge/maintainers/testing.md) for the desktop/emulator integration command.
+
+## Actors
+
+The actor tools author the Object/Actor/Component half of a scene (document version 5;
+see [Actors and components](actors.md) and [document formats](formats.md)).
+They are additive: the legacy entity tools are unchanged and still the way to author
+`epok::Entity` records.
+
+| Tool | Arguments | Effect |
+| --- | --- | --- |
+| `scene_actors` | — | Lists authored actors (class, family, domain, active flag, logical parent, overrides, components), the derived view of legacy entities that have not been migrated, the diagnostic codes of that derivation, and the placeable actor classes. |
+| `scene_add_actor` | `revision`, `class`, `name?`, `parent?` | Adds an actor of a placeable class with the root component of its domain. `parent` is the id of another actor and sets the logical parent, not a transform parent. |
+| `scene_remove_actor` | `revision`, `id` | Removes one authored actor; references to it from other actors are cleared rather than left dangling. |
+| `scene_set_actor` | `revision`, `id`, `active?`, `name?`, `properties?` | Changes the active flag, the name and reflected property overrides. A `null` property value clears the override and restores the class default. |
+
+Rules:
+
+- `class` is validated against `object_model::Model::placeable()`, so an abstract class,
+  a component class or a `SceneScriptActor` subclass is refused with the list of classes
+  that are accepted. The whole scene is then checked with `Scene::validate_with_model`.
+- Every mutation runs through the same transaction the entity tools use, so it goes
+  through `Editor::changed()`: the build is marked stale and the edit is reversible with
+  `scene_history` (`undo`/`redo`), together with entity edits, in one history.
+- Only authored actors can be edited. A *derived* actor is the in-memory view of a legacy
+  entity (`Scene::actor_view`); migrating it into the document is an explicit editor
+  action, not something an MCP call does implicitly.
+- `model_available` is `false` in a project that has never compiled. `scene_actors` still
+  lists the document; the mutating tools refuse until the class model exists.
+
+### Legacy command translation
+
+| Legacy entity operation | Actor equivalent |
+| --- | --- |
+| `scene_apply` `create` | `scene_add_actor` (a class rather than a `kind`) |
+| `scene_apply` `update` on `name`/`script` properties | `scene_set_actor` (`name`, `properties`) |
+| `scene_apply` `delete` | `scene_remove_actor` |
+| `scene_apply` `reparent` | `scene_add_actor`/`scene_set_actor` `parent` is a *logical* parent; spatial attachment is authored in the editor, not over MCP yet |
+| `entity_select` | no actor equivalent yet; selection is still entity-indexed |
+
+The command-line equivalent of `scene_add_actor` is
+`--project <folder> --add-actor <class>:<name> [--scene assets/scenes/Map.epokmap]`,
+which applies the same `placeable()` gate and the same validation before saving. It
+defaults to the project's startup scene.

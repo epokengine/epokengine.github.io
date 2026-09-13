@@ -46,6 +46,7 @@ the **[complete feature catalog](docs/features.md)**.
 | **Build your world** | Arrange entities in a dockable editor with transform gizmos, parenting and a component Inspector. Create and edit geometry with [Blockout](docs/blockout.md), including extrusion, bevels and geometry Undo/Redo. |
 | **Bring in your assets** | Import [PNG textures](docs/textures.md), [OBJ/MTL models](docs/static-mesh-import.md) and [FBX characters](docs/skeletal.md). Asset identities survive moves and reimports. |
 | **Animate and add effects** | Build layered effects in the [VFX editor](docs/vfx-editor.md) with presets, Q12 curves, bursts and preview controls. Reuse [timelines](docs/timelines.md) for scene sequences and connect their markers to Blueprint gameplay. Use sprites, flipbooks, [particle emitters](docs/sprites-particles.md), fog and palette cycling. |
+| **Model your game objects** | Compose maps from [actors and components](docs/actors.md): `Actor3D`, `Actor2D` and `UIActor` classes written in C++ or as Blueprints, with typed components, per-map scene Blueprints and a 3D / 2D / UI authoring mode. Existing entities and Behaviours keep working unchanged. Host-validated; PSX build validation pending on an SDK machine. |
 | **Write native gameplay** | Author C++20 behaviours with Inspector properties. Connect [input and collision](docs/input-collision.md), [scene transitions and object lifecycle](docs/runtime-services.md), cameras, tweens and [Memory Card storage](docs/memory-card.md). |
 | **Build visual gameplay** | Create [Blueprint classes](docs/blueprints.md) with native or visual parents, inherited defaults, typed graph nodes, functions, event overrides and Call Parent. Author entity templates, spawn classes and debug node execution. Graphs compile ahead of time to native C++; no graph VM runs on the PSX. |
 | **Light and render** | Combine baked vertex lighting, bounded realtime GTE lighting, static shadows and blob shadows. Author for PSX rendering limits with native [performance counters](docs/performance.md). |
@@ -101,7 +102,7 @@ cargo run --locked
 
 Setup initializes the pinned Nugget SDK and installs verified portable MIPS tools, PCSX-Redux, psxavenc and mkpsxiso under `.tools/`. Rustup selects the repository's pinned toolchain. Setup does not change your global PATH.
 
-On macOS, download the macOS Arm build of PCSX-Redux and move it to `/Applications/PCSX-Redux.app`, then run:
+On macOS Apple Silicon, run:
 
 ```sh
 xcode-select --install
@@ -109,7 +110,7 @@ xcode-select --install
 make run
 ```
 
-The setup script installs Rust and the upstream MIPS toolchain with Homebrew, builds pinned host audio/disc utilities under `.tools/macos/`, and writes an untracked `Local.epokconfig`. Start Epok with `make run` or `./tools/run-macos.sh`; neither command requires changing your shell PATH. The first launch of PCSX-Redux may require approving the unsigned application in macOS Privacy & Security.
+The setup script installs Rust and the upstream MIPS toolchain with Homebrew, builds pinned host audio/disc utilities under `.tools/macos/`, downloads PCSX-Redux into `.tools/macos/redux/`, and writes an untracked `Local.epokconfig`. Start Epok with `make run` or `./tools/run-macos.sh`; neither command requires changing your shell PATH.
 
 On Linux x86_64, run:
 
@@ -142,10 +143,11 @@ See [Getting started](docs/getting-started.md) for configuration and troubleshoo
 | `cargo run --locked` | Open the project Hub |
 | `cargo run --locked -- --project examples/rpg-2-5d-demo` | Open the included 2.5D project |
 | `cargo build --locked --release` | Build the optimized editor |
+| `make app` (macOS) | Build `Epok Engine.app` and optionally replace its Desktop copy |
 | `cargo test --locked` | Run the default Rust test suite |
 | `.\.tools\mips\bin\make.exe check` | Run formatting, tests, Clippy and the debug build |
 
-A release build produces the editor executable; distributable application packaging is not yet provided. See [all development commands](docs/getting-started.md#common-development-commands) and [local testing](knowledge/maintainers/testing.md).
+A release build produces the editor executable. On macOS, `make app` additionally creates a Finder application bundle and asks before placing or replacing it on the Desktop. See [all development commands](docs/getting-started.md#common-development-commands) and [local testing](knowledge/maintainers/testing.md).
 
 </details>
 
@@ -184,7 +186,7 @@ The included mannequin has 96 vertices, 144 triangles and Idle/Walk clips. The P
 
 ## AI-assisted development
 
-Connect an MCP-compatible assistant to work directly with the running editor. Epok exposes **20 tools** for scenes, assets, scripts, screenshots, builds and emulator controls.
+Connect an MCP-compatible assistant to work directly with the running editor. Epok exposes **24 tools** for scenes, actors, assets, scripts, screenshots, builds and emulator controls.
 
 An assistant can arrange entities, move the Scene camera, capture Scene/Game/HUD/editor views, inspect build logs and control Play, Pause and Step. Scene batches support Undo/Redo and revision checks; file replacements retain local backups.
 
@@ -207,10 +209,10 @@ Browse the **[Epok documentation](docs/getting-started.md)** for guides, workflo
 
 | Area | Guides |
 | --- | --- |
-| **Start and configure** | [Complete feature catalog](docs/features.md) · [Getting started](docs/getting-started.md) · [Projects](docs/projects.md) · [Settings](docs/settings.md) · [Editor](docs/editor.md) |
+| **Start and configure** | [Complete feature catalog](docs/features.md) · [Getting started](docs/getting-started.md) · [Projects](docs/projects.md) · [Settings](docs/settings.md) · [Editor](docs/editor.md) · [Migrating to actors](docs/migration-actors.md) |
 | **Create content** | [Blockout](docs/blockout.md) · [Third Person arena](docs/third-person.md) · [Static model import](docs/static-mesh-import.md) · [Skeletal characters](docs/skeletal.md) |
 | **Render and animate** | [Textures](docs/textures.md) · [Lighting](docs/lighting.md) · [Sprites and particles](docs/sprites-particles.md) · [Environment effects](docs/environment-effects.md) · [Palette animation](docs/palette-animation.md) |
-| **Build gameplay** | [Blueprints](docs/blueprints.md) · [C++ scripting](docs/scripting.md) · [Input and collision](docs/input-collision.md) · [Runtime services](docs/runtime-services.md) · [Cameras and resources](docs/camera-resources.md) · [Memory Card](docs/memory-card.md) |
+| **Build gameplay** | [Actors and components](docs/actors.md) · [Blueprints](docs/blueprints.md) · [C++ scripting](docs/scripting.md) · [Input and collision](docs/input-collision.md) · [Runtime services](docs/runtime-services.md) · [Cameras and resources](docs/camera-resources.md) · [Memory Card](docs/memory-card.md) |
 | **Look up C++ APIs** | [Complete API reference](docs/api/index.md) · [Epok runtime API](docs/api/epok.md) · [PsyQo API](docs/api/psyqo.md) |
 | **Sound and interface** | [Assets and audio](docs/assets.md) · [HUD](docs/hud.md) |
 | **Extend and verify** | [AI / MCP](docs/mcp.md) · [Architecture](knowledge/architecture.md) · [Performance](docs/performance.md) · [Testing](knowledge/maintainers/testing.md) · [Runtime and export](runtime/README.md) |
@@ -220,7 +222,8 @@ Browse the **[Epok documentation](docs/getting-started.md)** for guides, workflo
 Epok targets the original hardware's constraints. Keep these boundaries in mind when planning a project:
 
 - **Animation:** rigid skeletal deformation is supported; skeletal textures, blended skin weights and animation blending remain future work.
-- **Editing:** Blueprint graphs/templates, Blockout geometry and MCP scene batches have Undo/Redo. Entity multiselection remains future work.
+- **Editing:** the open map's last 32 scene edits, Blueprint graphs/templates, Blockout geometry and MCP scene batches have Undo/Redo. Entity multiselection remains future work.
+- **Actors:** actor and component classes, per-map scene Blueprints and the 3D/2D/UI modes are host-validated; PSX build and emulator validation of actor content is pending on an SDK machine. There are no Pawn/Character archetypes, no positional audio and no 2D rigid-body physics.
 - **Rendering:** frustum clipping and ordering tables are used; intersecting polygons can still produce sorting artifacts. Capacity limits are not frame-rate guarantees.
 - **Simulation:** measured time drives fixed 60 Hz steps with bounded catch-up. Collision uses conservative AABBs, rather than rigid-body physics.
 - **Resources:** prelinked scene banks share resources and reuse active objects and VRAM. Resident data must fit PSX RAM; arbitrary map streaming from CD is not implemented.

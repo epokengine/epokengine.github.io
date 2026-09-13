@@ -23,7 +23,7 @@ This module covers compiled Blueprint execution and object interaction. It docum
 **Exact declaration**
 
 ```cpp
-inline bool instantiate_template(EntityHandle root,const Object* prototypes,size_t count,size_t root_index, const TemplateBinding* bindings,size_t binding_count, bool(*configure_components)(const EntityHandle*,size_t)=nullptr)
+inline bool instantiate_template(EntityHandle root,const Entity* prototypes,size_t count,size_t root_index, const TemplateBinding* bindings,size_t binding_count, bool(*configure_components)(const EntityHandle*,size_t)=nullptr)
 ```
 
 - **Declared at:** [line 13](../../../runtime/blueprint_template.hpp#L13)
@@ -34,7 +34,7 @@ inline bool instantiate_template(EntityHandle root,const Object* prototypes,size
 | Name | Type | Role | Meaning |
 | --- | --- | --- | --- |
 | `root` | `EntityHandle` | Input | Value supplied for `root`. See the exact type and module contract. |
-| `prototypes` | `const Object *` | Input | Value supplied for `prototypes`. See the exact type and module contract. |
+| `prototypes` | `const Entity *` | Input | Value supplied for `prototypes`. See the exact type and module contract. |
 | `count` | `size_t` | Input | Value supplied for `count`. See the exact type and module contract. |
 | `root_index` | `size_t` | Input | Value supplied for `root_index`. See the exact type and module contract. |
 | `bindings` | `const TemplateBinding *` | Input | Value supplied for `bindings`. See the exact type and module contract. |
@@ -52,7 +52,7 @@ inline bool instantiate_template(EntityHandle root,const Object* prototypes,size
 
 // Assume these named values have been initialized with valid data:
 // EntityHandle root
-// const Object * prototypes
+// const Entity * prototypes
 // size_t count
 // size_t root_index
 // const TemplateBinding * bindings

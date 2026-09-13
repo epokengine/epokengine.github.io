@@ -4,14 +4,47 @@
 
 ## Counters and timing
 
+### Optional on-screen debug HUD
+
+**Project Settings > Debug** has independent FPS, CPU, Geometry/GTE, GPU Command
+DMA and SPU Sample Memory toggles. Apply, then build/Play. They also apply to
+exports: turn them off for a clean shipping build. They default to off for both
+new and existing projects.
+
+The bottom-left overlay is chained after the game HUD, fades and loading image.
+It shares the existing font/CLUT, uses fixed double-buffered packets (no heap),
+and allocates no extra VRAM texture. All five enabled use 1,136 bytes of packet/
+state RAM in the tested MIPS build, plus initialization guard, code and stack.
+A compile-time assertion limits packet/state storage to 2 KiB. All disabled
+removes the overlay and its instrumentation; it is small, not zero-cost when on.
+
+* FPS counts rendered runtime frames over at least 30 NTSC vblanks, not host or
+  editor frames. It updates about twice a second and initially reads zero.
+* CPU measures `Scene::frame` including any waits inside it, but excludes the
+  overlay itself and the final `GPU::flip` wait.
+* GTE measures the mesh vertex preparation/projection path using the GTE,
+  including CPU setup. Lighting and software projection are excluded. It is not
+  a hardware busy-cycle percentage.
+* GPU measures command DMA observed from CPU-frame entry until completion or
+  the overlay sample, whichever comes first. Transfers completed before entry
+  are not counted. It is not GPU rasterizer utilization and can include stalls.
+* SPU shows the resident ADPCM bank plus the reserved 4 KiB, out of 512 KiB.
+  It is neither SPU execution load nor XA streaming-buffer fill.
+
+Time bars fill at one NTSC vblank budget (~263 scanlines / 16.7 ms), with red at
+or above budget. They overlap; do not add them. The 16-bit scanline timer wraps
+after ~4.2 seconds. Compare performance using matching overlay settings.
+
+### Instrumented counters
+
 The counters cover simulation, world synchronization, collision synchronization, mesh rendering, vertex transformation/projection, polygon processing, shading, fog and emission.
 
 Timings are nested: simulation includes its world/collision queries, collision includes world synchronization, rendering includes vertices and polygons, and polygons include shading/fog/emission. Do not sum nested fields. The 16-bit timer difference wraps after approximately 4.2 seconds per scope.
 
 Work counters report simulation steps, synchronization calls, local/world matrix rebuilds, collider-bound rebuilds and GTE/software vertex counts. A synchronization call does not imply a matrix rebuild.
 
-The general profiler also reads linked `sequence_stats`, `effect_stats` and
-`particle_stats`. Its `playback` report includes active/alive and peak counts,
+The general profiler also reads linked `sequence_stats`, `effect_stats`,
+`particle_stats` and `actor_stats`. Its `playback` report includes active/alive and peak counts,
 completed/cancelled work, skipped bindings/events, dropped effects/particles and
 diagnostic overflow. Unlinked services are reported as unavailable. Counts come
 from each sampled RAM snapshot; they are not separate completed-frame timers.
@@ -19,6 +52,31 @@ The report separates current gauges from cumulative counters, preserves startup
 totals, reports capture deltas and flags observed resets and saturation. Sampled
 maxima can miss activity between samples; runtime peak counters retain their own
 high-water marks. A saturated drop counter cannot quantify further lost work.
+
+`actor_stats` (`epok::actor_stats`, declared in `runtime/actor_tables.hpp`) reports
+the Object/Actor/Component model, in the `playback` report under the key `actor`:
+
+| Field | Kind | Meaning |
+| --- | --- | --- |
+| `alive` | gauge | Registry slots in use (actors, components, the `Level` and the scene script). |
+| `peak` | gauge | High-water mark of `alive` since boot. |
+| `rejected` | counter | Spawns, component additions and attachments refused by a capacity, domain, cardinality or abstractness rule. |
+| `spawned` | counter | Slot acquisitions since boot, including reused slots. |
+| `deferred` | counter | Spawn/destroy requests queued because they were made inside a callback. |
+| `actors` | gauge | Actors in the current level's table (the scene script is not in it). |
+| `components` | gauge | Components owned by those actors. |
+| `scene_scripts` | counter | `SceneScriptActor` instances created, one per bank load. |
+| `banks_loaded` | counter | Cooked actor tables loaded, so a transition is visible in the counters. |
+
+The values are refreshed once per frame after `audio_tick()` and again on every bank
+load and unload. A build whose banks carry no actors still links the symbol, so the
+report is `available: true` with an empty level rather than missing; a build from
+before this phase has no symbol at all and reports `available: false`.
+
+`EPOK_OBJECT_REGISTRY_CAPACITY` is the cooked slot-table size: the maximum over the
+scene banks of (actors + components) plus 32 dynamic slots. Exhausting it increments
+`rejected`, never overwrites memory. `epok::level_actor_capacity` (64) and
+`epok::actor_component_capacity` (8) bound one level and one actor respectively.
 
 Additional fields report mesh chunks tested/visible, backfaces, clipped polygons, emitted triangles, frame work before and after mesh rendering (`prepare`, `finish`), retained triangles and retained-packet rebuilds. With `EPOK_PROFILE_DETAIL=1`, per-quad shade/fog/emit timers, chunk setup and camera/sprite/HUD timers are also populated. Release builds leave those detail fields at zero. Reading extra timers adds work, so detail-build timings are not release measurements.
 
@@ -40,6 +98,12 @@ and may lower FPS. Camera and object transforms remain supported; the setting
 does not add occlusion or increase the visible range.
 
 ## Retained HUD and geometry
+
+Movement uses fixed 60 Hz simulation independently of rendering. Position
+interpolation can smooth entity/camera translations at mismatched rendering
+rates; it is a presentation feature, not an FPS optimization. It keeps gameplay
+transforms/collision matrices unchanged and adds up to one fixed step of visual
+latency. See [Position Interpolation](settings.md) for its switch and limits.
 
 The runtime reuses unchanged HUD and eligible static-mesh packets. Enable
 **Retained Packets** in Project Settings to use static geometry retention; it is

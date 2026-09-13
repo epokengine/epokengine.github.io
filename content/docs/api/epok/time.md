@@ -2,7 +2,7 @@
 
 > **Header:** `"time.hpp"` · **Tier:** Epok runtime API · **Source:** [open header](../../../runtime/time.hpp)
 
-This module covers fixed-step simulation time and frame timing. It documents 7 public callables declared directly in this header.
+This module covers fixed-step simulation time and frame timing. It documents 8 public callables declared directly in this header.
 
 ## Declared types
 
@@ -12,6 +12,7 @@ This module covers fixed-step simulation time and frame timing. It documents 7 p
 
 - [`epok::Time::advance`](#epok-time-advance-1) — Performs `advance` as part of fixed-step simulation time and frame timing.
 - [`epok::Time::begin_tick`](#epok-time-begin-tick-1) — Begins tick as part of fixed-step simulation time and frame timing.
+- [`epok::Time::interpolation_raw`](#epok-time-interpolation-raw-1) — Performs `interpolation raw` as part of fixed-step simulation time and frame timing.
 - [`epok::Time::interpolation_thousandths`](#epok-time-interpolation-thousandths-1) — Performs `interpolation thousandths` as part of fixed-step simulation time and frame timing.
 - [`epok::Time::paused`](#epok-time-paused-1) — Pauses d as part of fixed-step simulation time and frame timing.
 - [`epok::Time::reset`](#epok-time-reset-1) — Resets reset as part of fixed-step simulation time and frame timing.
@@ -90,6 +91,39 @@ object.begin_tick();
 ```
 
 **Why choose it.** It provides direct, allocation-conscious access to fixed-step simulation time and frame timing. No exception-based error path is implied by the signature.
+
+**Trade-offs and warnings.** Call it only in the lifecycle phase described by the module. Validate indices, capacities and object state before use.
+
+<a id="epok-time-interpolation-raw-1"></a>
+
+## `epok::Time::interpolation_raw`
+
+**Purpose.** Performs `interpolation raw` as part of fixed-step simulation time and frame timing.
+
+**Exact declaration**
+
+```cpp
+uint32_t interpolation_raw() const
+```
+
+- **Declared at:** [line 31](../../../runtime/time.hpp#L31)
+- **Kind:** `cxx method`; qualifiers: `const`
+
+**Returns.** Returns `uint32_t`. Check the purpose and failure notes before using the value.
+
+**Use it when.** You need fixed-step simulation time and frame timing and the preconditions in the declaration are already satisfied.
+
+**Usage pattern**
+
+```cpp
+#include "time.hpp"
+
+epok::Time& object = /* obtain a valid instance */;
+
+auto result = object.interpolation_raw();
+```
+
+**Why choose it.** The method is `const`, so it does not mutate the object through this API surface.
 
 **Trade-offs and warnings.** Call it only in the lifecycle phase described by the module. Validate indices, capacities and object state before use.
 

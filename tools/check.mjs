@@ -68,6 +68,34 @@ for (const slug of ['features', 'content-browser', 'play', 'blueprints-tutorial'
   if (!documentationIndex.includes(`/docs/${slug}/`) || !search.some(d => d.url === `/docs/${slug}/`)) errors.push(`Learning guide is not discoverable: ${slug}`);
 }
 const homepage = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+const architectureSection = homepage.match(/<section id="architecture"[\s\S]*?<\/section>/)?.[0] || '';
+for (const required of ['architecture-diagram', 'architecture-flow', 'Epok Editor', 'Reflect. Cook. Build.', 'Epok Runtime', 'PsyQo / native MIPS', 'NEXT SIGNAL / UNDISCLOSED', 'PSX is the supported game target today;', '/docs/architecture/', 'architecture-caption']) if (!architectureSection.includes(required)) errors.push(`Architecture diagram missing ${required}`);
+if (/N64|Nintendo|Sega|Saturn|Dreamcast|GameCube|PS2/i.test(architectureSection)) errors.push('Architecture teaser must not disclose other console names');
+if ((architectureSection.match(/class="architecture-stage /g) || []).length !== 3) errors.push('Architecture diagram must retain its three real pipeline stages');
+const featureItems = JSON.parse(fs.readFileSync(path.join(root, 'assets/features.json'), 'utf8'));
+const updates = JSON.parse(fs.readFileSync(path.join(root, '../feature-updates.json'), 'utf8'));
+if (featureItems.length < 180 || (homepage.match(/data-feature data-category=/g) || []).length !== featureItems.length) errors.push('Feature explorer has missing static entries');
+if (new Set(featureItems.map(item => item.id)).size !== featureItems.length) errors.push('Feature explorer contains duplicate IDs');
+if (featureItems.filter(item => item.fresh).length !== updates.items.length) errors.push('Feature explorer is missing new source-mapped capabilities');
+for (const item of featureItems) if (!item.url || !item.sourceUrl || !item.description || !item.category) errors.push(`Incomplete feature entry: ${item.title}`);
+for (const required of ['data-feature-query', 'data-feature-category', 'data-feature-new', 'data-feature-reset', 'data-feature-empty', 'aria-label="Scrollable feature results"', '/assets/feature-explorer.js', '<noscript>']) if (!homepage.includes(required)) errors.push(`Missing feature explorer affordance: ${required}`);
+const sourceFeatureDoc = fs.readFileSync(path.join(root, '../content/docs/features.md'), 'utf8');
+const sourceEntryCount = (sourceFeatureDoc.split('## Known boundaries')[0].match(/^- \*\*/gm) || []).length;
+if (featureItems.filter(item => !item.fresh).length !== sourceEntryCount + 7 + 5 + 2) errors.push('A committed feature bullet, CLI family or validation capability was omitted');
+for (const slug of ['actors', 'migration-actors', 'worlds-2d', 'scene-blueprints', 'music-sequences', 'native-hud-preview', 'iteration', 'third-person']) {
+  if (!documentationIndex.includes(`/docs/${slug}/`) || !search.some(item => item.url === `/docs/${slug}/`)) errors.push(`New guide not discoverable: ${slug}`);
+}
+for (const item of ['epok::Actor2D', 'epok::SceneScriptActor', 'epok::Camera2D', 'epok::debug_hud::State']) if (!apiSearch.some(entry => entry.title === item)) errors.push(`New API type not indexed: ${item}`);
+const coverage = JSON.parse(fs.readFileSync(path.join(root, '../content/docs/api/coverage.json'), 'utf8'));
+if (coverage.modules.some(module => module.diagnostics.length)) errors.push('Published API extraction contains diagnostics');
+for (const area of ['<header class="header">', '<footer class="footer">']) {
+  const html = homepage.slice(homepage.indexOf(area)).split(area.startsWith('<header') ? '</header>' : '</footer>')[0];
+  if (!html.includes('https://discord.gg/2wEGxsVhKT') || !html.includes('aria-label="Join the Epok Discord server"') || !html.includes('<svg')) errors.push(`Discord icon/link missing from ${area}`);
+}
+if ((homepage.match(/data-slide data-title=/g) || []).length !== 3 || !homepage.includes('aria-label="3 of 3"') || !homepage.includes('epok-third-person-editor.png')) errors.push('Homepage gallery must retain both earlier slides and include the Third Person capture');
+for (const [slug, obsolete] of [['editor', 'an Epok C++ input API is not implemented yet'], ['editor', 'Adding and removing components arrives in a later'], ['features', 'Auto compile'], ['features', 'Component add/remove and actor rename/duplicate/delete are not yet'], ['third-person', 'template does not attach a character controller']]) {
+  if (fs.readFileSync(path.join(root, `docs/${slug}/index.html`), 'utf8').includes(obsolete)) errors.push(`Obsolete claim still visible in ${slug}: ${obsolete}`);
+}
 for (const [slug, image] of [['vfx-editor', 'vfx-editor.png'], ['spell-tutorial', 'blueprint-fireball.png']]) {
   if (!fs.readFileSync(path.join(root, `docs/${slug}/index.html`), 'utf8').includes(`/media/docs/images/${image}`)) errors.push(`Guide is missing its editor capture: ${slug}`);
 }

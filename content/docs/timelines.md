@@ -79,6 +79,19 @@ activation checks, including after component removal. HUD Text/Image/Progress
 adapters also require RectTransform. An ordinary Transform-typed slot requires
 only the transform, even when the attached class derives from TimelineCamera.
 
+On an **actor** the same requirement is read differently: an actor has no
+component members of its own, so the requirement is satisfied by the component
+class reserved for it being present in the actor's component set — `Camera` by
+`epok::Camera3DComponent`, `AudioSource` by `epok::AudioComponent`, `Light` by
+`epok::Light3DComponent`, and the HUD requirements by
+`epok::RectTransformComponent`, `epok::TextComponent`, `epok::ImageComponent` and
+`epok::ProgressBarComponent`. Neither check replaces the other: a legacy entity
+keeps the entity-member check above, an actor gets the component-set one, and the
+set of requirements is identical, so nothing that cooks today stops cooking.
+`PaletteAnimator` and `ParticleEmitter` have no reserved actor component yet and
+are checked on legacy entities only. See
+`knowledge/initiatives/actor-architecture/p9-services.md`.
+
 The reusable library passes a dedicated MIPS/standalone-export/PCSX integration
 that inspects actual component values, plus PsyQo host runtime tests. This
 supplements the original gate/camera lifecycle fixture. Audible output, pixel

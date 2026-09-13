@@ -41,11 +41,68 @@ Editor panels and tool windows share a charcoal theme with blue selection and fo
 
 Gizmo shortcuts are suppressed during flight. Click a mesh to select the nearest visible hit, or click the background to clear selection. Camera and gizmo drags do not change selection. Use Hierarchy to select empty entities and cameras without selectable Scene icons.
 
+### Orientation control
+
+The upper-right **VIEW** control is the Scene camera orientation widget. Its
+colored X, Y and Z rows mirror the transform-axis colors; choose `+` or `-` to
+look toward the pivot from that signed world axis. The control preserves the
+current pivot and distance, keeps a tiny pole offset for a stable orbit basis,
+and marks the local Scene view as changed without editing authored scene data.
+`Persp` identifies the current perspective authoring view; orthographic camera
+snapping is not implemented yet.
+
 Entering camera navigation releases an active text field. Releasing the right mouse button, pressing Escape, or losing application focus releases cursor capture. Geometry shortcuts are suppressed while flying or entering text. See [Blockout](blockout.md) for bevel requirements and editing shortcuts.
 
 Scene is a GPU preview. Game shows the emulated PSX output, including its quantization and ordering-table behavior.
 
+## View modes
+
+Scene opens on one of three authoring modes, selected with the **3D / 2D / UI** buttons
+above the viewport.
+
+| Mode | Shows |
+| --- | --- |
+| 3D | The 3D world: the shaded viewport, its camera controls, grid and gizmos |
+| 2D | The 2D world. Camera2D authoring arrives in a later release; the mode already lists this map's 2D actors in the Hierarchy |
+| UI | The Canvas / HUD editor described in [HUD and 2D entities](hud.md) |
+
+Switching modes never edits the map and never restarts the 3D preview: the camera,
+selection and simulation state are exactly where you left them when you come back.
+Leaving UI stops the HUD preview, as it always has.
+
 ## Hierarchy and materials
+
+The Hierarchy lists what belongs to the current view mode: 3D shows the 3D world, UI shows
+canvases and rect elements, 2D shows 2D actors. An item of another domain that has children
+in the current one still appears, greyed out, so branches keep their shape and order. Those
+lines are labels only — they cannot be selected, renamed or used as a drop target.
+
+Filtering changes nothing in the document. A selection made in one mode stays selected when
+you switch away and comes back highlighted when you return.
+
+Actors authored in the map's document appear below the entities with their own icon, named
+after the actor and nested by their logical parent. Selecting one opens the Actor section in
+the Inspector: its class, domain, identity, an editable Active checkbox and a read-only list
+of its components and authored properties. Adding and removing components arrives in a later
+release.
+
+Create an actor from the Actor submenu of any creation menu; its classes are grouped by 3D,
+2D, UI and Logic. A new actor is created at the map root with the components its class
+declares, or the root component its domain requires when it declares none. The submenu is
+empty, with an explanation, in a project whose classes the editor cannot resolve — see
+[Actors and components](actors.md) for what the actor model needs.
+
+The first line of the Hierarchy is the **map root**, named after the scene. It is not an
+object: clicking it opens **Map Settings**, which shows the map's name, document version and
+entity/actor counts, its scene Blueprint and its HUD budget. A map without a scene Blueprint
+offers **Create Scene Blueprint**, using the parent chosen there or the project default.
+Opening an embedded scene Blueprint for editing arrives in a later release.
+
+**Undo and redo.** Ctrl+Z and Ctrl+Y (or Ctrl+Shift+Z) step through scene edits while the
+Hierarchy, Scene or Inspector has focus and the game is not playing; the same steps are in
+the Edit menu. The last 32 edits of the open map are kept, and opening another map starts a
+fresh history. Component attachment and Blueprint edits keep their own Edit-menu entries and
+are undone first when they are the most recent change.
 
 Create cubes or empty entities through GameObject or the Hierarchy context menu. A context menu on an entity can create a child; a menu on empty space creates a root. New entities become selected and their parent branches expand.
 
@@ -81,7 +138,9 @@ For AI-assisted authoring, enable the optional local server in **Edit > Editor P
 
 ## Prototype limits
 
-Tags and Layers are not implemented. Entity activation is displayed as a disabled placeholder and does not affect the runtime. Floating panels stay inside the application window. Entity multiselection and global scene undo/redo are not implemented. [Blockout](blockout.md) provides face/edge/vertex selection and geometry Undo/Redo.
+Tags and Layers are not implemented. Entity activation is displayed as a disabled placeholder and does not affect the runtime. Floating panels stay inside the application window. Entity multiselection is not implemented. Scene Undo/Redo covers the open map's last 32 edits, as described above; the Blueprint, mesh and timeline editors keep their own stacks, and [Blockout](blockout.md) provides face/edge/vertex selection and geometry Undo/Redo.
+
+Actors support inline rename, Duplicate, Delete and drag-and-drop reparenting in the Hierarchy, and the Inspector's Add Component popup and per-component Remove follow the class compatibility rules (the root and inherited components cannot be removed). Converting an actor to another class or domain is not offered; the [MCP actor tools](mcp.md#actors) and `--add-actor` provide the same edits for automation.
 
 The initial renderer limits exported positions to +/-128 and scales to 64. It clips triangles against the camera frustum and uses double-buffered ordering tables. Those tables cannot resolve all intersecting geometry. Lighting and HUD have additional [lighting](lighting.md) and [HUD](hud.md) budgets.
 

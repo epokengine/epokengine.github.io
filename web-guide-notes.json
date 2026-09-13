@@ -255,7 +255,7 @@
     "plain": "MCP lets a compatible assistant inspect and operate the project already open in Epok. It is optional, local-only by default and guarded by revisions, schemas and an access key.",
     "analogy": "Treat the assistant like a co-op player with a very detailed controller: it can act quickly, but the game still validates every move.",
     "flow": ["Enable the local server", "Let the client read state and revision", "Apply guarded edits, capture and verify"],
-    "details": ["Twenty tools cover scenes, files, assets, screenshots, builds, Play and serial preparation.", "Scene batches are atomic; file writes require SHA-256 revisions and keep backups.", "There is no LAN listener, shell tool or unrestricted computer filesystem access."],
+    "details": ["Twenty-four tools cover scenes, Actors, files, assets, screenshots, builds, Play and serial preparation.", "Scene batches are atomic; file writes require SHA-256 revisions and keep backups.", "There is no LAN listener, shell tool or unrestricted computer filesystem access."],
     "tip": "Ask for a screenshot after a visual change. Trust is good; pixels are excellent."
   },
   "architecture": {
