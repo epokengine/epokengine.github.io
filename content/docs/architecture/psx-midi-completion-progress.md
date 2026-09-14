@@ -393,7 +393,7 @@ must be repeated after the later resonance/parameter corrections and on PSX.
 Review corrected modulation-envelope convex attack, tremolo polarity and the
 filter's DC attenuation with positive resonance against SF2 generators 26, 13
 and 9. Formula-based native tests passed; source-filter control signals use Q15
-unity 32768. Source/target processing remains distinct. The PSX build probe also
+the neutral value 32768. Source/target processing remains distinct. The PSX build probe also
 caught two integration errors before console execution: memory reporting treated
 a derived bank UUID as an authoring asset, and the dependency observer omitted
 library-specific cook inputs. Both paths now understand the versioned derivation;

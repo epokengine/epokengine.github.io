@@ -39,7 +39,7 @@ for (const item of search) {
   if (primer < 0 || !html.includes('class="mental-model"') || !html.includes('class="concept-flow"') || !html.includes('class="field-note"')) errors.push(`${slug}: missing beginner explanation, mental model, diagram or field note`);
   if (html.indexOf('<h1') > primer) errors.push(`${slug}: beginner overview appears before the guide title`);
 }
-for (const query of ['textures', 'collision', 'mcp', 'blueprint', 'vfx', 'marker', 'cancellation']) if (!search.some(d => `${d.title} ${d.text}`.toLowerCase().includes(query))) errors.push(`Search index missing ${query}`);
+for (const query of ['textures', 'collision', 'mcp', 'blueprint', 'lua', 'vfx', 'marker', 'cancellation']) if (!search.some(d => `${d.title} ${d.text}`.toLowerCase().includes(query))) errors.push(`Search index missing ${query}`);
 const apiSearch = JSON.parse(fs.readFileSync(path.join(root, 'assets/api-search.json'), 'utf8'));
 for (const query of ['epok::raycast', 'psyqo::gpu', 'sendprimitive', 'memory card']) if (!apiSearch.some(d => `${d.title} ${d.text}`.toLowerCase().includes(query))) errors.push(`API search index missing ${query}`);
 const catalog = JSON.parse(fs.readFileSync(path.join(root, '../content/docs/api/catalog.json'), 'utf8'));
@@ -67,7 +67,7 @@ for (const item of apiSearch) {
   if (['Function', 'Function template', 'Method', 'Constructor', 'Destructor', 'Conversion operator', 'Field', 'Variable', 'Enum value'].includes(item.kind) && !html.includes('Trade-offs and warnings')) errors.push(`${item.title}: missing trade-offs and warnings`);
 }
 const documentationIndex = fs.readFileSync(path.join(root, 'docs/index.html'), 'utf8');
-for (const slug of ['features', 'content-browser', 'play', 'blueprints-tutorial', 'vfx-editor', 'timelines', 'spell-tutorial', 'blueprints-vfx-troubleshooting']) {
+for (const slug of ['features', 'release-v0.2.0', 'content-browser', 'play', 'blueprints-tutorial', 'lua-tutorial', 'lua-scripting', 'lua-vm-runtime', 'vfx-editor', 'timelines', 'spell-tutorial', 'blueprints-vfx-troubleshooting']) {
   if (!documentationIndex.includes(`/docs/${slug}/`) || !search.some(d => d.url === `/docs/${slug}/`)) errors.push(`Learning guide is not discoverable: ${slug}`);
 }
 const homepage = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
@@ -86,7 +86,7 @@ for (const required of ['data-feature-query', 'data-feature-category', 'data-fea
 const sourceFeatureDoc = fs.readFileSync(path.join(root, '../content/docs/features.md'), 'utf8');
 const sourceEntryCount = (sourceFeatureDoc.split('## Known boundaries')[0].match(/^- \*\*/gm) || []).length;
 if (featureItems.filter(item => !item.fresh).length !== sourceEntryCount + 7 + 5 + 2) errors.push('A committed feature bullet, CLI family or validation capability was omitted');
-for (const slug of ['actors', 'migration-actors', 'worlds-2d', 'scene-blueprints', 'music-sequences', 'native-hud-preview', 'iteration', 'third-person']) {
+for (const slug of ['actors', 'migration-actors', 'worlds-2d', 'scene-blueprints', 'lua-tutorial', 'lua-scripting', 'lua-vm-runtime', 'release-v0.2.0', 'music-sequences', 'native-hud-preview', 'iteration', 'third-person']) {
   if (!documentationIndex.includes(`/docs/${slug}/`) || !search.some(item => item.url === `/docs/${slug}/`)) errors.push(`New guide not discoverable: ${slug}`);
 }
 for (const item of ['epok::Actor2D', 'epok::SceneScriptActor', 'epok::Camera2D', 'epok::debug_hud::State']) if (!apiSearch.some(entry => entry.title === item)) errors.push(`New API type not indexed: ${item}`);
@@ -97,16 +97,19 @@ for (const area of ['<header class="header">', '<footer class="footer">']) {
   if (!html.includes('https://discord.gg/2wEGxsVhKT') || !html.includes('aria-label="Join the Epok Discord server"') || !html.includes('<svg')) errors.push(`Discord icon/link missing from ${area}`);
 }
 if ((homepage.match(/data-slide data-title=/g) || []).length !== 3 || !homepage.includes('aria-label="3 of 3"') || !homepage.includes('epok-third-person-editor.png')) errors.push('Homepage gallery must retain both earlier slides and include the Third Person capture');
-for (const [slug, obsolete] of [['editor', 'an Epok C++ input API is not implemented yet'], ['editor', 'Adding and removing components arrives in a later'], ['features', 'Auto compile'], ['features', 'Component add/remove and actor rename/duplicate/delete are not yet'], ['third-person', 'template does not attach a character controller']]) {
+for (const [slug, obsolete] of [['editor', 'an Epok C++ input API is not implemented yet'], ['editor', 'Adding and removing components arrives in a later'], ['features', 'Auto compile'], ['features', 'Component add/remove and actor rename/duplicate/delete are not yet'], ['features', 'there is no Lua gameplay VM'], ['features', 'Non-native/Lua gameplay execution'], ['third-person', 'template does not attach a character controller']]) {
   if (fs.readFileSync(path.join(root, `docs/${slug}/index.html`), 'utf8').includes(obsolete)) errors.push(`Obsolete claim still visible in ${slug}: ${obsolete}`);
 }
 for (const [slug, image] of [['vfx-editor', 'vfx-editor.png'], ['spell-tutorial', 'blueprint-fireball.png']]) {
   if (!fs.readFileSync(path.join(root, `docs/${slug}/index.html`), 'utf8').includes(`/media/docs/images/${image}`)) errors.push(`Guide is missing its editor capture: ${slug}`);
 }
 if (!homepage.includes('id="blueprints"') || !homepage.includes('/docs/blueprints/')) errors.push('Homepage is missing Blueprint documentation access');
+if (!homepage.includes('C++ / BLUEPRINTS / LUA') || !homepage.includes('Gameplay in C++20, Blueprints or Lua') || !homepage.includes('/docs/lua-tutorial/') || !homepage.includes('/docs/lua-scripting/')) errors.push('Homepage is missing first-class C++, Blueprint and Lua gameplay messaging');
 if (!homepage.includes('id="memory-analyzer"') || !homepage.includes('/assets/captures/epok-memory-analyzer.png') || !homepage.includes('/docs/play/#memory-analyzer')) errors.push('Homepage is missing the Memory Analyzer feature showcase');
 if (!homepage.includes('2 MiB Main RAM') || !homepage.includes('512 KiB SPU audio') || !homepage.includes('Runtime heap, stack and scene-transition peaks are not measured')) errors.push('Memory Analyzer showcase is missing its budgets or measurement limitation');
 if (!homepage.includes('/docs/features/') || !homepage.includes('/docs/content-browser/') || !homepage.includes('/docs/play/')) errors.push('Homepage is missing access to the feature catalog, Content Browser or Play guides');
+const luaTutorial = fs.readFileSync(path.join(root, 'docs/lua-tutorial/index.html'), 'utf8');
+for (const required of ['Your first Lua class', 'Spinner:tick', 'Native C++', 'Lua VM — bytecode', 'Lua VM — source', 'FastSpinner.super.tick', 'Common mistakes']) if (!luaTutorial.includes(required)) errors.push(`Lua tutorial is missing ${required}`);
 if (!homepage.includes('<a href="/docs/api/"')) errors.push('Main navigation is missing the API Reference link');
 if (!homepage.includes('/media/resources/branding/epok-lockup.png')) errors.push('Homepage is missing the Epok Engine wordmark');
 if (!homepage.includes('Linux x86_64')) errors.push('Homepage is missing Linux x86_64 support');

@@ -1,6 +1,6 @@
 {
   "repository": "https://github.com/epokengine/epok-engine",
-  "commit": "2b75fb3aeb56694605a37c4fa4f5a943cc6ea56b",
+  "commit": "8ba289636985b428f3264cc3126b0819d2be0134",
   "files": [
     "LICENSE",
     "README.md",
@@ -38,6 +38,7 @@
     "docs/api/epok/lifecycle.md",
     "docs/api/epok/lighting.md",
     "docs/api/epok/loading-renderer.md",
+    "docs/api/epok/lua-runtime.md",
     "docs/api/epok/memory-card-backend.md",
     "docs/api/epok/memory-card.md",
     "docs/api/epok/motion-interpolation.md",
@@ -172,6 +173,8 @@
     "docs/input-collision.md",
     "docs/ironwood-diagnostics-2026-09-12.md",
     "docs/lighting.md",
+    "docs/lua-scripting.md",
+    "docs/lua-vm-runtime.md",
     "docs/mcp.md",
     "docs/memory-card.md",
     "docs/migration-actors.md",
@@ -181,6 +184,8 @@
     "docs/play.md",
     "docs/projects.md",
     "docs/release-process.md",
+    "docs/releases/v0.1.1.md",
+    "docs/releases/v0.2.0.md",
     "docs/runtime-services.md",
     "docs/scripting.md",
     "docs/settings.md",
@@ -206,11 +211,11 @@
     "runtime/THIRD_PARTY_NOTICES.md"
   ],
   "api_generation": {
-    "source_commit": "2b75fb3aeb56694605a37c4fa4f5a943cc6ea56b",
+    "source_commit": "8ba289636985b428f3264cc3126b0819d2be0134",
     "generator": "tools/generate-api-reference.py",
-    "generator_sha256": "fafc6a3b7ccace2a132677ee45eac592ce629cf0819f5dce2061963fbd229bb9",
+    "generator_sha256": "9227729386ddb1b26983491202ac5ca4ac6c8503de3ca531aca2ac6161920d46",
     "fixture": "tools/api-fixtures/debug-hud.hh",
-    "fixture_sha256": "56167ca35570e562f8744ca012c3eb2886d9ad5b3289fecce506c9eca19e1107",
+    "fixture_sha256": "cd6f02b10b0820ad8c178cb3eec8212c08d9ecc00632c459c2146d69adf5ee0b",
     "note": "Regenerated from the pinned source tree with all Debug HUD declarations enabled for documentation only. See the website audit notes."
   }
 }

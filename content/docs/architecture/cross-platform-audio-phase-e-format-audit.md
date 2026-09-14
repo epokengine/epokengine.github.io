@@ -37,7 +37,7 @@ The following primary evidence was inspected:
   `game/prog/SOUNDDEF.H:351`, and `game/prog/sound.c:3812`, `:1919`, `:3307`:
   converter workflow, converted header layout, record traversal, score startup
   and event consumption. These files were read only. Their source notices name
-  CAPCOM and reserve rights; they are evidence, not code available for reuse.
+  their original publisher and reserve rights; they are evidence, not code available for reuse.
 
 No game was launched, no third-party audio was played, and no game source or
 samples were copied into Epok. The adjacent repository remains read-only. Its

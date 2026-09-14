@@ -52,11 +52,14 @@ engine worktree and import it with `node tools/refresh-api.mjs <worktree>` after
 syncing. The checked procedure, extraction fixture, source audit and design
 references are in [the September audit](notes/feature-audit-2026-09-14.md).
 
-The documentation index offers three learning paths: a first Blueprint, VFX
-authoring, and a marker-driven spell. Keep introductory tutorials separate from
-the Blueprint and Timeline references. The Timelines & VFX group also includes
-the playable example and a shared troubleshooting guide. Search, navigation,
-table-of-contents anchors and the new editor captures are checked by `npm run check`.
+The documentation index offers four learning paths: a first Blueprint, a first
+Lua Actor class, VFX authoring, and a marker-driven spell. Keep introductory
+tutorials separate from their complete references. The Lua tutorial should stay
+small enough to follow end-to-end while linking to the full language/runtime
+contracts for exact types, modes and target limits. The Timelines & VFX group
+also includes the playable example and a shared troubleshooting guide. Search,
+navigation, table-of-contents anchors and the editor captures are checked by
+`npm run check`.
 
 ## Publish
 

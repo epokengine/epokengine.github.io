@@ -8,7 +8,7 @@ Panel combines RectTransform and Image. Text and ProgressBar are independent gra
 
 Scene's **UI** mode opens Canvas editing. It is one of the three authoring modes — **3D**, **2D** and **UI** — selected above the viewport; see [View modes](editor.md#view-modes). Select an element to drag it, or resize it from its lower-right corner. Inspector exposes Anchor Min/Max, Pivot, Position and Size Delta with anchor presets.
 
-The Hierarchy in UI mode lists this map's canvases and rect elements together with its UI actors. An element of another domain that still has UI children appears greyed out so the branch keeps its shape; those lines are labels only.
+The Hierarchy in UI mode lists this map's canvases and rect elements together with its UI actors. Domain-neutral Empty objects, scripts, audio and resource holders remain visible and editable here; this keeps the authored side of a procedural HUD available beside its preview. Runtime-only elements created by a script are not added to the authored Hierarchy. An element of another spatial domain that still has UI children appears greyed out so the branch keeps its shape; those lines are labels only.
 
 Anchors and pivots range from 0 to 1. Positions use reference pixels with +Y pointing up. Size Delta adds to the space between anchors so elements can stretch with their parent. Reparenting with world preservation keeps the visible rectangle.
 

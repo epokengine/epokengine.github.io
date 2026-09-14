@@ -1,8 +1,8 @@
 # Using the editor
 
-Numeric fields support both keyboard entry and mouse adjustment: click and release without dragging to edit the text; hold and drag horizontally to change the value. The pointer shows horizontal arrows during the drag, including vector components, and returns to its normal cursor on release. Enter commits text and Escape cancels text editing. This applies to component values, transforms, scripts, asset tools and numeric editor settings. Existing per-field speeds, limits and validation remain in place. The behavior follows the combined text/spin control described in Epic's [SNumericEntryBox documentation](https://dev.epicgames.com/documentation/en-us/unreal-engine/API/Runtime/Slate/SNumericEntryBox), using Dear ImGui's native click-to-input mode rather than a separate overlay.
+Numeric fields support both keyboard entry and mouse adjustment: click and release without dragging to edit the text; hold and drag horizontally to change the value. The pointer shows horizontal arrows during the drag, including vector components, and returns to its normal cursor on release. Enter commits text and Escape cancels text editing. This applies to component values, transforms, scripts, asset tools and numeric editor settings. The combined text/spin control uses Dear ImGui's native click-to-input mode rather than a separate overlay.
 
-Selecting a file in Project shows its metadata in the Inspector with a resizable preview below, following the separation of properties and previews described in Unity's [Inspector manual](https://docs.unity3d.com/Manual/InspectorOptions.html). See [Content Browser](content-browser.md) for supported previews and controls.
+Selecting a file in Project shows its metadata in the Inspector with a resizable preview below, separating properties from previews. See [Content Browser](content-browser.md) for supported previews and controls.
 
 **Edit > Project Settings** opens project identity, startup scene, automatic compilation and native resolution options. **Edit > Editor Preferences** opens local navigation and Game/emulator display preferences. Both have category navigation, search and explicit Apply. See [Settings](settings.md).
 
@@ -32,7 +32,7 @@ Editor panels and tool windows share a charcoal theme with blue selection and fo
 | Right mouse held + Q / E | Fly down / up |
 | Shift during flight | Increase speed |
 | Alt + left mouse drag | Orbit around the focus point |
-| Wheel | Move forward/backward without changing field of view |
+| Wheel | Move the camera forward/backward along its viewing direction, using Speed, without a zoom limit or field-of-view change |
 | Right mouse held + wheel | Adjust flight speed (also available as Speed in Scene) |
 | Escape | Release camera capture |
 | 1 / 2 / 3 in Blockout | Faces / edges / vertices |
@@ -40,6 +40,10 @@ Editor panels and tool windows share a charcoal theme with blue selection and fo
 | F | Frame the selected entity |
 
 Gizmo shortcuts are suppressed during flight. Click a mesh to select the nearest visible hit, or click the background to clear selection. Camera and gizmo drags do not change selection. Use Hierarchy to select empty entities and cameras without selectable Scene icons.
+
+The top **Build** menu contains **Build Project**, **Build Lighting**, packaging
+and export actions, and **Lighting Settings**. Scene edits retain baked shadows;
+an amber warning indicates when to run **Build Lighting** again.
 
 ### Orientation control
 
@@ -73,7 +77,9 @@ Leaving UI stops the HUD preview, as it always has.
 ## Hierarchy and materials
 
 The Hierarchy lists what belongs to the current view mode: 3D shows the 3D world, UI shows
-canvases and rect elements, 2D shows 2D actors. An item of another domain that has children
+canvases and rect elements, 2D shows 2D actors. Domain-neutral logic and resource objects
+appear in every mode, so a procedural UI's controllers, audio and resource holders remain
+editable while its preview is visible. An item of another spatial domain that has children
 in the current one still appears, greyed out, so branches keep their shape and order. Those
 lines are labels only — they cannot be selected, renamed or used as a drop target.
 

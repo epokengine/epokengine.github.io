@@ -2,11 +2,11 @@
 
 > **Header:** `"object_model.hpp"` · **Tier:** Epok runtime API · **Source:** [open header](../../../runtime/object_model.hpp)
 
-This module covers the object model module. It documents 140 public callables declared directly in this header.
+This module covers the object model module. It documents 152 public callables declared directly in this header.
 
 ## Declared types
 
-`epok::Actor`, `epok::Actor2D`, `epok::Actor3D`, `epok::ActorComponent`, `epok::ActorSpawnRequest`, `epok::AudioComponent`, `epok::ClassDescriptor`, `epok::EndPlayReason`, `epok::LegacyBehaviourComponent`, `epok::Level`, `epok::Level::ActorPrepareFn`, `epok::LevelPendingOp`, `epok::Object`, `epok::ObjectClassFlags`, `epok::ObjectDispatchScope`, `epok::ObjectDomain`, `epok::ObjectFamily`, `epok::ObjectId`, `epok::ObjectPool`, `epok::ObjectRegistry`, `epok::ObjectRegistryStorage`, `epok::ObjectSlot`, `epok::ObjectState`, `epok::ObjectStats`, `epok::RectTransformComponent`, `epok::SceneComponent2D`, `epok::SceneComponent3D`, `epok::SceneScriptActor`, `epok::Transform2D`, `epok::UIActor`, `epok::UIComponent`, `epok::World`
+`epok::Actor`, `epok::Actor2D`, `epok::Actor3D`, `epok::ActorComponent`, `epok::ActorSpawnRequest`, `epok::AudioComponent`, `epok::BlobShadowComponent`, `epok::Camera3DComponent`, `epok::CanvasComponent`, `epok::ClassDescriptor`, `epok::Collider3DComponent`, `epok::EndPlayReason`, `epok::ImageComponent`, `epok::Level`, `epok::Level::ActorPrepareFn`, `epok::LevelPendingOp`, `epok::Light3DComponent`, `epok::Mesh3DComponent`, `epok::NativeComponentDefault`, `epok::Object`, `epok::ObjectClassFlags`, `epok::ObjectDispatchScope`, `epok::ObjectDomain`, `epok::ObjectFamily`, `epok::ObjectId`, `epok::ObjectPool`, `epok::ObjectRegistry`, `epok::ObjectRegistryStorage`, `epok::ObjectSlot`, `epok::ObjectState`, `epok::ObjectStats`, `epok::PaletteAnimatorComponent`, `epok::ParticleEffectComponent`, `epok::ParticleEmitterComponent`, `epok::ProgressBarComponent`, `epok::RectTransformComponent`, `epok::SceneComponent2D`, `epok::SceneComponent3D`, `epok::SceneScriptActor`, `epok::Sprite3DComponent`, `epok::TextComponent`, `epok::TimelineComponent`, `epok::Transform2D`, `epok::UIActor`, `epok::UIComponent`, `epok::World`
 
 ## Callable index
 
@@ -16,27 +16,32 @@ This module covers the object model module. It documents 140 public callables de
 - [`epok::Actor3D::default_root`](#epok-actor3d-default-root-1) — Performs `default root` as part of the object model module.
 - [`epok::Actor::active`](#epok-actor-active-1) — Self flag only; Level::actor_active() folds the logical parent chain.
 - [`epok::Actor::begin_play`](#epok-actor-begin-play-1) — Begins play as part of the object model module.
+- [`epok::Actor::bind_data`](#epok-actor-bind-data-1) — Performs `bind data` as part of the object model module.
+- [`epok::Actor::blueprint_observe`](#epok-actor-blueprint-observe-1) — Performs `blueprint observe` as part of the object model module.
 - [`epok::Actor::class_id`](#epok-actor-class-id-1) — Performs `class id` as part of the object model module.
 - [`epok::Actor::component_count`](#epok-actor-component-count-1) — Performs `component count` as part of the object model module.
 - [`epok::Actor::component_id`](#epok-actor-component-id-1) — Performs `component id` as part of the object model module.
+- [`epok::Actor::data`](#epok-actor-data-1) — Legacy adapter: the canonical slot behind the root scene component, or nullptr.
 - [`epok::Actor::default_root`](#epok-actor-default-root-1) — Runtime hook, not reflected: the declarative root component embedded in the actor.
+- [`epok::Actor::destroy`](#epok-actor-destroy-1) — Destroys destroy as part of the object model module.
 - [`epok::Actor::end_play`](#epok-actor-end-play-1) — Ends play as part of the object model module.
-- [`epok::Actor::entity`](#epok-actor-entity-1) — Legacy adapter: the canonical slot behind the root scene component, or nullptr.
-- [`epok::Actor::level_id`](#epok-actor-level-id-1) — Performs `level id` as part of the object model module.
+- [`epok::Actor::level_id`](#epok-actor-level-id-1) — Reflected identity/hierarchy readers.
 - [`epok::Actor::logical_parent`](#epok-actor-logical-parent-1) — Performs `logical parent` as part of the object model module.
 - [`epok::Actor::name`](#epok-actor-name-1) — Performs `name` as part of the object model module.
 - [`epok::Actor::on_disable`](#epok-actor-on-disable-1) — Performs `on disable` as part of the object model module.
 - [`epok::Actor::on_enable`](#epok-actor-on-enable-1) — Performs `on enable` as part of the object model module.
 - [`epok::Actor::root_id`](#epok-actor-root-id-1) — Performs `root id` as part of the object model module.
+- [`epok::Actor::set_active`](#epok-actor-set-active-1) — Folded activation with the on_enable/on_disable fan-out, and deferred destruction inside a dispatch scope: the same Level paths the legacy Blueprint nodes take.
 - [`epok::Actor::set_name`](#epok-actor-set-name-1) — Sets name as part of the object model module.
 - [`epok::Actor::set_wants_tick`](#epok-actor-set-wants-tick-1) — Sets wants tick as part of the object model module.
 - [`epok::Actor::tick`](#epok-actor-tick-1) — Performs `tick` as part of the object model module.
 - [`epok::Actor::wants_tick`](#epok-actor-wants-tick-1) — Performs `wants tick` as part of the object model module.
 - [`epok::ActorComponent::attach_slot`](#epok-actorcomponent-attach-slot-1) — Performs `attach slot` as part of the object model module.
 - [`epok::ActorComponent::begin_play`](#epok-actorcomponent-begin-play-1) — Begins play as part of the object model module.
+- [`epok::ActorComponent::blueprint_observe`](#epok-actorcomponent-blueprint-observe-1) — Performs `blueprint observe` as part of the object model module.
 - [`epok::ActorComponent::class_id`](#epok-actorcomponent-class-id-1) — Performs `class id` as part of the object model module.
 - [`epok::ActorComponent::end_play`](#epok-actorcomponent-end-play-1) — Ends play as part of the object model module.
-- [`epok::ActorComponent::frame_update`](#epok-actorcomponent-frame-update-1) — Runtime hooks, not reflected.
+- [`epok::ActorComponent::frame_update`](#epok-actorcomponent-frame-update-1) — Performs `frame update` as part of the object model module.
 - [`epok::ActorComponent::get_owner`](#epok-actorcomponent-get-owner-1) — Returns owner as part of the object model module.
 - [`epok::ActorComponent::name`](#epok-actorcomponent-name-1) — Performs `name` as part of the object model module.
 - [`epok::ActorComponent::on_disable`](#epok-actorcomponent-on-disable-1) — Performs `on disable` as part of the object model module.
@@ -46,6 +51,7 @@ This module covers the object model module. It documents 140 public callables de
 - [`epok::ActorComponent::releasable`](#epok-actorcomponent-releasable-1) — False while a service still holds this component's storage; the registry then keeps the (already dead) slot quarantined instead of returning it to the pool.
 - [`epok::ActorComponent::set_name`](#epok-actorcomponent-set-name-1) — Sets name as part of the object model module.
 - [`epok::ActorComponent::tick`](#epok-actorcomponent-tick-1) — Performs `tick` as part of the object model module.
+- [`epok::ActorComponent::timeline_sync`](#epok-actorcomponent-timeline-sync-1) — Runtime hooks, not reflected.
 - [`epok::attach_component`](#epok-attach-component-1) — Spatial attachment between components of the same domain.
 - [`epok::AudioComponent::begin_play`](#epok-audiocomponent-begin-play-1) — play_on_start policy.
 - [`epok::AudioComponent::bind_local`](#epok-audiocomponent-bind-local-1) — Performs `bind local` as part of the object model module.
@@ -57,24 +63,18 @@ This module covers the object model module. It documents 140 public callables de
 - [`epok::AudioComponent::on_disable`](#epok-audiocomponent-on-disable-1) — Deactivation and teardown stop both kinds: lifecycle.hpp::set_active stops a legacy slot's audio through the slot table, and stopping an already stopped source is a no-op, so the two paths are idempotent rather than conflicting.
 - [`epok::AudioComponent::owns_source`](#epok-audiocomponent-owns-source-1) — True only for component-owned storage.
 - [`epok::AudioComponent::play`](#epok-audiocomponent-play-1) — Starts play as part of the object model module.
-- [`epok::AudioComponent::releasable`](#epok-audiocomponent-releasable-1) — Component-owned storage stays quarantined while an asynchronous consumer (the XA music service) still points at it, mirroring create_entity's legacy-slot rule.
+- [`epok::AudioComponent::releasable`](#epok-audiocomponent-releasable-1) — Component-owned storage stays quarantined while an asynchronous consumer (the XA music service) still points at it, mirroring allocate_actor_data's legacy-slot rule.
 - [`epok::AudioComponent::stop`](#epok-audiocomponent-stop-1) — Stops stop as part of the object model module.
+- [`epok::BlobShadowComponent::class_id`](#epok-blobshadowcomponent-class-id-1) — Performs `class id` as part of the object model module.
+- [`epok::Camera3DComponent::class_id`](#epok-camera3dcomponent-class-id-1) — Performs `class id` as part of the object model module.
+- [`epok::CanvasComponent::class_id`](#epok-canvascomponent-class-id-1) — Performs `class id` as part of the object model module.
+- [`epok::Collider3DComponent::class_id`](#epok-collider3dcomponent-class-id-1) — Performs `class id` as part of the object model module.
 - [`epok::detail::compact_class_id`](#epok-detail-compact-class-id-1) — Single-block SHA-256: enough for a 36 character UUID (message + padding <= 64 bytes).
 - [`epok::detail::sha256_rotr`](#epok-detail-sha256-rotr-1) — Performs `sha256 rotr` as part of the object model module.
 - [`epok::dispatch_trigger`](#epok-dispatch-trigger-1) — Collision is owned by the spatial services, not by the Level: they resolve the legacy slot to its actor and call this, which fans the event out to the owner's components in registration order.
 - [`epok::find_object_class`](#epok-find-object-class-1) — Finds object class as part of the object model module.
-- [`epok::LegacyBehaviourComponent::begin_play`](#epok-legacybehaviourcomponent-begin-play-1) — Begins play as part of the object model module.
-- [`epok::LegacyBehaviourComponent::bind`](#epok-legacybehaviourcomponent-bind-1) — Resolve the slot from the owner's root scene component (Actor3D only).
-- [`epok::LegacyBehaviourComponent::bind`](#epok-legacybehaviourcomponent-bind-2) — The bound entity must NOT also appear in the scene bank's Binding table: the actor events below are the only source of start/update/frame_update/enable/disable/destroy for this Behaviour, so a migrated entity never receives an event twice.
-- [`epok::LegacyBehaviourComponent::class_id`](#epok-legacybehaviourcomponent-class-id-1) — Performs `class id` as part of the object model module.
-- [`epok::LegacyBehaviourComponent::end_play`](#epok-legacybehaviourcomponent-end-play-1) — Ends play as part of the object model module.
-- [`epok::LegacyBehaviourComponent::ensure_started`](#epok-legacybehaviourcomponent-ensure-started-1) — start() runs once, on the first event after the Behaviour is bound, and always before update(); binding after add_component therefore never loses the event.
-- [`epok::LegacyBehaviourComponent::entity_slot`](#epok-legacybehaviourcomponent-entity-slot-1) — Performs `entity slot` as part of the object model module.
-- [`epok::LegacyBehaviourComponent::frame_update`](#epok-legacybehaviourcomponent-frame-update-1) — Legacy contract, preserved: frame_update runs once per rendered frame even while the simulation clock is paused, and tick()/update() does not.
-- [`epok::LegacyBehaviourComponent::on_disable`](#epok-legacybehaviourcomponent-on-disable-1) — Performs `on disable` as part of the object model module.
-- [`epok::LegacyBehaviourComponent::on_enable`](#epok-legacybehaviourcomponent-on-enable-1) — Performs `on enable` as part of the object model module.
-- [`epok::LegacyBehaviourComponent::on_trigger`](#epok-legacybehaviourcomponent-on-trigger-1) — Forwarded by dispatch_trigger(); the object model never generates the event.
-- [`epok::LegacyBehaviourComponent::tick`](#epok-legacybehaviourcomponent-tick-1) — Performs `tick` as part of the object model module.
+- [`epok::ImageComponent::class_id`](#epok-imagecomponent-class-id-1) — Performs `class id` as part of the object model module.
+- [`epok::is_active`](#epok-is-active-1) — Reports whether active as part of the object model module.
 - [`epok::Level::actor_active`](#epok-level-actor-active-1) — ---- activation ----------------------------------------------------------------
 - [`epok::Level::actor_at`](#epok-level-actor-at-1) — Performs `actor at` as part of the object model module.
 - [`epok::Level::actor_count`](#epok-level-actor-count-1) — Performs `actor count` as part of the object model module.
@@ -91,14 +91,18 @@ This module covers the object model module. It documents 140 public callables de
 - [`epok::Level::remove_component`](#epok-level-remove-component-1) — Removes component as part of the object model module.
 - [`epok::Level::scene_script`](#epok-level-scene-script-1) — Performs `scene script` as part of the object model module.
 - [`epok::Level::set_active`](#epok-level-set-active-1) — Sets active as part of the object model module.
+- [`epok::Level::set_logical_parent`](#epok-level-set-logical-parent-1) — Sets logical parent as part of the object model module.
 - [`epok::Level::spawn_actor`](#epok-level-spawn-actor-1) — Performs `spawn actor` as part of the object model module.
 - [`epok::Level::spawn_batch`](#epok-level-spawn-batch-1) — All or nothing.
 - [`epok::Level::stats`](#epok-level-stats-1) — Performs `stats` as part of the object model module.
 - [`epok::Level::tick`](#epok-level-tick-1) — ---- ticking -------------------------------------------------------------------
+- [`epok::Light3DComponent::class_id`](#epok-light3dcomponent-class-id-1) — Performs `class id` as part of the object model module.
+- [`epok::Mesh3DComponent::class_id`](#epok-mesh3dcomponent-class-id-1) — Performs `class id` as part of the object model module.
 - [`epok::Object::class_id`](#epok-object-class-id-1) — Runtime-owned identity hooks; not an authoring API.
 - [`epok::Object::id`](#epok-object-id-1) — Performs `id` as part of the object model module.
 - [`epok::Object::is_a`](#epok-object-is-a-1) — Reports whether a as part of the object model module.
 - [`epok::Object::state`](#epok-object-state-1) — Performs `state` as part of the object model module.
+- [`epok::Object::timeline_sync`](#epok-object-timeline-sync-1) — Performs `timeline sync` as part of the object model module.
 - [`epok::Object::~Object`](#epok-object-object-1) — Releases the resources owned by `epok::Object`.
 - [`epok::object_class_is_a`](#epok-object-class-is-a-1) — Ancestry walk bounded by the table size; the cook rejects cycles before emitting.
 - [`epok::object_construct`](#epok-object-construct-1) — Placement-new into caller storage; destroy runs the virtual destructor of the concrete type, so a base pointer never slices.
@@ -109,6 +113,7 @@ This module covers the object model module. It documents 140 public callables de
 - [`epok::ObjectDispatchScope::ObjectDispatchScope`](#epok-objectdispatchscope-objectdispatchscope-2) — Constructs `epok::ObjectDispatchScope` for the object model module.
 - [`epok::ObjectDispatchScope::operator=`](#epok-objectdispatchscope-operator-1) — Performs `operator =` as part of the object model module.
 - [`epok::ObjectDispatchScope::~ObjectDispatchScope`](#epok-objectdispatchscope-objectdispatchscope-3) — Releases the resources owned by `epok::ObjectDispatchScope`.
+- [`epok::ObjectId::get`](#epok-objectid-get-1) — Returns get as part of the object model module.
 - [`epok::ObjectId::operator!=`](#epok-objectid-operator-1) — Performs `operator !=` as part of the object model module.
 - [`epok::ObjectId::operator==`](#epok-objectid-operator-2) — Performs `operator ==` as part of the object model module.
 - [`epok::ObjectId::valid`](#epok-objectid-valid-1) — Performs `valid` as part of the object model module.
@@ -132,6 +137,10 @@ This module covers the object model module. It documents 140 public callables de
 - [`epok::ObjectRegistry::slot`](#epok-objectregistry-slot-1) — Performs `slot` as part of the object model module.
 - [`epok::ObjectRegistry::slot`](#epok-objectregistry-slot-2) — Performs `slot` as part of the object model module.
 - [`epok::ObjectRegistryStorage::ObjectRegistryStorage<Capacity>`](#epok-objectregistrystorage-objectregistrystorage-capacity-1) — Constructs `epok::ObjectRegistryStorage` for the object model module.
+- [`epok::PaletteAnimatorComponent::class_id`](#epok-paletteanimatorcomponent-class-id-1) — Performs `class id` as part of the object model module.
+- [`epok::ParticleEffectComponent::class_id`](#epok-particleeffectcomponent-class-id-1) — Performs `class id` as part of the object model module.
+- [`epok::ParticleEmitterComponent::class_id`](#epok-particleemittercomponent-class-id-1) — Performs `class id` as part of the object model module.
+- [`epok::ProgressBarComponent::class_id`](#epok-progressbarcomponent-class-id-1) — Performs `class id` as part of the object model module.
 - [`epok::RectTransformComponent::attach_slot`](#epok-recttransformcomponent-attach-slot-1) — Performs `attach slot` as part of the object model module.
 - [`epok::RectTransformComponent::bind_local`](#epok-recttransformcomponent-bind-local-1) — Performs `bind local` as part of the object model module.
 - [`epok::RectTransformComponent::bind_slot`](#epok-recttransformcomponent-bind-slot-1) — Performs `bind slot` as part of the object model module.
@@ -145,6 +154,9 @@ This module covers the object model module. It documents 140 public callables de
 - [`epok::SceneComponent3D::class_id`](#epok-scenecomponent3d-class-id-1) — Performs `class id` as part of the object model module.
 - [`epok::SceneComponent3D::entity_slot`](#epok-scenecomponent3d-entity-slot-1) — Performs `entity slot` as part of the object model module.
 - [`epok::SceneScriptActor::class_id`](#epok-scenescriptactor-class-id-1) — Performs `class id` as part of the object model module.
+- [`epok::Sprite3DComponent::class_id`](#epok-sprite3dcomponent-class-id-1) — Performs `class id` as part of the object model module.
+- [`epok::TextComponent::class_id`](#epok-textcomponent-class-id-1) — Performs `class id` as part of the object model module.
+- [`epok::TimelineComponent::class_id`](#epok-timelinecomponent-class-id-1) — Performs `class id` as part of the object model module.
 - [`epok::UIActor::class_id`](#epok-uiactor-class-id-1) — Performs `class id` as part of the object model module.
 - [`epok::UIActor::default_root`](#epok-uiactor-default-root-1) — Performs `default root` as part of the object model module.
 - [`epok::UIComponent::class_id`](#epok-uicomponent-class-id-1) — Performs `class id` as part of the object model module.
@@ -163,7 +175,7 @@ This module covers the object model module. It documents 140 public callables de
 uint64_t class_id() const override
 ```
 
-- **Declared at:** [line 615](../../../runtime/object_model.hpp#L615)
+- **Declared at:** [line 653](../../../runtime/object_model.hpp#L653)
 - **Kind:** `cxx method`; qualifiers: `const`
 
 **Returns.** Returns `uint64_t`. Check the purpose and failure notes before using the value.
@@ -196,7 +208,7 @@ auto result = object.class_id();
 ActorComponent* default_root() override
 ```
 
-- **Declared at:** [line 617](../../../runtime/object_model.hpp#L617)
+- **Declared at:** [line 655](../../../runtime/object_model.hpp#L655)
 - **Kind:** `cxx method`
 
 **Returns.** Returns `ActorComponent *`. Check the purpose and failure notes before using the value.
@@ -229,7 +241,7 @@ auto result = object.default_root();
 uint64_t class_id() const override
 ```
 
-- **Declared at:** [line 608](../../../runtime/object_model.hpp#L608)
+- **Declared at:** [line 646](../../../runtime/object_model.hpp#L646)
 - **Kind:** `cxx method`; qualifiers: `const`
 
 **Returns.** Returns `uint64_t`. Check the purpose and failure notes before using the value.
@@ -262,7 +274,7 @@ auto result = object.class_id();
 ActorComponent* default_root() override
 ```
 
-- **Declared at:** [line 610](../../../runtime/object_model.hpp#L610)
+- **Declared at:** [line 648](../../../runtime/object_model.hpp#L648)
 - **Kind:** `cxx method`
 
 **Returns.** Returns `ActorComponent *`. Check the purpose and failure notes before using the value.
@@ -295,7 +307,7 @@ auto result = object.default_root();
 bool active() const
 ```
 
-- **Declared at:** [line 413](../../../runtime/object_model.hpp#L413)
+- **Declared at:** [line 423](../../../runtime/object_model.hpp#L423)
 - **Kind:** `cxx method`; qualifiers: `const`
 
 **Returns.** Returns `bool`. Check the purpose and failure notes before using the value.
@@ -328,7 +340,7 @@ auto result = object.active();
 virtual void begin_play()
 ```
 
-- **Declared at:** [line 392](../../../runtime/object_model.hpp#L392)
+- **Declared at:** [line 398](../../../runtime/object_model.hpp#L398)
 - **Kind:** `cxx method`; qualifiers: `virtual`
 
 **Returns.** No value is returned; observe the documented state change or callback.
@@ -349,6 +361,81 @@ object.begin_play();
 
 **Trade-offs and warnings.** Call it only in the lifecycle phase described by the module. Validate indices, capacities and object state before use.
 
+<a id="epok-actor-bind-data-1"></a>
+
+## `epok::Actor::bind_data`
+
+**Purpose.** Performs `bind data` as part of the object model module.
+
+**Exact declaration**
+
+```cpp
+void bind_data(ActorData& value)
+```
+
+- **Declared at:** [line 408](../../../runtime/object_model.hpp#L408)
+- **Kind:** `cxx method`
+
+**Parameters**
+
+| Name | Type | Role | Meaning |
+| --- | --- | --- | --- |
+| `value` | `ActorData &` | Input/output; inspect the function contract | Value supplied for `value`. See the exact type and module contract. |
+
+**Returns.** No value is returned; observe the documented state change or callback.
+
+**Use it when.** You need the object model module and the preconditions in the declaration are already satisfied.
+
+**Usage pattern**
+
+```cpp
+#include "object_model.hpp"
+
+// Assume these named values have been initialized with valid data:
+// ActorData & value
+
+epok::Actor& object = /* obtain a valid instance */;
+
+object.bind_data(value);
+```
+
+**Why choose it.** It provides direct, allocation-conscious access to the object model module. No exception-based error path is implied by the signature.
+
+**Trade-offs and warnings.** Pointer/reference arguments are borrowed unless the source contract says otherwise; keep them valid for the complete operation and never assume null is accepted.
+
+<a id="epok-actor-blueprint-observe-1"></a>
+
+## `epok::Actor::blueprint_observe`
+
+**Purpose.** Performs `blueprint observe` as part of the object model module.
+
+**Exact declaration**
+
+```cpp
+virtual void blueprint_observe()
+```
+
+- **Declared at:** [line 399](../../../runtime/object_model.hpp#L399)
+- **Kind:** `cxx method`; qualifiers: `virtual`
+
+**Returns.** No value is returned; observe the documented state change or callback.
+
+**Use it when.** You need the object model module and the preconditions in the declaration are already satisfied.
+
+**Usage pattern**
+
+```cpp
+#include "object_model.hpp"
+
+epok::Actor& object = /* obtain a valid instance */;
+
+object.blueprint_observe();
+```
+
+**Why choose it.** It provides direct, allocation-conscious access to the object model module. No exception-based error path is implied by the signature.
+
+**Trade-offs and warnings.** Call it only in the lifecycle phase described by the module. Validate indices, capacities and object state before use.
+
 <a id="epok-actor-class-id-1"></a>
 
 ## `epok::Actor::class_id`
@@ -361,7 +448,7 @@ object.begin_play();
 uint64_t class_id() const override
 ```
 
-- **Declared at:** [line 391](../../../runtime/object_model.hpp#L391)
+- **Declared at:** [line 397](../../../runtime/object_model.hpp#L397)
 - **Kind:** `cxx method`; qualifiers: `const`
 
 **Returns.** Returns `uint64_t`. Check the purpose and failure notes before using the value.
@@ -394,7 +481,7 @@ auto result = object.class_id();
 size_t component_count() const
 ```
 
-- **Declared at:** [line 411](../../../runtime/object_model.hpp#L411)
+- **Declared at:** [line 421](../../../runtime/object_model.hpp#L421)
 - **Kind:** `cxx method`; qualifiers: `const`
 
 **Returns.** Returns `size_t`. Check the purpose and failure notes before using the value.
@@ -427,7 +514,7 @@ auto result = object.component_count();
 ObjectId component_id(size_t index) const
 ```
 
-- **Declared at:** [line 410](../../../runtime/object_model.hpp#L410)
+- **Declared at:** [line 420](../../../runtime/object_model.hpp#L420)
 - **Kind:** `cxx method`; qualifiers: `const`
 
 **Parameters**
@@ -457,6 +544,39 @@ auto result = object.component_id(index);
 
 **Trade-offs and warnings.** Call it only in the lifecycle phase described by the module. Validate indices, capacities and object state before use.
 
+<a id="epok-actor-data-1"></a>
+
+## `epok::Actor::data`
+
+**Purpose.** Legacy adapter: the canonical slot behind the root scene component, or nullptr.
+
+**Exact declaration**
+
+```cpp
+ActorData* data() const
+```
+
+- **Declared at:** [line 407](../../../runtime/object_model.hpp#L407)
+- **Kind:** `cxx method`; qualifiers: `const`
+
+**Returns.** Returns `ActorData *`. Check the purpose and failure notes before using the value.
+
+**Use it when.** You need the object model module and the preconditions in the declaration are already satisfied.
+
+**Usage pattern**
+
+```cpp
+#include "object_model.hpp"
+
+epok::Actor& object = /* obtain a valid instance */;
+
+auto result = object.data();
+```
+
+**Why choose it.** The method is `const`, so it does not mutate the object through this API surface.
+
+**Trade-offs and warnings.** Call it only in the lifecycle phase described by the module. Validate indices, capacities and object state before use.
+
 <a id="epok-actor-default-root-1"></a>
 
 ## `epok::Actor::default_root`
@@ -469,7 +589,7 @@ auto result = object.component_id(index);
 virtual ActorComponent* default_root()
 ```
 
-- **Declared at:** [line 398](../../../runtime/object_model.hpp#L398)
+- **Declared at:** [line 405](../../../runtime/object_model.hpp#L405)
 - **Kind:** `cxx method`; qualifiers: `virtual`
 
 **Returns.** Returns `ActorComponent *`. Check the purpose and failure notes before using the value.
@@ -490,6 +610,39 @@ auto result = object.default_root();
 
 **Trade-offs and warnings.** Call it only in the lifecycle phase described by the module. Validate indices, capacities and object state before use.
 
+<a id="epok-actor-destroy-1"></a>
+
+## `epok::Actor::destroy`
+
+**Purpose.** Destroys destroy as part of the object model module.
+
+**Exact declaration**
+
+```cpp
+void destroy()
+```
+
+- **Declared at:** [line 427](../../../runtime/object_model.hpp#L427)
+- **Kind:** `cxx method`
+
+**Returns.** No value is returned; observe the documented state change or callback.
+
+**Use it when.** You need the object model module and the preconditions in the declaration are already satisfied.
+
+**Usage pattern**
+
+```cpp
+#include "object_model.hpp"
+
+epok::Actor& object = /* obtain a valid instance */;
+
+object.destroy();
+```
+
+**Why choose it.** It provides direct, allocation-conscious access to the object model module. No exception-based error path is implied by the signature.
+
+**Trade-offs and warnings.** Call it only in the lifecycle phase described by the module. Validate indices, capacities and object state before use.
+
 <a id="epok-actor-end-play-1"></a>
 
 ## `epok::Actor::end_play`
@@ -499,17 +652,17 @@ auto result = object.default_root();
 **Exact declaration**
 
 ```cpp
-virtual void end_play(EndPlayReason)
+virtual void end_play(EndPlayReason end_play_reason)
 ```
 
-- **Declared at:** [line 394](../../../runtime/object_model.hpp#L394)
+- **Declared at:** [line 401](../../../runtime/object_model.hpp#L401)
 - **Kind:** `cxx method`; qualifiers: `virtual`
 
 **Parameters**
 
 | Name | Type | Role | Meaning |
 | --- | --- | --- | --- |
-| `arg1` | `EndPlayReason` | Input | Value supplied for `arg1`. See the exact type and module contract. |
+| `end_play_reason` | `EndPlayReason` | Input | Value supplied for `end_play_reason`. See the exact type and module contract. |
 
 **Returns.** No value is returned; observe the documented state change or callback.
 
@@ -521,44 +674,11 @@ virtual void end_play(EndPlayReason)
 #include "object_model.hpp"
 
 // Assume these named values have been initialized with valid data:
-// EndPlayReason arg1
+// EndPlayReason end_play_reason
 
 epok::Actor& object = /* obtain a valid instance */;
 
-object.end_play(arg1);
-```
-
-**Why choose it.** It provides direct, allocation-conscious access to the object model module. No exception-based error path is implied by the signature.
-
-**Trade-offs and warnings.** Call it only in the lifecycle phase described by the module. Validate indices, capacities and object state before use.
-
-<a id="epok-actor-entity-1"></a>
-
-## `epok::Actor::entity`
-
-**Purpose.** Legacy adapter: the canonical slot behind the root scene component, or nullptr.
-
-**Exact declaration**
-
-```cpp
-Entity* entity()
-```
-
-- **Declared at:** [line 400](../../../runtime/object_model.hpp#L400)
-- **Kind:** `cxx method`
-
-**Returns.** Returns `Entity *`. Check the purpose and failure notes before using the value.
-
-**Use it when.** You need the object model module and the preconditions in the declaration are already satisfied.
-
-**Usage pattern**
-
-```cpp
-#include "object_model.hpp"
-
-epok::Actor& object = /* obtain a valid instance */;
-
-auto result = object.entity();
+object.end_play(end_play_reason);
 ```
 
 **Why choose it.** It provides direct, allocation-conscious access to the object model module. No exception-based error path is implied by the signature.
@@ -569,7 +689,9 @@ auto result = object.entity();
 
 ## `epok::Actor::level_id`
 
-**Purpose.** Performs `level id` as part of the object model module.
+**Purpose.** Reflected identity/hierarchy readers.
+
+**Details.** Every authoring provider (C++, Blueprint, Lua) inherits them from this base instead of bridging a private builtin.
 
 **Exact declaration**
 
@@ -577,12 +699,12 @@ auto result = object.entity();
 ObjectId level_id() const
 ```
 
-- **Declared at:** [line 407](../../../runtime/object_model.hpp#L407)
+- **Declared at:** [line 417](../../../runtime/object_model.hpp#L417)
 - **Kind:** `cxx method`; qualifiers: `const`
 
 **Returns.** Returns `ObjectId`. Check the purpose and failure notes before using the value.
 
-**Use it when.** You need the object model module and the preconditions in the declaration are already satisfied.
+**Use it when.** Every authoring provider (C++, Blueprint, Lua) inherits them from this base instead of bridging a private builtin.
 
 **Usage pattern**
 
@@ -610,7 +732,7 @@ auto result = object.level_id();
 ObjectId logical_parent() const
 ```
 
-- **Declared at:** [line 409](../../../runtime/object_model.hpp#L409)
+- **Declared at:** [line 419](../../../runtime/object_model.hpp#L419)
 - **Kind:** `cxx method`; qualifiers: `const`
 
 **Returns.** Returns `ObjectId`. Check the purpose and failure notes before using the value.
@@ -643,7 +765,7 @@ auto result = object.logical_parent();
 const char* name() const
 ```
 
-- **Declared at:** [line 401](../../../runtime/object_model.hpp#L401)
+- **Declared at:** [line 409](../../../runtime/object_model.hpp#L409)
 - **Kind:** `cxx method`; qualifiers: `const`
 
 **Returns.** Returns `const char *`. Check the purpose and failure notes before using the value.
@@ -676,7 +798,7 @@ auto result = object.name();
 virtual void on_disable()
 ```
 
-- **Declared at:** [line 396](../../../runtime/object_model.hpp#L396)
+- **Declared at:** [line 403](../../../runtime/object_model.hpp#L403)
 - **Kind:** `cxx method`; qualifiers: `virtual`
 
 **Returns.** No value is returned; observe the documented state change or callback.
@@ -709,7 +831,7 @@ object.on_disable();
 virtual void on_enable()
 ```
 
-- **Declared at:** [line 395](../../../runtime/object_model.hpp#L395)
+- **Declared at:** [line 402](../../../runtime/object_model.hpp#L402)
 - **Kind:** `cxx method`; qualifiers: `virtual`
 
 **Returns.** No value is returned; observe the documented state change or callback.
@@ -742,7 +864,7 @@ object.on_enable();
 ObjectId root_id() const
 ```
 
-- **Declared at:** [line 408](../../../runtime/object_model.hpp#L408)
+- **Declared at:** [line 418](../../../runtime/object_model.hpp#L418)
 - **Kind:** `cxx method`; qualifiers: `const`
 
 **Returns.** Returns `ObjectId`. Check the purpose and failure notes before using the value.
@@ -763,6 +885,48 @@ auto result = object.root_id();
 
 **Trade-offs and warnings.** Call it only in the lifecycle phase described by the module. Validate indices, capacities and object state before use.
 
+<a id="epok-actor-set-active-1"></a>
+
+## `epok::Actor::set_active`
+
+**Purpose.** Folded activation with the on_enable/on_disable fan-out, and deferred destruction inside a dispatch scope: the same Level paths the legacy Blueprint nodes take.
+
+**Exact declaration**
+
+```cpp
+void set_active(bool active)
+```
+
+- **Declared at:** [line 426](../../../runtime/object_model.hpp#L426)
+- **Kind:** `cxx method`
+
+**Parameters**
+
+| Name | Type | Role | Meaning |
+| --- | --- | --- | --- |
+| `active` | `bool` | Input | Value supplied for `active`. See the exact type and module contract. |
+
+**Returns.** No value is returned; observe the documented state change or callback.
+
+**Use it when.** You need the object model module and the preconditions in the declaration are already satisfied.
+
+**Usage pattern**
+
+```cpp
+#include "object_model.hpp"
+
+// Assume these named values have been initialized with valid data:
+// bool active
+
+epok::Actor& object = /* obtain a valid instance */;
+
+object.set_active(active);
+```
+
+**Why choose it.** It provides direct, allocation-conscious access to the object model module. No exception-based error path is implied by the signature.
+
+**Trade-offs and warnings.** Call it only in the lifecycle phase described by the module. Validate indices, capacities and object state before use.
+
 <a id="epok-actor-set-name-1"></a>
 
 ## `epok::Actor::set_name`
@@ -775,7 +939,7 @@ auto result = object.root_id();
 void set_name(const char* value)
 ```
 
-- **Declared at:** [line 402](../../../runtime/object_model.hpp#L402)
+- **Declared at:** [line 410](../../../runtime/object_model.hpp#L410)
 - **Kind:** `cxx method`
 
 **Parameters**
@@ -817,7 +981,7 @@ object.set_name(value);
 void set_wants_tick(bool value)
 ```
 
-- **Declared at:** [line 415](../../../runtime/object_model.hpp#L415)
+- **Declared at:** [line 429](../../../runtime/object_model.hpp#L429)
 - **Kind:** `cxx method`
 
 **Parameters**
@@ -856,17 +1020,17 @@ object.set_wants_tick(value);
 **Exact declaration**
 
 ```cpp
-virtual void tick(Fixed)
+virtual void tick(Fixed delta_seconds)
 ```
 
-- **Declared at:** [line 393](../../../runtime/object_model.hpp#L393)
+- **Declared at:** [line 400](../../../runtime/object_model.hpp#L400)
 - **Kind:** `cxx method`; qualifiers: `virtual`
 
 **Parameters**
 
 | Name | Type | Role | Meaning |
 | --- | --- | --- | --- |
-| `arg1` | `Fixed` | Input | Value supplied for `arg1`. See the exact type and module contract. |
+| `delta_seconds` | `Fixed` | Input | Value supplied for `delta_seconds`. See the exact type and module contract. |
 
 **Returns.** No value is returned; observe the documented state change or callback.
 
@@ -878,11 +1042,11 @@ virtual void tick(Fixed)
 #include "object_model.hpp"
 
 // Assume these named values have been initialized with valid data:
-// Fixed arg1
+// Fixed delta_seconds
 
 epok::Actor& object = /* obtain a valid instance */;
 
-object.tick(arg1);
+object.tick(delta_seconds);
 ```
 
 **Why choose it.** It provides direct, allocation-conscious access to the object model module. No exception-based error path is implied by the signature.
@@ -901,7 +1065,7 @@ object.tick(arg1);
 bool wants_tick() const
 ```
 
-- **Declared at:** [line 414](../../../runtime/object_model.hpp#L414)
+- **Declared at:** [line 428](../../../runtime/object_model.hpp#L428)
 - **Kind:** `cxx method`; qualifiers: `const`
 
 **Returns.** Returns `bool`. Check the purpose and failure notes before using the value.
@@ -934,7 +1098,7 @@ auto result = object.wants_tick();
 virtual ObjectId* attach_slot()
 ```
 
-- **Declared at:** [line 439](../../../runtime/object_model.hpp#L439)
+- **Declared at:** [line 456](../../../runtime/object_model.hpp#L456)
 - **Kind:** `cxx method`; qualifiers: `virtual`
 
 **Returns.** Returns `ObjectId *`. Check the purpose and failure notes before using the value.
@@ -967,7 +1131,7 @@ auto result = object.attach_slot();
 virtual void begin_play()
 ```
 
-- **Declared at:** [line 431](../../../runtime/object_model.hpp#L431)
+- **Declared at:** [line 446](../../../runtime/object_model.hpp#L446)
 - **Kind:** `cxx method`; qualifiers: `virtual`
 
 **Returns.** No value is returned; observe the documented state change or callback.
@@ -988,6 +1152,39 @@ object.begin_play();
 
 **Trade-offs and warnings.** Call it only in the lifecycle phase described by the module. Validate indices, capacities and object state before use.
 
+<a id="epok-actorcomponent-blueprint-observe-1"></a>
+
+## `epok::ActorComponent::blueprint_observe`
+
+**Purpose.** Performs `blueprint observe` as part of the object model module.
+
+**Exact declaration**
+
+```cpp
+virtual void blueprint_observe()
+```
+
+- **Declared at:** [line 454](../../../runtime/object_model.hpp#L454)
+- **Kind:** `cxx method`; qualifiers: `virtual`
+
+**Returns.** No value is returned; observe the documented state change or callback.
+
+**Use it when.** You need the object model module and the preconditions in the declaration are already satisfied.
+
+**Usage pattern**
+
+```cpp
+#include "object_model.hpp"
+
+epok::ActorComponent& object = /* obtain a valid instance */;
+
+object.blueprint_observe();
+```
+
+**Why choose it.** It provides direct, allocation-conscious access to the object model module. No exception-based error path is implied by the signature.
+
+**Trade-offs and warnings.** Call it only in the lifecycle phase described by the module. Validate indices, capacities and object state before use.
+
 <a id="epok-actorcomponent-class-id-1"></a>
 
 ## `epok::ActorComponent::class_id`
@@ -1000,7 +1197,7 @@ object.begin_play();
 uint64_t class_id() const override
 ```
 
-- **Declared at:** [line 430](../../../runtime/object_model.hpp#L430)
+- **Declared at:** [line 445](../../../runtime/object_model.hpp#L445)
 - **Kind:** `cxx method`; qualifiers: `const`
 
 **Returns.** Returns `uint64_t`. Check the purpose and failure notes before using the value.
@@ -1030,17 +1227,17 @@ auto result = object.class_id();
 **Exact declaration**
 
 ```cpp
-virtual void end_play(EndPlayReason)
+virtual void end_play(EndPlayReason end_play_reason)
 ```
 
-- **Declared at:** [line 433](../../../runtime/object_model.hpp#L433)
+- **Declared at:** [line 448](../../../runtime/object_model.hpp#L448)
 - **Kind:** `cxx method`; qualifiers: `virtual`
 
 **Parameters**
 
 | Name | Type | Role | Meaning |
 | --- | --- | --- | --- |
-| `arg1` | `EndPlayReason` | Input | Value supplied for `arg1`. See the exact type and module contract. |
+| `end_play_reason` | `EndPlayReason` | Input | Value supplied for `end_play_reason`. See the exact type and module contract. |
 
 **Returns.** No value is returned; observe the documented state change or callback.
 
@@ -1052,11 +1249,11 @@ virtual void end_play(EndPlayReason)
 #include "object_model.hpp"
 
 // Assume these named values have been initialized with valid data:
-// EndPlayReason arg1
+// EndPlayReason end_play_reason
 
 epok::ActorComponent& object = /* obtain a valid instance */;
 
-object.end_play(arg1);
+object.end_play(end_play_reason);
 ```
 
 **Why choose it.** It provides direct, allocation-conscious access to the object model module. No exception-based error path is implied by the signature.
@@ -1067,9 +1264,7 @@ object.end_play(arg1);
 
 ## `epok::ActorComponent::frame_update`
 
-**Purpose.** Runtime hooks, not reflected.
-
-**Details.** frame_update runs once per rendered frame even while paused; attach_slot exposes the spatial parent of components that have one.
+**Purpose.** Performs `frame update` as part of the object model module.
 
 **Exact declaration**
 
@@ -1077,7 +1272,7 @@ object.end_play(arg1);
 virtual void frame_update(uint32_t)
 ```
 
-- **Declared at:** [line 438](../../../runtime/object_model.hpp#L438)
+- **Declared at:** [line 455](../../../runtime/object_model.hpp#L455)
 - **Kind:** `cxx method`; qualifiers: `virtual`
 
 **Parameters**
@@ -1088,7 +1283,7 @@ virtual void frame_update(uint32_t)
 
 **Returns.** No value is returned; observe the documented state change or callback.
 
-**Use it when.** frame_update runs once per rendered frame even while paused; attach_slot exposes the spatial parent of components that have one.
+**Use it when.** You need the object model module and the preconditions in the declaration are already satisfied.
 
 **Usage pattern**
 
@@ -1119,7 +1314,7 @@ object.frame_update(arg1);
 Actor* get_owner()
 ```
 
-- **Declared at:** [line 448](../../../runtime/object_model.hpp#L448)
+- **Declared at:** [line 465](../../../runtime/object_model.hpp#L465)
 - **Kind:** `cxx method`
 
 **Returns.** Returns `Actor *`. Check the purpose and failure notes before using the value.
@@ -1152,7 +1347,7 @@ auto result = object.get_owner();
 const char* name() const
 ```
 
-- **Declared at:** [line 449](../../../runtime/object_model.hpp#L449)
+- **Declared at:** [line 466](../../../runtime/object_model.hpp#L466)
 - **Kind:** `cxx method`; qualifiers: `const`
 
 **Returns.** Returns `const char *`. Check the purpose and failure notes before using the value.
@@ -1185,7 +1380,7 @@ auto result = object.name();
 virtual void on_disable()
 ```
 
-- **Declared at:** [line 435](../../../runtime/object_model.hpp#L435)
+- **Declared at:** [line 450](../../../runtime/object_model.hpp#L450)
 - **Kind:** `cxx method`; qualifiers: `virtual`
 
 **Returns.** No value is returned; observe the documented state change or callback.
@@ -1218,7 +1413,7 @@ object.on_disable();
 virtual void on_enable()
 ```
 
-- **Declared at:** [line 434](../../../runtime/object_model.hpp#L434)
+- **Declared at:** [line 449](../../../runtime/object_model.hpp#L449)
 - **Kind:** `cxx method`; qualifiers: `virtual`
 
 **Returns.** No value is returned; observe the documented state change or callback.
@@ -1250,17 +1445,17 @@ object.on_enable();
 **Exact declaration**
 
 ```cpp
-virtual void on_trigger(EntityHandle, TriggerPhase)
+virtual void on_trigger(DataHandle, TriggerPhase)
 ```
 
-- **Declared at:** [line 443](../../../runtime/object_model.hpp#L443)
+- **Declared at:** [line 460](../../../runtime/object_model.hpp#L460)
 - **Kind:** `cxx method`; qualifiers: `virtual`
 
 **Parameters**
 
 | Name | Type | Role | Meaning |
 | --- | --- | --- | --- |
-| `arg1` | `EntityHandle` | Input | Value supplied for `arg1`. See the exact type and module contract. |
+| `arg1` | `DataHandle` | Input | Value supplied for `arg1`. See the exact type and module contract. |
 | `arg2` | `TriggerPhase` | Input | Value supplied for `arg2`. See the exact type and module contract. |
 
 **Returns.** No value is returned; observe the documented state change or callback.
@@ -1273,7 +1468,7 @@ virtual void on_trigger(EntityHandle, TriggerPhase)
 #include "object_model.hpp"
 
 // Assume these named values have been initialized with valid data:
-// EntityHandle arg1
+// DataHandle arg1
 // TriggerPhase arg2
 
 epok::ActorComponent& object = /* obtain a valid instance */;
@@ -1297,7 +1492,7 @@ object.on_trigger(arg1, arg2);
 ObjectId owner_id() const
 ```
 
-- **Declared at:** [line 447](../../../runtime/object_model.hpp#L447)
+- **Declared at:** [line 464](../../../runtime/object_model.hpp#L464)
 - **Kind:** `cxx method`; qualifiers: `const`
 
 **Returns.** Returns `ObjectId`. Check the purpose and failure notes before using the value.
@@ -1330,7 +1525,7 @@ auto result = object.owner_id();
 virtual bool releasable() const
 ```
 
-- **Declared at:** [line 446](../../../runtime/object_model.hpp#L446)
+- **Declared at:** [line 463](../../../runtime/object_model.hpp#L463)
 - **Kind:** `cxx method`; qualifiers: `const, virtual`
 
 **Returns.** Returns `bool`. Check the purpose and failure notes before using the value.
@@ -1363,7 +1558,7 @@ auto result = object.releasable();
 void set_name(const char* value)
 ```
 
-- **Declared at:** [line 450](../../../runtime/object_model.hpp#L450)
+- **Declared at:** [line 467](../../../runtime/object_model.hpp#L467)
 - **Kind:** `cxx method`
 
 **Parameters**
@@ -1402,17 +1597,17 @@ object.set_name(value);
 **Exact declaration**
 
 ```cpp
-virtual void tick(Fixed)
+virtual void tick(Fixed delta_seconds)
 ```
 
-- **Declared at:** [line 432](../../../runtime/object_model.hpp#L432)
+- **Declared at:** [line 447](../../../runtime/object_model.hpp#L447)
 - **Kind:** `cxx method`; qualifiers: `virtual`
 
 **Parameters**
 
 | Name | Type | Role | Meaning |
 | --- | --- | --- | --- |
-| `arg1` | `Fixed` | Input | Value supplied for `arg1`. See the exact type and module contract. |
+| `delta_seconds` | `Fixed` | Input | Value supplied for `delta_seconds`. See the exact type and module contract. |
 
 **Returns.** No value is returned; observe the documented state change or callback.
 
@@ -1424,11 +1619,57 @@ virtual void tick(Fixed)
 #include "object_model.hpp"
 
 // Assume these named values have been initialized with valid data:
-// Fixed arg1
+// Fixed delta_seconds
 
 epok::ActorComponent& object = /* obtain a valid instance */;
 
-object.tick(arg1);
+object.tick(delta_seconds);
+```
+
+**Why choose it.** It provides direct, allocation-conscious access to the object model module. No exception-based error path is implied by the signature.
+
+**Trade-offs and warnings.** Call it only in the lifecycle phase described by the module. Validate indices, capacities and object state before use.
+
+<a id="epok-actorcomponent-timeline-sync-1"></a>
+
+## `epok::ActorComponent::timeline_sync`
+
+**Purpose.** Runtime hooks, not reflected.
+
+**Details.** frame_update runs once per rendered frame even while paused; attach_slot exposes the spatial parent of components that have one.
+
+**Exact declaration**
+
+```cpp
+virtual void timeline_sync(uint64_t, bool)
+```
+
+- **Declared at:** [line 453](../../../runtime/object_model.hpp#L453)
+- **Kind:** `cxx method`; qualifiers: `virtual`
+
+**Parameters**
+
+| Name | Type | Role | Meaning |
+| --- | --- | --- | --- |
+| `arg1` | `uint64_t` | Input | Value supplied for `arg1`. See the exact type and module contract. |
+| `arg2` | `bool` | Input | Value supplied for `arg2`. See the exact type and module contract. |
+
+**Returns.** No value is returned; observe the documented state change or callback.
+
+**Use it when.** frame_update runs once per rendered frame even while paused; attach_slot exposes the spatial parent of components that have one.
+
+**Usage pattern**
+
+```cpp
+#include "object_model.hpp"
+
+// Assume these named values have been initialized with valid data:
+// uint64_t arg1
+// bool arg2
+
+epok::ActorComponent& object = /* obtain a valid instance */;
+
+object.timeline_sync(arg1, arg2);
 ```
 
 **Why choose it.** It provides direct, allocation-conscious access to the object model module. No exception-based error path is implied by the signature.
@@ -1449,7 +1690,7 @@ object.tick(arg1);
 inline bool attach_component(ObjectId child, ObjectId parent)
 ```
 
-- **Declared at:** [line 1155](../../../runtime/object_model.hpp#L1155)
+- **Declared at:** [line 1264](../../../runtime/object_model.hpp#L1264)
 - **Kind:** `function decl`
 
 **Parameters**
@@ -1493,7 +1734,7 @@ auto result = epok::attach_component(child, parent);
 void begin_play() override
 ```
 
-- **Declared at:** [line 533](../../../runtime/object_model.hpp#L533)
+- **Declared at:** [line 550](../../../runtime/object_model.hpp#L550)
 - **Kind:** `cxx method`
 
 **Returns.** No value is returned; observe the documented state change or callback.
@@ -1526,7 +1767,7 @@ object.begin_play();
 void bind_local()
 ```
 
-- **Declared at:** [line 520](../../../runtime/object_model.hpp#L520)
+- **Declared at:** [line 537](../../../runtime/object_model.hpp#L537)
 - **Kind:** `cxx method`
 
 **Returns.** No value is returned; observe the documented state change or callback.
@@ -1556,17 +1797,17 @@ object.bind_local();
 **Exact declaration**
 
 ```cpp
-void bind_slot(Entity& value)
+void bind_slot(ActorData& value)
 ```
 
-- **Declared at:** [line 519](../../../runtime/object_model.hpp#L519)
+- **Declared at:** [line 536](../../../runtime/object_model.hpp#L536)
 - **Kind:** `cxx method`
 
 **Parameters**
 
 | Name | Type | Role | Meaning |
 | --- | --- | --- | --- |
-| `value` | `Entity &` | Input/output; inspect the function contract | Value supplied for `value`. See the exact type and module contract. |
+| `value` | `ActorData &` | Input/output; inspect the function contract | Value supplied for `value`. See the exact type and module contract. |
 
 **Returns.** No value is returned; observe the documented state change or callback.
 
@@ -1578,7 +1819,7 @@ void bind_slot(Entity& value)
 #include "object_model.hpp"
 
 // Assume these named values have been initialized with valid data:
-// Entity & value
+// ActorData & value
 
 epok::AudioComponent& object = /* obtain a valid instance */;
 
@@ -1601,7 +1842,7 @@ object.bind_slot(value);
 uint64_t class_id() const override
 ```
 
-- **Declared at:** [line 513](../../../runtime/object_model.hpp#L513)
+- **Declared at:** [line 530](../../../runtime/object_model.hpp#L530)
 - **Kind:** `cxx method`; qualifiers: `const`
 
 **Returns.** Returns `uint64_t`. Check the purpose and failure notes before using the value.
@@ -1634,7 +1875,7 @@ auto result = object.class_id();
 void end_play(EndPlayReason) override
 ```
 
-- **Declared at:** [line 542](../../../runtime/object_model.hpp#L542)
+- **Declared at:** [line 559](../../../runtime/object_model.hpp#L559)
 - **Kind:** `cxx method`
 
 **Parameters**
@@ -1673,13 +1914,13 @@ object.end_play(arg1);
 **Exact declaration**
 
 ```cpp
-Entity* entity_slot() const
+ActorData* entity_slot() const
 ```
 
-- **Declared at:** [line 521](../../../runtime/object_model.hpp#L521)
+- **Declared at:** [line 538](../../../runtime/object_model.hpp#L538)
 - **Kind:** `cxx method`; qualifiers: `const`
 
-**Returns.** Returns `Entity *`. Check the purpose and failure notes before using the value.
+**Returns.** Returns `ActorData *`. Check the purpose and failure notes before using the value.
 
 **Use it when.** You need the object model module and the preconditions in the declaration are already satisfied.
 
@@ -1709,7 +1950,7 @@ auto result = object.entity_slot();
 bool is_playing() const
 ```
 
-- **Declared at:** [line 517](../../../runtime/object_model.hpp#L517)
+- **Declared at:** [line 534](../../../runtime/object_model.hpp#L534)
 - **Kind:** `cxx method`; qualifiers: `const`
 
 **Returns.** Returns `bool`. Check the purpose and failure notes before using the value.
@@ -1742,7 +1983,7 @@ auto result = object.is_playing();
 void on_disable() override
 ```
 
-- **Declared at:** [line 541](../../../runtime/object_model.hpp#L541)
+- **Declared at:** [line 558](../../../runtime/object_model.hpp#L558)
 - **Kind:** `cxx method`
 
 **Returns.** No value is returned; observe the documented state change or callback.
@@ -1777,7 +2018,7 @@ object.on_disable();
 bool owns_source() const
 ```
 
-- **Declared at:** [line 524](../../../runtime/object_model.hpp#L524)
+- **Declared at:** [line 541](../../../runtime/object_model.hpp#L541)
 - **Kind:** `cxx method`; qualifiers: `const`
 
 **Returns.** Returns `bool`. Check the purpose and failure notes before using the value.
@@ -1810,7 +2051,7 @@ auto result = object.owns_source();
 void play()
 ```
 
-- **Declared at:** [line 515](../../../runtime/object_model.hpp#L515)
+- **Declared at:** [line 532](../../../runtime/object_model.hpp#L532)
 - **Kind:** `cxx method`
 
 **Returns.** No value is returned; observe the documented state change or callback.
@@ -1835,7 +2076,7 @@ object.play();
 
 ## `epok::AudioComponent::releasable`
 
-**Purpose.** Component-owned storage stays quarantined while an asynchronous consumer (the XA music service) still points at it, mirroring create_entity's legacy-slot rule.
+**Purpose.** Component-owned storage stays quarantined while an asynchronous consumer (the XA music service) still points at it, mirroring allocate_actor_data's legacy-slot rule.
 
 **Details.** Slot storage belongs to the scene bank, so this component never holds it back.
 
@@ -1845,7 +2086,7 @@ object.play();
 bool releasable() const override
 ```
 
-- **Declared at:** [line 546](../../../runtime/object_model.hpp#L546)
+- **Declared at:** [line 563](../../../runtime/object_model.hpp#L563)
 - **Kind:** `cxx method`; qualifiers: `const`
 
 **Returns.** Returns `bool`. Check the purpose and failure notes before using the value.
@@ -1878,7 +2119,7 @@ auto result = object.releasable();
 void stop()
 ```
 
-- **Declared at:** [line 516](../../../runtime/object_model.hpp#L516)
+- **Declared at:** [line 533](../../../runtime/object_model.hpp#L533)
 - **Kind:** `cxx method`
 
 **Returns.** No value is returned; observe the documented state change or callback.
@@ -1899,6 +2140,138 @@ object.stop();
 
 **Trade-offs and warnings.** Treat device absence, busy state and I/O failure as expected outcomes; do not block the frame loop waiting for hardware.
 
+<a id="epok-blobshadowcomponent-class-id-1"></a>
+
+## `epok::BlobShadowComponent::class_id`
+
+**Purpose.** Performs `class id` as part of the object model module.
+
+**Exact declaration**
+
+```cpp
+uint64_t class_id() const override
+```
+
+- **Declared at:** [line 640](../../../runtime/object_model.hpp#L640)
+- **Kind:** `cxx method`; qualifiers: `const`
+
+**Returns.** Returns `uint64_t`. Check the purpose and failure notes before using the value.
+
+**Use it when.** You need the object model module and the preconditions in the declaration are already satisfied.
+
+**Usage pattern**
+
+```cpp
+#include "object_model.hpp"
+
+epok::BlobShadowComponent& object = /* obtain a valid instance */;
+
+auto result = object.class_id();
+```
+
+**Why choose it.** The method is `const`, so it does not mutate the object through this API surface.
+
+**Trade-offs and warnings.** Call it only in the lifecycle phase described by the module. Validate indices, capacities and object state before use.
+
+<a id="epok-camera3dcomponent-class-id-1"></a>
+
+## `epok::Camera3DComponent::class_id`
+
+**Purpose.** Performs `class id` as part of the object model module.
+
+**Exact declaration**
+
+```cpp
+uint64_t class_id() const override
+```
+
+- **Declared at:** [line 585](../../../runtime/object_model.hpp#L585)
+- **Kind:** `cxx method`; qualifiers: `const`
+
+**Returns.** Returns `uint64_t`. Check the purpose and failure notes before using the value.
+
+**Use it when.** You need the object model module and the preconditions in the declaration are already satisfied.
+
+**Usage pattern**
+
+```cpp
+#include "object_model.hpp"
+
+epok::Camera3DComponent& object = /* obtain a valid instance */;
+
+auto result = object.class_id();
+```
+
+**Why choose it.** The method is `const`, so it does not mutate the object through this API surface.
+
+**Trade-offs and warnings.** Call it only in the lifecycle phase described by the module. Validate indices, capacities and object state before use.
+
+<a id="epok-canvascomponent-class-id-1"></a>
+
+## `epok::CanvasComponent::class_id`
+
+**Purpose.** Performs `class id` as part of the object model module.
+
+**Exact declaration**
+
+```cpp
+uint64_t class_id() const override
+```
+
+- **Declared at:** [line 600](../../../runtime/object_model.hpp#L600)
+- **Kind:** `cxx method`; qualifiers: `const`
+
+**Returns.** Returns `uint64_t`. Check the purpose and failure notes before using the value.
+
+**Use it when.** You need the object model module and the preconditions in the declaration are already satisfied.
+
+**Usage pattern**
+
+```cpp
+#include "object_model.hpp"
+
+epok::CanvasComponent& object = /* obtain a valid instance */;
+
+auto result = object.class_id();
+```
+
+**Why choose it.** The method is `const`, so it does not mutate the object through this API surface.
+
+**Trade-offs and warnings.** Call it only in the lifecycle phase described by the module. Validate indices, capacities and object state before use.
+
+<a id="epok-collider3dcomponent-class-id-1"></a>
+
+## `epok::Collider3DComponent::class_id`
+
+**Purpose.** Performs `class id` as part of the object model module.
+
+**Exact declaration**
+
+```cpp
+uint64_t class_id() const override
+```
+
+- **Declared at:** [line 595](../../../runtime/object_model.hpp#L595)
+- **Kind:** `cxx method`; qualifiers: `const`
+
+**Returns.** Returns `uint64_t`. Check the purpose and failure notes before using the value.
+
+**Use it when.** You need the object model module and the preconditions in the declaration are already satisfied.
+
+**Usage pattern**
+
+```cpp
+#include "object_model.hpp"
+
+epok::Collider3DComponent& object = /* obtain a valid instance */;
+
+auto result = object.class_id();
+```
+
+**Why choose it.** The method is `const`, so it does not mutate the object through this API surface.
+
+**Trade-offs and warnings.** Call it only in the lifecycle phase described by the module. Validate indices, capacities and object state before use.
+
 <a id="epok-detail-compact-class-id-1"></a>
 
 ## `epok::detail::compact_class_id`
@@ -1911,7 +2284,7 @@ object.stop();
 constexpr uint64_t compact_class_id(const char* text)
 ```
 
-- **Declared at:** [line 81](../../../runtime/object_model.hpp#L81)
+- **Declared at:** [line 90](../../../runtime/object_model.hpp#L90)
 - **Kind:** `function decl`
 
 **Parameters**
@@ -1951,7 +2324,7 @@ auto result = epok::detail::compact_class_id(text);
 constexpr uint32_t sha256_rotr(uint32_t value, unsigned bits)
 ```
 
-- **Declared at:** [line 77](../../../runtime/object_model.hpp#L77)
+- **Declared at:** [line 86](../../../runtime/object_model.hpp#L86)
 - **Kind:** `function decl`
 
 **Parameters**
@@ -1992,10 +2365,10 @@ auto result = epok::detail::sha256_rotr(value, bits);
 **Exact declaration**
 
 ```cpp
-inline size_t dispatch_trigger(Level& level, ObjectId actor, EntityHandle other, TriggerPhase phase)
+inline size_t dispatch_trigger(Level& level, ObjectId actor, DataHandle other, TriggerPhase phase)
 ```
 
-- **Declared at:** [line 1129](../../../runtime/object_model.hpp#L1129)
+- **Declared at:** [line 1238](../../../runtime/object_model.hpp#L1238)
 - **Kind:** `function decl`
 
 **Parameters**
@@ -2004,7 +2377,7 @@ inline size_t dispatch_trigger(Level& level, ObjectId actor, EntityHandle other,
 | --- | --- | --- | --- |
 | `level` | `Level &` | Input/output; inspect the function contract | Value supplied for `level`. See the exact type and module contract. |
 | `actor` | `ObjectId` | Input | Value supplied for `actor`. See the exact type and module contract. |
-| `other` | `EntityHandle` | Input | Value supplied for `other`. See the exact type and module contract. |
+| `other` | `DataHandle` | Input | Value supplied for `other`. See the exact type and module contract. |
 | `phase` | `TriggerPhase` | Input | Value supplied for `phase`. See the exact type and module contract. |
 
 **Returns.** Returns `size_t`. Check the purpose and failure notes before using the value.
@@ -2019,7 +2392,7 @@ inline size_t dispatch_trigger(Level& level, ObjectId actor, EntityHandle other,
 // Assume these named values have been initialized with valid data:
 // Level & level
 // ObjectId actor
-// EntityHandle other
+// DataHandle other
 // TriggerPhase phase
 
 auto result = epok::dispatch_trigger(level, actor, other, phase);
@@ -2041,7 +2414,7 @@ auto result = epok::dispatch_trigger(level, actor, other, phase);
 inline const ClassDescriptor* find_object_class(uint64_t id)
 ```
 
-- **Declared at:** [line 142](../../../runtime/object_model.hpp#L142)
+- **Declared at:** [line 153](../../../runtime/object_model.hpp#L153)
 - **Kind:** `function decl`
 
 **Parameters**
@@ -2069,128 +2442,9 @@ auto result = epok::find_object_class(id);
 
 **Trade-offs and warnings.** Call it only in the lifecycle phase described by the module. Validate indices, capacities and object state before use.
 
-<a id="epok-legacybehaviourcomponent-begin-play-1"></a>
+<a id="epok-imagecomponent-class-id-1"></a>
 
-## `epok::LegacyBehaviourComponent::begin_play`
-
-**Purpose.** Begins play as part of the object model module.
-
-**Exact declaration**
-
-```cpp
-void begin_play() override
-```
-
-- **Declared at:** [line 578](../../../runtime/object_model.hpp#L578)
-- **Kind:** `cxx method`
-
-**Returns.** No value is returned; observe the documented state change or callback.
-
-**Use it when.** You need the object model module and the preconditions in the declaration are already satisfied.
-
-**Usage pattern**
-
-```cpp
-#include "object_model.hpp"
-
-epok::LegacyBehaviourComponent& object = /* obtain a valid instance */;
-
-object.begin_play();
-```
-
-**Why choose it.** It provides direct, allocation-conscious access to the object model module. No exception-based error path is implied by the signature.
-
-**Trade-offs and warnings.** Call it only in the lifecycle phase described by the module. Validate indices, capacities and object state before use.
-
-<a id="epok-legacybehaviourcomponent-bind-1"></a>
-
-## `epok::LegacyBehaviourComponent::bind`
-
-**Purpose.** Resolve the slot from the owner's root scene component (Actor3D only).
-
-**Exact declaration**
-
-```cpp
-bool bind(Behaviour& value)
-```
-
-- **Declared at:** [line 569](../../../runtime/object_model.hpp#L569)
-- **Kind:** `cxx method`
-
-**Parameters**
-
-| Name | Type | Role | Meaning |
-| --- | --- | --- | --- |
-| `value` | `Behaviour &` | Input/output; inspect the function contract | Value supplied for `value`. See the exact type and module contract. |
-
-**Returns.** Returns `bool`. Check the purpose and failure notes before using the value.
-
-**Use it when.** You need the object model module and the preconditions in the declaration are already satisfied.
-
-**Usage pattern**
-
-```cpp
-#include "object_model.hpp"
-
-// Assume these named values have been initialized with valid data:
-// Behaviour & value
-
-epok::LegacyBehaviourComponent& object = /* obtain a valid instance */;
-
-auto result = object.bind(value);
-```
-
-**Why choose it.** The boolean result makes success, availability or state explicit without exceptions.
-
-**Trade-offs and warnings.** Check the return value; `false` is part of normal control flow for many PSX resource operations. Pointer/reference arguments are borrowed unless the source contract says otherwise; keep them valid for the complete operation and never assume null is accepted.
-
-<a id="epok-legacybehaviourcomponent-bind-2"></a>
-
-## `epok::LegacyBehaviourComponent::bind`
-
-**Purpose.** The bound entity must NOT also appear in the scene bank's Binding table: the actor events below are the only source of start/update/frame_update/enable/disable/destroy for this Behaviour, so a migrated entity never receives an event twice.
-
-**Exact declaration**
-
-```cpp
-void bind(Behaviour& value, Entity& owner_slot)
-```
-
-- **Declared at:** [line 563](../../../runtime/object_model.hpp#L563)
-- **Kind:** `cxx method`
-
-**Parameters**
-
-| Name | Type | Role | Meaning |
-| --- | --- | --- | --- |
-| `value` | `Behaviour &` | Input/output; inspect the function contract | Value supplied for `value`. See the exact type and module contract. |
-| `owner_slot` | `Entity &` | Input/output; inspect the function contract | Value supplied for `owner_slot`. See the exact type and module contract. |
-
-**Returns.** No value is returned; observe the documented state change or callback.
-
-**Use it when.** You need the object model module and the preconditions in the declaration are already satisfied.
-
-**Usage pattern**
-
-```cpp
-#include "object_model.hpp"
-
-// Assume these named values have been initialized with valid data:
-// Behaviour & value
-// Entity & owner_slot
-
-epok::LegacyBehaviourComponent& object = /* obtain a valid instance */;
-
-object.bind(value, owner_slot);
-```
-
-**Why choose it.** It provides direct, allocation-conscious access to the object model module. No exception-based error path is implied by the signature.
-
-**Trade-offs and warnings.** Pointer/reference arguments are borrowed unless the source contract says otherwise; keep them valid for the complete operation and never assume null is accepted.
-
-<a id="epok-legacybehaviourcomponent-class-id-1"></a>
-
-## `epok::LegacyBehaviourComponent::class_id`
+## `epok::ImageComponent::class_id`
 
 **Purpose.** Performs `class id` as part of the object model module.
 
@@ -2200,7 +2454,7 @@ object.bind(value, owner_slot);
 uint64_t class_id() const override
 ```
 
-- **Declared at:** [line 558](../../../runtime/object_model.hpp#L558)
+- **Declared at:** [line 605](../../../runtime/object_model.hpp#L605)
 - **Kind:** `cxx method`; qualifiers: `const`
 
 **Returns.** Returns `uint64_t`. Check the purpose and failure notes before using the value.
@@ -2212,7 +2466,7 @@ uint64_t class_id() const override
 ```cpp
 #include "object_model.hpp"
 
-epok::LegacyBehaviourComponent& object = /* obtain a valid instance */;
+epok::ImageComponent& object = /* obtain a valid instance */;
 
 auto result = object.class_id();
 ```
@@ -2221,62 +2475,26 @@ auto result = object.class_id();
 
 **Trade-offs and warnings.** Call it only in the lifecycle phase described by the module. Validate indices, capacities and object state before use.
 
-<a id="epok-legacybehaviourcomponent-end-play-1"></a>
+<a id="epok-is-active-1"></a>
 
-## `epok::LegacyBehaviourComponent::end_play`
+## `epok::is_active`
 
-**Purpose.** Ends play as part of the object model module.
+**Purpose.** Reports whether active as part of the object model module.
 
 **Exact declaration**
 
 ```cpp
-void end_play(EndPlayReason) override
+inline bool is_active(Object* value)
 ```
 
-- **Declared at:** [line 591](../../../runtime/object_model.hpp#L591)
-- **Kind:** `cxx method`
+- **Declared at:** [line 1254](../../../runtime/object_model.hpp#L1254)
+- **Kind:** `function decl`
 
 **Parameters**
 
 | Name | Type | Role | Meaning |
 | --- | --- | --- | --- |
-| `arg1` | `EndPlayReason` | Input | Value supplied for `arg1`. See the exact type and module contract. |
-
-**Returns.** No value is returned; observe the documented state change or callback.
-
-**Use it when.** You need the object model module and the preconditions in the declaration are already satisfied.
-
-**Usage pattern**
-
-```cpp
-#include "object_model.hpp"
-
-// Assume these named values have been initialized with valid data:
-// EndPlayReason arg1
-
-epok::LegacyBehaviourComponent& object = /* obtain a valid instance */;
-
-object.end_play(arg1);
-```
-
-**Why choose it.** It provides direct, allocation-conscious access to the object model module. No exception-based error path is implied by the signature.
-
-**Trade-offs and warnings.** Call it only in the lifecycle phase described by the module. Validate indices, capacities and object state before use.
-
-<a id="epok-legacybehaviourcomponent-ensure-started-1"></a>
-
-## `epok::LegacyBehaviourComponent::ensure_started`
-
-**Purpose.** start() runs once, on the first event after the Behaviour is bound, and always before update(); binding after add_component therefore never loses the event.
-
-**Exact declaration**
-
-```cpp
-bool ensure_started()
-```
-
-- **Declared at:** [line 573](../../../runtime/object_model.hpp#L573)
-- **Kind:** `cxx method`
+| `value` | `Object *` | Input/output; inspect the function contract | Value supplied for `value`. See the exact type and module contract. |
 
 **Returns.** Returns `bool`. Check the purpose and failure notes before using the value.
 
@@ -2287,243 +2505,15 @@ bool ensure_started()
 ```cpp
 #include "object_model.hpp"
 
-epok::LegacyBehaviourComponent& object = /* obtain a valid instance */;
+// Assume these named values have been initialized with valid data:
+// Object * value
 
-auto result = object.ensure_started();
+auto result = epok::is_active(value);
 ```
 
 **Why choose it.** The boolean result makes success, availability or state explicit without exceptions.
 
-**Trade-offs and warnings.** Check the return value; `false` is part of normal control flow for many PSX resource operations.
-
-<a id="epok-legacybehaviourcomponent-entity-slot-1"></a>
-
-## `epok::LegacyBehaviourComponent::entity_slot`
-
-**Purpose.** Performs `entity slot` as part of the object model module.
-
-**Exact declaration**
-
-```cpp
-Entity* entity_slot() const
-```
-
-- **Declared at:** [line 570](../../../runtime/object_model.hpp#L570)
-- **Kind:** `cxx method`; qualifiers: `const`
-
-**Returns.** Returns `Entity *`. Check the purpose and failure notes before using the value.
-
-**Use it when.** You need the object model module and the preconditions in the declaration are already satisfied.
-
-**Usage pattern**
-
-```cpp
-#include "object_model.hpp"
-
-epok::LegacyBehaviourComponent& object = /* obtain a valid instance */;
-
-auto result = object.entity_slot();
-```
-
-**Why choose it.** The method is `const`, so it does not mutate the object through this API surface.
-
-**Trade-offs and warnings.** Call it only in the lifecycle phase described by the module. Validate indices, capacities and object state before use.
-
-<a id="epok-legacybehaviourcomponent-frame-update-1"></a>
-
-## `epok::LegacyBehaviourComponent::frame_update`
-
-**Purpose.** Legacy contract, preserved: frame_update runs once per rendered frame even while the simulation clock is paused, and tick()/update() does not.
-
-**Details.** main.cpp drives the two from separate places (Level::frame_update every frame, Level::tick only for the fixed steps the Time service schedules), so a pause menu keeps receiving it.
-
-**Exact declaration**
-
-```cpp
-void frame_update(uint32_t elapsed) override
-```
-
-- **Declared at:** [line 584](../../../runtime/object_model.hpp#L584)
-- **Kind:** `cxx method`
-
-**Parameters**
-
-| Name | Type | Role | Meaning |
-| --- | --- | --- | --- |
-| `elapsed` | `uint32_t` | Input | Value supplied for `elapsed`. See the exact type and module contract. |
-
-**Returns.** No value is returned; observe the documented state change or callback.
-
-**Use it when.** main.cpp drives the two from separate places (Level::frame_update every frame, Level::tick only for the fixed steps the Time service schedules), so a pause menu keeps receiving it.
-
-**Usage pattern**
-
-```cpp
-#include "object_model.hpp"
-
-// Assume these named values have been initialized with valid data:
-// uint32_t elapsed
-
-epok::LegacyBehaviourComponent& object = /* obtain a valid instance */;
-
-object.frame_update(elapsed);
-```
-
-**Why choose it.** It provides direct, allocation-conscious access to the object model module. No exception-based error path is implied by the signature.
-
-**Trade-offs and warnings.** Call it only in the lifecycle phase described by the module. Validate indices, capacities and object state before use.
-
-<a id="epok-legacybehaviourcomponent-on-disable-1"></a>
-
-## `epok::LegacyBehaviourComponent::on_disable`
-
-**Purpose.** Performs `on disable` as part of the object model module.
-
-**Exact declaration**
-
-```cpp
-void on_disable() override
-```
-
-- **Declared at:** [line 590](../../../runtime/object_model.hpp#L590)
-- **Kind:** `cxx method`
-
-**Returns.** No value is returned; observe the documented state change or callback.
-
-**Use it when.** You need the object model module and the preconditions in the declaration are already satisfied.
-
-**Usage pattern**
-
-```cpp
-#include "object_model.hpp"
-
-epok::LegacyBehaviourComponent& object = /* obtain a valid instance */;
-
-object.on_disable();
-```
-
-**Why choose it.** It provides direct, allocation-conscious access to the object model module. No exception-based error path is implied by the signature.
-
-**Trade-offs and warnings.** Call it only in the lifecycle phase described by the module. Validate indices, capacities and object state before use.
-
-<a id="epok-legacybehaviourcomponent-on-enable-1"></a>
-
-## `epok::LegacyBehaviourComponent::on_enable`
-
-**Purpose.** Performs `on enable` as part of the object model module.
-
-**Exact declaration**
-
-```cpp
-void on_enable() override
-```
-
-- **Declared at:** [line 589](../../../runtime/object_model.hpp#L589)
-- **Kind:** `cxx method`
-
-**Returns.** No value is returned; observe the documented state change or callback.
-
-**Use it when.** You need the object model module and the preconditions in the declaration are already satisfied.
-
-**Usage pattern**
-
-```cpp
-#include "object_model.hpp"
-
-epok::LegacyBehaviourComponent& object = /* obtain a valid instance */;
-
-object.on_enable();
-```
-
-**Why choose it.** It provides direct, allocation-conscious access to the object model module. No exception-based error path is implied by the signature.
-
-**Trade-offs and warnings.** Call it only in the lifecycle phase described by the module. Validate indices, capacities and object state before use.
-
-<a id="epok-legacybehaviourcomponent-on-trigger-1"></a>
-
-## `epok::LegacyBehaviourComponent::on_trigger`
-
-**Purpose.** Forwarded by dispatch_trigger(); the object model never generates the event.
-
-**Exact declaration**
-
-```cpp
-void on_trigger(EntityHandle other, TriggerPhase phase) override
-```
-
-- **Declared at:** [line 586](../../../runtime/object_model.hpp#L586)
-- **Kind:** `cxx method`
-
-**Parameters**
-
-| Name | Type | Role | Meaning |
-| --- | --- | --- | --- |
-| `other` | `EntityHandle` | Input | Value supplied for `other`. See the exact type and module contract. |
-| `phase` | `TriggerPhase` | Input | Value supplied for `phase`. See the exact type and module contract. |
-
-**Returns.** No value is returned; observe the documented state change or callback.
-
-**Use it when.** You need the object model module and the preconditions in the declaration are already satisfied.
-
-**Usage pattern**
-
-```cpp
-#include "object_model.hpp"
-
-// Assume these named values have been initialized with valid data:
-// EntityHandle other
-// TriggerPhase phase
-
-epok::LegacyBehaviourComponent& object = /* obtain a valid instance */;
-
-object.on_trigger(other, phase);
-```
-
-**Why choose it.** It provides direct, allocation-conscious access to the object model module. No exception-based error path is implied by the signature.
-
-**Trade-offs and warnings.** Call it only in the lifecycle phase described by the module. Validate indices, capacities and object state before use.
-
-<a id="epok-legacybehaviourcomponent-tick-1"></a>
-
-## `epok::LegacyBehaviourComponent::tick`
-
-**Purpose.** Performs `tick` as part of the object model module.
-
-**Exact declaration**
-
-```cpp
-void tick(Fixed delta) override
-```
-
-- **Declared at:** [line 579](../../../runtime/object_model.hpp#L579)
-- **Kind:** `cxx method`
-
-**Parameters**
-
-| Name | Type | Role | Meaning |
-| --- | --- | --- | --- |
-| `delta` | `Fixed` | Input | Value supplied for `delta`. See the exact type and module contract. |
-
-**Returns.** No value is returned; observe the documented state change or callback.
-
-**Use it when.** You need the object model module and the preconditions in the declaration are already satisfied.
-
-**Usage pattern**
-
-```cpp
-#include "object_model.hpp"
-
-// Assume these named values have been initialized with valid data:
-// Fixed delta
-
-epok::LegacyBehaviourComponent& object = /* obtain a valid instance */;
-
-object.tick(delta);
-```
-
-**Why choose it.** It provides direct, allocation-conscious access to the object model module. No exception-based error path is implied by the signature.
-
-**Trade-offs and warnings.** Call it only in the lifecycle phase described by the module. Validate indices, capacities and object state before use.
+**Trade-offs and warnings.** Check the return value; `false` is part of normal control flow for many PSX resource operations. Pointer/reference arguments are borrowed unless the source contract says otherwise; keep them valid for the complete operation and never assume null is accepted.
 
 <a id="epok-level-actor-active-1"></a>
 
@@ -2537,7 +2527,7 @@ object.tick(delta);
 bool actor_active(const Actor& actor) const
 ```
 
-- **Declared at:** [line 821](../../../runtime/object_model.hpp#L821)
+- **Declared at:** [line 871](../../../runtime/object_model.hpp#L871)
 - **Kind:** `cxx method`; qualifiers: `const`
 
 **Parameters**
@@ -2579,7 +2569,7 @@ auto result = object.actor_active(actor);
 ObjectId actor_at(size_t index) const
 ```
 
-- **Declared at:** [line 667](../../../runtime/object_model.hpp#L667)
+- **Declared at:** [line 705](../../../runtime/object_model.hpp#L705)
 - **Kind:** `cxx method`; qualifiers: `const`
 
 **Parameters**
@@ -2621,7 +2611,7 @@ auto result = object.actor_at(index);
 size_t actor_count() const
 ```
 
-- **Declared at:** [line 666](../../../runtime/object_model.hpp#L666)
+- **Declared at:** [line 704](../../../runtime/object_model.hpp#L704)
 - **Kind:** `cxx method`; qualifiers: `const`
 
 **Returns.** Returns `size_t`. Check the purpose and failure notes before using the value.
@@ -2654,7 +2644,7 @@ auto result = object.actor_count();
 template<class T> T* add_component(Actor& owner, const char* name = nullptr)
 ```
 
-- **Declared at:** [line 861](../../../runtime/object_model.hpp#L861)
+- **Declared at:** [line 912](../../../runtime/object_model.hpp#L912)
 - **Kind:** `function template`; qualifiers: `template`
 
 **Parameters**
@@ -2703,7 +2693,7 @@ auto result = object.add_component<T>(owner, name);
 bool bind(ObjectRegistry& value)
 ```
 
-- **Declared at:** [line 657](../../../runtime/object_model.hpp#L657)
+- **Declared at:** [line 695](../../../runtime/object_model.hpp#L695)
 - **Kind:** `cxx method`
 
 **Parameters**
@@ -2745,7 +2735,7 @@ auto result = object.bind(value);
 uint64_t class_id() const override
 ```
 
-- **Declared at:** [line 653](../../../runtime/object_model.hpp#L653)
+- **Declared at:** [line 691](../../../runtime/object_model.hpp#L691)
 - **Kind:** `cxx method`; qualifiers: `const`
 
 **Returns.** Returns `uint64_t`. Check the purpose and failure notes before using the value.
@@ -2778,7 +2768,7 @@ auto result = object.class_id();
 ObjectId create_scene_script(const ClassDescriptor& type, const char* name)
 ```
 
-- **Declared at:** [line 752](../../../runtime/object_model.hpp#L752)
+- **Declared at:** [line 802](../../../runtime/object_model.hpp#L802)
 - **Kind:** `cxx method`
 
 **Parameters**
@@ -2822,7 +2812,7 @@ auto result = object.create_scene_script(type, name);
 bool destroy_actor(ObjectId actor, EndPlayReason reason = EndPlayReason::Destroyed)
 ```
 
-- **Declared at:** [line 769](../../../runtime/object_model.hpp#L769)
+- **Declared at:** [line 819](../../../runtime/object_model.hpp#L819)
 - **Kind:** `cxx method`
 
 **Parameters**
@@ -2866,7 +2856,7 @@ auto result = object.destroy_actor(actor, reason);
 void end_play_all(EndPlayReason reason)
 ```
 
-- **Declared at:** [line 789](../../../runtime/object_model.hpp#L789)
+- **Declared at:** [line 839](../../../runtime/object_model.hpp#L839)
 - **Kind:** `cxx method`
 
 **Parameters**
@@ -2908,7 +2898,7 @@ object.end_play_all(reason);
 void frame_update(uint32_t elapsed)
 ```
 
-- **Declared at:** [line 810](../../../runtime/object_model.hpp#L810)
+- **Declared at:** [line 860](../../../runtime/object_model.hpp#L860)
 - **Kind:** `cxx method`
 
 **Parameters**
@@ -2950,7 +2940,7 @@ object.frame_update(elapsed);
 template<class T> T* get_component(const Actor& owner) const
 ```
 
-- **Declared at:** [line 879](../../../runtime/object_model.hpp#L879)
+- **Declared at:** [line 930](../../../runtime/object_model.hpp#L930)
 - **Kind:** `function template`; qualifiers: `const, template`
 
 **Parameters**
@@ -2995,7 +2985,7 @@ auto result = object.get_component<T>(owner);
 template<class T> size_t get_components(const Actor& owner, T** out, size_t capacity) const
 ```
 
-- **Declared at:** [line 886](../../../runtime/object_model.hpp#L886)
+- **Declared at:** [line 937](../../../runtime/object_model.hpp#L937)
 - **Kind:** `function template`; qualifiers: `const, template`
 
 **Parameters**
@@ -3044,7 +3034,7 @@ auto result = object.get_components<T>(owner, out, capacity);
 ObjectRegistry* registry() const
 ```
 
-- **Declared at:** [line 664](../../../runtime/object_model.hpp#L664)
+- **Declared at:** [line 702](../../../runtime/object_model.hpp#L702)
 - **Kind:** `cxx method`; qualifiers: `const`
 
 **Returns.** Returns `ObjectRegistry *`. Check the purpose and failure notes before using the value.
@@ -3077,7 +3067,7 @@ auto result = object.registry();
 bool remove_component(Actor& owner, ObjectId component)
 ```
 
-- **Declared at:** [line 897](../../../runtime/object_model.hpp#L897)
+- **Declared at:** [line 948](../../../runtime/object_model.hpp#L948)
 - **Kind:** `cxx method`
 
 **Parameters**
@@ -3121,7 +3111,7 @@ auto result = object.remove_component(owner, component);
 ObjectId scene_script() const
 ```
 
-- **Declared at:** [line 668](../../../runtime/object_model.hpp#L668)
+- **Declared at:** [line 706](../../../runtime/object_model.hpp#L706)
 - **Kind:** `cxx method`; qualifiers: `const`
 
 **Returns.** Returns `ObjectId`. Check the purpose and failure notes before using the value.
@@ -3154,7 +3144,7 @@ auto result = object.scene_script();
 bool set_active(ObjectId actor, bool active)
 ```
 
-- **Declared at:** [line 830](../../../runtime/object_model.hpp#L830)
+- **Declared at:** [line 880](../../../runtime/object_model.hpp#L880)
 - **Kind:** `cxx method`
 
 **Parameters**
@@ -3186,6 +3176,50 @@ auto result = object.set_active(actor, active);
 
 **Trade-offs and warnings.** Check the return value; `false` is part of normal control flow for many PSX resource operations.
 
+<a id="epok-level-set-logical-parent-1"></a>
+
+## `epok::Level::set_logical_parent`
+
+**Purpose.** Sets logical parent as part of the object model module.
+
+**Exact declaration**
+
+```cpp
+bool set_logical_parent(ObjectId child,ObjectId parent)
+```
+
+- **Declared at:** [line 707](../../../runtime/object_model.hpp#L707)
+- **Kind:** `cxx method`
+
+**Parameters**
+
+| Name | Type | Role | Meaning |
+| --- | --- | --- | --- |
+| `child` | `ObjectId` | Input | Value supplied for `child`. See the exact type and module contract. |
+| `parent` | `ObjectId` | Input | Value supplied for `parent`. See the exact type and module contract. |
+
+**Returns.** Returns `bool`. Check the purpose and failure notes before using the value.
+
+**Use it when.** You need the object model module and the preconditions in the declaration are already satisfied.
+
+**Usage pattern**
+
+```cpp
+#include "object_model.hpp"
+
+// Assume these named values have been initialized with valid data:
+// ObjectId child
+// ObjectId parent
+
+epok::Level& object = /* obtain a valid instance */;
+
+auto result = object.set_logical_parent(child, parent);
+```
+
+**Why choose it.** The boolean result makes success, availability or state explicit without exceptions.
+
+**Trade-offs and warnings.** Check the return value; `false` is part of normal control flow for many PSX resource operations.
+
 <a id="epok-level-spawn-actor-1"></a>
 
 ## `epok::Level::spawn_actor`
@@ -3195,11 +3229,11 @@ auto result = object.set_active(actor, active);
 **Exact declaration**
 
 ```cpp
-ObjectId spawn_actor(const ClassDescriptor& type, const char* name, ObjectId logical_parent = {})
+virtual ObjectId spawn_actor(const ClassDescriptor& type, const char* name, ObjectId logical_parent = {})
 ```
 
-- **Declared at:** [line 743](../../../runtime/object_model.hpp#L743)
-- **Kind:** `cxx method`
+- **Declared at:** [line 792](../../../runtime/object_model.hpp#L792)
+- **Kind:** `cxx method`; qualifiers: `virtual`
 
 **Parameters**
 
@@ -3246,7 +3280,7 @@ auto result = object.spawn_actor(type, name, logical_parent);
 size_t spawn_batch(const ActorSpawnRequest* requests, size_t count, ObjectId* out, ActorPrepareFn prepare = nullptr)
 ```
 
-- **Declared at:** [line 685](../../../runtime/object_model.hpp#L685)
+- **Declared at:** [line 735](../../../runtime/object_model.hpp#L735)
 - **Kind:** `cxx method`
 
 **Parameters**
@@ -3294,7 +3328,7 @@ auto result = object.spawn_batch(requests, count, out, prepare);
 ObjectStats stats() const
 ```
 
-- **Declared at:** [line 665](../../../runtime/object_model.hpp#L665)
+- **Declared at:** [line 703](../../../runtime/object_model.hpp#L703)
 - **Kind:** `cxx method`; qualifiers: `const`
 
 **Returns.** Returns `ObjectStats`. Check the purpose and failure notes before using the value.
@@ -3327,7 +3361,7 @@ auto result = object.stats();
 void tick(Fixed delta)
 ```
 
-- **Declared at:** [line 800](../../../runtime/object_model.hpp#L800)
+- **Declared at:** [line 850](../../../runtime/object_model.hpp#L850)
 - **Kind:** `cxx method`
 
 **Parameters**
@@ -3357,6 +3391,72 @@ object.tick(delta);
 
 **Trade-offs and warnings.** Call it only in the lifecycle phase described by the module. Validate indices, capacities and object state before use.
 
+<a id="epok-light3dcomponent-class-id-1"></a>
+
+## `epok::Light3DComponent::class_id`
+
+**Purpose.** Performs `class id` as part of the object model module.
+
+**Exact declaration**
+
+```cpp
+uint64_t class_id() const override
+```
+
+- **Declared at:** [line 590](../../../runtime/object_model.hpp#L590)
+- **Kind:** `cxx method`; qualifiers: `const`
+
+**Returns.** Returns `uint64_t`. Check the purpose and failure notes before using the value.
+
+**Use it when.** You need the object model module and the preconditions in the declaration are already satisfied.
+
+**Usage pattern**
+
+```cpp
+#include "object_model.hpp"
+
+epok::Light3DComponent& object = /* obtain a valid instance */;
+
+auto result = object.class_id();
+```
+
+**Why choose it.** The method is `const`, so it does not mutate the object through this API surface.
+
+**Trade-offs and warnings.** Call it only in the lifecycle phase described by the module. Validate indices, capacities and object state before use.
+
+<a id="epok-mesh3dcomponent-class-id-1"></a>
+
+## `epok::Mesh3DComponent::class_id`
+
+**Purpose.** Performs `class id` as part of the object model module.
+
+**Exact declaration**
+
+```cpp
+uint64_t class_id() const override
+```
+
+- **Declared at:** [line 575](../../../runtime/object_model.hpp#L575)
+- **Kind:** `cxx method`; qualifiers: `const`
+
+**Returns.** Returns `uint64_t`. Check the purpose and failure notes before using the value.
+
+**Use it when.** You need the object model module and the preconditions in the declaration are already satisfied.
+
+**Usage pattern**
+
+```cpp
+#include "object_model.hpp"
+
+epok::Mesh3DComponent& object = /* obtain a valid instance */;
+
+auto result = object.class_id();
+```
+
+**Why choose it.** The method is `const`, so it does not mutate the object through this API surface.
+
+**Trade-offs and warnings.** Call it only in the lifecycle phase described by the module. Validate indices, capacities and object state before use.
+
 <a id="epok-object-class-id-1"></a>
 
 ## `epok::Object::class_id`
@@ -3369,7 +3469,7 @@ object.tick(delta);
 virtual uint64_t class_id() const
 ```
 
-- **Declared at:** [line 164](../../../runtime/object_model.hpp#L164)
+- **Declared at:** [line 175](../../../runtime/object_model.hpp#L175)
 - **Kind:** `cxx method`; qualifiers: `const, virtual`
 
 **Returns.** Returns `uint64_t`. Check the purpose and failure notes before using the value.
@@ -3402,7 +3502,7 @@ auto result = object.class_id();
 ObjectId id() const
 ```
 
-- **Declared at:** [line 165](../../../runtime/object_model.hpp#L165)
+- **Declared at:** [line 177](../../../runtime/object_model.hpp#L177)
 - **Kind:** `cxx method`; qualifiers: `const`
 
 **Returns.** Returns `ObjectId`. Check the purpose and failure notes before using the value.
@@ -3435,7 +3535,7 @@ auto result = object.id();
 bool is_a(uint64_t parent) const
 ```
 
-- **Declared at:** [line 167](../../../runtime/object_model.hpp#L167)
+- **Declared at:** [line 179](../../../runtime/object_model.hpp#L179)
 - **Kind:** `cxx method`; qualifiers: `const`
 
 **Parameters**
@@ -3477,7 +3577,7 @@ auto result = object.is_a(parent);
 ObjectState state() const
 ```
 
-- **Declared at:** [line 166](../../../runtime/object_model.hpp#L166)
+- **Declared at:** [line 178](../../../runtime/object_model.hpp#L178)
 - **Kind:** `cxx method`; qualifiers: `const`
 
 **Returns.** Returns `ObjectState`. Check the purpose and failure notes before using the value.
@@ -3498,6 +3598,50 @@ auto result = object.state();
 
 **Trade-offs and warnings.** Call it only in the lifecycle phase described by the module. Validate indices, capacities and object state before use.
 
+<a id="epok-object-timeline-sync-1"></a>
+
+## `epok::Object::timeline_sync`
+
+**Purpose.** Performs `timeline sync` as part of the object model module.
+
+**Exact declaration**
+
+```cpp
+virtual void timeline_sync(uint64_t, bool)
+```
+
+- **Declared at:** [line 176](../../../runtime/object_model.hpp#L176)
+- **Kind:** `cxx method`; qualifiers: `virtual`
+
+**Parameters**
+
+| Name | Type | Role | Meaning |
+| --- | --- | --- | --- |
+| `arg1` | `uint64_t` | Input | Value supplied for `arg1`. See the exact type and module contract. |
+| `arg2` | `bool` | Input | Value supplied for `arg2`. See the exact type and module contract. |
+
+**Returns.** No value is returned; observe the documented state change or callback.
+
+**Use it when.** You need the object model module and the preconditions in the declaration are already satisfied.
+
+**Usage pattern**
+
+```cpp
+#include "object_model.hpp"
+
+// Assume these named values have been initialized with valid data:
+// uint64_t arg1
+// bool arg2
+
+epok::Object& object = /* obtain a valid instance */;
+
+object.timeline_sync(arg1, arg2);
+```
+
+**Why choose it.** It provides direct, allocation-conscious access to the object model module. No exception-based error path is implied by the signature.
+
+**Trade-offs and warnings.** Call it only in the lifecycle phase described by the module. Validate indices, capacities and object state before use.
+
 <a id="epok-object-object-1"></a>
 
 ## `epok::Object::~Object`
@@ -3510,7 +3654,7 @@ auto result = object.state();
 virtual ~Object() = default
 ```
 
-- **Declared at:** [line 162](../../../runtime/object_model.hpp#L162)
+- **Declared at:** [line 173](../../../runtime/object_model.hpp#L173)
 - **Kind:** `destructor`; qualifiers: `virtual`
 
 **Use it when.** You need the object model module and the preconditions in the declaration are already satisfied.
@@ -3539,7 +3683,7 @@ virtual ~Object() = default
 inline bool object_class_is_a(uint64_t child, uint64_t parent)
 ```
 
-- **Declared at:** [line 148](../../../runtime/object_model.hpp#L148)
+- **Declared at:** [line 159](../../../runtime/object_model.hpp#L159)
 - **Kind:** `function decl`
 
 **Parameters**
@@ -3581,7 +3725,7 @@ auto result = epok::object_class_is_a(child, parent);
 template<class T> Object* object_construct(void* storage)
 ```
 
-- **Declared at:** [line 177](../../../runtime/object_model.hpp#L177)
+- **Declared at:** [line 190](../../../runtime/object_model.hpp#L190)
 - **Kind:** `function template`; qualifiers: `template`
 
 **Parameters**
@@ -3624,7 +3768,7 @@ auto result = epok::object_construct<T>(storage);
 inline void object_destruct(Object* instance)
 ```
 
-- **Declared at:** [line 178](../../../runtime/object_model.hpp#L178)
+- **Declared at:** [line 191](../../../runtime/object_model.hpp#L191)
 - **Kind:** `function decl`
 
 **Parameters**
@@ -3666,7 +3810,7 @@ epok::object_destruct(instance);
 constexpr uint8_t object_domain_bit(ObjectDomain domain)
 ```
 
-- **Declared at:** [line 58](../../../runtime/object_model.hpp#L58)
+- **Declared at:** [line 67](../../../runtime/object_model.hpp#L67)
 - **Kind:** `function decl`
 
 **Parameters**
@@ -3706,7 +3850,7 @@ auto result = epok::object_domain_bit(domain);
 inline bool object_storage_quarantined(Object* instance)
 ```
 
-- **Declared at:** [line 238](../../../runtime/object_model.hpp#L238)
+- **Declared at:** [line 251](../../../runtime/object_model.hpp#L251)
 - **Kind:** `function decl`
 
 **Parameters**
@@ -3746,7 +3890,7 @@ auto result = epok::object_storage_quarantined(instance);
 ObjectDispatchScope(const ObjectDispatchScope&) = delete
 ```
 
-- **Declared at:** [line 376](../../../runtime/object_model.hpp#L376)
+- **Declared at:** [line 381](../../../runtime/object_model.hpp#L381)
 - **Kind:** `constructor`
 
 **Parameters**
@@ -3784,7 +3928,7 @@ epok::ObjectDispatchScope value(arg1);
 explicit ObjectDispatchScope(ObjectRegistry& value) : r
 ```
 
-- **Declared at:** [line 374](../../../runtime/object_model.hpp#L374)
+- **Declared at:** [line 379](../../../runtime/object_model.hpp#L379)
 - **Kind:** `constructor`
 
 **Parameters**
@@ -3822,7 +3966,7 @@ epok::ObjectDispatchScope value(value);
 ObjectDispatchScope& operator=(const ObjectDispatchScope&) = delete
 ```
 
-- **Declared at:** [line 377](../../../runtime/object_model.hpp#L377)
+- **Declared at:** [line 382](../../../runtime/object_model.hpp#L382)
 - **Kind:** `cxx method`
 
 **Parameters**
@@ -3864,7 +4008,7 @@ auto result = object.operator=(arg1);
 ~ObjectDispatchScope()
 ```
 
-- **Declared at:** [line 375](../../../runtime/object_model.hpp#L375)
+- **Declared at:** [line 380](../../../runtime/object_model.hpp#L380)
 - **Kind:** `destructor`
 
 **Use it when.** You need the object model module and the preconditions in the declaration are already satisfied.
@@ -3881,6 +4025,39 @@ auto result = object.operator=(arg1);
 
 **Trade-offs and warnings.** Call it only in the lifecycle phase described by the module. Validate indices, capacities and object state before use.
 
+<a id="epok-objectid-get-1"></a>
+
+## `epok::ObjectId::get`
+
+**Purpose.** Returns get as part of the object model module.
+
+**Exact declaration**
+
+```cpp
+Object* get() const
+```
+
+- **Declared at:** [line 38](../../../runtime/object_model.hpp#L38)
+- **Kind:** `cxx method`; qualifiers: `const`
+
+**Returns.** Returns `Object *`. Check the purpose and failure notes before using the value.
+
+**Use it when.** You need the object model module and the preconditions in the declaration are already satisfied.
+
+**Usage pattern**
+
+```cpp
+#include "object_model.hpp"
+
+epok::ObjectId& object = /* obtain a valid instance */;
+
+auto result = object.get();
+```
+
+**Why choose it.** The method is `const`, so it does not mutate the object through this API surface.
+
+**Trade-offs and warnings.** Call it only in the lifecycle phase described by the module. Validate indices, capacities and object state before use.
+
 <a id="epok-objectid-operator-1"></a>
 
 ## `epok::ObjectId::operator!=`
@@ -3893,7 +4070,7 @@ auto result = object.operator=(arg1);
 constexpr bool operator!=(const ObjectId& other) const
 ```
 
-- **Declared at:** [line 33](../../../runtime/object_model.hpp#L33)
+- **Declared at:** [line 42](../../../runtime/object_model.hpp#L42)
 - **Kind:** `cxx method`; qualifiers: `const`
 
 **Parameters**
@@ -3935,7 +4112,7 @@ auto result = object.operator!=(other);
 constexpr bool operator==(const ObjectId& other) const
 ```
 
-- **Declared at:** [line 30](../../../runtime/object_model.hpp#L30)
+- **Declared at:** [line 39](../../../runtime/object_model.hpp#L39)
 - **Kind:** `cxx method`; qualifiers: `const`
 
 **Parameters**
@@ -3977,7 +4154,7 @@ auto result = object.operator==(other);
 constexpr bool valid() const
 ```
 
-- **Declared at:** [line 29](../../../runtime/object_model.hpp#L29)
+- **Declared at:** [line 37](../../../runtime/object_model.hpp#L37)
 - **Kind:** `cxx method`; qualifiers: `const`
 
 **Returns.** Returns `bool`. Check the purpose and failure notes before using the value.
@@ -4010,7 +4187,7 @@ auto result = object.valid();
 static Object* acquire()
 ```
 
-- **Declared at:** [line 189](../../../runtime/object_model.hpp#L189)
+- **Declared at:** [line 202](../../../runtime/object_model.hpp#L202)
 - **Kind:** `cxx method`; qualifiers: `static`
 
 **Returns.** Returns `Object *`. Check the purpose and failure notes before using the value.
@@ -4041,7 +4218,7 @@ auto result = epok::ObjectPool::acquire();
 static size_t live()
 ```
 
-- **Declared at:** [line 205](../../../runtime/object_model.hpp#L205)
+- **Declared at:** [line 218](../../../runtime/object_model.hpp#L218)
 - **Kind:** `cxx method`; qualifiers: `static`
 
 **Returns.** Returns `size_t`. Check the purpose and failure notes before using the value.
@@ -4072,7 +4249,7 @@ auto result = epok::ObjectPool::live();
 static void release(Object* instance)
 ```
 
-- **Declared at:** [line 197](../../../runtime/object_model.hpp#L197)
+- **Declared at:** [line 210](../../../runtime/object_model.hpp#L210)
 - **Kind:** `cxx method`; qualifiers: `static`
 
 **Parameters**
@@ -4114,7 +4291,7 @@ epok::ObjectPool::release(instance);
 ObjectId acquire(const ClassDescriptor& type)
 ```
 
-- **Declared at:** [line 288](../../../runtime/object_model.hpp#L288)
+- **Declared at:** [line 292](../../../runtime/object_model.hpp#L292)
 - **Kind:** `cxx method`
 
 **Parameters**
@@ -4158,7 +4335,7 @@ auto result = object.acquire(type);
 ObjectId adopt(Object& instance, const ClassDescriptor& type)
 ```
 
-- **Declared at:** [line 300](../../../runtime/object_model.hpp#L300)
+- **Declared at:** [line 304](../../../runtime/object_model.hpp#L304)
 - **Kind:** `cxx method`
 
 **Parameters**
@@ -4202,7 +4379,7 @@ auto result = object.adopt(instance, type);
 const ClassDescriptor* class_of(ObjectId id)
 ```
 
-- **Declared at:** [line 282](../../../runtime/object_model.hpp#L282)
+- **Declared at:** [line 286](../../../runtime/object_model.hpp#L286)
 - **Kind:** `cxx method`
 
 **Parameters**
@@ -4246,7 +4423,7 @@ auto result = object.class_of(id);
 void collect_quarantined()
 ```
 
-- **Declared at:** [line 342](../../../runtime/object_model.hpp#L342)
+- **Declared at:** [line 346](../../../runtime/object_model.hpp#L346)
 - **Kind:** `cxx method`
 
 **Returns.** No value is returned; observe the documented state change or callback.
@@ -4281,7 +4458,7 @@ object.collect_quarantined();
 void finish_release()
 ```
 
-- **Declared at:** [line 324](../../../runtime/object_model.hpp#L324)
+- **Declared at:** [line 328](../../../runtime/object_model.hpp#L328)
 - **Kind:** `cxx method`
 
 **Returns.** No value is returned; observe the documented state change or callback.
@@ -4314,7 +4491,7 @@ object.finish_release();
 Object* get(ObjectId id)
 ```
 
-- **Declared at:** [line 270](../../../runtime/object_model.hpp#L270)
+- **Declared at:** [line 274](../../../runtime/object_model.hpp#L274)
 - **Kind:** `cxx method`
 
 **Parameters**
@@ -4356,7 +4533,7 @@ auto result = object.get(id);
 size_t live() const
 ```
 
-- **Declared at:** [line 343](../../../runtime/object_model.hpp#L343)
+- **Declared at:** [line 347](../../../runtime/object_model.hpp#L347)
 - **Kind:** `cxx method`; qualifiers: `const`
 
 **Returns.** Returns `size_t`. Check the purpose and failure notes before using the value.
@@ -4389,7 +4566,7 @@ auto result = object.live();
 static uint16_t next_generation(uint16_t value)
 ```
 
-- **Declared at:** [line 262](../../../runtime/object_model.hpp#L262)
+- **Declared at:** [line 266](../../../runtime/object_model.hpp#L266)
 - **Kind:** `cxx method`; qualifiers: `static`
 
 **Parameters**
@@ -4429,7 +4606,7 @@ auto result = epok::ObjectRegistry::next_generation(value);
 ObjectRegistry(const ObjectRegistry&) = delete
 ```
 
-- **Declared at:** [line 259](../../../runtime/object_model.hpp#L259)
+- **Declared at:** [line 263](../../../runtime/object_model.hpp#L263)
 - **Kind:** `constructor`
 
 **Parameters**
@@ -4467,7 +4644,7 @@ epok::ObjectRegistry value(arg1);
 constexpr ObjectRegistry(ObjectSlot* table, uint16_t count) : slots(table), capacity(count)
 ```
 
-- **Declared at:** [line 258](../../../runtime/object_model.hpp#L258)
+- **Declared at:** [line 262](../../../runtime/object_model.hpp#L262)
 - **Kind:** `constructor`
 
 **Parameters**
@@ -4507,7 +4684,7 @@ epok::ObjectRegistry value(table, count);
 ObjectRegistry& operator=(const ObjectRegistry&) = delete
 ```
 
-- **Declared at:** [line 260](../../../runtime/object_model.hpp#L260)
+- **Declared at:** [line 264](../../../runtime/object_model.hpp#L264)
 - **Kind:** `cxx method`
 
 **Parameters**
@@ -4549,7 +4726,7 @@ auto result = object.operator=(arg1);
 bool release(ObjectId id)
 ```
 
-- **Declared at:** [line 308](../../../runtime/object_model.hpp#L308)
+- **Declared at:** [line 312](../../../runtime/object_model.hpp#L312)
 - **Kind:** `cxx method`
 
 **Parameters**
@@ -4591,7 +4768,7 @@ auto result = object.release(id);
 template<class T> T* resolve(ObjectId id)
 ```
 
-- **Declared at:** [line 275](../../../runtime/object_model.hpp#L275)
+- **Declared at:** [line 279](../../../runtime/object_model.hpp#L279)
 - **Kind:** `function template`; qualifiers: `template`
 
 **Parameters**
@@ -4636,7 +4813,7 @@ auto result = object.resolve<T>(id);
 template<class T> const T* resolve(ObjectId id) const
 ```
 
-- **Declared at:** [line 281](../../../runtime/object_model.hpp#L281)
+- **Declared at:** [line 285](../../../runtime/object_model.hpp#L285)
 - **Kind:** `function template`; qualifiers: `const, template`
 
 **Parameters**
@@ -4681,7 +4858,7 @@ auto result = object.resolve<T>(id);
 ObjectSlot* slot(ObjectId id)
 ```
 
-- **Declared at:** [line 263](../../../runtime/object_model.hpp#L263)
+- **Declared at:** [line 267](../../../runtime/object_model.hpp#L267)
 - **Kind:** `cxx method`
 
 **Parameters**
@@ -4723,7 +4900,7 @@ auto result = object.slot(id);
 const ObjectSlot* slot(ObjectId id) const
 ```
 
-- **Declared at:** [line 269](../../../runtime/object_model.hpp#L269)
+- **Declared at:** [line 273](../../../runtime/object_model.hpp#L273)
 - **Kind:** `cxx method`; qualifiers: `const`
 
 **Parameters**
@@ -4765,7 +4942,7 @@ auto result = object.slot(id);
 ObjectRegistryStorage() : O
 ```
 
-- **Declared at:** [line 369](../../../runtime/object_model.hpp#L369)
+- **Declared at:** [line 374](../../../runtime/object_model.hpp#L374)
 - **Kind:** `constructor`
 
 **Use it when.** You need the object model module and the preconditions in the declaration are already satisfied.
@@ -4782,6 +4959,138 @@ epok::ObjectRegistryStorage value();
 
 **Trade-offs and warnings.** Call it only in the lifecycle phase described by the module. Validate indices, capacities and object state before use.
 
+<a id="epok-paletteanimatorcomponent-class-id-1"></a>
+
+## `epok::PaletteAnimatorComponent::class_id`
+
+**Purpose.** Performs `class id` as part of the object model module.
+
+**Exact declaration**
+
+```cpp
+uint64_t class_id() const override
+```
+
+- **Declared at:** [line 635](../../../runtime/object_model.hpp#L635)
+- **Kind:** `cxx method`; qualifiers: `const`
+
+**Returns.** Returns `uint64_t`. Check the purpose and failure notes before using the value.
+
+**Use it when.** You need the object model module and the preconditions in the declaration are already satisfied.
+
+**Usage pattern**
+
+```cpp
+#include "object_model.hpp"
+
+epok::PaletteAnimatorComponent& object = /* obtain a valid instance */;
+
+auto result = object.class_id();
+```
+
+**Why choose it.** The method is `const`, so it does not mutate the object through this API surface.
+
+**Trade-offs and warnings.** Call it only in the lifecycle phase described by the module. Validate indices, capacities and object state before use.
+
+<a id="epok-particleeffectcomponent-class-id-1"></a>
+
+## `epok::ParticleEffectComponent::class_id`
+
+**Purpose.** Performs `class id` as part of the object model module.
+
+**Exact declaration**
+
+```cpp
+uint64_t class_id() const override
+```
+
+- **Declared at:** [line 630](../../../runtime/object_model.hpp#L630)
+- **Kind:** `cxx method`; qualifiers: `const`
+
+**Returns.** Returns `uint64_t`. Check the purpose and failure notes before using the value.
+
+**Use it when.** You need the object model module and the preconditions in the declaration are already satisfied.
+
+**Usage pattern**
+
+```cpp
+#include "object_model.hpp"
+
+epok::ParticleEffectComponent& object = /* obtain a valid instance */;
+
+auto result = object.class_id();
+```
+
+**Why choose it.** The method is `const`, so it does not mutate the object through this API surface.
+
+**Trade-offs and warnings.** Call it only in the lifecycle phase described by the module. Validate indices, capacities and object state before use.
+
+<a id="epok-particleemittercomponent-class-id-1"></a>
+
+## `epok::ParticleEmitterComponent::class_id`
+
+**Purpose.** Performs `class id` as part of the object model module.
+
+**Exact declaration**
+
+```cpp
+uint64_t class_id() const override
+```
+
+- **Declared at:** [line 620](../../../runtime/object_model.hpp#L620)
+- **Kind:** `cxx method`; qualifiers: `const`
+
+**Returns.** Returns `uint64_t`. Check the purpose and failure notes before using the value.
+
+**Use it when.** You need the object model module and the preconditions in the declaration are already satisfied.
+
+**Usage pattern**
+
+```cpp
+#include "object_model.hpp"
+
+epok::ParticleEmitterComponent& object = /* obtain a valid instance */;
+
+auto result = object.class_id();
+```
+
+**Why choose it.** The method is `const`, so it does not mutate the object through this API surface.
+
+**Trade-offs and warnings.** Call it only in the lifecycle phase described by the module. Validate indices, capacities and object state before use.
+
+<a id="epok-progressbarcomponent-class-id-1"></a>
+
+## `epok::ProgressBarComponent::class_id`
+
+**Purpose.** Performs `class id` as part of the object model module.
+
+**Exact declaration**
+
+```cpp
+uint64_t class_id() const override
+```
+
+- **Declared at:** [line 615](../../../runtime/object_model.hpp#L615)
+- **Kind:** `cxx method`; qualifiers: `const`
+
+**Returns.** Returns `uint64_t`. Check the purpose and failure notes before using the value.
+
+**Use it when.** You need the object model module and the preconditions in the declaration are already satisfied.
+
+**Usage pattern**
+
+```cpp
+#include "object_model.hpp"
+
+epok::ProgressBarComponent& object = /* obtain a valid instance */;
+
+auto result = object.class_id();
+```
+
+**Why choose it.** The method is `const`, so it does not mutate the object through this API surface.
+
+**Trade-offs and warnings.** Call it only in the lifecycle phase described by the module. Validate indices, capacities and object state before use.
+
 <a id="epok-recttransformcomponent-attach-slot-1"></a>
 
 ## `epok::RectTransformComponent::attach_slot`
@@ -4794,7 +5103,7 @@ epok::ObjectRegistryStorage value();
 ObjectId* attach_slot() override
 ```
 
-- **Declared at:** [line 499](../../../runtime/object_model.hpp#L499)
+- **Declared at:** [line 516](../../../runtime/object_model.hpp#L516)
 - **Kind:** `cxx method`
 
 **Returns.** Returns `ObjectId *`. Check the purpose and failure notes before using the value.
@@ -4827,7 +5136,7 @@ auto result = object.attach_slot();
 void bind_local()
 ```
 
-- **Declared at:** [line 503](../../../runtime/object_model.hpp#L503)
+- **Declared at:** [line 520](../../../runtime/object_model.hpp#L520)
 - **Kind:** `cxx method`
 
 **Returns.** No value is returned; observe the documented state change or callback.
@@ -4857,17 +5166,17 @@ object.bind_local();
 **Exact declaration**
 
 ```cpp
-void bind_slot(Entity& value)
+void bind_slot(ActorData& value)
 ```
 
-- **Declared at:** [line 502](../../../runtime/object_model.hpp#L502)
+- **Declared at:** [line 519](../../../runtime/object_model.hpp#L519)
 - **Kind:** `cxx method`
 
 **Parameters**
 
 | Name | Type | Role | Meaning |
 | --- | --- | --- | --- |
-| `value` | `Entity &` | Input/output; inspect the function contract | Value supplied for `value`. See the exact type and module contract. |
+| `value` | `ActorData &` | Input/output; inspect the function contract | Value supplied for `value`. See the exact type and module contract. |
 
 **Returns.** No value is returned; observe the documented state change or callback.
 
@@ -4879,7 +5188,7 @@ void bind_slot(Entity& value)
 #include "object_model.hpp"
 
 // Assume these named values have been initialized with valid data:
-// Entity & value
+// ActorData & value
 
 epok::RectTransformComponent& object = /* obtain a valid instance */;
 
@@ -4902,7 +5211,7 @@ object.bind_slot(value);
 uint64_t class_id() const override
 ```
 
-- **Declared at:** [line 498](../../../runtime/object_model.hpp#L498)
+- **Declared at:** [line 515](../../../runtime/object_model.hpp#L515)
 - **Kind:** `cxx method`; qualifiers: `const`
 
 **Returns.** Returns `uint64_t`. Check the purpose and failure notes before using the value.
@@ -4932,13 +5241,13 @@ auto result = object.class_id();
 **Exact declaration**
 
 ```cpp
-Entity* entity_slot() const
+ActorData* entity_slot() const
 ```
 
-- **Declared at:** [line 504](../../../runtime/object_model.hpp#L504)
+- **Declared at:** [line 521](../../../runtime/object_model.hpp#L521)
 - **Kind:** `cxx method`; qualifiers: `const`
 
-**Returns.** Returns `Entity *`. Check the purpose and failure notes before using the value.
+**Returns.** Returns `ActorData *`. Check the purpose and failure notes before using the value.
 
 **Use it when.** You need the object model module and the preconditions in the declaration are already satisfied.
 
@@ -4968,7 +5277,7 @@ auto result = object.entity_slot();
 ObjectId* attach_slot() override
 ```
 
-- **Declared at:** [line 484](../../../runtime/object_model.hpp#L484)
+- **Declared at:** [line 501](../../../runtime/object_model.hpp#L501)
 - **Kind:** `cxx method`
 
 **Returns.** Returns `ObjectId *`. Check the purpose and failure notes before using the value.
@@ -5001,7 +5310,7 @@ auto result = object.attach_slot();
 uint64_t class_id() const override
 ```
 
-- **Declared at:** [line 483](../../../runtime/object_model.hpp#L483)
+- **Declared at:** [line 500](../../../runtime/object_model.hpp#L500)
 - **Kind:** `cxx method`; qualifiers: `const`
 
 **Returns.** Returns `uint64_t`. Check the purpose and failure notes before using the value.
@@ -5034,7 +5343,7 @@ auto result = object.class_id();
 ObjectId* attach_slot() override
 ```
 
-- **Declared at:** [line 466](../../../runtime/object_model.hpp#L466)
+- **Declared at:** [line 483](../../../runtime/object_model.hpp#L483)
 - **Kind:** `cxx method`
 
 **Returns.** Returns `ObjectId *`. Check the purpose and failure notes before using the value.
@@ -5067,7 +5376,7 @@ auto result = object.attach_slot();
 void bind_local()
 ```
 
-- **Declared at:** [line 474](../../../runtime/object_model.hpp#L474)
+- **Declared at:** [line 491](../../../runtime/object_model.hpp#L491)
 - **Kind:** `cxx method`
 
 **Returns.** No value is returned; observe the documented state change or callback.
@@ -5097,17 +5406,17 @@ object.bind_local();
 **Exact declaration**
 
 ```cpp
-void bind_slot(Entity& value)
+void bind_slot(ActorData& value)
 ```
 
-- **Declared at:** [line 472](../../../runtime/object_model.hpp#L472)
+- **Declared at:** [line 489](../../../runtime/object_model.hpp#L489)
 - **Kind:** `cxx method`
 
 **Parameters**
 
 | Name | Type | Role | Meaning |
 | --- | --- | --- | --- |
-| `value` | `Entity &` | Input/output; inspect the function contract | Value supplied for `value`. See the exact type and module contract. |
+| `value` | `ActorData &` | Input/output; inspect the function contract | Value supplied for `value`. See the exact type and module contract. |
 
 **Returns.** No value is returned; observe the documented state change or callback.
 
@@ -5119,7 +5428,7 @@ void bind_slot(Entity& value)
 #include "object_model.hpp"
 
 // Assume these named values have been initialized with valid data:
-// Entity & value
+// ActorData & value
 
 epok::SceneComponent3D& object = /* obtain a valid instance */;
 
@@ -5142,7 +5451,7 @@ object.bind_slot(value);
 uint64_t class_id() const override
 ```
 
-- **Declared at:** [line 465](../../../runtime/object_model.hpp#L465)
+- **Declared at:** [line 482](../../../runtime/object_model.hpp#L482)
 - **Kind:** `cxx method`; qualifiers: `const`
 
 **Returns.** Returns `uint64_t`. Check the purpose and failure notes before using the value.
@@ -5172,13 +5481,13 @@ auto result = object.class_id();
 **Exact declaration**
 
 ```cpp
-Entity* entity_slot() const
+ActorData* entity_slot() const
 ```
 
-- **Declared at:** [line 475](../../../runtime/object_model.hpp#L475)
+- **Declared at:** [line 492](../../../runtime/object_model.hpp#L492)
 - **Kind:** `cxx method`; qualifiers: `const`
 
-**Returns.** Returns `Entity *`. Check the purpose and failure notes before using the value.
+**Returns.** Returns `ActorData *`. Check the purpose and failure notes before using the value.
 
 **Use it when.** You need the object model module and the preconditions in the declaration are already satisfied.
 
@@ -5208,7 +5517,7 @@ auto result = object.entity_slot();
 uint64_t class_id() const override
 ```
 
-- **Declared at:** [line 630](../../../runtime/object_model.hpp#L630)
+- **Declared at:** [line 668](../../../runtime/object_model.hpp#L668)
 - **Kind:** `cxx method`; qualifiers: `const`
 
 **Returns.** Returns `uint64_t`. Check the purpose and failure notes before using the value.
@@ -5229,6 +5538,105 @@ auto result = object.class_id();
 
 **Trade-offs and warnings.** Call it only in the lifecycle phase described by the module. Validate indices, capacities and object state before use.
 
+<a id="epok-sprite3dcomponent-class-id-1"></a>
+
+## `epok::Sprite3DComponent::class_id`
+
+**Purpose.** Performs `class id` as part of the object model module.
+
+**Exact declaration**
+
+```cpp
+uint64_t class_id() const override
+```
+
+- **Declared at:** [line 580](../../../runtime/object_model.hpp#L580)
+- **Kind:** `cxx method`; qualifiers: `const`
+
+**Returns.** Returns `uint64_t`. Check the purpose and failure notes before using the value.
+
+**Use it when.** You need the object model module and the preconditions in the declaration are already satisfied.
+
+**Usage pattern**
+
+```cpp
+#include "object_model.hpp"
+
+epok::Sprite3DComponent& object = /* obtain a valid instance */;
+
+auto result = object.class_id();
+```
+
+**Why choose it.** The method is `const`, so it does not mutate the object through this API surface.
+
+**Trade-offs and warnings.** Call it only in the lifecycle phase described by the module. Validate indices, capacities and object state before use.
+
+<a id="epok-textcomponent-class-id-1"></a>
+
+## `epok::TextComponent::class_id`
+
+**Purpose.** Performs `class id` as part of the object model module.
+
+**Exact declaration**
+
+```cpp
+uint64_t class_id() const override
+```
+
+- **Declared at:** [line 610](../../../runtime/object_model.hpp#L610)
+- **Kind:** `cxx method`; qualifiers: `const`
+
+**Returns.** Returns `uint64_t`. Check the purpose and failure notes before using the value.
+
+**Use it when.** You need the object model module and the preconditions in the declaration are already satisfied.
+
+**Usage pattern**
+
+```cpp
+#include "object_model.hpp"
+
+epok::TextComponent& object = /* obtain a valid instance */;
+
+auto result = object.class_id();
+```
+
+**Why choose it.** The method is `const`, so it does not mutate the object through this API surface.
+
+**Trade-offs and warnings.** Call it only in the lifecycle phase described by the module. Validate indices, capacities and object state before use.
+
+<a id="epok-timelinecomponent-class-id-1"></a>
+
+## `epok::TimelineComponent::class_id`
+
+**Purpose.** Performs `class id` as part of the object model module.
+
+**Exact declaration**
+
+```cpp
+uint64_t class_id() const override
+```
+
+- **Declared at:** [line 625](../../../runtime/object_model.hpp#L625)
+- **Kind:** `cxx method`; qualifiers: `const`
+
+**Returns.** Returns `uint64_t`. Check the purpose and failure notes before using the value.
+
+**Use it when.** You need the object model module and the preconditions in the declaration are already satisfied.
+
+**Usage pattern**
+
+```cpp
+#include "object_model.hpp"
+
+epok::TimelineComponent& object = /* obtain a valid instance */;
+
+auto result = object.class_id();
+```
+
+**Why choose it.** The method is `const`, so it does not mutate the object through this API surface.
+
+**Trade-offs and warnings.** Call it only in the lifecycle phase described by the module. Validate indices, capacities and object state before use.
+
 <a id="epok-uiactor-class-id-1"></a>
 
 ## `epok::UIActor::class_id`
@@ -5241,7 +5649,7 @@ auto result = object.class_id();
 uint64_t class_id() const override
 ```
 
-- **Declared at:** [line 622](../../../runtime/object_model.hpp#L622)
+- **Declared at:** [line 660](../../../runtime/object_model.hpp#L660)
 - **Kind:** `cxx method`; qualifiers: `const`
 
 **Returns.** Returns `uint64_t`. Check the purpose and failure notes before using the value.
@@ -5274,7 +5682,7 @@ auto result = object.class_id();
 ActorComponent* default_root() override
 ```
 
-- **Declared at:** [line 624](../../../runtime/object_model.hpp#L624)
+- **Declared at:** [line 662](../../../runtime/object_model.hpp#L662)
 - **Kind:** `cxx method`
 
 **Returns.** Returns `ActorComponent *`. Check the purpose and failure notes before using the value.
@@ -5307,7 +5715,7 @@ auto result = object.default_root();
 uint64_t class_id() const override
 ```
 
-- **Declared at:** [line 493](../../../runtime/object_model.hpp#L493)
+- **Declared at:** [line 510](../../../runtime/object_model.hpp#L510)
 - **Kind:** `cxx method`; qualifiers: `const`
 
 **Returns.** Returns `uint64_t`. Check the purpose and failure notes before using the value.
@@ -5340,7 +5748,7 @@ auto result = object.class_id();
 void bind(Level& value, ObjectRegistry& table)
 ```
 
-- **Declared at:** [line 1100](../../../runtime/object_model.hpp#L1100)
+- **Declared at:** [line 1204](../../../runtime/object_model.hpp#L1204)
 - **Kind:** `cxx method`
 
 **Parameters**
@@ -5384,7 +5792,7 @@ object.bind(value, table);
 uint64_t class_id() const override
 ```
 
-- **Declared at:** [line 1096](../../../runtime/object_model.hpp#L1096)
+- **Declared at:** [line 1200](../../../runtime/object_model.hpp#L1200)
 - **Kind:** `cxx method`; qualifiers: `const`
 
 **Returns.** Returns `uint64_t`. Check the purpose and failure notes before using the value.

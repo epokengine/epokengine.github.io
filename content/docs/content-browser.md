@@ -1,6 +1,6 @@
 # Content Browser
 
-The Project panel is a native ImGui Content Browser based on the supplied Unreal Engine screenshot. `Content` represents the project's `assets/` directory, including empty folders. No project files are renamed merely to display this label.
+The Project panel is a native ImGui Content Browser based on the supplied reference screenshot. `Content` represents the project's `assets/` directory, including empty folders. No project files are renamed merely to display this label.
 
 ![Native Content Browser](images/content-browser.png)
 
@@ -65,7 +65,7 @@ Startup establishes the source-observation baseline after loading and migration.
 
 Content Drawer switches to the bottom drawer; Dock in Layout returns to the previous docking node. Output Log focuses Console. Cmd exposes `save`, `build`, `play`, `stop` and `refresh`. Derived Data opens the asset dependency view. Source Control Off reflects the absence of an integrated source-control provider.
 
-Add retains Epok's C++ Class, Blueprint Class, Timeline, Particle Effect and Timeline Adapter workflows. Those specialized workflows retain their established destination rules. This panel does not introduce Unreal-specific asset types, source-control integration or Unreal's complete advanced search language.
+Add retains Epok's C++ Class, Blueprint Class, Timeline, Particle Effect and Timeline Adapter workflows. Those specialized workflows retain their established destination rules. This panel does not introduce external asset types, source-control integration or an advanced search language.
 
 ## Visual verification
 
@@ -75,7 +75,7 @@ Add retains Epok's C++ Class, Blueprint Class, Timeline, Particle Effect and Tim
 epok-editor --project <fixture> --window-size 1258x342 --screenshot-content-browser --screenshot <output.png>
 ```
 
-The design reference remains the supplied screenshot. Behavioral details were checked against Epic's [Content Browser interface documentation](https://dev.epicgames.com/documentation/en-us/unreal-engine/content-browser-interface-in-unreal-engine) and the authorized GitHub source files `ContentBrowserStyle.cpp`, `SContentBrowser.cpp`, `SAssetView.cpp` and `DragDropHandler.cpp`. The implementation uses Epok's existing Roboto, Font Awesome and Codicons resources with native folder geometry; no Epic source or artwork is bundled.
+The design reference remains the supplied screenshot. The implementation uses Epok's existing Roboto, Font Awesome and Codicons resources with native folder geometry; no external source or artwork is bundled.
 
 `tests/integration/create_content_browser_visual_fixture.py` creates a fresh temporary QAGame fixture with the reference folder names and can capture it with `--screenshot <output.png>`. See [verification notes](content-browser-qa.md).
 

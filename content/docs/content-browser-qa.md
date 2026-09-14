@@ -25,7 +25,7 @@
 - Debug and Release editor/header-tool binaries built with the locked dependencies. Actual editor captures checked default visibility, source/processed badge colors, malformed-image fallback, list controls and 96-pixel compact tiles. Reproduce with `tests/integration/create_content_preview_visual_fixture.py`; see `images/content-browser-previews.png`.
 - Audio audition previews the saved import settings before SPU/XA encoding; it does not certify console compression artifacts or looping behavior.
 
-The actual WGPU/ImGui renderer was captured and visually inspected at 1258x342, at 640x342, and inside the normal 1440x900 editor. The supplied Unreal screenshot was the design target. The isolated capture and the docked panel call the same implementation.
+The actual WGPU/ImGui renderer was captured and visually inspected at 1258x342, at 640x342, and inside the normal 1440x900 editor. The supplied screenshot was the design target. The isolated capture and the docked panel call the same implementation.
 
 ## Findings and corrections
 
@@ -48,9 +48,9 @@ The new filesystem tests cover empty folders, collision/escape/self-nesting reje
 
 ## Remaining differences from the reference
 
-This is a working Epok implementation, not a claim of pixel-identical Unreal parity. Folder geometry and toolbar icons are independently rendered, with small silhouette/stroke/spacing differences. The screenshot's yellow focus outline is not a permanent decoration. Item counts and project content come from the real project. Asset types, class creation, imports, commands and generated-data inspection use Epok's existing capabilities.
+This is a working Epok implementation, not a claim of pixel-identical parity. Folder geometry and toolbar icons are independently rendered, with small silhouette/stroke/spacing differences. The screenshot's yellow focus outline is not a permanent decoration. Item counts and project content come from the real project. Asset types, class creation, imports, commands and generated-data inspection use Epok's existing capabilities.
 
-Unreal-specific providers, advanced search expressions, folder imports, class/model duplication outside the dedicated workflows, and live image thumbnails are not implemented here. See the behavior limits in `content-browser.md`.
+External providers, advanced search expressions, folder imports, class/model duplication outside the dedicated workflows, and live image thumbnails are not implemented here. See the behavior limits in `content-browser.md`.
 
 ## Native icons and project startup
 

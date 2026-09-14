@@ -2,7 +2,7 @@
 
 > **Header:** `"scene_service.hpp"` · **Tier:** Engine internal · **Source:** [open header](../../../runtime/scene_service.hpp)
 
-This module covers scene lifecycle and scene-stack control. It documents 4 public callables declared directly in this header.
+This module covers scene lifecycle and scene-stack control. It documents 3 public callables declared directly in this header.
 
 ## Declared types
 
@@ -10,16 +10,15 @@ This module covers scene lifecycle and scene-stack control. It documents 4 publi
 
 ## Callable index
 
-- [`epok::install_actor_service_hooks`](#epok-install-actor-service-hooks-1) — Idempotent; main.cpp installs at startup and scene_tick keeps it installed across a transition that replaced the bindings table.
-- [`epok::legacy_bindings_notify`](#epok-legacy-bindings-notify-1) — Trigger delivery rule: the legacy `bindings` table wins.
-- [`epok::music_retains_audio_source`](#epok-music-retains-audio-source-1) — Component-owned AudioSource storage stays quarantined while the XA consumer still points at it -- exactly the rule create_entity (runtime/lifecycle.hpp) applies to a legacy slot's `audio`.
+- [`epok::install_actor_service_hooks`](#epok-install-actor-service-hooks-1) — Performs `install actor service hooks` as part of scene lifecycle and scene-stack control.
+- [`epok::music_retains_audio_source`](#epok-music-retains-audio-source-1) — Component-owned AudioSource storage stays quarantined while the XA consumer still points at it -- exactly the rule allocate_actor_data (runtime/lifecycle.hpp) applies to a legacy slot's `audio`.
 - [`epok::scene_tick`](#epok-scene-tick-1) — Performs `scene tick` as part of scene lifecycle and scene-stack control.
 
 <a id="epok-install-actor-service-hooks-1"></a>
 
 ## `epok::install_actor_service_hooks`
 
-**Purpose.** Idempotent; main.cpp installs at startup and scene_tick keeps it installed across a transition that replaced the bindings table.
+**Purpose.** Performs `install actor service hooks` as part of scene lifecycle and scene-stack control.
 
 **Exact declaration**
 
@@ -27,7 +26,7 @@ This module covers scene lifecycle and scene-stack control. It documents 4 publi
 inline void install_actor_service_hooks()
 ```
 
-- **Declared at:** [line 37](../../../runtime/scene_service.hpp#L37)
+- **Declared at:** [line 25](../../../runtime/scene_service.hpp#L25)
 - **Kind:** `function decl`
 
 **Returns.** No value is returned; observe the documented state change or callback.
@@ -46,53 +45,11 @@ epok::install_actor_service_hooks();
 
 **Trade-offs and warnings.** This is classified as **Engine internal**. Prefer a higher-level Epok service unless you need this exact control.
 
-<a id="epok-legacy-bindings-notify-1"></a>
-
-## `epok::legacy_bindings_notify`
-
-**Purpose.** Trigger delivery rule: the legacy `bindings` table wins.
-
-**Details.** A LegacyBehaviourComponent wrapping a Behaviour that table already notifies is skipped by dispatch_trigger, so a migrated entity never receives on_trigger twice.
-
-**Exact declaration**
-
-```cpp
-inline bool legacy_bindings_notify(const ActorComponent* component)
-```
-
-- **Declared at:** [line 28](../../../runtime/scene_service.hpp#L28)
-- **Kind:** `function decl`
-
-**Parameters**
-
-| Name | Type | Role | Meaning |
-| --- | --- | --- | --- |
-| `component` | `const ActorComponent *` | Input | Value supplied for `component`. See the exact type and module contract. |
-
-**Returns.** Returns `bool`. Check the purpose and failure notes before using the value.
-
-**Use it when.** A LegacyBehaviourComponent wrapping a Behaviour that table already notifies is skipped by dispatch_trigger, so a migrated entity never receives on_trigger twice.
-
-**Usage pattern**
-
-```cpp
-#include "scene_service.hpp"
-
-// Assume these named values have been initialized with valid data:
-// const ActorComponent * component
-
-auto result = epok::legacy_bindings_notify(component);
-```
-
-**Why choose it.** The boolean result makes success, availability or state explicit without exceptions.
-
-**Trade-offs and warnings.** Check the return value; `false` is part of normal control flow for many PSX resource operations. This is classified as **Engine internal**. Prefer a higher-level Epok service unless you need this exact control. Pointer/reference arguments are borrowed unless the source contract says otherwise; keep them valid for the complete operation and never assume null is accepted.
-
 <a id="epok-music-retains-audio-source-1"></a>
 
 ## `epok::music_retains_audio_source`
 
-**Purpose.** Component-owned AudioSource storage stays quarantined while the XA consumer still points at it -- exactly the rule create_entity (runtime/lifecycle.hpp) applies to a legacy slot's `audio`.
+**Purpose.** Component-owned AudioSource storage stays quarantined while the XA consumer still points at it -- exactly the rule allocate_actor_data (runtime/lifecycle.hpp) applies to a legacy slot's `audio`.
 
 **Details.** `music_lookup` means a CD lookup for `music_active` is still in flight, so that source is retained even between requests.
 
@@ -142,7 +99,7 @@ auto result = epok::music_retains_audio_source(source);
 inline bool scene_tick(psyqo::GPU& gpu)
 ```
 
-- **Declared at:** [line 69](../../../runtime/scene_service.hpp#L69)
+- **Declared at:** [line 56](../../../runtime/scene_service.hpp#L56)
 - **Kind:** `function decl`
 
 **Parameters**

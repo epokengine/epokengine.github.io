@@ -2,52 +2,51 @@
 
 > **Header:** `"actor_tables.hpp"` · **Tier:** Epok runtime API · **Source:** [open header](../../../runtime/actor_tables.hpp)
 
-This module covers the actor tables module. It documents 11 public callables declared directly in this header.
+This module covers the actor tables module. It documents 12 public callables declared directly in this header.
 
 ## Declared types
 
-`epok::ActorComponentRecord`, `epok::ActorRecord`, `epok::ActorStats`, `epok::ActorTable`, `epok::SceneLevel`, `epok::SceneReferenceRecord`, `epok::SceneRefKind`
+`epok::ActorComponentRecord`, `epok::ActorPrototype`, `epok::ActorRecord`, `epok::ActorStats`, `epok::ActorTable`, `epok::SceneLevel`, `epok::SceneReferenceRecord`, `epok::SceneRefKind`
 
 ## Callable index
 
-- [`epok::actor_for_slot`](#epok-actor-for-slot-1) — ---- trigger fan-out --------------------------------------------------------------- The collision service reports legacy slot indices; the object model speaks ObjectIds.
-- [`epok::collect_object_quarantine`](#epok-collect-object-quarantine-1) — Retries the slots an asynchronous service still points at.
-- [`epok::dispatch_slot_trigger`](#epok-dispatch-slot-trigger-1) — One event, one delivery: the collision service calls this once per colliding slot, and epok::dispatch_trigger skips any component the legacy `bindings` table already notified (see component_trigger_filtered, installed by scene_service.hpp).
-- [`epok::load_actor_bank`](#epok-load-actor-bank-1) — Called by the generated load_bank_N() before the legacy initialize_scripts().
-- [`epok::SceneLevel::add_component_by_class`](#epok-scenelevel-add-component-by-class-1) — Adds a component named by its cooked class id.
-- [`epok::SceneLevel::bind_scene_references`](#epok-scenelevel-bind-scene-references-1) — Binds the bank's resolved map-scoped references into the scene script instance.
-- [`epok::SceneLevel::create_bank_scene_script`](#epok-scenelevel-create-bank-scene-script-1) — Cooked scene script for the bank.
-- [`epok::SceneLevel::ensure_bound`](#epok-scenelevel-ensure-bound-1) — Binds the slot table once.
-- [`epok::SceneLevel::load_bank`](#epok-scenelevel-load-bank-1) — Loads one cooked bank.
-- [`epok::SceneLevel::refresh_stats`](#epok-scenelevel-refresh-stats-1) — Snapshot of the registry and level counters for tools/profile_runtime.py.
-- [`epok::unload_actor_bank`](#epok-unload-actor-bank-1) — Called by scene_tick() before the legacy binding teardown, while the actors and their legacy slots are still alive.
+- [`epok::actor_for_slot`](#epok-actor-for-slot-1) — Performs `actor for slot` as part of the actor tables module.
+- [`epok::collect_object_quarantine`](#epok-collect-object-quarantine-1) — Performs `collect object quarantine` as part of the actor tables module.
+- [`epok::dispatch_slot_trigger`](#epok-dispatch-slot-trigger-1) — Performs `dispatch slot trigger` as part of the actor tables module.
+- [`epok::load_actor_bank`](#epok-load-actor-bank-1) — Loads actor bank as part of the actor tables module.
+- [`epok::SceneLevel::add_component_by_class`](#epok-scenelevel-add-component-by-class-1) — Adds component by class as part of the actor tables module.
+- [`epok::SceneLevel::bind_scene_references`](#epok-scenelevel-bind-scene-references-1) — Performs `bind scene references` as part of the actor tables module.
+- [`epok::SceneLevel::create_bank_scene_script`](#epok-scenelevel-create-bank-scene-script-1) — Creates bank scene script as part of the actor tables module.
+- [`epok::SceneLevel::ensure_bound`](#epok-scenelevel-ensure-bound-1) — Performs `ensure bound` as part of the actor tables module.
+- [`epok::SceneLevel::load_bank`](#epok-scenelevel-load-bank-1) — Loads bank as part of the actor tables module.
+- [`epok::SceneLevel::refresh_stats`](#epok-scenelevel-refresh-stats-1) — Performs `refresh stats` as part of the actor tables module.
+- [`epok::SceneLevel::spawn_actor`](#epok-scenelevel-spawn-actor-1) — Performs `spawn actor` as part of the actor tables module.
+- [`epok::unload_actor_bank`](#epok-unload-actor-bank-1) — Performs `unload actor bank` as part of the actor tables module.
 
 <a id="epok-actor-for-slot-1"></a>
 
 ## `epok::actor_for_slot`
 
-**Purpose.** ---- trigger fan-out --------------------------------------------------------------- The collision service reports legacy slot indices; the object model speaks ObjectIds.
-
-**Details.** An actor participates in a trigger event when its *root* component is bound to the colliding slot -- that root is the canonical transform the collision world read.
+**Purpose.** Performs `actor for slot` as part of the actor tables module.
 
 **Exact declaration**
 
 ```cpp
-inline ObjectId actor_for_slot(const Entity* slot)
+inline ObjectId actor_for_slot(const ActorData* data)
 ```
 
-- **Declared at:** [line 373](../../../runtime/actor_tables.hpp#L373)
+- **Declared at:** [line 159](../../../runtime/actor_tables.hpp#L159)
 - **Kind:** `function decl`
 
 **Parameters**
 
 | Name | Type | Role | Meaning |
 | --- | --- | --- | --- |
-| `slot` | `const Entity *` | Input | Value supplied for `slot`. See the exact type and module contract. |
+| `data` | `const ActorData *` | Input | Value supplied for `data`. See the exact type and module contract. |
 
 **Returns.** Returns `ObjectId`. Check the purpose and failure notes before using the value.
 
-**Use it when.** An actor participates in a trigger event when its *root* component is bound to the colliding slot -- that root is the canonical transform the collision world read.
+**Use it when.** You need the actor tables module and the preconditions in the declaration are already satisfied.
 
 **Usage pattern**
 
@@ -55,9 +54,9 @@ inline ObjectId actor_for_slot(const Entity* slot)
 #include "actor_tables.hpp"
 
 // Assume these named values have been initialized with valid data:
-// const Entity * slot
+// const ActorData * data
 
-auto result = epok::actor_for_slot(slot);
+auto result = epok::actor_for_slot(data);
 ```
 
 **Why choose it.** It provides direct, allocation-conscious access to the actor tables module. No exception-based error path is implied by the signature.
@@ -68,9 +67,7 @@ auto result = epok::actor_for_slot(slot);
 
 ## `epok::collect_object_quarantine`
 
-**Purpose.** Retries the slots an asynchronous service still points at.
-
-**Details.** main.cpp calls it once per frame, next to the point where the legacy path re-checks music_active.
+**Purpose.** Performs `collect object quarantine` as part of the actor tables module.
 
 **Exact declaration**
 
@@ -78,12 +75,12 @@ auto result = epok::actor_for_slot(slot);
 inline void collect_object_quarantine()
 ```
 
-- **Declared at:** [line 367](../../../runtime/actor_tables.hpp#L367)
+- **Declared at:** [line 158](../../../runtime/actor_tables.hpp#L158)
 - **Kind:** `function decl`
 
 **Returns.** No value is returned; observe the documented state change or callback.
 
-**Use it when.** main.cpp calls it once per frame, next to the point where the legacy path re-checks music_active.
+**Use it when.** You need the actor tables module and the preconditions in the declaration are already satisfied.
 
 **Usage pattern**
 
@@ -101,23 +98,23 @@ epok::collect_object_quarantine();
 
 ## `epok::dispatch_slot_trigger`
 
-**Purpose.** One event, one delivery: the collision service calls this once per colliding slot, and epok::dispatch_trigger skips any component the legacy `bindings` table already notified (see component_trigger_filtered, installed by scene_service.hpp).
+**Purpose.** Performs `dispatch slot trigger` as part of the actor tables module.
 
 **Exact declaration**
 
 ```cpp
-inline size_t dispatch_slot_trigger(EntityHandle self, EntityHandle other, TriggerPhase phase)
+inline size_t dispatch_slot_trigger(DataHandle self,DataHandle other,TriggerPhase phase)
 ```
 
-- **Declared at:** [line 391](../../../runtime/actor_tables.hpp#L391)
+- **Declared at:** [line 160](../../../runtime/actor_tables.hpp#L160)
 - **Kind:** `function decl`
 
 **Parameters**
 
 | Name | Type | Role | Meaning |
 | --- | --- | --- | --- |
-| `self` | `EntityHandle` | Input | Value supplied for `self`. See the exact type and module contract. |
-| `other` | `EntityHandle` | Input | Value supplied for `other`. See the exact type and module contract. |
+| `self` | `DataHandle` | Input | Value supplied for `self`. See the exact type and module contract. |
+| `other` | `DataHandle` | Input | Value supplied for `other`. See the exact type and module contract. |
 | `phase` | `TriggerPhase` | Input | Value supplied for `phase`. See the exact type and module contract. |
 
 **Returns.** Returns `size_t`. Check the purpose and failure notes before using the value.
@@ -130,8 +127,8 @@ inline size_t dispatch_slot_trigger(EntityHandle self, EntityHandle other, Trigg
 #include "actor_tables.hpp"
 
 // Assume these named values have been initialized with valid data:
-// EntityHandle self
-// EntityHandle other
+// DataHandle self
+// DataHandle other
 // TriggerPhase phase
 
 auto result = epok::dispatch_slot_trigger(self, other, phase);
@@ -145,15 +142,15 @@ auto result = epok::dispatch_slot_trigger(self, other, phase);
 
 ## `epok::load_actor_bank`
 
-**Purpose.** Called by the generated load_bank_N() before the legacy initialize_scripts().
+**Purpose.** Loads actor bank as part of the actor tables module.
 
 **Exact declaration**
 
 ```cpp
-inline size_t load_actor_bank(const ActorTable& table, Entity* slots, size_t slot_count)
+inline size_t load_actor_bank(const ActorTable& table,ActorData* slots,size_t count)
 ```
 
-- **Declared at:** [line 355](../../../runtime/actor_tables.hpp#L355)
+- **Declared at:** [line 156](../../../runtime/actor_tables.hpp#L156)
 - **Kind:** `function decl`
 
 **Parameters**
@@ -161,8 +158,8 @@ inline size_t load_actor_bank(const ActorTable& table, Entity* slots, size_t slo
 | Name | Type | Role | Meaning |
 | --- | --- | --- | --- |
 | `table` | `const ActorTable &` | Input | Value supplied for `table`. See the exact type and module contract. |
-| `slots` | `Entity *` | Input/output; inspect the function contract | Value supplied for `slots`. See the exact type and module contract. |
-| `slot_count` | `size_t` | Input | Value supplied for `slot_count`. See the exact type and module contract. |
+| `slots` | `ActorData *` | Input/output; inspect the function contract | Value supplied for `slots`. See the exact type and module contract. |
+| `count` | `size_t` | Input | Value supplied for `count`. See the exact type and module contract. |
 
 **Returns.** Returns `size_t`. Check the purpose and failure notes before using the value.
 
@@ -175,10 +172,10 @@ inline size_t load_actor_bank(const ActorTable& table, Entity* slots, size_t slo
 
 // Assume these named values have been initialized with valid data:
 // const ActorTable & table
-// Entity * slots
-// size_t slot_count
+// ActorData * slots
+// size_t count
 
-auto result = epok::load_actor_bank(table, slots, slot_count);
+auto result = epok::load_actor_bank(table, slots, count);
 ```
 
 **Why choose it.** It provides direct, allocation-conscious access to the actor tables module. No exception-based error path is implied by the signature.
@@ -189,30 +186,28 @@ auto result = epok::load_actor_bank(table, slots, slot_count);
 
 ## `epok::SceneLevel::add_component_by_class`
 
-**Purpose.** Adds a component named by its cooked class id.
-
-**Details.** Mirrors Level::add_component<T> (same owner-domain, cardinality, abstractness and capacity rules) without needing the C++ type at the call site. begin_play is deferred to finish_components().
+**Purpose.** Adds component by class as part of the actor tables module.
 
 **Exact declaration**
 
 ```cpp
-ObjectId add_component_by_class(Actor& owner, const ClassDescriptor& type, const char* name)
+ObjectId add_component_by_class(Actor& actor,const ClassDescriptor& type,const char* name)
 ```
 
-- **Declared at:** [line 112](../../../runtime/actor_tables.hpp#L112)
+- **Declared at:** [line 33](../../../runtime/actor_tables.hpp#L33)
 - **Kind:** `cxx method`
 
 **Parameters**
 
 | Name | Type | Role | Meaning |
 | --- | --- | --- | --- |
-| `owner` | `Actor &` | Input/output; inspect the function contract | Value supplied for `owner`. See the exact type and module contract. |
+| `actor` | `Actor &` | Input/output; inspect the function contract | Value supplied for `actor`. See the exact type and module contract. |
 | `type` | `const ClassDescriptor &` | Input | Value supplied for `type`. See the exact type and module contract. |
 | `name` | `const char *` | Input | Value supplied for `name`. See the exact type and module contract. |
 
 **Returns.** Returns `ObjectId`. Check the purpose and failure notes before using the value.
 
-**Use it when.** Mirrors Level::add_component<T> (same owner-domain, cardinality, abstractness and capacity rules) without needing the C++ type at the call site. begin_play is deferred to finish_components().
+**Use it when.** You need the actor tables module and the preconditions in the declaration are already satisfied.
 
 **Usage pattern**
 
@@ -220,13 +215,13 @@ ObjectId add_component_by_class(Actor& owner, const ClassDescriptor& type, const
 #include "actor_tables.hpp"
 
 // Assume these named values have been initialized with valid data:
-// Actor & owner
+// Actor & actor
 // const ClassDescriptor & type
 // const char * name
 
 epok::SceneLevel& object = /* obtain a valid instance */;
 
-auto result = object.add_component_by_class(owner, type, name);
+auto result = object.add_component_by_class(actor, type, name);
 ```
 
 **Why choose it.** It provides direct, allocation-conscious access to the actor tables module. No exception-based error path is implied by the signature.
@@ -237,17 +232,15 @@ auto result = object.add_component_by_class(owner, type, name);
 
 ## `epok::SceneLevel::bind_scene_references`
 
-**Purpose.** Binds the bank's resolved map-scoped references into the scene script instance.
-
-**Details.** Every target is a table index the cook resolved by UUID and scope (P6); this turns it into a live identity and hands it to the generated writer.
+**Purpose.** Performs `bind scene references` as part of the actor tables module.
 
 **Exact declaration**
 
 ```cpp
-size_t bind_scene_references(const ActorTable& table, ObjectId owner)
+size_t bind_scene_references(const ActorTable& table,ObjectId owner)
 ```
 
-- **Declared at:** [line 215](../../../runtime/actor_tables.hpp#L215)
+- **Declared at:** [line 75](../../../runtime/actor_tables.hpp#L75)
 - **Kind:** `cxx method`
 
 **Parameters**
@@ -259,7 +252,7 @@ size_t bind_scene_references(const ActorTable& table, ObjectId owner)
 
 **Returns.** Returns `size_t`. Check the purpose and failure notes before using the value.
 
-**Use it when.** Every target is a table index the cook resolved by UUID and scope (P6); this turns it into a live identity and hands it to the generated writer.
+**Use it when.** You need the actor tables module and the preconditions in the declaration are already satisfied.
 
 **Usage pattern**
 
@@ -283,9 +276,7 @@ auto result = object.bind_scene_references(table, owner);
 
 ## `epok::SceneLevel::create_bank_scene_script`
 
-**Purpose.** Cooked scene script for the bank.
-
-**Details.** Exactly one per loaded level: the cooked class when the map authored a scene Blueprint, the runtime base otherwise.
+**Purpose.** Creates bank scene script as part of the actor tables module.
 
 **Exact declaration**
 
@@ -293,7 +284,7 @@ auto result = object.bind_scene_references(table, owner);
 ObjectId create_bank_scene_script(const ActorTable& table)
 ```
 
-- **Declared at:** [line 196](../../../runtime/actor_tables.hpp#L196)
+- **Declared at:** [line 68](../../../runtime/actor_tables.hpp#L68)
 - **Kind:** `cxx method`
 
 **Parameters**
@@ -304,7 +295,7 @@ ObjectId create_bank_scene_script(const ActorTable& table)
 
 **Returns.** Returns `ObjectId`. Check the purpose and failure notes before using the value.
 
-**Use it when.** Exactly one per loaded level: the cooked class when the map authored a scene Blueprint, the runtime base otherwise.
+**Use it when.** You need the actor tables module and the preconditions in the declaration are already satisfied.
 
 **Usage pattern**
 
@@ -327,9 +318,7 @@ auto result = object.create_bank_scene_script(table);
 
 ## `epok::SceneLevel::ensure_bound`
 
-**Purpose.** Binds the slot table once.
-
-**Details.** Calling it again is a no-op, so a scene transition reuses the same registry and the same Level identity.
+**Purpose.** Performs `ensure bound` as part of the actor tables module.
 
 **Exact declaration**
 
@@ -337,7 +326,7 @@ auto result = object.create_bank_scene_script(table);
 bool ensure_bound(ObjectRegistry& registry)
 ```
 
-- **Declared at:** [line 104](../../../runtime/actor_tables.hpp#L104)
+- **Declared at:** [line 32](../../../runtime/actor_tables.hpp#L32)
 - **Kind:** `cxx method`
 
 **Parameters**
@@ -348,7 +337,7 @@ bool ensure_bound(ObjectRegistry& registry)
 
 **Returns.** Returns `bool`. Check the purpose and failure notes before using the value.
 
-**Use it when.** Calling it again is a no-op, so a scene transition reuses the same registry and the same Level identity.
+**Use it when.** You need the actor tables module and the preconditions in the declaration are already satisfied.
 
 **Usage pattern**
 
@@ -371,17 +360,15 @@ auto result = object.ensure_bound(registry);
 
 ## `epok::SceneLevel::load_bank`
 
-**Purpose.** Loads one cooked bank.
-
-**Details.** Returns the number of actors instantiated. Order (design.md section 6; the P10 deviation is closed): 1. Level::spawn_batch -> reserve, defaults, roots, owners, register; 2. the prepare hook, per actor of the batch: authored components, legacy slot binding, attachment and the generated property overrides; 3. begin_play -- components first, then the owning actor -- so an actor's own begin_play already sees its per-instance overrides and components; 4. the bank's single SceneScriptActor: created, its map-scoped references bound, then begin_play. The scene script therefore always observes fully configured actors.
+**Purpose.** Loads bank as part of the actor tables module.
 
 **Exact declaration**
 
 ```cpp
-size_t load_bank(const ActorTable& table, Entity* slots, size_t slot_count)
+size_t load_bank(const ActorTable& table,ActorData* slots,size_t count)
 ```
 
-- **Declared at:** [line 141](../../../runtime/actor_tables.hpp#L141)
+- **Declared at:** [line 40](../../../runtime/actor_tables.hpp#L40)
 - **Kind:** `cxx method`
 
 **Parameters**
@@ -389,12 +376,12 @@ size_t load_bank(const ActorTable& table, Entity* slots, size_t slot_count)
 | Name | Type | Role | Meaning |
 | --- | --- | --- | --- |
 | `table` | `const ActorTable &` | Input | Value supplied for `table`. See the exact type and module contract. |
-| `slots` | `Entity *` | Input/output; inspect the function contract | Value supplied for `slots`. See the exact type and module contract. |
-| `slot_count` | `size_t` | Input | Value supplied for `slot_count`. See the exact type and module contract. |
+| `slots` | `ActorData *` | Input/output; inspect the function contract | Value supplied for `slots`. See the exact type and module contract. |
+| `count` | `size_t` | Input | Value supplied for `count`. See the exact type and module contract. |
 
 **Returns.** Returns `size_t`. Check the purpose and failure notes before using the value.
 
-**Use it when.** Returns the number of actors instantiated. Order (design.md section 6; the P10 deviation is closed): 1. Level::spawn_batch -> reserve, defaults, roots, owners, register; 2. the prepare hook, per actor of the batch: authored components, legacy slot binding, attachment and the generated property overrides; 3. begin_play -- components first, then the owning actor -- so an actor's own begin_play already sees its per-instance overrides and components; 4. the bank's single SceneScriptActor: created, its map-scoped references bound, then begin_play. The scene script therefore always observes fully configured actors.
+**Use it when.** You need the actor tables module and the preconditions in the declaration are already satisfied.
 
 **Usage pattern**
 
@@ -403,12 +390,12 @@ size_t load_bank(const ActorTable& table, Entity* slots, size_t slot_count)
 
 // Assume these named values have been initialized with valid data:
 // const ActorTable & table
-// Entity * slots
-// size_t slot_count
+// ActorData * slots
+// size_t count
 
 epok::SceneLevel& object = /* obtain a valid instance */;
 
-auto result = object.load_bank(table, slots, slot_count);
+auto result = object.load_bank(table, slots, count);
 ```
 
 **Why choose it.** It provides direct, allocation-conscious access to the actor tables module. No exception-based error path is implied by the signature.
@@ -419,7 +406,7 @@ auto result = object.load_bank(table, slots, slot_count);
 
 ## `epok::SceneLevel::refresh_stats`
 
-**Purpose.** Snapshot of the registry and level counters for tools/profile_runtime.py.
+**Purpose.** Performs `refresh stats` as part of the actor tables module.
 
 **Exact declaration**
 
@@ -427,7 +414,7 @@ auto result = object.load_bank(table, slots, slot_count);
 void refresh_stats()
 ```
 
-- **Declared at:** [line 249](../../../runtime/actor_tables.hpp#L249)
+- **Declared at:** [line 85](../../../runtime/actor_tables.hpp#L85)
 - **Kind:** `cxx method`
 
 **Returns.** No value is returned; observe the documented state change or callback.
@@ -448,11 +435,57 @@ object.refresh_stats();
 
 **Trade-offs and warnings.** Call it only in the lifecycle phase described by the module. Validate indices, capacities and object state before use.
 
+<a id="epok-scenelevel-spawn-actor-1"></a>
+
+## `epok::SceneLevel::spawn_actor`
+
+**Purpose.** Performs `spawn actor` as part of the actor tables module.
+
+**Exact declaration**
+
+```cpp
+ObjectId spawn_actor(const ClassDescriptor& type,const char* name,ObjectId parent={}) override
+```
+
+- **Declared at:** [line 48](../../../runtime/actor_tables.hpp#L48)
+- **Kind:** `cxx method`
+
+**Parameters**
+
+| Name | Type | Role | Meaning |
+| --- | --- | --- | --- |
+| `type` | `const ClassDescriptor &` | Input | Value supplied for `type`. See the exact type and module contract. |
+| `name` | `const char *` | Input | Value supplied for `name`. See the exact type and module contract. |
+| `parent` | `ObjectId` | Input | Value supplied for `parent`. See the exact type and module contract. |
+
+**Returns.** Returns `ObjectId`. Check the purpose and failure notes before using the value.
+
+**Use it when.** You need the actor tables module and the preconditions in the declaration are already satisfied.
+
+**Usage pattern**
+
+```cpp
+#include "actor_tables.hpp"
+
+// Assume these named values have been initialized with valid data:
+// const ClassDescriptor & type
+// const char * name
+// ObjectId parent
+
+epok::SceneLevel& object = /* obtain a valid instance */;
+
+auto result = object.spawn_actor(type, name, parent);
+```
+
+**Why choose it.** It provides direct, allocation-conscious access to the actor tables module. No exception-based error path is implied by the signature.
+
+**Trade-offs and warnings.** Pointer/reference arguments are borrowed unless the source contract says otherwise; keep them valid for the complete operation and never assume null is accepted.
+
 <a id="epok-unload-actor-bank-1"></a>
 
 ## `epok::unload_actor_bank`
 
-**Purpose.** Called by scene_tick() before the legacy binding teardown, while the actors and their legacy slots are still alive.
+**Purpose.** Performs `unload actor bank` as part of the actor tables module.
 
 **Exact declaration**
 
@@ -460,7 +493,7 @@ object.refresh_stats();
 inline void unload_actor_bank()
 ```
 
-- **Declared at:** [line 361](../../../runtime/actor_tables.hpp#L361)
+- **Declared at:** [line 157](../../../runtime/actor_tables.hpp#L157)
 - **Kind:** `function decl`
 
 **Returns.** No value is returned; observe the documented state change or callback.
