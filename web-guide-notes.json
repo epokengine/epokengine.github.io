@@ -203,10 +203,10 @@
     "tip": "Fix the first error first. Later errors often exist only because the first one knocked over the furniture."
   },
   "assets": {
-    "plain": "Imported assets are portable packages with a stable UUID, source snapshot and conversion settings. This guide also explains resident sound effects and disc-based XA music.",
+    "plain": "Imported assets are portable packages with a stable UUID, source snapshot and conversion settings. WAV, MP3, FLAC and OGG/Vorbis can become resident effects or disc streams; MIDI uses native music with a SoundBank.",
     "analogy": "The package is both the cooked ingredient and its recipe card, so the project can preview or rebuild it after the original source moves.",
     "flow": ["Choose a source and settings", "Import into a UUID package", "Reference, reimport or recover it safely"],
-    "details": ["Texture, audio, model and editable documents share identity/revision rules.", "SFX becomes SPU ADPCM in a validated resident bank.", "Music becomes XA sectors and uses asynchronous CD playback outside the SFX bank."],
+    "details": ["Texture, audio, model and editable documents share identity/revision rules.", "Resident effects and native sequence banks share SPU memory and voices.", "A rendered stream becomes XA sectors and uses asynchronous CD playback outside the resident sample bank."],
     "tip": "Keep the imported package in version control even if the original art source lives elsewhere."
   },
   "hud": {

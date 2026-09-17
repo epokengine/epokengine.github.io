@@ -28,8 +28,8 @@
     "tip": "Keep reusable door logic in the door class, not copied into every level's opening sequence."
   },
   "music-sequences": {
-    "plain": "Import MIDI and a SoundFont or portable SoundBank, inspect the instrument mapping, and convert the result to sequenced SPU music with explicit quality and memory controls.",
-    "analogy": "MIDI is the sheet music; the SoundBank is the orchestra. The PSX stage has only 24 chairs, shared with your sound effects.",
+    "plain": "Choose resident effects, native MIDI music with a SoundBank, or a disc stream. The guide shows how each route is imported, assigned and controlled from the editor, Blueprints, C++ and Lua.",
+    "analogy": "MIDI is the sheet music; the SoundBank is the instrument case. The SPU stage has only 24 chairs, shared with sound effects.",
     "flow": ["Import the score and instruments", "Analyze and save a PSX recipe", "Compare previews, then test the game"],
     "details": ["SF2/SF3 libraries keep their source snapshots; conversion selects required regions and layers.", "Compact/Balanced/High presets and an opt-in optimizer help fit budgets without silently dropping instruments.", "A host Target Preview does not reproduce hardware interpolation, interrupt latency or all runtime contention."],
     "tip": "Reserve room for menu clicks and gameplay SFX before giving the entire SPU to the orchestra."

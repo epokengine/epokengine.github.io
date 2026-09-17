@@ -68,8 +68,6 @@ To repeat after syncing a newer committed revision:
 Primary references inspected in text and browser:
 
 - [Godot features](https://godotengine.org/features/): themed groups, explanatory feature cards and a separate complete inventory.
-- [Unity Engine](https://unity.com/products/unity-engine): short overview, anchored sections, expandable feature detail and learning links.
-- [Unreal Engine features](https://www.unrealengine.com/features): collapsed feature families, detailed explanations/screenshots and explicit experimental-status caveats.
 
 Applied to Epok: compact overview/detail hierarchy; persistent search/filter context; source and guide links; restrained dark panels; actual Epok screenshots. No competitor assets or copy were reused.
 
