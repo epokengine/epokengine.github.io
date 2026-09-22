@@ -27,7 +27,7 @@ This module covers native HUD layout, drawing and focus navigation. It documents
 inline void begin(psyqo::GPU& gpu)
 ```
 
-- **Declared at:** [line 61](../../../runtime/debug_hud.hpp#L61)
+- **Declared at:** [line 62](../../../runtime/debug_hud.hpp#L62)
 - **Kind:** `function decl`
 
 **Parameters**
@@ -67,7 +67,7 @@ epok::debug_hud::begin(gpu);
 inline void draw(psyqo::GPU& gpu)
 ```
 
-- **Declared at:** [line 90](../../../runtime/debug_hud.hpp#L90)
+- **Declared at:** [line 91](../../../runtime/debug_hud.hpp#L91)
 - **Kind:** `function decl`
 
 **Parameters**
@@ -107,7 +107,7 @@ epok::debug_hud::draw(gpu);
 inline void geometry(uint16_t started, bool gte)
 ```
 
-- **Declared at:** [line 84](../../../runtime/debug_hud.hpp#L84)
+- **Declared at:** [line 85](../../../runtime/debug_hud.hpp#L85)
 - **Kind:** `function decl`
 
 **Parameters**
@@ -149,7 +149,7 @@ epok::debug_hud::geometry(started, gte);
 inline void initialize(psyqo::GPU& gpu)
 ```
 
-- **Declared at:** [line 41](../../../runtime/debug_hud.hpp#L41)
+- **Declared at:** [line 42](../../../runtime/debug_hud.hpp#L42)
 - **Kind:** `function decl`
 
 **Parameters**

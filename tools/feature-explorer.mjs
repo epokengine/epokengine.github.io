@@ -54,7 +54,7 @@ const sections = {
   'Build, memory analysis, loading and distribution': ['Build & deploy', 'play'],
   'Geometry streaming and performance': ['Performance & memory', 'performance'],
   'Memory Card persistence': ['Gameplay & Actors', 'memory-card'],
-  'AI assistant / MCP integration': ['Automation & tools', 'mcp'],
+  'External tools / MCP integration': ['Automation & tools', 'mcp'],
   'Command-line and automation surface': ['Automation & tools', 'getting-started'],
   'Validation and developer tooling': ['Automation & tools', 'testing'],
 };

@@ -67,7 +67,7 @@ for (const item of apiSearch) {
   if (['Function', 'Function template', 'Method', 'Constructor', 'Destructor', 'Conversion operator', 'Field', 'Variable', 'Enum value'].includes(item.kind) && !html.includes('Trade-offs and warnings')) errors.push(`${item.title}: missing trade-offs and warnings`);
 }
 const documentationIndex = fs.readFileSync(path.join(root, 'docs/index.html'), 'utf8');
-for (const slug of ['features', 'release-v0.2.0', 'content-browser', 'play', 'blueprints-tutorial', 'lua-tutorial', 'lua-scripting', 'lua-vm-runtime', 'vfx-editor', 'timelines', 'spell-tutorial', 'blueprints-vfx-troubleshooting']) {
+for (const slug of ['features', 'release-v0.4.0', 'content-browser', 'play', 'blueprints-tutorial', 'lua-tutorial', 'lua-scripting', 'lua-vm-runtime', 'vfx-editor', 'timelines', 'terrain', 'navigation', 'blueprints-vfx-troubleshooting']) {
   if (!documentationIndex.includes(`/docs/${slug}/`) || !search.some(d => d.url === `/docs/${slug}/`)) errors.push(`Learning guide is not discoverable: ${slug}`);
 }
 const homepage = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
@@ -86,7 +86,7 @@ for (const required of ['data-feature-query', 'data-feature-category', 'data-fea
 const sourceFeatureDoc = fs.readFileSync(path.join(root, '../content/docs/features.md'), 'utf8');
 const sourceEntryCount = (sourceFeatureDoc.split('## Known boundaries')[0].match(/^- \*\*/gm) || []).length;
 if (featureItems.filter(item => !item.fresh).length !== sourceEntryCount + 7 + 5 + 2) errors.push('A committed feature bullet, CLI family or validation capability was omitted');
-for (const slug of ['actors', 'migration-actors', 'worlds-2d', 'scene-blueprints', 'lua-tutorial', 'lua-scripting', 'lua-vm-runtime', 'release-v0.2.0', 'music-sequences', 'native-hud-preview', 'iteration', 'third-person']) {
+for (const slug of ['actors', 'migration-actors', 'worlds-2d', 'scene-blueprints', 'lua-tutorial', 'lua-scripting', 'lua-vm-runtime', 'release-v0.4.0', 'music-sequences', 'native-hud-preview', 'iteration', 'third-person']) {
   if (!documentationIndex.includes(`/docs/${slug}/`) || !search.some(item => item.url === `/docs/${slug}/`)) errors.push(`New guide not discoverable: ${slug}`);
 }
 for (const item of ['epok::Actor2D', 'epok::SceneScriptActor', 'epok::Camera2D', 'epok::debug_hud::State']) if (!apiSearch.some(entry => entry.title === item)) errors.push(`New API type not indexed: ${item}`);
@@ -100,7 +100,7 @@ if ((homepage.match(/data-slide data-title=/g) || []).length !== 3 || !homepage.
 for (const [slug, obsolete] of [['editor', 'an Epok C++ input API is not implemented yet'], ['editor', 'Adding and removing components arrives in a later'], ['features', 'Auto compile'], ['features', 'Component add/remove and actor rename/duplicate/delete are not yet'], ['features', 'there is no Lua gameplay VM'], ['features', 'Non-native/Lua gameplay execution'], ['third-person', 'template does not attach a character controller']]) {
   if (fs.readFileSync(path.join(root, `docs/${slug}/index.html`), 'utf8').includes(obsolete)) errors.push(`Obsolete claim still visible in ${slug}: ${obsolete}`);
 }
-for (const [slug, image] of [['vfx-editor', 'vfx-editor.png'], ['spell-tutorial', 'blueprint-fireball.png']]) {
+for (const [slug, image] of [['vfx-editor', 'vfx-editor.png']]) {
   if (!fs.readFileSync(path.join(root, `docs/${slug}/index.html`), 'utf8').includes(`/media/docs/images/${image}`)) errors.push(`Guide is missing its editor capture: ${slug}`);
 }
 if (!homepage.includes('id="blueprints"') || !homepage.includes('/docs/blueprints/')) errors.push('Homepage is missing Blueprint documentation access');

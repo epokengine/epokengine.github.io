@@ -11,8 +11,7 @@ root = Path(__file__).resolve().parent.parent
 checkout = Path(sys.argv[1]).resolve()
 ref = sys.argv[2] if len(sys.argv) > 2 else "origin/develop"
 commit = subprocess.check_output(["git", "-C", str(checkout), "rev-parse", ref], text=True).strip()
-paths = ["docs", "knowledge/architecture.md", "knowledge/maintainers/resources.md", "knowledge/maintainers/testing.md", "README.md", "LICENSE", "THIRD_PARTY_NOTICES.md", "runtime/README.md", "runtime/THIRD_PARTY_NOTICES.md", "examples/rpg-2-5d-demo/README.md", "examples/rpg-2-5d-demo/preview.png", "resources/branding/epok.png", "resources/branding/epok-lockup.png", "resources/branding/README.md"]
-paths.append("examples/timeline-spell/README.md")
+paths = ["VERSION", "docs", "knowledge/architecture.md", "knowledge/maintainers/resources.md", "knowledge/maintainers/testing.md", "README.md", "LICENSE", "THIRD_PARTY_NOTICES.md", "runtime/README.md", "runtime/THIRD_PARTY_NOTICES.md", "resources/branding/epok.png", "resources/branding/epok-lockup.png", "resources/branding/README.md"]
 # These captures predate the public identity and contain obsolete UI branding.
 retired_captures = {"editor.png", "blueprint-editor.png", "mcp-preferences.png", "skeletal-preview.png", "third-person-arena.png"}
 

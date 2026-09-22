@@ -1,75 +1,657 @@
 {
-  "reviewed": "2026-09-15",
+  "reviewed": "2026-09-22",
   "baseline": "8ba2896",
   "items": [
-    {"title":"Lua classes in the reflected Actor model","category":"Blueprints & code","guide":"lua-tutorial","description":"Author one code-declared class per .lua file, extend eligible C++, Blueprint or Lua parents, and use the same Inspector, defaults, attachment and spawning contracts.","source":"src/lua_asset.rs"},
-    {"title":"Three Lua execution modes","category":"Blueprints & code","guide":"lua-scripting","description":"Choose project-wide Native C++, VM bytecode or VM source execution. The same statically checked script and generated C++ subclass work in every mode.","source":"src/lua_compile.rs"},
-    {"title":"Stable Lua identity outside source","category":"Editor & projects","guide":"lua-scripting","description":"ProjectSettings/LuaClasses.epoksettings keeps editor-assigned class UUIDs stable across managed file moves and renames; member IDs derive predictably and may be pinned.","source":"src/lua_identity.rs"},
-    {"title":"Lua Inspector properties and typed callables","category":"Blueprints & code","guide":"lua-tutorial","description":"Plain literals and explicit Epok constructors declare editable properties; Lua Language Server annotations declare callable parameters and results shared with other providers.","source":"src/lua_asset.rs"},
-    {"title":"Intrinsic transforms and engine builtins for Lua","category":"Gameplay & Actors","guide":"lua-scripting","description":"Move 3D/2D Actors or UI layouts and call input, scene, spawn, ownership, audio, texture and effect operations without project-specific C++ helper classes.","source":"src/lua_aot.rs"},
-    {"title":"Generated Lua API definitions","category":"Automation & tools","guide":"lua-scripting","description":"Registry refresh writes .epok/lua/epok.d.lua and creates .luarc.json, covering native, Blueprint and Lua inheritance, properties, events, records, enums and builtins.","source":"src/lua_api_stub.rs"},
-    {"title":"Bounded PSX Lua VM arenas","category":"Performance & memory","guide":"lua-vm-runtime","description":"Bytecode and source modes reserve fixed 96 KiB and 128 KiB arenas by default, with measured peaks, explicit exhaustion and a generated project override.","source":"src/lua_vm.rs"},
-    {"title":"Verified 32-bit Lua bytecode ABI","category":"Build & deploy","guide":"lua-vm-runtime","description":"A host cooker emits target-format chunks and checks its header byte-for-byte against the pinned 32-bit runtime instead of assuming host and PSX layouts match.","source":"src/lua_bytecode.rs"},
-    {"title":"Inherited Blueprint events until connected","category":"Blueprints & code","guide":"blueprints","description":"Lifecycle events begin disconnected and dimmed, preserve parent behavior until implemented, and offer an explicit event-specific Call Parent action.","source":"src/blueprint_event_tests.rs"},
-    {"title":"Descriptive reflected Blueprint pins","category":"Blueprints & code","guide":"blueprints","description":"Reflected parameters require meaningful names, overrides inherit base labels and saved pin identities survive later SDK naming improvements.","source":"src/header_extract.rs"},
-    {"title":"Rigid GTE skeletal playback","category":"Rendering & animation","guide":"skeletal","description":"Group rigid vertices by bone and submit visible ranges directly through the GTE after conservative animation-envelope culling; this is the default import mode.","source":"src/skeletal_compile.rs"},
-    {"title":"Compressed baked skeletal frames","category":"Rendering & animation","guide":"skeletal","description":"Compile 30 Hz clips into independent compressed vertex frames to avoid runtime bone evaluation, trading target archive space within a 512 KiB per-model budget.","source":"runtime/skeletal.hpp"},
-    {"title":"Domain-aware Actor component creation","category":"Gameplay & Actors","guide":"actors","description":"Add Component and new C++/Blueprint component dialogs filter parents by the selected Actor domain and compatibility rules before authoring begins.","source":"src/gui.rs"},
-    {"title":"Shared mesh selection without asset mutation","category":"Assets & imports","guide":"static-mesh-import","description":"Switch an instance among the engine cube, editable meshes and skeletal meshes while preserving Actor identity and leaving shared project assets untouched.","source":"src/mesh_editor.rs"},
-    {"title":"Persistent baked-lighting edit preview","category":"Rendering & animation","guide":"lighting","description":"Keep the last valid shadows and AO visible while editing, show an amber stale-cache warning and rebuild explicitly from the top-level Build menu.","source":"src/lighting.rs"},
-    {"title":"External OBJ dependency import","category":"Assets & imports","guide":"static-mesh-import","description":"Read MTL and texture dependencies beside an external OBJ, copy them into project-owned destinations and reject paths that escape the allowed source boundary.","source":"src/obj_import.rs"},
-    {"title":"UTF-8 BOM-safe Lua source","category":"Blueprints & code","guide":"lua-scripting","description":"Skip an optional byte order mark at the start of a script and explain how to replace the retired metadata-table declaration when encountered.","source":"src/lua_frontend.rs"},
-    {"title":"Playable Third Person controller","category":"World building","guide":"third-person","description":"Camera-relative digital movement, directional turning, acceleration, braking and normalized diagonals in editable native C++.","source":"templates/ThirdPersonController.cpp"},
-    {"title":"Jumping and air control","category":"World building","guide":"third-person","description":"Grounded Cross-button jumps, gravity, weaker airborne steering and bounded step-up for ledges.","source":"templates/ThirdPersonController.cpp"},
-    {"title":"Follow and orbit camera","category":"World building","guide":"third-person","description":"Shoulder-button orbit and elevation, a following camera boom and gradual alignment behind forward travel. No camera-obstacle avoidance.","source":"templates/ThirdPersonController.cpp"},
-    {"title":"Walkable ramp surfaces","category":"Gameplay & Actors","guide":"third-person","description":"Slope rise and X/Z axis settings let movement follow a ramp's standing height. Height-field behavior, not general inclined-plane physics.","source":"runtime/collision.hpp"},
-    {"title":"Lighter editable arena geometry","category":"World building","guide":"third-person","description":"Reduced unnecessary subdivision keeps the generated greybox cheaper to draw while its seven mesh packages remain editable.","source":"src/third_person.rs"},
-    {"title":"Three Scene editing modes","category":"Editor & projects","guide":"worlds-2d","description":"Separate 3D, world 2D and UI modes with domain-aware hierarchy filtering and context-preserving ancestors.","source":"src/scene_view_mode.rs"},
-    {"title":"Signed-axis orientation control","category":"Editor & projects","guide":"editor","description":"Choose positive or negative X, Y or Z views while preserving the Scene View pivot and distance.","source":"src/gui.rs"},
-    {"title":"Placeable Actor class menu","category":"Gameplay & Actors","guide":"actors","description":"Create reflected native or Blueprint Actor classes from domain-grouped Hierarchy menus, with compatible roots and defaults.","source":"src/gui.rs"},
-    {"title":"Actor hierarchy editing","category":"Gameplay & Actors","guide":"actors","description":"Rename, duplicate, delete and logically reparent Actors. Branch operations include children; cross-domain conversion is not offered.","source":"src/editor.rs"},
-    {"title":"Compatible component authoring","category":"Gameplay & Actors","guide":"actors","description":"Add/remove instance components through Inspector with root, inheritance, cardinality and required/excluded-component checks.","source":"src/gui.rs"},
-    {"title":"Actor and component property overrides","category":"Gameplay & Actors","guide":"actors","description":"Edit reflected instance values and distinguish authored overrides from class defaults in Inspector.","source":"src/gui.rs"},
-    {"title":"Logical parenting and spatial attachment","category":"Gameplay & Actors","guide":"actors","description":"Actor ownership/activation and component transform attachment have separate validated contracts and cycle checks.","source":"src/actor_document.rs"},
-    {"title":"Actor and Component Blueprint lifecycles","category":"Blueprints & code","guide":"actors","description":"Begin Play, Tick and End Play for the new class families, alongside the existing Behaviour graph lifecycle.","source":"runtime/actor_blueprint.hpp"},
-    {"title":"Typed object references and Spawn Actor","category":"Blueprints & code","guide":"actors","description":"ActorRef, ComponentRef, ObjectRef, Get Owner and bounded Actor spawning connect reflected class identity to visual gameplay.","source":"runtime/actor_blueprint.hpp"},
-    {"title":"Map Settings and Scene Blueprint editing","category":"Blueprints & code","guide":"scene-blueprints","description":"Edit the map-owned SceneScriptActor graph from Map Settings; validate class changes and compile with the project.","source":"src/editor.rs"},
-    {"title":"Same-map identity references","category":"Blueprints & code","guide":"scene-blueprints","description":"Scene graphs can target local Actors, Components and entities with checked identity, type and map ownership.","source":"src/blueprint_refs.rs"},
-    {"title":"Cooked Actor tables and Level integration","category":"Gameplay & Actors","guide":"actors","description":"Per-bank Actor/component/override/scene-script tables and bounded runtime instances. Dedicated console acceptance remains incomplete.","source":"runtime/actor_tables.hpp"},
-    {"title":"Actor runtime telemetry","category":"Performance & memory","guide":"actors","description":"Inspect alive, peak, rejected, spawned and deferred counts plus component, scene-script and loaded-bank counters.","source":"runtime/object_model.hpp"},
-    {"title":"World2D placement editor","category":"World building","guide":"worlds-2d","description":"Grid, pan, cursor-centered zoom, topmost picking and drag movement of labeled Actor footprints, with one undo step per drag.","source":"src/gui.rs"},
-    {"title":"Q12 2D transforms and Camera2D","category":"World building","guide":"worlds-2d","description":"Native parent-relative transforms, deterministic degree-based math and independent world/screen projection at 32 pixels per unit.","source":"runtime/world2d.hpp"},
-    {"title":"Stable 2D draw order and picking","category":"World building","guide":"worlds-2d","description":"Native layer, draw-order and creation-index sorting plus bounded picking helpers. The editor currently displays placement footprints.","source":"runtime/world2d.hpp"},
-    {"title":"Bounded 2D collision toolkit","category":"Gameplay & Actors","guide":"worlds-2d","description":"Box/circle overlap, raycasts, sliding movement, masks and triggers. Sweeps are conservative; no rigid-body solver.","source":"runtime/world2d.hpp"},
-    {"title":"Automatic procedural UI construction preview","category":"UI & HUD","guide":"native-hud-preview","description":"A native editor_preview hook shows code-created menus in UI mode without a MIPS build or gameplay lifecycle execution.","source":"native/hud_preview.cpp"},
-    {"title":"Interactive native UI preview","category":"UI & HUD","guide":"native-hud-preview","description":"Optional navigation with Pause, Resume, Step and Restart in an isolated desktop process; cards are temporary and audio silent.","source":"docs/native-hud-preview.md"},
-    {"title":"Shared desktop and PSX HUD compiler","category":"UI & HUD","guide":"native-hud-preview","description":"The same bounded Q12 layout, clipping, text and nine-slice primitive compiler serves desktop preview and target rendering.","source":"runtime/hud_core.hpp"},
-    {"title":"Portable audio roles and load modes","category":"Audio & music","guide":"assets","description":"WAV, MP3, FLAC and OGG/Vorbis import as AudioClip. SFX, Music, Ambience and Dialogue roles are independent of Auto, Resident and Stream delivery; MIDI MusicSequence stays resident.","source":"src/assets.rs"},
-    {"title":"MIDI MusicSequence import","category":"Audio & music","guide":"music-sequences","description":"Import SMF 0/1 MIDI, retain original bytes and identity, inspect programs, tempo, note activity, loops and logical polyphony.","source":"src/midi.rs"},
-    {"title":"Editable portable SoundBanks","category":"Audio & music","guide":"music-sequences","description":"Map imported AudioClips to programs/key/velocity zones with tuning, pan, gain, envelopes and source-frame sample loops.","source":"src/sound_bank.rs"},
-    {"title":"Retro Starter SoundBank","category":"Audio & music","guide":"music-sequences","description":"Generate an original MIT-provenance triangle sample and program-0 bank for a minimal music test. No hidden GM fallback.","source":"src/sound_bank.rs"},
-    {"title":"Project default instrument bank","category":"Audio & music","guide":"music-sequences","description":"Explicit per-sequence bank selection or a project default, with dependency-aware invalidation when either changes.","source":"src/project.rs"},
-    {"title":"SF2 and SF3 instrument libraries","category":"Audio & music","guide":"music-sequences","description":"Import compatible complete SoundFont libraries as one source-preserving bank; inspect required instruments, coverage and layers.","source":"src/sf2.rs"},
-    {"title":"Bundled reference instrument library","category":"Audio & music","guide":"music-sequences","description":"Install the checksum-identified FluidR3Mono GM 2.315 library with its MIT notice from the sequence settings.","source":"resources/audio/fluidr3mono-2.315.json"},
-    {"title":"Musical v2 MIDI interpretation","category":"Audio & music","guide":"music-sequences","description":"Bank selection, RPN bend/fine/coarse tuning and supported controller semantics; old assets keep Legacy v1 until explicitly upgraded.","source":"src/midi_controls.rs"},
-    {"title":"PSX music quality recipes","category":"Audio & music","guide":"music-sequences","description":"Compact/Balanced/High and Custom settings for rate, ADPCM effort, loops, release, filters, effects, headroom and budgets.","source":"src/psx_music_settings.rs"},
-    {"title":"Cancellable conversion analysis","category":"Audio & music","guide":"music-sequences","description":"Analyze exact draft cook costs asynchronously, with contextual parameter help and no publication of a failed candidate.","source":"src/music_conversion_ui.rs"},
-    {"title":"Opt-in music budget optimizer","category":"Audio & music","guide":"music-sequences","description":"A bounded sample-rate search proposes a recipe. Adopt it into the draft explicitly, then save; required layers are not silently removed.","source":"src/psx_music_optimizer.rs"},
-    {"title":"Source versus PSX Target audition","category":"Audio & music","guide":"music-sequences","description":"Compare original MIDI/SoundBank interpretation with the saved EPSQ v3 native commands and cooked ADPCM samples. Target Preview reports its host-model limits.","source":"src/sequence_preview.rs"},
-    {"title":"Native SPU music and SFX sharing","category":"Audio & music","guide":"music-sequences","description":"The target reads precompiled music commands rather than parsing MIDI at runtime. Four sequence instances, configured voice limits and priority/age allocation share 24 physical voices with SFX.","source":"runtime/sequence_instrument_service.hpp"},
-    {"title":"Sequence memory and conversion reports","category":"Performance & memory","guide":"music-sequences","description":"Separate sequence RAM, bank metadata/sample copies and SPU sample costs, with build-bound identities and adaptation diagnostics.","source":"src/memory.rs"},
-    {"title":"Bounded native sequence delivery","category":"Audio & music","guide":"music-sequences","description":"Cooked command streams, sample transfers and note starts are bounded before play. Runtime work applies prepared SPU operations instead of evaluating a MIDI or SoundFont player.","source":"runtime/sequence_instrument_service.hpp"},
-    {"title":"Manual PSX compilation","category":"Build & deploy","guide":"iteration","description":"Edit without launching a MIPS build on every source change. Observation still refreshes resources and invalidates stale output.","source":"src/editor.rs"},
-    {"title":"Verified Play build reuse","category":"Build & deploy","guide":"iteration","description":"PlayBuild.epokcache receipts allow executable/disc reuse only for matching scenes, profiles, resources, scripts and tracked inputs.","source":"src/play.rs"},
-    {"title":"Selected scenes and initial bank","category":"Build & deploy","guide":"play","description":"Build a chosen set of maps with inclusion checkboxes and an initial-scene choice, within the 16-bank total limit.","source":"src/play_ui.rs"},
-    {"title":"Build reports and artifact-size status","category":"Performance & memory","guide":"iteration","description":"Memory reports enabled by default, open-last-report workflow and provenance-aware executable/external-data sizes with stale warnings.","source":"src/memory_ui.rs"},
-    {"title":"Configurable runtime Debug HUD","category":"Performance & memory","guide":"iteration","description":"Independent FPS, CPU, GTE, GPU command DMA and SPU sample-memory displays; metric definitions explicitly avoid utilization claims.","source":"docs/performance.md"},
-    {"title":"Position interpolation","category":"Performance & memory","guide":"iteration","description":"Smooth supported entity/camera translations between fixed simulation steps; does not raise FPS or interpolate every visual system.","source":"runtime/epok.hpp"},
-    {"title":"Scratchpad projected-vertex staging","category":"Performance & memory","guide":"iteration","description":"Stage a chunk's projected vertices in the PSX scratchpad to reuse projection work without promising a universal speedup.","source":"runtime/main.cpp"},
-    {"title":"Persistent serial developer control","category":"Build & deploy","guide":"play","description":"Owned resident/host sessions with acknowledged Pause, Continue and Reset, bounded timeouts and explicit resynchronization.","source":"src/serial.rs"},
-    {"title":"Bundled dependency Install / Repair","category":"Editor & projects","guide":"getting-started","description":"Guarded host setup verifies and restores bundled tools with progress, cancellation and installation locking.","source":"src/dependencies.rs"},
-    {"title":"macOS development shortcuts and tooling","category":"Editor & projects","guide":"iteration","description":"Host-aware setup/profile scripts and optional Desktop shortcuts for the development editor; not a packaged app or a new reflection toolchain.","source":"tools/desktop-shortcuts-macos.sh"},
-    {"title":"MCP Actor operations","category":"Automation & tools","guide":"mcp","description":"scene_actors, scene_add_actor, scene_remove_actor and scene_set_actor extend the local authenticated editor interface to 24 tools.","source":"src/mcp_tools.rs"},
-    {"title":"Namespaced Actor CLI placement","category":"Automation & tools","guide":"actors","description":"--add-actor resolves native class names including namespaces and validates the destination map and Actor contract.","source":"src/main.rs"}
+    {
+      "title": "Lua classes in the reflected Actor model",
+      "category": "Blueprints & code",
+      "guide": "lua-tutorial",
+      "description": "Author one code-declared class per .lua file, extend eligible C++, Blueprint or Lua parents, and use the same Inspector, defaults, attachment and spawning contracts.",
+      "source": "src/lua_asset.rs"
+    },
+    {
+      "title": "Three Lua execution modes",
+      "category": "Blueprints & code",
+      "guide": "lua-scripting",
+      "description": "Choose project-wide Native C++, VM bytecode or VM source execution. The same statically checked script and generated C++ subclass work in every mode.",
+      "source": "src/lua_compile.rs"
+    },
+    {
+      "title": "Stable Lua identity outside source",
+      "category": "Editor & projects",
+      "guide": "lua-scripting",
+      "description": "ProjectSettings/LuaClasses.epoksettings keeps editor-assigned class UUIDs stable across managed file moves and renames; member IDs derive predictably and may be pinned.",
+      "source": "src/lua_identity.rs"
+    },
+    {
+      "title": "Lua Inspector properties and typed callables",
+      "category": "Blueprints & code",
+      "guide": "lua-tutorial",
+      "description": "Plain literals and explicit Epok constructors declare editable properties; Lua Language Server annotations declare callable parameters and results shared with other providers.",
+      "source": "src/lua_asset.rs"
+    },
+    {
+      "title": "Intrinsic transforms and engine builtins for Lua",
+      "category": "Gameplay & Actors",
+      "guide": "lua-scripting",
+      "description": "Move 3D/2D Actors or UI layouts and call input, scene, spawn, ownership, audio, texture and effect operations without project-specific C++ helper classes.",
+      "source": "src/lua_aot.rs"
+    },
+    {
+      "title": "Generated Lua API definitions",
+      "category": "Automation & tools",
+      "guide": "lua-scripting",
+      "description": "Registry refresh writes .epok/lua/epok.d.lua and creates .luarc.json, covering native, Blueprint and Lua inheritance, properties, events, records, enums and builtins.",
+      "source": "src/lua_api_stub.rs"
+    },
+    {
+      "title": "Bounded PSX Lua VM arenas",
+      "category": "Performance & memory",
+      "guide": "lua-vm-runtime",
+      "description": "Bytecode and source modes reserve fixed 96 KiB and 128 KiB arenas by default, with measured peaks, explicit exhaustion and a generated project override.",
+      "source": "src/lua_vm.rs"
+    },
+    {
+      "title": "Verified 32-bit Lua bytecode ABI",
+      "category": "Build & deploy",
+      "guide": "lua-vm-runtime",
+      "description": "A host cooker emits target-format chunks and checks its header byte-for-byte against the pinned 32-bit runtime instead of assuming host and PSX layouts match.",
+      "source": "src/lua_bytecode.rs"
+    },
+    {
+      "title": "Inherited Blueprint events until connected",
+      "category": "Blueprints & code",
+      "guide": "blueprints",
+      "description": "Lifecycle events begin disconnected and dimmed, preserve parent behavior until implemented, and offer an explicit event-specific Call Parent action.",
+      "source": "src/blueprint_event_tests.rs"
+    },
+    {
+      "title": "Descriptive reflected Blueprint pins",
+      "category": "Blueprints & code",
+      "guide": "blueprints",
+      "description": "Reflected parameters require meaningful names, overrides inherit base labels and saved pin identities survive later SDK naming improvements.",
+      "source": "src/header_extract.rs"
+    },
+    {
+      "title": "Rigid GTE skeletal playback",
+      "category": "Rendering & animation",
+      "guide": "skeletal",
+      "description": "Group rigid vertices by bone and submit visible ranges directly through the GTE after conservative animation-envelope culling; this is the default import mode.",
+      "source": "src/skeletal_compile.rs"
+    },
+    {
+      "title": "Compressed baked skeletal frames",
+      "category": "Rendering & animation",
+      "guide": "skeletal",
+      "description": "Compile 30 Hz clips into independent compressed vertex frames to avoid runtime bone evaluation, trading target archive space within a 512 KiB per-model budget.",
+      "source": "runtime/skeletal.hpp"
+    },
+    {
+      "title": "Domain-aware Actor component creation",
+      "category": "Gameplay & Actors",
+      "guide": "actors",
+      "description": "Add Component and new C++/Blueprint component dialogs filter parents by the selected Actor domain and compatibility rules before authoring begins.",
+      "source": "src/gui.rs"
+    },
+    {
+      "title": "Shared mesh selection without asset mutation",
+      "category": "Assets & imports",
+      "guide": "static-mesh-import",
+      "description": "Switch an instance among the engine cube, editable meshes and skeletal meshes while preserving Actor identity and leaving shared project assets untouched.",
+      "source": "src/mesh_editor.rs"
+    },
+    {
+      "title": "Persistent baked-lighting edit preview",
+      "category": "Rendering & animation",
+      "guide": "lighting",
+      "description": "Keep the last valid shadows and AO visible while editing, show an amber stale-cache warning and rebuild explicitly from the top-level Build menu.",
+      "source": "src/lighting.rs"
+    },
+    {
+      "title": "External OBJ dependency import",
+      "category": "Assets & imports",
+      "guide": "static-mesh-import",
+      "description": "Read MTL and texture dependencies beside an external OBJ, copy them into project-owned destinations and reject paths that escape the allowed source boundary.",
+      "source": "src/obj_import.rs"
+    },
+    {
+      "title": "UTF-8 BOM-safe Lua source",
+      "category": "Blueprints & code",
+      "guide": "lua-scripting",
+      "description": "Skip an optional byte order mark at the start of a script and explain how to replace the retired metadata-table declaration when encountered.",
+      "source": "src/lua_frontend.rs"
+    },
+    {
+      "title": "Playable Third Person controller",
+      "category": "World building",
+      "guide": "third-person",
+      "description": "Camera-relative digital movement, directional turning, acceleration, braking and normalized diagonals in editable native C++.",
+      "source": "templates/ThirdPersonController.cpp"
+    },
+    {
+      "title": "Jumping and air control",
+      "category": "World building",
+      "guide": "third-person",
+      "description": "Grounded Cross-button jumps, gravity, weaker airborne steering and bounded step-up for ledges.",
+      "source": "templates/ThirdPersonController.cpp"
+    },
+    {
+      "title": "Follow and orbit camera",
+      "category": "World building",
+      "guide": "third-person",
+      "description": "Shoulder-button orbit and elevation, a following camera boom and gradual alignment behind forward travel. No camera-obstacle avoidance.",
+      "source": "templates/ThirdPersonController.cpp"
+    },
+    {
+      "title": "Walkable ramp surfaces",
+      "category": "Gameplay & Actors",
+      "guide": "third-person",
+      "description": "Slope rise and X/Z axis settings let movement follow a ramp's standing height. Height-field behavior, not general inclined-plane physics.",
+      "source": "runtime/collision.hpp"
+    },
+    {
+      "title": "Lighter editable arena geometry",
+      "category": "World building",
+      "guide": "third-person",
+      "description": "Reduced unnecessary subdivision keeps the generated greybox cheaper to draw while its seven mesh packages remain editable.",
+      "source": "src/third_person.rs"
+    },
+    {
+      "title": "Three Scene editing modes",
+      "category": "Editor & projects",
+      "guide": "worlds-2d",
+      "description": "Separate 3D, world 2D and UI modes with domain-aware hierarchy filtering and context-preserving ancestors.",
+      "source": "src/scene_view_mode.rs"
+    },
+    {
+      "title": "Signed-axis orientation control",
+      "category": "Editor & projects",
+      "guide": "editor",
+      "description": "Choose positive or negative X, Y or Z views while preserving the Scene View pivot and distance.",
+      "source": "src/gui.rs"
+    },
+    {
+      "title": "Placeable Actor class menu",
+      "category": "Gameplay & Actors",
+      "guide": "actors",
+      "description": "Create reflected native or Blueprint Actor classes from domain-grouped Hierarchy menus, with compatible roots and defaults.",
+      "source": "src/gui.rs"
+    },
+    {
+      "title": "Actor hierarchy editing",
+      "category": "Gameplay & Actors",
+      "guide": "actors",
+      "description": "Rename, duplicate, delete and logically reparent Actors. Branch operations include children; cross-domain conversion is not offered.",
+      "source": "src/editor.rs"
+    },
+    {
+      "title": "Compatible component authoring",
+      "category": "Gameplay & Actors",
+      "guide": "actors",
+      "description": "Add/remove instance components through Inspector with root, inheritance, cardinality and required/excluded-component checks.",
+      "source": "src/gui.rs"
+    },
+    {
+      "title": "Actor and component property overrides",
+      "category": "Gameplay & Actors",
+      "guide": "actors",
+      "description": "Edit reflected instance values and distinguish authored overrides from class defaults in Inspector.",
+      "source": "src/gui.rs"
+    },
+    {
+      "title": "Logical parenting and spatial attachment",
+      "category": "Gameplay & Actors",
+      "guide": "actors",
+      "description": "Actor ownership/activation and component transform attachment have separate validated contracts and cycle checks.",
+      "source": "src/actor_document.rs"
+    },
+    {
+      "title": "Actor and Component Blueprint lifecycles",
+      "category": "Blueprints & code",
+      "guide": "actors",
+      "description": "Begin Play, Tick and End Play for the new class families, alongside the existing Behaviour graph lifecycle.",
+      "source": "runtime/actor_blueprint.hpp"
+    },
+    {
+      "title": "Typed object references and Spawn Actor",
+      "category": "Blueprints & code",
+      "guide": "actors",
+      "description": "ActorRef, ComponentRef, ObjectRef, Get Owner and bounded Actor spawning connect reflected class identity to visual gameplay.",
+      "source": "runtime/actor_blueprint.hpp"
+    },
+    {
+      "title": "Map Settings and Scene Blueprint editing",
+      "category": "Blueprints & code",
+      "guide": "scene-blueprints",
+      "description": "Edit the map-owned SceneScriptActor graph from Map Settings; validate class changes and compile with the project.",
+      "source": "src/editor.rs"
+    },
+    {
+      "title": "Same-map identity references",
+      "category": "Blueprints & code",
+      "guide": "scene-blueprints",
+      "description": "Scene graphs can target local Actors, Components and entities with checked identity, type and map ownership.",
+      "source": "src/blueprint_refs.rs"
+    },
+    {
+      "title": "Cooked Actor tables and Level integration",
+      "category": "Gameplay & Actors",
+      "guide": "actors",
+      "description": "Per-bank Actor/component/override/scene-script tables and bounded runtime instances. Dedicated console acceptance remains incomplete.",
+      "source": "runtime/actor_tables.hpp"
+    },
+    {
+      "title": "Actor runtime telemetry",
+      "category": "Performance & memory",
+      "guide": "actors",
+      "description": "Inspect alive, peak, rejected, spawned and deferred counts plus component, scene-script and loaded-bank counters.",
+      "source": "runtime/object_model.hpp"
+    },
+    {
+      "title": "World2D placement editor",
+      "category": "World building",
+      "guide": "worlds-2d",
+      "description": "Grid, pan, cursor-centered zoom, topmost picking and drag movement of labeled Actor footprints, with one undo step per drag.",
+      "source": "src/gui.rs"
+    },
+    {
+      "title": "Q12 2D transforms and Camera2D",
+      "category": "World building",
+      "guide": "worlds-2d",
+      "description": "Native parent-relative transforms, deterministic degree-based math and independent world/screen projection at 32 pixels per unit.",
+      "source": "runtime/world2d.hpp"
+    },
+    {
+      "title": "Stable 2D draw order and picking",
+      "category": "World building",
+      "guide": "worlds-2d",
+      "description": "Native layer, draw-order and creation-index sorting plus bounded picking helpers. The editor currently displays placement footprints.",
+      "source": "runtime/world2d.hpp"
+    },
+    {
+      "title": "Bounded 2D collision toolkit",
+      "category": "Gameplay & Actors",
+      "guide": "worlds-2d",
+      "description": "Box/circle overlap, raycasts, sliding movement, masks and triggers. Sweeps are conservative; no rigid-body solver.",
+      "source": "runtime/world2d.hpp"
+    },
+    {
+      "title": "Automatic procedural UI construction preview",
+      "category": "UI & HUD",
+      "guide": "native-hud-preview",
+      "description": "A native editor_preview hook shows code-created menus in UI mode without a MIPS build or gameplay lifecycle execution.",
+      "source": "native/hud_preview.cpp"
+    },
+    {
+      "title": "Interactive native UI preview",
+      "category": "UI & HUD",
+      "guide": "native-hud-preview",
+      "description": "Optional navigation with Pause, Resume, Step and Restart in an isolated desktop process; cards are temporary and audio silent.",
+      "source": "docs/native-hud-preview.md"
+    },
+    {
+      "title": "Shared desktop and PSX HUD compiler",
+      "category": "UI & HUD",
+      "guide": "native-hud-preview",
+      "description": "The same bounded Q12 layout, clipping, text and nine-slice primitive compiler serves desktop preview and target rendering.",
+      "source": "runtime/hud_core.hpp"
+    },
+    {
+      "title": "Portable audio roles and load modes",
+      "category": "Audio & music",
+      "guide": "assets",
+      "description": "WAV, MP3, FLAC and OGG/Vorbis import as AudioClip. SFX, Music, Ambience and Dialogue roles are independent of Auto, Resident and Stream delivery; MIDI MusicSequence stays resident.",
+      "source": "src/assets.rs"
+    },
+    {
+      "title": "MIDI MusicSequence import",
+      "category": "Audio & music",
+      "guide": "music-sequences",
+      "description": "Import SMF 0/1 MIDI, retain original bytes and identity, inspect programs, tempo, note activity, loops and logical polyphony.",
+      "source": "src/midi.rs"
+    },
+    {
+      "title": "Editable portable SoundBanks",
+      "category": "Audio & music",
+      "guide": "music-sequences",
+      "description": "Map imported AudioClips to programs/key/velocity zones with tuning, pan, gain, envelopes and source-frame sample loops.",
+      "source": "src/sound_bank.rs"
+    },
+    {
+      "title": "Retro Starter SoundBank",
+      "category": "Audio & music",
+      "guide": "music-sequences",
+      "description": "Generate an original MIT-provenance triangle sample and program-0 bank for a minimal music test. No hidden GM fallback.",
+      "source": "src/sound_bank.rs"
+    },
+    {
+      "title": "Project default instrument bank",
+      "category": "Audio & music",
+      "guide": "music-sequences",
+      "description": "Explicit per-sequence bank selection or a project default, with dependency-aware invalidation when either changes.",
+      "source": "src/project.rs"
+    },
+    {
+      "title": "SF2 and SF3 instrument libraries",
+      "category": "Audio & music",
+      "guide": "music-sequences",
+      "description": "Import compatible complete SoundFont libraries as one source-preserving bank; inspect required instruments, coverage and layers.",
+      "source": "src/sf2.rs"
+    },
+    {
+      "title": "Bundled reference instrument library",
+      "category": "Audio & music",
+      "guide": "music-sequences",
+      "description": "Install the checksum-identified FluidR3Mono GM 2.315 library with its MIT notice from the sequence settings.",
+      "source": "resources/audio/fluidr3mono-2.315.json"
+    },
+    {
+      "title": "Musical v2 MIDI interpretation",
+      "category": "Audio & music",
+      "guide": "music-sequences",
+      "description": "Bank selection, RPN bend/fine/coarse tuning and supported controller semantics; old assets keep Legacy v1 until explicitly upgraded.",
+      "source": "src/midi_controls.rs"
+    },
+    {
+      "title": "PSX music quality recipes",
+      "category": "Audio & music",
+      "guide": "music-sequences",
+      "description": "Compact/Balanced/High and Custom settings for rate, ADPCM effort, loops, release, filters, effects, headroom and budgets.",
+      "source": "src/psx_music_settings.rs"
+    },
+    {
+      "title": "Cancellable conversion analysis",
+      "category": "Audio & music",
+      "guide": "music-sequences",
+      "description": "Analyze exact draft cook costs asynchronously, with contextual parameter help and no publication of a failed candidate.",
+      "source": "src/music_conversion_ui.rs"
+    },
+    {
+      "title": "Opt-in music budget optimizer",
+      "category": "Audio & music",
+      "guide": "music-sequences",
+      "description": "A bounded sample-rate search proposes a recipe. Adopt it into the draft explicitly, then save; required layers are not silently removed.",
+      "source": "src/psx_music_optimizer.rs"
+    },
+    {
+      "title": "Source versus PSX Target audition",
+      "category": "Audio & music",
+      "guide": "music-sequences",
+      "description": "Compare original MIDI/SoundBank interpretation with the saved EPSQ v3 native commands and cooked ADPCM samples. Target Preview reports its host-model limits.",
+      "source": "src/sequence_preview.rs"
+    },
+    {
+      "title": "Native SPU music and SFX sharing",
+      "category": "Audio & music",
+      "guide": "music-sequences",
+      "description": "The target reads precompiled music commands rather than parsing MIDI at runtime. Four sequence instances, configured voice limits and priority/age allocation share 24 physical voices with SFX.",
+      "source": "runtime/sequence_instrument_service.hpp"
+    },
+    {
+      "title": "Sequence memory and conversion reports",
+      "category": "Performance & memory",
+      "guide": "music-sequences",
+      "description": "Separate sequence RAM, bank metadata/sample copies and SPU sample costs, with build-bound identities and adaptation diagnostics.",
+      "source": "src/memory.rs"
+    },
+    {
+      "title": "Bounded native sequence delivery",
+      "category": "Audio & music",
+      "guide": "music-sequences",
+      "description": "Cooked command streams, sample transfers and note starts are bounded before play. Runtime work applies prepared SPU operations instead of evaluating a MIDI or SoundFont player.",
+      "source": "runtime/sequence_instrument_service.hpp"
+    },
+    {
+      "title": "Manual PSX compilation",
+      "category": "Build & deploy",
+      "guide": "iteration",
+      "description": "Edit without launching a MIPS build on every source change. Observation still refreshes resources and invalidates stale output.",
+      "source": "src/editor.rs"
+    },
+    {
+      "title": "Verified Play build reuse",
+      "category": "Build & deploy",
+      "guide": "iteration",
+      "description": "PlayBuild.epokcache receipts allow executable/disc reuse only for matching scenes, profiles, resources, scripts and tracked inputs.",
+      "source": "src/play.rs"
+    },
+    {
+      "title": "Selected scenes and initial bank",
+      "category": "Build & deploy",
+      "guide": "play",
+      "description": "Build a chosen set of maps with inclusion checkboxes and an initial-scene choice, within the 16-bank total limit.",
+      "source": "src/play_ui.rs"
+    },
+    {
+      "title": "Build reports and artifact-size status",
+      "category": "Performance & memory",
+      "guide": "iteration",
+      "description": "Memory reports enabled by default, open-last-report workflow and provenance-aware executable/external-data sizes with stale warnings.",
+      "source": "src/memory_ui.rs"
+    },
+    {
+      "title": "Configurable runtime Debug HUD",
+      "category": "Performance & memory",
+      "guide": "iteration",
+      "description": "Independent FPS, CPU, GTE, GPU command DMA and SPU sample-memory displays; metric definitions explicitly avoid utilization claims.",
+      "source": "docs/performance.md"
+    },
+    {
+      "title": "Position interpolation",
+      "category": "Performance & memory",
+      "guide": "iteration",
+      "description": "Smooth supported entity/camera translations between fixed simulation steps; does not raise FPS or interpolate every visual system.",
+      "source": "runtime/epok.hpp"
+    },
+    {
+      "title": "Scratchpad projected-vertex staging",
+      "category": "Performance & memory",
+      "guide": "iteration",
+      "description": "Stage a chunk's projected vertices in the PSX scratchpad to reuse projection work without promising a universal speedup.",
+      "source": "runtime/main.cpp"
+    },
+    {
+      "title": "Persistent serial developer control",
+      "category": "Build & deploy",
+      "guide": "play",
+      "description": "Owned resident/host sessions with acknowledged Pause, Continue and Reset, bounded timeouts and explicit resynchronization.",
+      "source": "src/serial.rs"
+    },
+    {
+      "title": "Bundled dependency Install / Repair",
+      "category": "Editor & projects",
+      "guide": "getting-started",
+      "description": "Guarded host setup verifies and restores bundled tools with progress, cancellation and installation locking.",
+      "source": "src/dependencies.rs"
+    },
+    {
+      "title": "macOS development shortcuts and tooling",
+      "category": "Editor & projects",
+      "guide": "iteration",
+      "description": "Host-aware setup/profile scripts and optional Desktop shortcuts for the development editor; not a packaged app or a new reflection toolchain.",
+      "source": "tools/desktop-shortcuts-macos.sh"
+    },
+    {
+      "title": "MCP Actor operations",
+      "category": "Automation & tools",
+      "guide": "mcp",
+      "description": "scene_actors, scene_add_actor, scene_remove_actor and scene_set_actor extend the local authenticated editor interface to 24 tools.",
+      "source": "src/mcp_tools.rs"
+    },
+    {
+      "title": "Namespaced Actor CLI placement",
+      "category": "Automation & tools",
+      "guide": "actors",
+      "description": "--add-actor resolves native class names including namespaces and validates the destination map and Actor contract.",
+      "source": "src/main.rs"
+    },
+    {
+      "title": "Heightmap terrain",
+      "category": "World building",
+      "guide": "terrain",
+      "description": "Sculpt and paint a grid of up to 256 x 256 cells whose corner heights are stored in Q8. It bakes into the same chunk format as Blockout geometry, inheriting culling, retained packets, visibility, streaming and the lighting bake.",
+      "source": "src/terrain.rs"
+    },
+    {
+      "title": "Terrain material autotiling",
+      "category": "World building",
+      "guide": "terrain",
+      "description": "The painted byte is a material row and the baker picks each tile's column and rotation from the cell's four edge neighbours, so a path painted one cell at a time resolves its own borders instead of leaving a staircase.",
+      "source": "src/terrain_compile.rs"
+    },
+    {
+      "title": "Heightfield collision",
+      "category": "World building",
+      "guide": "terrain",
+      "description": "An optional collider generalises the single-axis ramp to a two-axis grid, sampled bilinearly in Q12 at two bytes per corner. Like the ramp it is a surface to stand on and never an obstacle.",
+      "source": "runtime/collision.hpp"
+    },
+    {
+      "title": "Terrain sculpting brush",
+      "category": "World building",
+      "guide": "terrain",
+      "description": "The blockout sculpt brush is shared with terrain and gains a vertex displacement pass that triangulates the quads a stroke bends.",
+      "source": "src/terrain_editor.rs"
+    },
+    {
+      "title": "Baked NavLite navigation",
+      "category": "Gameplay & Actors",
+      "guide": "navigation",
+      "description": "Bake a bounded walking graph from box collider tops, collider ramps and navigation surfaces inside authored volumes, under one profile shared by every volume in the map.",
+      "source": "src/navigation.rs"
+    },
+    {
+      "title": "Navigation agents",
+      "category": "Gameplay & Actors",
+      "guide": "navigation",
+      "description": "An unparented actor moves with move_to and reports arrived, failed or status inside a shared console search budget, sampling baked surfaces and performing collision-checked lift, forward and lower motion over steps.",
+      "source": "runtime/navigation_components.hpp"
+    },
+    {
+      "title": "Authored jump and climb links",
+      "category": "Gameplay & Actors",
+      "guide": "navigation",
+      "description": "Parabolic arcs and vertical-then-horizontal climbs with a duration and optional reverse direction. The baker checks the whole trajectory for clearance; the engine never infers jump capability from a mesh.",
+      "source": "runtime/navigation.hpp"
+    },
+    {
+      "title": "Moving navigation obstacles",
+      "category": "Gameplay & Actors",
+      "guide": "navigation",
+      "description": "A door or crate is excluded from the static bake and handled while it moves. Mesh geometry, ramp parameters, transforms, profile settings and authored links all participate in the bake fingerprint.",
+      "source": "src/navigation_geometry.rs"
+    },
+    {
+      "title": "Navigation volume preview",
+      "category": "World building",
+      "guide": "navigation",
+      "description": "Selecting a bake volume shows a cached translucent walkable area with point markers and connections, generated even without a saved bake, and never edits the scene or its materials.",
+      "source": "src/scene_gpu.rs"
+    },
+    {
+      "title": "Native PC play runtime",
+      "category": "Build & deploy",
+      "guide": "play",
+      "description": "Play the generated C++ gameplay on the host with the same fixed 60 Hz clock as the console. It runs out of process and returns only bounded actor and HUD snapshots to the editor renderer.",
+      "source": "src/native_play.rs"
+    },
+    {
+      "title": "Four logical controller pads",
+      "category": "Gameplay & Actors",
+      "guide": "input-collision",
+      "description": "Pad 1 to Pad 4 map to a multitap's Pad1a to Pad1d sockets on hardware and to matching virtual pads under Native PC, with analog stick and analog pad packets on every active pad.",
+      "source": "runtime/input.hpp"
+    },
+    {
+      "title": "Template browser and gameplay flavors",
+      "category": "Editor & projects",
+      "guide": "projects",
+      "description": "New Project presents a preview per template plus a Project Defaults block. Template, gameplay flavor and target platform are independent choices, and the flavor decides only which starter source is written.",
+      "source": "src/project_templates.rs"
+    },
+    {
+      "title": "Third Person in three languages",
+      "category": "Gameplay & Actors",
+      "guide": "third-person",
+      "description": "One set of assets, hierarchy, transforms and colliders with a controller written as project C++, as an authored graph of ten function bodies and as a Lua class. None of them calls another's implementation.",
+      "source": "src/third_person.rs"
+    },
+    {
+      "title": "Transactional project creation",
+      "category": "Editor & projects",
+      "guide": "projects",
+      "description": "A template that fails part way removes the folder it claimed instead of leaving a half-written project to be opened.",
+      "source": "src/workspace.rs"
+    },
+    {
+      "title": "Remappable control bindings",
+      "category": "Editor & projects",
+      "guide": "settings",
+      "description": "Keyboard, mouse and pad bindings are edited against original Epok controller artwork, a hand-authored vector illustration whose button regions scale with the image.",
+      "source": "src/controls_ui.rs"
+    },
+    {
+      "title": "Dense property Inspector",
+      "category": "Editor & projects",
+      "guide": "editor",
+      "description": "A two-column property grid with full-width section bands, clipped rather than wrapped labels, per-band command menus and renderer sections that own both their geometry and how it is drawn.",
+      "source": "src/gui.rs"
+    },
+    {
+      "title": "Hub dependencies pane",
+      "category": "Editor & projects",
+      "guide": "getting-started",
+      "description": "External tool setup sits beside Projects and New project rather than floating over them, drawn from the same page the editor shows inside Preferences, with a platform tab bar.",
+      "source": "src/hub.rs"
+    },
+    {
+      "title": "Scriptable distance fog and screen fade",
+      "category": "Rendering & animation",
+      "guide": "environment-effects",
+      "description": "Both were reachable only from hand-written C++. The scene accessors now expose them to Blueprint and Lua; the fog setter rejects an out-of-range distance range whole, and the fade setter clamps.",
+      "source": "runtime/epok.hpp"
+    },
+    {
+      "title": "Seventeen easing curves and vector tweens",
+      "category": "Gameplay & Actors",
+      "guide": "gameplay-api",
+      "description": "Polynomial and circular In/Out/InOut curves with scheduling delay, restart and ping-pong loops, plus a vector form whose timing member is a real scalar tween. Kernels are exact at both endpoints and monotonic.",
+      "source": "runtime/utility.hpp"
+    },
+    {
+      "title": "Portable controller arithmetic",
+      "category": "Blueprints & code",
+      "guide": "gameplay-api",
+      "description": "Trigonometry, roots, angle approach and the analog dead zone are reflected Math operations in the shared catalog, so the same controller can be written in C++, a graph or Lua from identical arithmetic.",
+      "source": "runtime/epok.hpp"
+    },
+    {
+      "title": "Batched raycasts",
+      "category": "Performance & memory",
+      "guide": "runtime-performance",
+      "description": "Many independent segments resolve against one world snapshot with the same nearest-hit, generation, layer and trigger rules as individual queries, using caller-owned storage and no allocation.",
+      "source": "runtime/collision.hpp"
+    },
+    {
+      "title": "Compact projected-vertex path",
+      "category": "Performance & memory",
+      "guide": "runtime-performance",
+      "description": "Interior retained geometry without fog or animated UVs projects through an eight-byte vertex that fits 128 vertices in the 1 KiB scratchpad against 51 full clipping vertices, with packet order, depth, topology and UVs unchanged.",
+      "source": "runtime/main.cpp"
+    },
+    {
+      "title": "Narrowed collision synchronization",
+      "category": "Performance & memory",
+      "guide": "runtime-performance",
+      "description": "Only enabled colliders and their parent chains are examined, with a root fast path, reuse of the existing basis for translation-only edits and one sine/cosine pair per nonzero axis.",
+      "source": "runtime/transform_cache.hpp"
+    },
+    {
+      "title": "Faster PlayStation rebuilds",
+      "category": "Build & deploy",
+      "guide": "iteration",
+      "description": "Rebuilds reuse a finer-grained view of their inputs, and play data is validated before it is handed to a runner.",
+      "source": "src/build_inputs.rs"
+    }
   ]
 }

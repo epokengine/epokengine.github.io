@@ -1,9 +1,9 @@
 # Timeline assets and scene directors
 
 For step-by-step effect authoring, use [Using the VFX editor](vfx-editor.md).
-[Connect a spell to Blueprint gameplay](spell-tutorial.md) covers spawning,
-markers and cancellation. This page describes scene directors and the shared
-timeline reference, including limits, bindings and cache behavior.
+This page describes scene directors and the shared timeline reference, including
+limits, bindings and cache behavior, and how Blueprints spawn effects and wait on
+their markers.
 
 TimelineAsset creates and validates reusable source assets and previews their
 property values. TimelineComponent binds an asset to scene entities and plays
@@ -15,8 +15,7 @@ Choose **New Timeline** in the Project browser, or double-click an existing
 `.timeline.json` file. Add a typed binding slot, select a reflected class, and
 choose an explicitly animatable property. Add two to four keys and markers,
 then scrub **Preview tick**. Values use integer Q12 evaluation, including on
-the host. There are 4096 ticks per second. The [spell example](../examples/timeline-spell/README.md)
-contains a charge curve and Cast, Impact, and Aftermath markers.
+the host. There are 4096 ticks per second.
 
 Use **Validate** to cook immutable tables and refresh the preview cache. Source
 files remain JSON below the project's `assets/`. Derived tables and host source
@@ -24,6 +23,24 @@ maps live below `.epok/timelines/`. Add **Timeline Component** in the entity
 Inspector, select an asset, and assign its typed binding slots. **Play on start**
 starts the sequence once the owner is active. The scene stores asset and entity
 UUIDs; the build resolves generation-checked handles and stages typed accessors.
+
+Opening a sequence preserves the current workspace layout. The dedicated
+Scene/Sequencer layout remains an explicit Layout menu option. In the Sequencer
+track list, expand vector tracks to see X/Y/Z channels; each value follows the
+playhead. Editing a value creates or updates a key at that time. The adjacent
+controls jump to the previous/next key or add one. Value edits support Undo/Redo.
+
+With **Scene preview** (the eye button) enabled, scrubbing and Sequencer Play
+preview TimelineTransform position/rotation/scale and TimelineCamera field of
+view in Scene. The preview uses the same Q12 curves and section timing as cooked
+playback, on a disposable scene copy: saving/building the map keeps its authored
+values. Disable the eye or close the sequence to restore the authored view.
+Preview targets appear beside binding rows and can be changed there; bindings
+from a matching scene TimelineComponent take precedence over automatic selection.
+Automatic selection only chooses an unambiguous compatible object/component.
+These preview-only choices do not modify the reusable asset or its scene player.
+Missing bindings are reported in the Sequencer status row. Other adapter fields,
+custom script properties and event execution still require Game/runtime playback.
 
 ## Component adapters
 
@@ -133,8 +150,9 @@ property/event tracks, four keys per curve, 64 event keys, and 64 markers. These
 independent of the runtime's eight director instances and eight components.
 Pool exhaustion skips the new request and increments dropped-work diagnostics.
 Existing particle limits
-remain 64 emitters, 128 particles per emitter, 256 globally, and 2048 sprite
-triangles per frame.
+remain 64 emitters, 128 particles per emitter and 256 globally. The native sprite
+triangle budget defaults to 2048 per frame and is configurable from 64 to 2048
+in Project Settings → Rendering → Geometry.
 
 ## Identity, editing, and validation
 

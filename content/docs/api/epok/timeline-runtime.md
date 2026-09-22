@@ -2,7 +2,7 @@
 
 > **Header:** `"timeline_runtime.hpp"` · **Tier:** Engine internal · **Source:** [open header](../../../runtime/timeline_runtime.hpp)
 
-This module covers fixed-step simulation time and frame timing. It documents 28 public callables declared directly in this header.
+This module covers fixed-step simulation time and frame timing. It documents 32 public callables declared directly in this header.
 
 ## Declared types
 
@@ -21,6 +21,7 @@ This module covers fixed-step simulation time and frame timing. It documents 28 
 - [`epok::timeline::BoundTarget::get`](#epok-timeline-boundtarget-get-1) — Returns get as part of fixed-step simulation time and frame timing.
 - [`epok::timeline::BoundTarget::operator ObjectId`](#epok-timeline-boundtarget-operator-objectid-1) — Performs `operator  object id` as part of fixed-step simulation time and frame timing.
 - [`epok::timeline::BoundTarget::same`](#epok-timeline-boundtarget-same-1) — Performs `same` as part of fixed-step simulation time and frame timing.
+- [`epok::timeline::BoundTarget::same_sink`](#epok-timeline-boundtarget-same-sink-1) — Performs `same sink` as part of fixed-step simulation time and frame timing.
 - [`epok::timeline::BoundTarget::valid`](#epok-timeline-boundtarget-valid-1) — Performs `valid` as part of fixed-step simulation time and frame timing.
 - [`epok::timeline::BoundTarget::visible`](#epok-timeline-boundtarget-visible-1) — Performs `visible` as part of fixed-step simulation time and frame timing.
 - [`epok::timeline::Director::advance`](#epok-timeline-director-advance-1) — Performs `advance` as part of fixed-step simulation time and frame timing.
@@ -33,11 +34,14 @@ This module covers fixed-step simulation time and frame timing. It documents 28 
 - [`epok::timeline::Director::play`](#epok-timeline-director-play-1) — Starts play as part of fixed-step simulation time and frame timing.
 - [`epok::timeline::Director::play`](#epok-timeline-director-play-2) — Starts play as part of fixed-step simulation time and frame timing.
 - [`epok::timeline::Director::poll_diagnostic`](#epok-timeline-director-poll-diagnostic-1) — Polls diagnostic as part of fixed-step simulation time and frame timing.
+- [`epok::timeline::Director::reverse`](#epok-timeline-director-reverse-1) — Performs `reverse` as part of fixed-step simulation time and frame timing.
 - [`epok::timeline::Director::seek`](#epok-timeline-director-seek-1) — Performs `seek` as part of fixed-step simulation time and frame timing.
 - [`epok::timeline::Director::snapshot`](#epok-timeline-director-snapshot-1) — Performs `snapshot` as part of fixed-step simulation time and frame timing.
 - [`epok::timeline::Director::state`](#epok-timeline-director-state-1) — Performs `state` as part of fixed-step simulation time and frame timing.
 - [`epok::timeline::Director::stop`](#epok-timeline-director-stop-1) — Stops stop as part of fixed-step simulation time and frame timing.
 - [`epok::timeline::Director::tick`](#epok-timeline-director-tick-1) — Performs `tick` as part of fixed-step simulation time and frame timing.
+- [`epok::timeline::Property::active`](#epok-timeline-property-active-1) — Performs `active` as part of fixed-step simulation time and frame timing.
+- [`epok::timeline::Property::source_tick`](#epok-timeline-property-source-tick-1) — Performs `source tick` as part of fixed-step simulation time and frame timing.
 
 <a id="epok-timeline-boundtarget-active-1"></a>
 
@@ -422,6 +426,48 @@ auto result = object.same(other);
 
 **Trade-offs and warnings.** Check the return value; `false` is part of normal control flow for many PSX resource operations. This is classified as **Engine internal**. Prefer a higher-level Epok service unless you need this exact control. Pointer/reference arguments are borrowed unless the source contract says otherwise; keep them valid for the complete operation and never assume null is accepted.
 
+<a id="epok-timeline-boundtarget-same-sink-1"></a>
+
+## `epok::timeline::BoundTarget::same_sink`
+
+**Purpose.** Performs `same sink` as part of fixed-step simulation time and frame timing.
+
+**Exact declaration**
+
+```cpp
+bool same_sink(const BoundTarget& other)const
+```
+
+- **Declared at:** [line 32](../../../runtime/timeline_runtime.hpp#L32)
+- **Kind:** `cxx method`; qualifiers: `const`
+
+**Parameters**
+
+| Name | Type | Role | Meaning |
+| --- | --- | --- | --- |
+| `other` | `const BoundTarget &` | Input | Value supplied for `other`. See the exact type and module contract. |
+
+**Returns.** Returns `bool`. Check the purpose and failure notes before using the value.
+
+**Use it when.** You need fixed-step simulation time and frame timing and the preconditions in the declaration are already satisfied.
+
+**Usage pattern**
+
+```cpp
+#include "timeline_runtime.hpp"
+
+// Assume these named values have been initialized with valid data:
+// const BoundTarget & other
+
+epok::timeline::BoundTarget& object = /* obtain a valid instance */;
+
+auto result = object.same_sink(other);
+```
+
+**Why choose it.** The method is `const`, so it does not mutate the object through this API surface. The boolean result makes success, availability or state explicit without exceptions.
+
+**Trade-offs and warnings.** Check the return value; `false` is part of normal control flow for many PSX resource operations. This is classified as **Engine internal**. Prefer a higher-level Epok service unless you need this exact control. Pointer/reference arguments are borrowed unless the source contract says otherwise; keep them valid for the complete operation and never assume null is accepted.
+
 <a id="epok-timeline-boundtarget-valid-1"></a>
 
 ## `epok::timeline::BoundTarget::valid`
@@ -500,7 +546,7 @@ auto result = object.visible();
 void advance(Fixed dt,uint32_t scene,bool paused=false)
 ```
 
-- **Declared at:** [line 253](../../../runtime/timeline_runtime.hpp#L253)
+- **Declared at:** [line 274](../../../runtime/timeline_runtime.hpp#L274)
 - **Kind:** `cxx method`
 
 **Parameters**
@@ -546,7 +592,7 @@ object.advance(dt, scene, paused);
 void cancel_all()
 ```
 
-- **Declared at:** [line 240](../../../runtime/timeline_runtime.hpp#L240)
+- **Declared at:** [line 261](../../../runtime/timeline_runtime.hpp#L261)
 - **Kind:** `cxx method`
 
 **Returns.** No value is returned; observe the documented state change or callback.
@@ -579,7 +625,7 @@ object.cancel_all();
 void cancel_owner(BoundTarget owner)
 ```
 
-- **Declared at:** [line 241](../../../runtime/timeline_runtime.hpp#L241)
+- **Declared at:** [line 262](../../../runtime/timeline_runtime.hpp#L262)
 - **Kind:** `cxx method`
 
 **Parameters**
@@ -621,7 +667,7 @@ object.cancel_owner(owner);
 void capacity_drop(const Asset& asset)
 ```
 
-- **Declared at:** [line 173](../../../runtime/timeline_runtime.hpp#L173)
+- **Declared at:** [line 187](../../../runtime/timeline_runtime.hpp#L187)
 - **Kind:** `cxx method`
 
 **Parameters**
@@ -663,7 +709,7 @@ object.capacity_drop(asset);
 uint32_t marker(Handle h,uint16_t index)const
 ```
 
-- **Declared at:** [line 193](../../../runtime/timeline_runtime.hpp#L193)
+- **Declared at:** [line 207](../../../runtime/timeline_runtime.hpp#L207)
 - **Kind:** `cxx method`; qualifiers: `const`
 
 **Parameters**
@@ -707,7 +753,7 @@ auto result = object.marker(h, index);
 uint32_t marker_revision(Handle h,uint64_t id)const
 ```
 
-- **Declared at:** [line 196](../../../runtime/timeline_runtime.hpp#L196)
+- **Declared at:** [line 210](../../../runtime/timeline_runtime.hpp#L210)
 - **Kind:** `cxx method`; qualifiers: `const`
 
 **Parameters**
@@ -751,7 +797,7 @@ auto result = object.marker_revision(h, id);
 bool pause(Handle h,bool paused)
 ```
 
-- **Declared at:** [line 239](../../../runtime/timeline_runtime.hpp#L239)
+- **Declared at:** [line 254](../../../runtime/timeline_runtime.hpp#L254)
 - **Kind:** `cxx method`
 
 **Parameters**
@@ -795,7 +841,7 @@ auto result = object.pause(h, paused);
 Handle play(const Asset& asset,BoundTarget owner,const BoundTarget* targets,uint32_t scene)
 ```
 
-- **Declared at:** [line 207](../../../runtime/timeline_runtime.hpp#L207)
+- **Declared at:** [line 221](../../../runtime/timeline_runtime.hpp#L221)
 - **Kind:** `cxx method`
 
 **Parameters**
@@ -843,7 +889,7 @@ auto result = object.play(asset, owner, targets, scene);
 Handle play(const Asset& asset,DataHandle owner,const DataHandle* targets,uint32_t scene)
 ```
 
-- **Declared at:** [line 201](../../../runtime/timeline_runtime.hpp#L201)
+- **Declared at:** [line 215](../../../runtime/timeline_runtime.hpp#L215)
 - **Kind:** `cxx method`
 
 **Parameters**
@@ -891,7 +937,7 @@ auto result = object.play(asset, owner, targets, scene);
 bool poll_diagnostic(Diagnostic& result)
 ```
 
-- **Declared at:** [line 174](../../../runtime/timeline_runtime.hpp#L174)
+- **Declared at:** [line 188](../../../runtime/timeline_runtime.hpp#L188)
 - **Kind:** `cxx method`
 
 **Parameters**
@@ -921,6 +967,50 @@ auto result = object.poll_diagnostic(result);
 
 **Trade-offs and warnings.** Check the return value; `false` is part of normal control flow for many PSX resource operations. This is classified as **Engine internal**. Prefer a higher-level Epok service unless you need this exact control. Pointer/reference arguments are borrowed unless the source contract says otherwise; keep them valid for the complete operation and never assume null is accepted.
 
+<a id="epok-timeline-director-reverse-1"></a>
+
+## `epok::timeline::Director::reverse`
+
+**Purpose.** Performs `reverse` as part of fixed-step simulation time and frame timing.
+
+**Exact declaration**
+
+```cpp
+bool reverse(Handle h,bool backwards)
+```
+
+- **Declared at:** [line 255](../../../runtime/timeline_runtime.hpp#L255)
+- **Kind:** `cxx method`
+
+**Parameters**
+
+| Name | Type | Role | Meaning |
+| --- | --- | --- | --- |
+| `h` | `Handle` | Input | Value supplied for `h`. See the exact type and module contract. |
+| `backwards` | `bool` | Input | Value supplied for `backwards`. See the exact type and module contract. |
+
+**Returns.** Returns `bool`. Check the purpose and failure notes before using the value.
+
+**Use it when.** You need fixed-step simulation time and frame timing and the preconditions in the declaration are already satisfied.
+
+**Usage pattern**
+
+```cpp
+#include "timeline_runtime.hpp"
+
+// Assume these named values have been initialized with valid data:
+// Handle h
+// bool backwards
+
+epok::timeline::Director& object = /* obtain a valid instance */;
+
+auto result = object.reverse(h, backwards);
+```
+
+**Why choose it.** The boolean result makes success, availability or state explicit without exceptions.
+
+**Trade-offs and warnings.** Check the return value; `false` is part of normal control flow for many PSX resource operations. This is classified as **Engine internal**. Prefer a higher-level Epok service unless you need this exact control.
+
 <a id="epok-timeline-director-seek-1"></a>
 
 ## `epok::timeline::Director::seek`
@@ -933,7 +1023,7 @@ auto result = object.poll_diagnostic(result);
 bool seek(Handle h,int32_t tick,uint32_t scene)
 ```
 
-- **Declared at:** [line 242](../../../runtime/timeline_runtime.hpp#L242)
+- **Declared at:** [line 263](../../../runtime/timeline_runtime.hpp#L263)
 - **Kind:** `cxx method`
 
 **Parameters**
@@ -979,7 +1069,7 @@ auto result = object.seek(h, tick, scene);
 bp::PlaybackSnapshot snapshot(Handle h,uint64_t asset=0,uint64_t marker=0)const
 ```
 
-- **Declared at:** [line 179](../../../runtime/timeline_runtime.hpp#L179)
+- **Declared at:** [line 193](../../../runtime/timeline_runtime.hpp#L193)
 - **Kind:** `cxx method`; qualifiers: `const`
 
 **Parameters**
@@ -1025,7 +1115,7 @@ auto result = object.snapshot(h, asset, marker);
 State state(Handle h)const
 ```
 
-- **Declared at:** [line 178](../../../runtime/timeline_runtime.hpp#L178)
+- **Declared at:** [line 192](../../../runtime/timeline_runtime.hpp#L192)
 - **Kind:** `cxx method`; qualifiers: `const`
 
 **Parameters**
@@ -1067,7 +1157,7 @@ auto result = object.state(h);
 bool stop(Handle h)
 ```
 
-- **Declared at:** [line 238](../../../runtime/timeline_runtime.hpp#L238)
+- **Declared at:** [line 253](../../../runtime/timeline_runtime.hpp#L253)
 - **Kind:** `cxx method`
 
 **Parameters**
@@ -1109,7 +1199,7 @@ auto result = object.stop(h);
 int32_t tick(Handle h)const
 ```
 
-- **Declared at:** [line 192](../../../runtime/timeline_runtime.hpp#L192)
+- **Declared at:** [line 206](../../../runtime/timeline_runtime.hpp#L206)
 - **Kind:** `cxx method`; qualifiers: `const`
 
 **Parameters**
@@ -1133,6 +1223,92 @@ int32_t tick(Handle h)const
 epok::timeline::Director& object = /* obtain a valid instance */;
 
 auto result = object.tick(h);
+```
+
+**Why choose it.** The method is `const`, so it does not mutate the object through this API surface.
+
+**Trade-offs and warnings.** This is classified as **Engine internal**. Prefer a higher-level Epok service unless you need this exact control.
+
+<a id="epok-timeline-property-active-1"></a>
+
+## `epok::timeline::Property::active`
+
+**Purpose.** Performs `active` as part of fixed-step simulation time and frame timing.
+
+**Exact declaration**
+
+```cpp
+bool active(int32_t tick,int32_t duration)const
+```
+
+- **Declared at:** [line 50](../../../runtime/timeline_runtime.hpp#L50)
+- **Kind:** `cxx method`; qualifiers: `const`
+
+**Parameters**
+
+| Name | Type | Role | Meaning |
+| --- | --- | --- | --- |
+| `tick` | `int32_t` | Input | Value supplied for `tick`. See the exact type and module contract. |
+| `duration` | `int32_t` | Input | Value supplied for `duration`. See the exact type and module contract. |
+
+**Returns.** Returns `bool`. Check the purpose and failure notes before using the value.
+
+**Use it when.** You need fixed-step simulation time and frame timing and the preconditions in the declaration are already satisfied.
+
+**Usage pattern**
+
+```cpp
+#include "timeline_runtime.hpp"
+
+// Assume these named values have been initialized with valid data:
+// int32_t tick
+// int32_t duration
+
+epok::timeline::Property& object = /* obtain a valid instance */;
+
+auto result = object.active(tick, duration);
+```
+
+**Why choose it.** The method is `const`, so it does not mutate the object through this API surface. The boolean result makes success, availability or state explicit without exceptions.
+
+**Trade-offs and warnings.** Check the return value; `false` is part of normal control flow for many PSX resource operations. This is classified as **Engine internal**. Prefer a higher-level Epok service unless you need this exact control.
+
+<a id="epok-timeline-property-source-tick-1"></a>
+
+## `epok::timeline::Property::source_tick`
+
+**Purpose.** Performs `source tick` as part of fixed-step simulation time and frame timing.
+
+**Exact declaration**
+
+```cpp
+int32_t source_tick(int32_t tick)const
+```
+
+- **Declared at:** [line 51](../../../runtime/timeline_runtime.hpp#L51)
+- **Kind:** `cxx method`; qualifiers: `const`
+
+**Parameters**
+
+| Name | Type | Role | Meaning |
+| --- | --- | --- | --- |
+| `tick` | `int32_t` | Input | Value supplied for `tick`. See the exact type and module contract. |
+
+**Returns.** Returns `int32_t`. Check the purpose and failure notes before using the value.
+
+**Use it when.** You need fixed-step simulation time and frame timing and the preconditions in the declaration are already satisfied.
+
+**Usage pattern**
+
+```cpp
+#include "timeline_runtime.hpp"
+
+// Assume these named values have been initialized with valid data:
+// int32_t tick
+
+epok::timeline::Property& object = /* obtain a valid instance */;
+
+auto result = object.source_tick(tick);
 ```
 
 **Why choose it.** The method is `const`, so it does not mutate the object through this API surface.

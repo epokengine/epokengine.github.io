@@ -2,78 +2,169 @@
   "actors": {
     "plain": "Actors give a map's objects a class and identity. Components give each object individual jobs, with rules that prevent invalid combinations.",
     "analogy": "A door is the Actor; its placement and creaking sound are separate components. One prop, several responsibilities.",
-    "flow": ["Choose a placeable class", "Edit compatible components and properties", "Cook bounded native instances"],
-    "details": ["3D, 2D and UI have distinct root contracts.", "C++, Blueprint and Lua classes share reflected identity and type checks.", "Component creation is filtered by owner-domain and compatibility rules before it modifies an Actor."],
+    "flow": [
+      "Choose a placeable class",
+      "Edit compatible components and properties",
+      "Cook bounded native instances"
+    ],
+    "details": [
+      "3D, 2D and UI have distinct root contracts.",
+      "C++, Blueprint and Lua classes share reflected identity and type checks.",
+      "Component creation is filtered by owner-domain and compatibility rules before it modifies an Actor."
+    ],
     "tip": "Start with one simple Actor. Composition is a tool for clarity, not a contest to attach the most components."
   },
   "migration-actors": {
     "plain": "Projects from the Entity and Behaviour era require deliberate recreation in the Actor model. Projects already created with v0.1.1 Actors remain compatible with v0.2.0.",
     "analogy": "This is rebuilding a set on a stronger stage, not pressing a button that silently rewrites the old scenery.",
-    "flow": ["Preserve the old project", "Create a current Actor-based project", "Copy source assets and rebuild maps and scripts deliberately"],
-    "details": ["Legacy documents are rejected with an explanation and are not rewritten in place.", "Logical ownership and spatial attachment remain distinct.", "Map 6, Blueprint 5 and reflection schema 9 remain current in v0.2.0."],
+    "flow": [
+      "Preserve the old project",
+      "Create a current Actor-based project",
+      "Copy source assets and rebuild maps and scripts deliberately"
+    ],
+    "details": [
+      "Legacy documents are rejected with an explanation and are not rewritten in place.",
+      "Logical ownership and spatial attachment remain distinct.",
+      "Map 6, Blueprint 5 and reflection schema 9 remain current in v0.2.0."
+    ],
     "tip": "Keep the original project and a version-control checkpoint until the recreated game has built and run successfully."
   },
   "worlds-2d": {
     "plain": "3D, 2D and UI are separate editing contexts. World 2D now has a grid, zoom, placement picking and drag editing, alongside native camera and collision helpers.",
     "analogy": "A side-scroller's character lives in the world; the health bar lives on the screen. They should not share an accidental coordinate system.",
-    "flow": ["Pick the object's domain", "Place it in the matching view", "Validate its runtime rendering and gameplay"],
-    "details": ["2D uses world units, with 32 pixels per unit at zoom 1.", "The current editor shows labeled Actor footprints, not a tilemap or textured sprite compositor.", "The native toolkit includes stable sorting, Camera2D and bounded collision; it is not a general physics engine."],
+    "flow": [
+      "Pick the object's domain",
+      "Place it in the matching view",
+      "Validate its runtime rendering and gameplay"
+    ],
+    "details": [
+      "2D uses world units, with 32 pixels per unit at zoom 1.",
+      "The current editor shows labeled Actor footprints, not a tilemap or textured sprite compositor.",
+      "The native toolkit includes stable sorting, Camera2D and bounded collision; it is not a general physics engine."
+    ],
     "tip": "Switching view modes does not convert an Actor or delete objects hidden by the domain filter."
   },
   "scene-blueprints": {
     "plain": "A Scene Blueprint coordinates the objects and events of one map. It runs as a single map-owned SceneScriptActor rather than a manually placed object.",
     "analogy": "Actors are the cast. The map script cues this particular scene's performance.",
-    "flow": ["Open Map Settings", "Edit the map's graph and local references", "Compile and test that scene bank"],
-    "details": ["Only SceneScriptActor subclasses qualify as map scripts.", "Local references use stable identity and type checks.", "Reusable object logic belongs in Actor/Component classes; map-specific coordination belongs here."],
+    "flow": [
+      "Open Map Settings",
+      "Edit the map's graph and local references",
+      "Compile and test that scene bank"
+    ],
+    "details": [
+      "Only SceneScriptActor subclasses qualify as map scripts.",
+      "Local references use stable identity and type checks.",
+      "Reusable object logic belongs in Actor/Component classes; map-specific coordination belongs here."
+    ],
     "tip": "Keep reusable door logic in the door class, not copied into every level's opening sequence."
   },
   "music-sequences": {
     "plain": "Choose resident effects, native MIDI music with a SoundBank, or a disc stream. The guide shows how each route is imported, assigned and controlled from the editor, Blueprints, C++ and Lua.",
     "analogy": "MIDI is the sheet music; the SoundBank is the instrument case. The SPU stage has only 24 chairs, shared with sound effects.",
-    "flow": ["Import the score and instruments", "Analyze and save a PSX recipe", "Compare previews, then test the game"],
-    "details": ["SF2/SF3 libraries keep their source snapshots; conversion selects required regions and layers.", "Compact/Balanced/High presets and an opt-in optimizer help fit budgets without silently dropping instruments.", "A host Target Preview does not reproduce hardware interpolation, interrupt latency or all runtime contention."],
+    "flow": [
+      "Import the score and instruments",
+      "Analyze and save a PSX recipe",
+      "Compare previews, then test the game"
+    ],
+    "details": [
+      "SF2/SF3 libraries keep their source snapshots; conversion selects required regions and layers.",
+      "Compact/Balanced/High presets and an opt-in optimizer help fit budgets without silently dropping instruments.",
+      "A host Target Preview does not reproduce hardware interpolation, interrupt latency or all runtime contention."
+    ],
     "tip": "Reserve room for menu clicks and gameplay SFX before giving the entire SPU to the orchestra."
   },
   "native-hud-preview": {
     "plain": "Native C++ menus can construct themselves automatically in the UI editor through a dedicated preview hook, without launching a PSX build.",
     "analogy": "See the completed menu set before the opening curtain animation starts. The actors do not need to perform the whole play for a layout check.",
-    "flow": ["Share UI construction code", "Inspect the automatic edit preview", "Interact optionally, then verify on target"],
-    "details": ["A separate native process runs construction hooks; normal edit preview does not run gameplay lifecycle.", "The desktop and console paths share Q12 HUD layout and primitive generation.", "Blueprint logic, real audio/cards, scene loading and cycle-accurate performance are outside this preview."],
+    "flow": [
+      "Share UI construction code",
+      "Inspect the automatic edit preview",
+      "Interact optionally, then verify on target"
+    ],
+    "details": [
+      "A separate native process runs construction hooks; normal edit preview does not run gameplay lifecycle.",
+      "The desktop and console paths share Q12 HUD layout and primitive generation.",
+      "Blueprint logic, real audio/cards, scene loading and cycle-accurate performance are outside this preview."
+    ],
     "tip": "Use UI mode, not world 2D. Earlier instructions used the old two-mode label."
   },
   "iteration": {
     "plain": "Build manually, reuse only verified output, select a small group of scenes and inspect both static memory and runtime timing before adding more content.",
     "analogy": "The memory report is the packing list; the Debug HUD is the lap timer. A light suitcase does not guarantee a fast race.",
-    "flow": ["Choose scenes, target and data source", "Build or reuse a matching receipt", "Measure the actual target workload"],
-    "details": ["Source observation invalidates stale output without automatically compiling a PSX game.", "Debug HUD metrics describe specific intervals or memory use; they are not additive hardware utilization percentages.", "Persistent serial control and dependency repair keep their ownership, acknowledgement and cancellation boundaries."],
+    "flow": [
+      "Choose scenes, target and data source",
+      "Build or reuse a matching receipt",
+      "Measure the actual target workload"
+    ],
+    "details": [
+      "Source observation invalidates stale output without automatically compiling a PSX game.",
+      "Debug HUD metrics describe specific intervals or memory use; they are not additive hardware utilization percentages.",
+      "Persistent serial control and dependency repair keep their ownership, acknowledgement and cancellation boundaries."
+    ],
     "tip": "Position interpolation smooths motion; it does not create more FPS."
-  },
-  "release-v0.2.0": {
-    "plain": "Version 0.2.0 brings Lua into the same gameplay model as C++ and Blueprints, adds two skeletal target formats, and tightens several authoring workflows.",
-    "analogy": "It adds a third language to the same stage: the cast, props and runtime stay shared even though authors can write, wire or script the performance.",
-    "flow": ["Review compatibility", "Choose the features relevant to your project", "Run the required release validation before upgrading"],
-    "details": ["v0.1.1 Actor projects do not need another document migration.", "Lua Native C++ mode links no VM; bytecode and source modes do.", "Physical-hardware validation of Lua and the new skeletal paths remains pending."],
-    "tip": "Read the compatibility section first, then follow the focused Lua or skeletal guide instead of treating release notes as a tutorial."
   },
   "lua-tutorial": {
     "plain": "Create a real Actor class in Lua, expose properties in the Inspector, move it every tick and build the same source through any of Epok's three execution modes.",
     "analogy": "The Lua file is a typed gameplay blueprint written as text: its declared shape is inspected before any code can run.",
-    "flow": ["Create and declare one class", "Add typed properties and lifecycle methods", "Place the Actor, choose a mode and test it"],
-    "details": ["The file name, local class name and returned class must agree.", "Properties are literals or explicit Epok constructors, not arbitrary file-scope expressions.", "The epok-lua v1 profile is intentionally smaller and more predictable than general Lua."],
+    "flow": [
+      "Create and declare one class",
+      "Add typed properties and lifecycle methods",
+      "Place the Actor, choose a mode and test it"
+    ],
+    "details": [
+      "The file name, local class name and returned class must agree.",
+      "Properties are literals or explicit Epok constructors, not arbitrary file-scope expressions.",
+      "The epok-lua v1 profile is intentionally smaller and more predictable than general Lua."
+    ],
     "tip": "Start in Native C++ mode with the small Spinner example. Switch modes only after the same class compiles and behaves correctly."
   },
   "lua-scripting": {
     "plain": "The Lua reference defines the exact class syntax, type system, engine builtins, diagnostics, execution modes and limits shared by every Lua project.",
     "analogy": "Think of it as the language contract at the border: every value must have a size and meaning that the PlayStation runtime can honor.",
-    "flow": ["Declare the class shape statically", "Compile one typed intermediate representation", "Run native code or a bounded VM backend"],
-    "details": ["Lua classes can inherit from reflected C++, Blueprint or Lua parents.", "Generated epok.d.lua definitions keep external editor tooling aligned with the live registry.", "Mode changes invalidate incompatible build artifacts and never trigger a silent fallback."],
+    "flow": [
+      "Declare the class shape statically",
+      "Compile one typed intermediate representation",
+      "Run native code or a bounded VM backend"
+    ],
+    "details": [
+      "Lua classes can inherit from reflected C++, Blueprint or Lua parents.",
+      "Generated epok.d.lua definitions keep external editor tooling aligned with the live registry.",
+      "Mode changes invalidate incompatible build artifacts and never trigger a silent fallback."
+    ],
     "tip": "When a diagnostic rejects ordinary Lua, check the profile table before trying to work around it dynamically."
   },
   "lua-vm-runtime": {
     "plain": "The VM guide explains what each Lua mode links, how much target memory it reserves, and how host-cooked bytecode is proven compatible with the 32-bit runtime.",
     "analogy": "Native mode translates the recipe before shipping; bytecode ships a compact prepared recipe; source mode also brings the parser into the tiny kitchen.",
-    "flow": ["Select one project mode", "Build the matching archive and script payload", "Measure the fixed arena and target result"],
-    "details": ["Bytecode defaults to a 96 KiB arena and source to 128 KiB.", "The ABI verifier compares host and target chunk headers byte-for-byte.", "Lua 5.2/psxlua MIT notices apply only when a VM archive is linked."],
+    "flow": [
+      "Select one project mode",
+      "Build the matching archive and script payload",
+      "Measure the fixed arena and target result"
+    ],
+    "details": [
+      "Bytecode defaults to a 96 KiB arena and source to 128 KiB.",
+      "The ABI verifier compares host and target chunk headers byte-for-byte.",
+      "Lua 5.2/psxlua MIT notices apply only when a VM archive is linked."
+    ],
     "tip": "Choose by measured game needs: source mode is convenient but carries the parser and the largest reserved arena."
+  },
+  "release-v0.4.0": {
+    "plain": "Version 0.4.0 adds terrain you can sculpt, navigation your characters can follow, and a Native PC runtime that runs the same gameplay code on your computer before it ever reaches a console.",
+    "analogy": "It fills in three gaps at once: the ground to walk on, the way to find a path across it, and a rehearsal room so you can watch it before opening night.",
+    "flow": [
+      "Review compatibility and the editor version",
+      "Try the new template browser and gameplay flavors",
+      "Sculpt terrain, bake navigation, iterate on Native PC"
+    ],
+    "details": [
+      "Every authoring contract from v0.3.0 is unchanged: no project recreation, scene migration or asset rewrite.",
+      "A project descriptor must declare editor_version 0.4.0; upgrade through the Hub, which backs up the descriptor first.",
+      "New projects choose a template, a gameplay flavor (C++, Blueprint or Lua) and a target platform as independent choices.",
+      "Appending a variant to a reflected enum or a member to a record no longer breaks saved Blueprint graphs.",
+      "The gameplay API reaches 485 public operations, each implemented on C++, Blueprint and all three Lua execution modes.",
+      "Terrain, navigation and the Native PC runtime have not been validated on physical PlayStation hardware."
+    ],
+    "tip": "Start with the compatibility section. The one thing you must do to an existing project is let the Hub move its editor version forward."
   }
 }

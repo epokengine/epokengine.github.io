@@ -23,7 +23,7 @@ An illustrative graph design is:
 2. Start the opening cue through the available reflected Timeline/gameplay functions.
 3. On the cue's marker or completion, call the gate class's own exposed function.
 
-The gate function is project code you provide, not a built-in “Arena Gate” node. See the [Timeline reference](/docs/timelines/) and [spell tutorial](/docs/spell-tutorial/) for concrete playback/wait workflows using implemented nodes.
+The gate function is project code you provide, not a built-in “Arena Gate” node. See the [Timeline reference](/docs/timelines/) and the [VFX editor guide](/docs/vfx-editor/) for concrete playback/wait workflows using implemented nodes.
 
 This division lets you reuse the gate class in another level without carrying the arena's entire introduction with it.
 

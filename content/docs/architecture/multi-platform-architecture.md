@@ -1,6 +1,6 @@
 # Epok Multi-Console Architecture Plan
 
-Navigate: [assessment](#2-current-epok-architecture-assessment) · [coupling register](#3-psx-specific-coupling-found) · [design](#6-proposed-layered-architecture) · [workspace](#7-proposed-rust-workspace--crate-layout) · [N64 roadmap](#18-n64-integration-roadmap) · [decisions](#21-architecture-decision-records) · [agent tasks](#22-concrete-implementation-tasks-for-ai-agents) · [sources](#evidence-and-source-register).
+Navigate: [assessment](#2-current-epok-architecture-assessment) · [coupling register](#3-psx-specific-coupling-found) · [design](#6-proposed-layered-architecture) · [workspace](#7-proposed-rust-workspace--crate-layout) · [N64 roadmap](#18-n64-integration-roadmap) · [decisions](#21-architecture-decision-records) · [implementation tasks](#22-concrete-implementation-tasks-for-maintainers) · [sources](#evidence-and-source-register).
 
 ## 1. Executive Summary
 
@@ -105,8 +105,8 @@ Hardware facts and SDK implementation choices must be kept distinct. The followi
 | Graphics work | CPU/GTE transforms; GPU consumes screen-space packets; ordering tables arrange painter ordering | RSP executes microcode; RDP rasterizes queued commands; software stack controls command/microcode format | Share scene/draw intent, not low-level commands or geometry stages. |
 | Visibility / depth | No conventional hardware depth buffer; affine texture mapping and explicit draw ordering | RDP supports depth buffering and perspective-correct texture mapping | Material/order policy must state semantic requirements and target fallbacks. Results need not be pixel-identical. |
 | Texture working set | VRAM allocation, texture pages and CLUTs; indexed 4/8-bit and direct 15-bit color representations | RDP texture memory is a small 4 KiB working store, loaded from RDRAM; formats and palette/tile restrictions apply | Offline texture partitioning and batching are different problems. Neither 256 pixels nor 4 KiB is a universal source-asset limit. |
-| DMA / visibility | GPU/SPU/CD transfers and packet lifetimes, PSX memory/bus rules | Cached/uncached aliases, cache-line maintenance and PI/RSP/RDP/AI transfers | Backend owns preparation, submission and retirement. `volatile` is insufficient for cache coherence. |
-| Audio | SPU voices and sample RAM; XA/CDDA use CD resources | AI consumes sample buffers; mixing/decoding may use CPU/RSP according to SDK | Expose logical playback; reserve queue time and buffers for the chosen native mixer. |
+| DMA / visibility | GPU/SPU/CD transfers and packet lifetimes, PSX memory/bus rules | Cached/uncached aliases, cache-line maintenance and peripheral/signal/display/audio transfers | Backend owns preparation, submission and retirement. `volatile` is insufficient for cache coherence. |
+| Audio | SPU voices and sample RAM; XA/CDDA use CD resources | The audio interface consumes sample buffers; mixing/decoding may use CPU/RSP according to SDK | Expose logical playback; reserve queue time and buffers for the chosen native mixer. |
 | Input / saves | Two controller connectors, optional multitap; cards share serial interface | Four controller connectors; accessories and cartridge save hardware vary | Device count and save availability are runtime observations constrained by the build profile. |
 | Bulk assets | CD sectors, seeks, media contention, optional executable residency or host dev transport | ROM/cartridge transfers, DragonFS or packaged ROM regions; flashcart extensions are optional | Separate logical asset source, packaging, physical reader and save storage. |
 | Boot / execution | PS-X executable or bootable disc; PsyQo/Nugget startup and linker conventions | ROM construction and SDK boot/startup/linker conventions | One native entry/startup owner per artifact; final link and packaging stay SDK-specific. |
@@ -568,7 +568,7 @@ Baseline artifacts: source revision plus dirty-tree digest, SDK/tool hashes, coo
 | Emulator integration | Boot, workflow and modeled hardware behavior | Native frame, assets, input replay, scene changes, streaming/audio/error paths |
 | Physical-console tests | Timing/cache/DMA/media behavior absent or imperfect in emulation | Audio+graphics stress, buffer retirement, real CD/save/ROM media, base-memory profile |
 
-Relevant existing entrypoints include `tests/runtime/verify_spatial.py`, `verify_sprites_particles.py`, `verify_frame_clear.py`, `verify_blueprint_runtime.py`, `test_stream_pool_layout.py`; integration scripts include `verify_pipeline.py`, `verify_projects.py`, `verify_reflection.py`, `verify_timeline_relocation.py`, `verify_particle_effect_preview.py`, `verify_bgm.py`, `verify_streaming.py`, `verify_streaming_xa.py` and `verify_skeletal.py`. Retain `tools/profile_runtime.py`, `profile_forest_*`, `compare_runtime.py`, and `compare_vram.py`. Run emulator suites serially where their current harness expects exclusive ownership; first read `knowledge/maintainers/testing.md` for fixture and environment requirements.
+Relevant existing entrypoints include `tests/runtime/verify_spatial.py`, `verify_sprites_particles.py`, `verify_frame_clear.py`, `verify_blueprint_runtime.py`, `test_stream_pool_layout.py`; integration scripts include `verify_pipeline.py`, `verify_projects.py`, `verify_reflection.py`, `verify_particle_effect_preview.py`, `verify_bgm.py`, `verify_streaming.py`, `verify_streaming_xa.py` and `verify_skeletal.py`. Retain `tools/profile_runtime.py`, `profile_forest_*`, `compare_runtime.py`, and `compare_vram.py`. Run emulator suites serially where their current harness expects exclusive ownership; first read `knowledge/maintainers/testing.md` for fixture and environment requirements.
 
 Before crate moves, use the current host checks: `cargo fmt --all -- --check`, `cargo test --locked`, `cargo clippy --locked --all-targets -- -D warnings`, `cargo build --locked`. After splitting, make package selection explicit and add host CI. Existing GitHub workflows primarily enforce release/version policy, so a full engine CI matrix is new work.
 
@@ -801,7 +801,7 @@ All decisions below are proposed for implementation. Hardware/toolchain gates re
 
 **Future consequences:** One shared framework can become the default after parity; unsupported old direct-access APIs remain in a clearly bounded legacy profile until migrated.
 
-## 22. Concrete Implementation Tasks for AI Agents
+## 22. Concrete Implementation Tasks for Maintainers
 
 Each task is a separate reviewable change unless its description explicitly calls for an experiment/report. Proposed paths below do not imply files already exist. Resolve existing references against the baseline captured by T00. General constraints apply to **every** task: preserve unrelated working-tree changes; do not reformat unrelated files, update SDK pins incidentally, modify source assets in place, or call a test passed without executing it. Use disposable fixture copies. A task may report a failed gate with evidence; it may not mark a dependent milestone complete by changing the definition of success.
 
@@ -1132,7 +1132,7 @@ The `Do not change` entry narrows scope further. Dependencies identify necessary
 - **Goal/context:** Existing behaviors and Blueprint output use direct fields/pointers and C++ text.
 - **Constraint:** Compatibility is an explicit API/node matrix, not a claim that all scripts are portable.
 - **Files:** Proposed `runtime/compat/epok-game-v1.h/.hpp`, `docs/architecture/cpp-compatibility.md`, reflection capability metadata.
-- **Instructions:** Audit sample-game, timeline-spell and disposable Ironwood script usage; specify supported accessors, callbacks, handles, numeric types and unsupported native extensions; compile a header-only fixture.
+- **Instructions:** Audit sample-game and disposable Ironwood script usage; specify supported accessors, callbacks, handles, numeric types and unsupported native extensions; compile a header-only fixture.
 - **Do not change:** Existing C++ scripts, original public API or Blueprint lowering yet.
 - **Dependencies:** T04, T09, T16; independent of later N64 rendering.
 - **Validation / done:** Every sampled API use is classified; facade compiles without PsyQo/libdragon headers; unsupported execution produces a diagnostic without deleting serialized data.
@@ -1251,7 +1251,7 @@ The `Do not change` entry narrows scope further. Dependencies identify necessary
 
 - **Goal/context:** A useful engine milestone requires more than isolated subsystem demos.
 - **Constraint:** Feature inventory drives acceptance; target-specific visual/media overrides are explicit and original projects stay intact.
-- **Files:** `examples/portable-parity`, disposable sample-game/timeline-spell/Ironwood migration copies, parity matrix.
+- **Files:** `examples/portable-parity`, disposable sample-game/Ironwood migration copies, parity matrix.
 - **Instructions:** Integrate input/3D/HUD/scenes/audio/save/animation/authored-system scenarios; use T54–56 movement/trigger/HUD services and T57–60 scene/script/export path. Enumerate any remaining game-specific unsupported call and create a bounded task before declaring its scenario complete.
 - **Do not change:** Original demo assets/scripts or redefine parity to omit a listed required behavior.
 - **Dependencies:** T26, T31, T35–42, T43, T54–60.

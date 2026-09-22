@@ -2,8 +2,7 @@
 
 Start with [Your first Blueprint](blueprints-tutorial.md) for a guided editor
 exercise. This page is the reference for types, inheritance and execution.
-For visual gameplay, continue with [VFX authoring](vfx-editor.md) and the
-[marker-driven spell tutorial](spell-tutorial.md). Keep
+For visual gameplay, continue with [VFX authoring](vfx-editor.md). Keep
 [troubleshooting](blueprints-vfx-troubleshooting.md) nearby when repairing graphs.
 
 Blueprints are original `.epokbp` class assets, not generated C++ files.
@@ -239,8 +238,7 @@ external binding slots. Slot renames/reordering retain connections; removed slot
 remain visible as stale connections until repaired. Subscribe to marker delivers
 future crossings through that same continuation table, retaining a compact
 backlog while the reached branch suspends. See [Timeline playback](timelines.md)
-for owner, pause, completion and cancellation rules, and open the
-`timeline-spell` example's `BP_Fireball` for an authored combat graph.
+for owner, pause, completion and cancellation rules.
 
 ## Actor templates and construction
 
@@ -342,3 +340,15 @@ wires. Its visual language does not imply external API or asset compatibility.
 Lua is a separately reserved provider. The reusable TimelineAsset and VFX editors
 are available alongside the older scalar Blueprint Timeline node; see
 [Using the VFX editor](vfx-editor.md) for their authoring workflow.
+## Catalog gameplay operations
+
+Blueprint's action menu includes engine gameplay operations generated from the
+same reflected catalog used by C++ and Lua. Function-library entries are grouped
+by category; instance entries have a typed `Target` pin; properties appear as
+generated Get/Set operations. Registered records can be split and recombined, and
+the compiler materializes a stateful query once before fan-out reads its fields.
+
+Legacy builtin nodes retain their UUIDs and serialized pins. They are compatibility
+aliases, so old graphs load without being rewritten while new graphs can use the
+catalog operations. See [Gameplay API](gameplay-api.md) for service groups, bounded
+results and skeletal sampling semantics.
