@@ -166,5 +166,53 @@
       "Terrain, navigation and the Native PC runtime have not been validated on physical PlayStation hardware."
     ],
     "tip": "Start with the compatibility section. The one thing you must do to an existing project is let the Hub move its editor version forward."
+  },
+  "release-v0.3.0": {
+    "plain": "Version 0.3.0 made one gameplay surface behave identically in C++, Blueprints and Lua, added a timeline sequencer with a live scene preview, and replaced software music with a native driver for the PlayStation's own sound chip.",
+    "analogy": "Three authors, one script: whichever language writes the scene, the performance on the console is the same one.",
+    "flow": [
+      "Review compatibility",
+      "Adopt the unified gameplay operations",
+      "Re-cook music for the native driver"
+    ],
+    "details": [
+      "Projects kept map format 6 and Blueprint format 5; no recreation or scene migration was required.",
+      "The Lua gameplay profile advanced from 1 to 2, adding composite values, service operations and typed foreign receivers.",
+      "Timeline assets advanced from schema 2 to 3, adding optional per-track sections with time remapping.",
+      "Epok Pulse compiles a MIDI entirely on the host into an absolute-timestamped SPU command stream; the software synthesizer stayed selectable as a reference.",
+      "Skeletal triangles gained per-corner texture coordinates and the per-model clip limit rose to 32."
+    ],
+    "tip": "If you author music, compare the Target Preview against the software reference before committing to the native driver."
+  },
+  "release-v0.2.0": {
+    "plain": "Version 0.2.0 brings Lua into the same gameplay model as C++ and Blueprints, adds two skeletal target formats, and tightens several authoring workflows.",
+    "analogy": "It adds a third language to the same stage: the cast, props and runtime stay shared even though authors can write, wire or script the performance.",
+    "flow": [
+      "Review compatibility",
+      "Choose the features relevant to your project",
+      "Run the required release validation before upgrading"
+    ],
+    "details": [
+      "v0.1.1 Actor projects did not need another document migration.",
+      "Lua Native C++ mode links no VM; the bytecode and source modes do.",
+      "Skeletal models gained a choice between direct GTE bone ranges and compressed baked vertex frames.",
+      "Physical-hardware validation of Lua and the new skeletal paths remained pending."
+    ],
+    "tip": "Read the compatibility section first, then follow the focused guides for whichever features you actually intend to use."
+  },
+  "release-v0.1.1": {
+    "plain": "Version 0.1.1 unified scene authoring around typed Actors, improved Blueprint creation and compilation feedback, and switched new Third Person projects to progressive output.",
+    "analogy": "It is the release where the scene stopped being a list of entities and became a hierarchy of typed objects you can reason about.",
+    "flow": [
+      "Migrate existing scenes to Actors",
+      "Re-check Blueprint compilation feedback",
+      "Confirm your project's display mode"
+    ],
+    "details": [
+      "Scene documents moved to the typed Actor model; the older Entity and Behaviour format was retired.",
+      "Progressive PlayStation output avoids the interlaced motion artifacts visible on physical displays.",
+      "Existing projects keep their saved resolution; the change applies to newly created Third Person projects."
+    ],
+    "tip": "This is the oldest release with notes on this site. Projects older than it need the Actor migration before a current editor will open them."
   }
 }
