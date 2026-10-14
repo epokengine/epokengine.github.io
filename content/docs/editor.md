@@ -67,7 +67,7 @@ above the viewport.
 | Mode | Shows |
 | --- | --- |
 | 3D | The 3D world: the shaded viewport, its camera controls, grid and gizmos |
-| 2D | The 2D world. Camera2D authoring arrives in a later release; the mode already lists this map's 2D actors in the Hierarchy |
+| 2D | The 2D world editor: select/move/rotate/scale tools, snapping, rulers, real sprite, tile and collider previews, camera bounds, and tile painting with a palette and TileSet editor. See [2D worlds](2d.md) |
 | UI | The Canvas / HUD editor described in [HUD and 2D entities](hud.md) |
 
 Switching modes never edits the map and never restarts the 3D preview: the camera,
@@ -148,7 +148,7 @@ Tags and Layers are not implemented. Entity activation is displayed as a disable
 
 Actors support inline rename, Duplicate, Delete and drag-and-drop reparenting in the Hierarchy, and the Inspector's Add Component popup and per-component Remove follow the class compatibility rules (the root and inherited components cannot be removed). Converting an actor to another class or domain is not offered; the [MCP actor tools](mcp.md#actors) and `--add-actor` provide the same edits for automation.
 
-The initial renderer limits exported positions to +/-128 and scales to 64. It clips triangles against the camera frustum and uses double-buffered ordering tables. Those tables cannot resolve all intersecting geometry. Lighting and HUD have additional [lighting](lighting.md) and [HUD](hud.md) budgets.
+Authored local transforms remain within +/-10000; exported scales and inherited basis coefficients are limited to 64. Inherited world positions must fit signed 32-bit Q12. Rendering subtracts the camera's world origin before rotation; the camera-relative far plane and the GTE's 16-bit vertex inputs do not limit absolute map positions to +/-128. It clips triangles against the camera frustum and uses double-buffered ordering tables. Those tables cannot resolve all intersecting geometry. Lighting and HUD have additional [lighting](lighting.md) and [HUD](hud.md) budgets.
 
 ## Imported assets and sound
 

@@ -30,7 +30,8 @@ export function correctWebMarkdown(markdown, slug) {
 }
 
 export function expandFeatureGuide(markdown, data) {
-  const additions = `## New in v0.2.0 and recent updates\n\nReviewed against the committed develop snapshot on ${data.reviewed}. These additions complement the existing catalog below; implementation is not a claim of unlimited capacity or full hardware acceptance. The [homepage explorer](/#feature-explorer) combines both lists with search and category filters.\n\n${data.items.map(item => `- **${item.title}.** ${item.description} [Guide](/docs/${item.guide}/).`).join('\n')}\n\n`;
+  const list = items => items.map(item => `- **${item.title}.**${item.release ? ` (${item.release})` : ''} ${item.description} [Guide](/docs/${item.guide}/).`).join('\n');
+  const additions = `## New in v0.5.0, v0.6.0 and v0.7.0\n\nReviewed against the committed develop snapshot on ${data.reviewed}. These additions complement the existing catalog below; implementation is not a claim of unlimited capacity or full hardware acceptance. The [homepage explorer](/#feature-explorer) combines every list with search and category filters.\n\n${list(data.items)}\n\n## Added in v0.2.0 to v0.4.0\n\n${list(data.earlier || [])}\n\n`;
   return markdown.replace('## Projects, startup and workspace', `${additions}## Projects, startup and workspace`);
 }
 
@@ -44,6 +45,7 @@ const sections = {
   'Lighting, shadows and environment': ['Rendering & animation', 'lighting'],
   'Cameras, sprites, particles and skeletal animation': ['Rendering & animation', 'sprites-particles'],
   'Timelines and sequenced effects': ['Timelines & VFX', 'timelines'],
+  '2D worlds': ['2D games', '2d'],
   'HUD and 2D interface': ['UI & HUD', 'hud'],
   'Audio': ['Audio & music', 'assets'],
   'Native C++ gameplay and reflection': ['Blueprints & code', 'scripting'],
@@ -62,7 +64,8 @@ const slugify = value => value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace
 const plain = value => marked.parseInline(value).replace(/<[^>]*>/g, '').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&#39;/g, "'").replace(/&quot;/g, '"').replace(/\s+/g, ' ').trim();
 
 export function buildFeatureExplorer({ markdown, featureData, manifest, esc }) {
-  const items = featureData.items.map(item => ({ ...item, id: slugify(item.title), fresh: true, url: `/docs/${item.guide}/`, sourceUrl: `${manifest.repository}/blob/${manifest.commit}/${item.source}` }));
+  const fromData = (item, fresh) => ({ ...item, id: slugify(item.title), fresh, url: `/docs/${item.guide}/`, sourceUrl: `${manifest.repository}/blob/${manifest.commit}/${item.source}` });
+  const items = [...featureData.items.map(item => fromData(item, true)), ...(featureData.earlier || []).map(item => fromData(item, false))];
   let heading = '';
   for (const token of marked.lexer(markdown)) {
     if (token.type === 'heading' && token.depth === 2) heading = token.text;

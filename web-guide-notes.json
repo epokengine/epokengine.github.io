@@ -680,5 +680,125 @@
       "Gameplay stays on its original fixed-step cadence: no collision check is skipped and no animation is slowed."
     ],
     "tip": "Capacity limits are correctness checks, not frame-rate guarantees. Measure your own scene rather than assuming a budget means smooth."
+  },
+  "dungeons": {
+    "plain": "The Dungeon Generator lays out rooms, corridors and doors from a seed and bakes them into ordinary meshes, colliders, navigation or a tile layer, in 3D or 2D. Recipes design the route, styles decide the look.",
+    "analogy": "A recipe is the floor plan's rules, a style is the interior decorator, and the seed is the dice roll that decides which of a million possible buildings you get today.",
+    "flow": [
+      "Add a generator and choose a layout",
+      "Shape it with a recipe, a style, rooms and volumes",
+      "Generate, check the budget and play"
+    ],
+    "details": [
+      "Every key and lock placement is checked by walking the dungeon, so it is always solvable.",
+      "Static pieces merge into a few mesh sections and one compound collider, so a big dungeon costs few actors.",
+      "Game code can query rooms, keys, locks and free spots, and draw a minimap with fog of war."
+    ],
+    "tip": "Use the seed bench before you fall in love with a seed: it shows how close your settings live to the console's limits."
+  },
+  "dungeon-template": {
+    "plain": "The Dungeon template starts a project with the Third Person character in a generated sci-fi dungeon: stairs, caves, a handmade reactor room and a key that opens a locked door, in C++, Blueprint or Lua.",
+    "analogy": "A furnished show home: walk through it as it is, then knock down walls with New seed, a new recipe or a new style.",
+    "flow": [
+      "Create the project in the Hub",
+      "Play it and find the key",
+      "Regenerate, restyle or rewrite its gameplay"
+    ],
+    "details": [
+      "Lighting is baked at creation, so Play works straight away.",
+      "Only the generator's Player picks keys up.",
+      "It uses about 1.9 MiB of the console's 2 MiB of RAM."
+    ],
+    "tip": "C++ is the lightest flavor on the console; Blueprint leaves the least RAM to grow."
+  },
+  "2d": {
+    "plain": "The complete 2D workflow: Actor2D nodes for sprites, tile maps, cameras, bodies, paths, particles, skeletons, navigation, physics, pictures and split screen, edited in a pixel-accurate 2D view and drawn natively by the console.",
+    "analogy": "A sticker book with physics: every sticker is a node, the tile map is the page, and the camera decides which page the player is looking at.",
+    "flow": [
+      "Add 2D nodes or start from Platformer 2D",
+      "Paint tiles and tune components in the Inspector",
+      "Fix warnings and play on the console"
+    ],
+    "details": [
+      "Units are pixels with Y pointing down; rotations are degrees.",
+      "Tile layers cook only the 16 × 16-cell chunks that hold tiles and draw only what is on screen.",
+      "Rigid boxes keep their rotation: the solver is axis-aligned, and circles roll."
+    ],
+    "tip": "Hover an amber warning sign in the Hierarchy: it says what the node needs, and the Inspector often offers the fix."
+  },
+  "texture-cooking": {
+    "plain": "How Epok turns your PNG textures into the console's indexed formats: the real 4- or 8-bit size, packed in VRAM by size, with lossless TIM import.",
+    "analogy": "Like packing a suitcase with clothes folded to their real size instead of in identical boxes: more fits, and nothing is wasted.",
+    "flow": [
+      "Import a PNG or TIM source",
+      "Let the cook pick a palette depth",
+      "Check VRAM placement in the memory tools"
+    ],
+    "details": [
+      "Source PNG packages, previews and authored UVs are never changed by the cook.",
+      "Textures are packed by size rather than in fixed shelves.",
+      "Placement can change between builds, so rebuild after upgrading."
+    ],
+    "tip": "Fewer colours mean a smaller texture: a 16-colour texture is half the VRAM of a 256-colour one."
+  },
+  "world-optimization": {
+    "plain": "A catalogue of the opt-in techniques that let large worlds run on the PlayStation: streaming, draw distance, camera visibility tracks, prepared packet order, static world and more, each with when to use it and what it measured.",
+    "analogy": "A theatre that only builds the scenery each seat can see, decided in rehearsal rather than during the show.",
+    "flow": [
+      "Measure where the frame goes",
+      "Pick the technique that targets it",
+      "Bake, build and measure again"
+    ],
+    "details": [
+      "Every technique is off until you enable it, and states its cost.",
+      "Visibility tracks are baked on the GPU from a camera route you draw or record.",
+      "Prepared packet order draws static, unlit scenery from lists already sorted."
+    ],
+    "tip": "Do not enable everything at once: turn on one technique, measure, then decide on the next."
+  },
+  "camera-space": {
+    "plain": "How positions are stored and projected so worlds are no longer limited to ±128 units: 32-bit translations, chunk-local vertices and camera-relative projection with exact re-anchoring.",
+    "analogy": "Instead of measuring every house from the city hall, each street measures from its own corner, and the camera re-reads the map when it changes neighbourhood.",
+    "flow": [
+      "Author the world at any size",
+      "Let the cook store chunks locally",
+      "Project relative to the camera"
+    ],
+    "details": [
+      "Actor translations and chunk origins are signed 32-bit Q12.",
+      "Chunk vertices use 16 or 32 bits as each chunk needs, losslessly.",
+      "Camera scale still uses ordinary Q12 arithmetic."
+    ],
+    "tip": "Large worlds are possible; they still have to fit RAM and VRAM, so pair them with streaming."
+  },
+  "scene-loading": {
+    "plain": "What happens when the editor opens a map, and which editor artifacts are disposable: opening a map is not an import or build request.",
+    "analogy": "Opening a document in a word processor should not reprint the book.",
+    "flow": [
+      "Open a map",
+      "Resolve its resources for the view",
+      "Build only when you ask"
+    ],
+    "details": [
+      "The authoring view resolves the whole map; PSX residency stays separate and opt-in.",
+      "Disposable editor artifacts can be deleted and are rebuilt when needed.",
+      "No authored scene, resource identity or PSX budget changes by opening a map."
+    ],
+    "tip": "If something looks stale in the view, rebuilding the project's disposable artifacts is safe."
+  },
+  "scene-view-resources": {
+    "plain": "How the Scene View loads textures and geometry and moves its camera: the authoring view is not bound by the console's resident pools.",
+    "analogy": "The architect's model can show the whole building at once, even though visitors will only ever see one room at a time.",
+    "flow": [
+      "Open a map in the Scene View",
+      "Navigate with the editor camera",
+      "Opt into baked-visibility simulation when needed"
+    ],
+    "details": [
+      "The view is not constrained by the PSX resident texture or geometry pool.",
+      "Baked visibility simulation is opt-in and resets when the scene changes.",
+      "Editor navigation does not change any authored camera."
+    ],
+    "tip": "Use the console build, not the editor view, to judge what fits in PSX memory."
   }
 }
