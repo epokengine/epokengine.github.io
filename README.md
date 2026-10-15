@@ -52,8 +52,9 @@ engine worktree and import it with `node tools/refresh-api.mjs <worktree>` after
 syncing. The checked procedure, extraction fixture, source audit and design
 references are in [the September audit](notes/feature-audit-2026-09-14.md).
 
-The documentation index offers four learning paths: a first Blueprint, a first
-Lua Actor class, VFX authoring, and a marker-driven spell. Keep introductory
+The documentation index offers six learning paths: a first Blueprint, a first
+Lua Actor class, VFX authoring, a marker-driven spell, a first generated dungeon
+(with a room built by hand) and a first 2D platformer. Keep introductory
 tutorials separate from their complete references. The Lua tutorial should stay
 small enough to follow end-to-end while linking to the full language/runtime
 contracts for exact types, modes and target limits. The Timelines & VFX group

@@ -43,16 +43,17 @@ the **[complete feature catalog](docs/features.md)**.
 
 | | What you can do |
 | --- | --- |
-| **Build your world** | Arrange entities in a dockable editor with transform gizmos, parenting and a component Inspector. Create and edit geometry with [Blockout](docs/blockout.md), including extrusion, bevels and geometry Undo/Redo. Sculpt and paint ground with [Terrain](docs/terrain.md). |
+| **Build your world** | Arrange entities in a dockable editor with transform gizmos, parenting and a component Inspector. Create and edit geometry with [Blockout](docs/blockout.md), including extrusion, bevels and geometry Undo/Redo. Sculpt and paint ground with [Terrain](docs/terrain.md). Generate seeded levels in 3D or 2D with the [Dungeon Generator](docs/dungeons.md): rooms and corridors, or recipes with branches, loops, keys and locks, floors joined by stairs and rooms built by hand, with a console minimap, gameplay queries, a seed bench and generation volumes. |
 | **Bring in your assets** | Import [PNG textures](docs/textures.md), [OBJ/MTL models](docs/static-mesh-import.md) and [FBX characters](docs/skeletal.md). Asset identities survive moves and reimports. |
 | **Animate and add effects** | Build layered effects in the [VFX editor](docs/vfx-editor.md) with presets, Q12 curves, bursts and preview controls. Reuse [timelines](docs/timelines.md) for scene sequences and connect their markers to Blueprint gameplay. Use sprites, flipbooks, [particle emitters](docs/sprites-particles.md), fog and palette cycling. |
+| **Make 2D games** | Build [2D worlds](docs/2d.md) from Sprite2D, AnimatedSprite2D, TileMapLayer, Camera2D, CharacterBody2D, StaticBody2D, Area2D, Parallax2D, Path2D, Line2D, Polygon2D, Particles2D, Skeleton2D, navigation, RigidBody2D, Joint2D, SubViewport2D, SplitScreen2D, light, audio and canvas-layer nodes in a pixel-accurate 2D editor with move/rotate/scale tools, snapping, rulers, a sprite region editor, a sprite-sheet slicer and tile painting with terrains, patterns and a TileSet editor. Sprites, tile maps with tile collision, one-way and moving platforms, `move_and_slide`, triggers, particles, parallax, cut-out skeletons with two-bone IK, grid and navmesh pathfinding, pushable rigid bodies with rods, ropes and springs, render-to-VRAM pictures, split screen and a smoothed, limited camera run natively on the console. |
 | **Model your game objects** | Compose maps from [actors and components](docs/actors.md): `Actor3D`, `Actor2D` and `UIActor` classes written in C++ or as Blueprints, with typed components, per-map scene Blueprints and a 3D / 2D / UI authoring mode. Maps use one Actor collection. Older projects must be recreated; see [project recreation](docs/migration-actors.md). |
 | **Write native gameplay** | Author C++20 behaviours with Inspector properties. Connect [input and collision](docs/input-collision.md), [scene transitions and object lifecycle](docs/runtime-services.md), cameras, tweens and [Memory Card storage](docs/memory-card.md). |
 | **Navigate NPCs** | Bake a bounded [NavLite](docs/navigation.md) walking graph from static box colliders, then reuse `NavigationAgentComponent` with a shared PSX search budget. Version 1 supports flat surfaces and obstacles. |
 | **Build visual gameplay** | Create [Blueprint classes](docs/blueprints.md) with native or visual parents, inherited defaults, typed graph nodes, functions, event overrides and Call Parent. Author entity templates, spawn classes and debug node execution. Graphs compile ahead of time to native C++; no graph VM runs on the PSX. |
 | **Script gameplay in Lua** | Author classes in [Lua](docs/lua-scripting.md) that subclass reflected C++ or other Lua classes, with Inspector properties, event overrides, typed gameplay-service/component calls and explicit parent calls. One project-wide setting compiles the same scripts to native C++ or runs them through a Lua VM linked into the game. New projects use bounded, statically typed Gameplay profile 2; older manifests retain the scalar Legacy v1 profile. Neither profile is general Lua compatibility. |
 | **Light and render** | Combine baked vertex lighting, bounded realtime GTE lighting, static shadows and blob shadows. Author for PSX rendering limits with native [performance counters](docs/performance.md). |
-| **Add audio and UI** | Import WAV, MP3, FLAC or OGG for SPU sound effects and XA music. Build [HUDs](docs/hud.md) with text, atlases, nine-slice images, progress bars and navigation. |
+| **Add audio and UI** | Import WAV, MP3, FLAC or OGG for SPU sound effects and XA music. Build [HUDs](docs/hud.md) with text, atlases, nine-slice images, progress bars, buttons, check boxes, sliders and D-pad navigation, and translate them with a project string table. |
 | **Play and export** | Choose [embedded/windowed PCSX-Redux or PSX through NOTPSXSerial](docs/play.md), the current scene or whole game, and resident/CD/PC geometry. Customize loading transitions with synchronized picture/audio fades. Build PS-X executables, package physical-disc BIN/CUE or ISO images with a user-supplied system-area license, or [export a standalone PsyQo project](runtime/README.md). |
 
 Projects live independently of the editor. Scenes, scripts and imported assets stay in your game folder; the engine owns the runtime and development tools.
@@ -133,7 +134,7 @@ system `PATH`; the local compiler build can take several minutes.
 3. Press **Play** to compile and run the game.
 4. Use **Pause**, **Step** and **Stop** to inspect it. Save scene changes with **Ctrl+S**.
 
-Choose the **Third Person** template for an optimized editable arena and an animated player with camera-relative movement, jumping, collision and an orbit camera. New Project also asks how its starter gameplay should be written — C++, Blueprint or Lua — and generates the same scene either way; the choice never locks the project to one system.
+Choose the **Dungeon** template for a generated dungeon with a working key and door around the same character, the **Third Person** template for an optimized editable arena and an animated player with camera-relative movement, jumping, collision and an orbit camera, or **Platformer 2D** for a side-scroller with an animated player, a tile-map level with one-way platforms, layered parallax scenery, a cut-out character, a navigating companion, physics props, coins and a following camera. New Project also asks how its starter gameplay should be written — C++, Blueprint or Lua — and generates the same scene either way; the choice never locks the project to one system.
 
 See [Getting started](docs/getting-started.md) for configuration and troubleshooting.
 
@@ -163,9 +164,25 @@ A release build produces the editor executable. On macOS, `make app` additionall
 
 See [Sprites and particles](docs/sprites-particles.md), [Textures](docs/textures.md) and [HUD](docs/hud.md) for the engine features used in this scene.
 
+### A 2D platformer
+
+![The Epok 2D editor with a platformer level, the sprite and animation Inspector and the camera bounds](docs/images/world2d-editor.png)
+
+<p align="center"><sub>The Platformer 2D template open in the 2D editor while painting its tile map: the tile tools, the palette of the level's TileSet, the game camera's view and the TileMapLayer Inspector.</sub></p>
+
+![The Platformer 2D template running in PCSX-Redux](docs/images/platformer-2d.png)
+
+<p align="center"><sub>The same level on the console at 320 × 240, captured in PCSX-Redux: a layered sky and parallax scenery, the cut-out guide pointing at the player with IK, the navigating wisp, a crate being pushed and a garland swaying on rope joints. The artwork is original pixel art the template generates.</sub></p>
+
+Choose the **Platformer 2D** template, or switch the Scene window to **2D** and add nodes. See [2D worlds](docs/2d.md).
+
 ### A playable third-person scene
 
 Choose the **Third Person** template for an animated player with camera-relative movement, jumping, collision and an obstacle-aware orbit camera in an optimized arena. See [Third Person template](docs/third-person.md).
+
+### A generated dungeon to explore
+
+Choose the **Dungeon** template for the same character in a generated sci-fi dungeon with rooms on three floors joined by stairs, a handmade reactor room and a working key and locked door, ready to regenerate with a new seed or to restyle. See [Dungeon template](docs/dungeon-template.md).
 
 Engine APIs are documented under [Input and collision](docs/input-collision.md), [Sprites and particles](docs/sprites-particles.md), [HUD](docs/hud.md) and [Runtime services](docs/runtime-services.md).
 
@@ -186,7 +203,7 @@ The included mannequin has 96 vertices, 144 triangles and Idle/Walk clips. The P
 
 ## External tools and automation
 
-Connect an MCP-compatible client to work directly with the running editor. Epok exposes **24 tools** for scenes, actors, assets, scripts, screenshots, builds and emulator controls.
+Connect an MCP-compatible client to work directly with the running editor. Epok exposes **27 tools** for scenes, actors, assets, dungeon generation, scripts, screenshots, builds and emulator controls.
 
 A connected client can arrange entities, move the Scene camera, capture Scene/Game/HUD/editor views, inspect build logs and control Play, Pause and Step. Scene batches support Undo/Redo and revision checks; file replacements retain local backups.
 
@@ -210,7 +227,7 @@ Browse the **[Epok documentation](docs/getting-started.md)** for guides, workflo
 | Area | Guides |
 | --- | --- |
 | **Start and configure** | [Complete feature catalog](docs/features.md) · [Getting started](docs/getting-started.md) · [Projects](docs/projects.md) · [Settings](docs/settings.md) · [Editor](docs/editor.md) · [Migrating to actors](docs/migration-actors.md) |
-| **Create content** | [Blockout](docs/blockout.md) · [Terrain](docs/terrain.md) · [Third Person arena](docs/third-person.md) · [Static model import](docs/static-mesh-import.md) · [Skeletal characters](docs/skeletal.md) |
+| **Create content** | [2D worlds](docs/2d.md) · [Blockout](docs/blockout.md) · [Terrain](docs/terrain.md) · [Dungeon Generator](docs/dungeons.md) · [Dungeon template](docs/dungeon-template.md) · [Third Person arena](docs/third-person.md) · [Static model import](docs/static-mesh-import.md) · [Skeletal characters](docs/skeletal.md) |
 | **Render and animate** | [Textures](docs/textures.md) · [Lighting](docs/lighting.md) · [Sprites and particles](docs/sprites-particles.md) · [Environment effects](docs/environment-effects.md) · [Palette animation](docs/palette-animation.md) |
 | **Build gameplay** | [Gameplay API](docs/gameplay-api.md) · [Actors and components](docs/actors.md) · [Blueprints](docs/blueprints.md) · [C++ scripting](docs/scripting.md) · [Lua scripting](docs/lua-scripting.md) · [Input and collision](docs/input-collision.md) · [Runtime services](docs/runtime-services.md) · [Cameras and resources](docs/camera-resources.md) · [Memory Card](docs/memory-card.md) |
 | **Look up C++ APIs** | [Complete API reference](docs/api/index.md) · [Epok runtime API](docs/api/epok.md) · [PsyQo API](docs/api/psyqo.md) |
@@ -223,7 +240,7 @@ Epok targets the original hardware's constraints. Keep these boundaries in mind 
 
 - **Animation:** rigid GTE skinning and compressed baked vertex clips are selectable per imported model; skeletal textures, blended skin weights and animation blending remain future work.
 - **Editing:** the open map's last 32 scene edits, Blueprint graphs/templates, Blockout geometry and MCP scene batches have Undo/Redo. Entity multiselection remains future work.
-- **Actors:** actor and component classes, per-map scene Blueprints and the 3D/2D/UI modes are host-validated; PSX build and emulator validation of actor content is pending on an SDK machine. There are no Pawn/Character archetypes, no positional audio and no 2D rigid-body physics.
+- **Actors:** actor and component classes, per-map scene Blueprints and the 3D/2D/UI modes are validated on the host and, for 2D actors and tile maps in C++, Blueprint and Lua, in PSX builds running in PCSX-Redux. There are no Pawn/Character archetypes and no 3D positional audio; 2D rigid boxes do not tumble.
 - **Rendering:** frustum clipping and ordering tables are used; intersecting polygons can still produce sorting artifacts. Capacity limits are not frame-rate guarantees.
 - **Simulation:** measured time drives fixed 60 Hz steps with bounded catch-up. Collision uses conservative AABBs, rather than rigid-body physics.
 - **Resources:** prelinked scene banks share resources and reuse active objects and VRAM. Resident data must fit PSX RAM; arbitrary map streaming from CD is not implemented.

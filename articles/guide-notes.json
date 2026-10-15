@@ -30,17 +30,17 @@
     "tip": "Keep the original project and a version-control checkpoint until the recreated game has built and run successfully."
   },
   "worlds-2d": {
-    "plain": "3D, 2D and UI are separate editing contexts. World 2D now has a grid, zoom, placement picking and drag editing, alongside native camera and collision helpers.",
+    "plain": "3D, 2D and UI are three editing spaces in one map. The 2D world is made of Actor2D nodes measured in pixels with Y pointing down, and it runs natively on the console between the 3D world and the HUD.",
     "analogy": "A side-scroller's character lives in the world; the health bar lives on the screen. They should not share an accidental coordinate system.",
     "flow": [
-      "Pick the object's domain",
-      "Place it in the matching view",
-      "Validate its runtime rendering and gameplay"
+      "Pick the space the object belongs to",
+      "Place it in the matching Scene mode",
+      "Play it on the console"
     ],
     "details": [
-      "2D uses world units, with 32 pixels per unit at zoom 1.",
-      "The current editor shows labeled Actor footprints, not a tilemap or textured sprite compositor.",
-      "The native toolkit includes stable sorting, Camera2D and bounded collision; it is not a general physics engine."
+      "2D positions, collider sizes, velocities and camera limits are all pixels; rotations are degrees.",
+      "2D nodes carry sprites, tile maps, bodies, cameras, paths, particles, skeletons, navigation and joints.",
+      "A project without 2D nodes compiles none of the 2D runtime."
     ],
     "tip": "Switching view modes does not convert an Actor or delete objects hidden by the domain filter."
   },
@@ -214,5 +214,98 @@
       "Existing projects keep their saved resolution; the change applies to newly created Third Person projects."
     ],
     "tip": "This is the oldest release with notes on this site. Projects older than it need the Actor migration before a current editor will open them."
+  },
+  "dungeon-tutorial": {
+    "plain": "A guided first dungeon: create the Dungeon template, play it, roll new seeds, change the route and the look, add a minimap, pick a seed that fits and let game code ask where things are.",
+    "analogy": "You are the architect who chooses the rules; the generator is the construction crew that builds a new site every time you change your mind, and never complains.",
+    "flow": [
+      "Create and play the Dungeon template",
+      "Change the recipe, the style and the seed",
+      "Add the minimap, test seeds, query from code"
+    ],
+    "details": [
+      "The template uses the Third Person character in a recipe dungeon with stairs, caves, a key, a locked door and a handmade room.",
+      "Every generation is one undo step, and the band shows the console budget before you build.",
+      "Keys and doors work the same in C++, Blueprint and Lua."
+    ],
+    "tip": "Press New seed freely: Ctrl+Z brings back the dungeon you liked better."
+  },
+  "dungeon-rooms-tutorial": {
+    "plain": "Build a room by hand once, save it as a Dungeon Room, and let recipes place it in every dungeon turned to fit its corridors. Then use volumes to keep the generator away from art of your own.",
+    "analogy": "Like a prefab room in a modular building kit: you design one module carefully, and the builder fits it into any floor plan through its doors.",
+    "flow": [
+      "Build the room under one actor, with Door markers",
+      "Save it and mark doors and spots on its floor plan",
+      "Add it to a Handmade rooms step and generate"
+    ],
+    "details": [
+      "Plain meshes, cubes and solid colliders merge into the dungeon; lights and scripted actors are copied.",
+      "Rooms turn in quarter turns, and doors nobody uses are walled by the style.",
+      "Keep out and Only here volumes work with recipes; Room here and Mirror with rooms-and-corridors layouts."
+    ],
+    "tip": "Keep At most small: every quad of a map costs console RAM, even inside a beautiful room."
+  },
+  "platformer-tutorial": {
+    "plain": "A guided first 2D game: create the Platformer 2D template, play it, paint new level from tiles and turn a picture into a crate that falls, bounces and gets pushed.",
+    "analogy": "Think of the template as a furnished flat: you can live in it as it is, repaint a wall, or move in your own furniture one piece at a time.",
+    "flow": [
+      "Create and play the Platformer 2D template",
+      "Paint level with tiles and terrains",
+      "Add a rigid body and fix its warning"
+    ],
+    "details": [
+      "2D units are pixels with Y pointing down, like the screen.",
+      "Tile collision comes with the tiles you paint.",
+      "Warnings in the Hierarchy and Inspector name what a node needs, often with a one-click fix."
+    ],
+    "tip": "Delete the template groups you do not need early: it frees RAM and makes the Hierarchy yours."
+  },
+  "release-v0.7.0": {
+    "plain": "Version 0.7.0 adds the Dungeon Generator: seeded dungeons in 3D and 2D with designed routes, keys and locked doors, stairs, handmade rooms, gameplay queries, a minimap, a seed bench and volumes, plus a Dungeon template.",
+    "analogy": "It is a level designer that never sleeps: you write the rules once, and it builds a new, solvable dungeon for every seed you try.",
+    "flow": [
+      "Review compatibility and the editor version",
+      "Create a Dungeon project or add a generator to a map",
+      "Shape it with recipes, styles, rooms and volumes"
+    ],
+    "details": [
+      "Every authoring contract from v0.6.0 is unchanged; maps without a generator load as before.",
+      "A project descriptor must declare editor_version 0.7.0; upgrade through the Hub, which backs up the descriptor first.",
+      "Lua == and Blueprint Equal now compare object references by identity, as C++ already did.",
+      "The sample game's static RAM goes from 976.0 KiB to 981.0 KiB.",
+      "Dungeon content has not been validated on physical PlayStation hardware."
+    ],
+    "tip": "Start with Your first dungeon: the template shows every new feature working together before you build your own."
+  },
+  "release-v0.6.0": {
+    "plain": "Version 0.6.0 is about 2D games: a complete 2D world on the console, a pixel-accurate 2D editor with tile painting, and a playable Platformer 2D template, plus HUD check boxes, sliders, colour tags and string tables.",
+    "analogy": "It adds a whole second floor to the house: the 3D world stays where it was, and a 2D world now lives on top of it with its own stairs.",
+    "flow": [
+      "Review compatibility and the editor version",
+      "Create a Platformer 2D project",
+      "Paint tiles and add 2D nodes"
+    ],
+    "details": [
+      "Authoring contracts are unchanged; Actor2D nodes, TileSets and string tables are additive.",
+      "A project descriptor must declare editor_version 0.6.0; upgrade through the Hub.",
+      "The 2D runtime is opt-in by content: a project without 2D nodes compiles none of it.",
+      "The 2D world has not been validated on physical PlayStation hardware."
+    ],
+    "tip": "Play the template before reading the reference: every node it uses is explained by its own Inspector."
+  },
+  "release-v0.5.0": {
+    "plain": "Version 0.5.0 is about large worlds: geometry streamed from disc in checked pages, camera visibility tracks, prepared packet order for static scenery, textures cooked to their real size, worlds beyond ±128 units and a HUD authored in the editor.",
+    "analogy": "Like a stage crew that only builds the scenery the audience can see from each seat, and swaps it while the play goes on.",
+    "flow": [
+      "Review compatibility and the editor version",
+      "Pick the optimization techniques your world needs",
+      "Measure with the memory and performance tools"
+    ],
+    "details": [
+      "Every technique is opt-in with a stated cost; a project that enables none builds as before.",
+      "A project descriptor must declare editor_version 0.5.0; upgrade through the Hub.",
+      "Rebuild after upgrading: texture placement and baked face formats change generated output."
+    ],
+    "tip": "Read World optimization first: it says what each technique does, when to use it and what it measured."
   }
 }

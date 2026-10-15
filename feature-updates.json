@@ -1,7 +1,233 @@
 {
-  "reviewed": "2026-09-22",
-  "baseline": "8ba2896",
+  "reviewed": "2026-10-15",
+  "baseline": "abb0571",
   "items": [
+    {
+      "title": "Dungeon Generator",
+      "category": "World building",
+      "guide": "dungeons",
+      "description": "Place a generator in a 3D or 2D map, pick a seed and bake rooms, corridors and doors into ordinary meshes, one compound collider, navigation volumes or a tile layer. Each generation is one undo step and the band shows the PSX budget first.",
+      "source": "src/dungeon.rs",
+      "release": "v0.7.0"
+    },
+    {
+      "title": "Dungeon Styles",
+      "category": "World building",
+      "guide": "dungeons",
+      "description": "A node editor maps every dungeon spot (floor, wall, door, corner, column, ceiling, key, lock and more) to blockout, merged meshes, actors, baked lights or 2D tiles, with chance, area, limits and room-wide variants.",
+      "source": "src/dungeon_style.rs",
+      "release": "v0.7.0"
+    },
+    {
+      "title": "Dungeon Recipes",
+      "category": "World building",
+      "guide": "dungeons",
+      "description": "Grow a designed route from steps: main path, branches and loops, items by depth, keys and locks that are always solvable, one-way shortcuts, caves and cut corners, previewed as a room graph for any seed.",
+      "source": "src/dungeon_recipe.rs",
+      "release": "v0.7.0"
+    },
+    {
+      "title": "Keys and locked doors that work in game",
+      "category": "Gameplay & Actors",
+      "guide": "dungeons",
+      "description": "Key and Door pieces install DungeonKey and DungeonDoor classes in C++, Blueprint or Lua; only the generator's Player picks a key up, and its door disappears.",
+      "source": "src/dungeon_gameplay.rs",
+      "release": "v0.7.0"
+    },
+    {
+      "title": "Dungeon levels and stairs",
+      "category": "World building",
+      "guide": "dungeons",
+      "description": "Rooms on up to five floors joined by flights of stairs in straight corridor cells; walls, ceilings, pieces, collision and navigation follow the floor, and the Third Person controller walks down steps.",
+      "source": "src/dungeon_bake.rs",
+      "release": "v0.7.0"
+    },
+    {
+      "title": "Handmade Dungeon Rooms",
+      "category": "World building",
+      "guide": "dungeons",
+      "description": "Build a room under one actor in any map, save it as a Dungeon Room, mark doors and spots on its floor plan, and let a recipe place it in quarter turns: static pieces merge, lights and scripted actors are copied.",
+      "source": "src/dungeon_room.rs",
+      "release": "v0.7.0"
+    },
+    {
+      "title": "Dungeon gameplay queries",
+      "category": "Gameplay & Actors",
+      "guide": "dungeons",
+      "description": "Ask the generated dungeon which room an actor is in, the next room towards the goal, keys, locks, free spots and a seed-bound random stream from C++, Blueprint or Lua.",
+      "source": "runtime/dungeon_map.hpp",
+      "release": "v0.7.0"
+    },
+    {
+      "title": "Console minimap with fog of war",
+      "category": "UI & HUD",
+      "guide": "dungeons",
+      "description": "A corner map that fills in as the player explores, marks keys, locked doors, the goal and the player, follows the player or fits the dungeon, and opens full screen from game code. About 9 KB of RAM.",
+      "source": "runtime/dungeon_minimap.hpp",
+      "release": "v0.7.0"
+    },
+    {
+      "title": "Dungeon seed bench",
+      "category": "Automation & tools",
+      "guide": "dungeons",
+      "description": "Measure hundreds of seeds against actors, quads, collision, navigation and tiles with histograms, pick one with Use, or export the seeds that fit as CSV; --dungeon-seed-bench runs it headless.",
+      "source": "src/dungeon_seeds.rs",
+      "release": "v0.7.0"
+    },
+    {
+      "title": "Generation volumes",
+      "category": "World building",
+      "guide": "dungeons",
+      "description": "Draw Keep out, Only here, Room here and Mirror rectangles on the generator's grid to fit a dungeon around hand-made art, keep it inside an area, force a room or make it symmetric.",
+      "source": "src/dungeon_volumes.rs",
+      "release": "v0.7.0"
+    },
+    {
+      "title": "Dungeon template",
+      "category": "Editor & projects",
+      "guide": "dungeon-template",
+      "description": "New Project > Dungeon: the Third Person character in a recipe dungeon with stairs, caves, a handmade reactor room and a working key and door, in C++, Blueprint or Lua, lit and ready to play.",
+      "source": "src/dungeon_template.rs",
+      "release": "v0.7.0"
+    },
+    {
+      "title": "Compound colliders",
+      "category": "Gameplay & Actors",
+      "guide": "input-collision",
+      "description": "One static actor carries many collision boxes; movement, raycasts, overlaps, ground probes, triggers and the navigation bake test each box.",
+      "source": "runtime/collision.hpp",
+      "release": "v0.7.0"
+    },
+    {
+      "title": "Native 2D worlds",
+      "category": "2D games",
+      "guide": "2d",
+      "description": "Actor2D nodes with sprites, tile maps, cameras, colliders, character bodies, parallax and canvas layers render natively on the console in a pixel-accurate 2D renderer.",
+      "source": "runtime/world2d.hpp",
+      "release": "v0.6.0"
+    },
+    {
+      "title": "2D editor and tile painting",
+      "category": "2D games",
+      "guide": "2d",
+      "description": "A 2D Scene view with move, rotate and scale tools, snapping, rulers, a sprite region editor and slicer, and tile painting with terrains, patterns and a TileSet editor.",
+      "source": "src/world2d_editor.rs",
+      "release": "v0.6.0"
+    },
+    {
+      "title": "TileSets and terrains",
+      "category": "2D games",
+      "guide": "2d",
+      "description": "TileSets carry collision, one-way tiles, animation, terrains and custom data; tile layers cook only the chunks that hold tiles and can be edited at runtime.",
+      "source": "src/tileset.rs",
+      "release": "v0.6.0"
+    },
+    {
+      "title": "2D content nodes",
+      "category": "2D games",
+      "guide": "2d",
+      "description": "Paths with moving platforms, lines, polygons, particles, positional 2D audio, on-screen notifiers and remote transforms.",
+      "source": "runtime/world2d_content.hpp",
+      "release": "v0.6.0"
+    },
+    {
+      "title": "Cut-out skeletons, navigation and rigid bodies",
+      "category": "2D games",
+      "guide": "2d",
+      "description": "Skeleton2D with pose keys and two-bone IK, grid and navmesh pathfinding for agents, and rigid bodies with rods, ropes and springs.",
+      "source": "runtime/world2d_service.hpp",
+      "release": "v0.6.0"
+    },
+    {
+      "title": "Render-to-VRAM pictures and split screen",
+      "category": "2D games",
+      "guide": "2d",
+      "description": "SubViewport2D draws a camera or layer into a VRAM picture for minimaps and monitors; SplitScreen2D shows two cameras with one HUD.",
+      "source": "runtime/world2d_render.hpp",
+      "release": "v0.6.0"
+    },
+    {
+      "title": "Platformer 2D template",
+      "category": "Editor & projects",
+      "guide": "2d",
+      "description": "New Project > Platformer 2D: an animated player, one-way platforms, a lift, parallax scenery, a cut-out guide, a navigating wisp, rope joints and coins, in C++, Blueprint or Lua.",
+      "source": "src/platformer_template.rs",
+      "release": "v0.6.0"
+    },
+    {
+      "title": "HUD check boxes, sliders and colour tags",
+      "category": "UI & HUD",
+      "guide": "hud",
+      "description": "Focusable toggles and stepped sliders with pressed, changed and cancelled events, and [color=#rrggbb] tags inside texts.",
+      "source": "src/hud_editor.rs",
+      "release": "v0.6.0"
+    },
+    {
+      "title": "String tables and languages",
+      "category": "UI & HUD",
+      "guide": "hud",
+      "description": "Window > Strings edits keys and languages with CSV import and export; keyed texts switch language at once through the localization library.",
+      "source": "src/localization.rs",
+      "release": "v0.6.0"
+    },
+    {
+      "title": "Camera visibility tracks",
+      "category": "Performance & memory",
+      "guide": "world-optimization",
+      "description": "Record or draw a guided camera's route, bake on the GPU what each point sees and stream exactly those pages; the build rejects a pool too small for the worst transition.",
+      "source": "src/visibility_bake.rs",
+      "release": "v0.5.0"
+    },
+    {
+      "title": "Prepared packet order",
+      "category": "Performance & memory",
+      "guide": "world-optimization",
+      "description": "Static, unlit scenery is drawn from per-sample lists already in draw order: no visibility test, sort or material setup at run time.",
+      "source": "runtime/ordered_renderer.hpp",
+      "release": "v0.5.0"
+    },
+    {
+      "title": "Geometry Draw Distance",
+      "category": "Performance & memory",
+      "guide": "streaming",
+      "description": "Chunks wholly beyond a camera-space distance are rejected before their geometry is loaded.",
+      "source": "src/streaming.rs",
+      "release": "v0.5.0"
+    },
+    {
+      "title": "Worlds beyond ±128 units",
+      "category": "World building",
+      "guide": "camera-space",
+      "description": "Signed 32-bit actor translations and camera-relative projection with exact re-anchoring remove the absolute-world position limit.",
+      "source": "runtime/main.cpp",
+      "release": "v0.5.0"
+    },
+    {
+      "title": "Textures at their real size",
+      "category": "Assets & imports",
+      "guide": "texture-cooking",
+      "description": "Textures cook to their true 4- or 8-bit size and pack by size in VRAM, and native TIM sources import losslessly.",
+      "source": "src/texture_cook.rs",
+      "release": "v0.5.0"
+    },
+    {
+      "title": "Sky gradient background",
+      "category": "Rendering & animation",
+      "guide": "world-optimization",
+      "description": "A camera can draw a sky, horizon and ground gradient behind the world.",
+      "source": "runtime/sky_gradient.hpp",
+      "release": "v0.5.0"
+    },
+    {
+      "title": "HUD authored in the editor",
+      "category": "UI & HUD",
+      "guide": "hud",
+      "description": "Layout containers, focus navigation, rotation and imported TrueType/OpenType fonts, edited in the editor's UI mode.",
+      "source": "src/font_asset.rs",
+      "release": "v0.5.0"
+    }
+  ],
+  "earlier": [
     {
       "title": "Lua classes in the reflected Actor model",
       "category": "Blueprints & code",

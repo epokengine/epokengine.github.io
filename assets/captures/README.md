@@ -21,6 +21,14 @@ supplied by the project owner on 2026-09-14. It is preserved byte for byte as th
 third slide in the homepage gallery. The capture's exact engine revision is not
 recorded; it is an editor view, not evidence of an in-game performance result.
 
+`epok-dungeon-editor.png` is the Dungeon template in the editor at engine revision
+`865af64` (2026-10-14): a project created with `--template dungeon` and captured with
+`--frame-dungeon`. The 3200 × 2000 window capture is scaled to 1600 × 1000; nothing
+else is edited. It is the fourth slide in the homepage gallery.
+
+`epok-2d-editor.png` is the engine documentation's `docs/images/world2d-editor.png`
+at revision `abb0571`, re-encoded with its pixels unchanged. It is the fifth slide.
+
 Run `tools/capture-editor.py /path/to/Epok` with the engine's Python requirements
 installed and its debug editor built to reproduce them. It creates isolated
 projects and preferences; no existing game is edited.

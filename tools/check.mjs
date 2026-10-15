@@ -67,7 +67,7 @@ for (const item of apiSearch) {
   if (['Function', 'Function template', 'Method', 'Constructor', 'Destructor', 'Conversion operator', 'Field', 'Variable', 'Enum value'].includes(item.kind) && !html.includes('Trade-offs and warnings')) errors.push(`${item.title}: missing trade-offs and warnings`);
 }
 const documentationIndex = fs.readFileSync(path.join(root, 'docs/index.html'), 'utf8');
-for (const slug of ['features', 'release-v0.4.0', 'content-browser', 'play', 'blueprints-tutorial', 'lua-tutorial', 'lua-scripting', 'lua-vm-runtime', 'vfx-editor', 'timelines', 'terrain', 'navigation', 'blueprints-vfx-troubleshooting']) {
+for (const slug of ['features', 'release-v0.7.0', 'release-v0.4.0', 'dungeon-tutorial', 'dungeon-rooms-tutorial', 'platformer-tutorial', 'content-browser', 'play', 'blueprints-tutorial', 'lua-tutorial', 'lua-scripting', 'lua-vm-runtime', 'vfx-editor', 'timelines', 'terrain', 'navigation', 'blueprints-vfx-troubleshooting']) {
   if (!documentationIndex.includes(`/docs/${slug}/`) || !search.some(d => d.url === `/docs/${slug}/`)) errors.push(`Learning guide is not discoverable: ${slug}`);
 }
 const homepage = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
@@ -85,18 +85,23 @@ for (const item of featureItems) if (!item.url || !item.sourceUrl || !item.descr
 for (const required of ['data-feature-query', 'data-feature-category', 'data-feature-new', 'data-feature-reset', 'data-feature-empty', 'aria-label="Scrollable feature results"', '/assets/feature-explorer.js', '<noscript>']) if (!homepage.includes(required)) errors.push(`Missing feature explorer affordance: ${required}`);
 const sourceFeatureDoc = fs.readFileSync(path.join(root, '../content/docs/features.md'), 'utf8');
 const sourceEntryCount = (sourceFeatureDoc.split('## Known boundaries')[0].match(/^- \*\*/gm) || []).length;
-if (featureItems.filter(item => !item.fresh).length !== sourceEntryCount + 7 + 5 + 2) errors.push('A committed feature bullet, CLI family or validation capability was omitted');
-for (const slug of ['actors', 'migration-actors', 'worlds-2d', 'scene-blueprints', 'lua-tutorial', 'lua-scripting', 'lua-vm-runtime', 'release-v0.4.0', 'music-sequences', 'native-hud-preview', 'iteration', 'third-person']) {
+// Every bullet before the boundaries, every CLI family row, every validation bullet, the
+// two host/licence entries and the earlier web additions.
+const sectionOf = heading => (sourceFeatureDoc.split(`## ${heading}`)[1] || '').split('\n## ')[0];
+const cliFamilies = (sectionOf('Command-line and automation surface').match(/^\| [^-|][^|]*\|/gm) || []).length - 1;
+const validationBullets = (sectionOf('Validation and developer tooling').match(/^- /gm) || []).length;
+if (featureItems.filter(item => !item.fresh).length !== sourceEntryCount + cliFamilies + validationBullets + 2 + (updates.earlier || []).length) errors.push('A committed feature bullet, CLI family or validation capability was omitted');
+for (const slug of ['dungeons', 'dungeon-template', '2d', 'world-optimization', 'texture-cooking', 'camera-space', 'release-v0.6.0', 'release-v0.5.0', 'actors', 'migration-actors', 'worlds-2d', 'scene-blueprints', 'lua-tutorial', 'lua-scripting', 'lua-vm-runtime', 'release-v0.4.0', 'music-sequences', 'native-hud-preview', 'iteration', 'third-person']) {
   if (!documentationIndex.includes(`/docs/${slug}/`) || !search.some(item => item.url === `/docs/${slug}/`)) errors.push(`New guide not discoverable: ${slug}`);
 }
-for (const item of ['epok::Actor2D', 'epok::SceneScriptActor', 'epok::Camera2D', 'epok::debug_hud::State']) if (!apiSearch.some(entry => entry.title === item)) errors.push(`New API type not indexed: ${item}`);
+for (const item of ['epok::Actor2D', 'epok::SceneScriptActor', 'epok::Camera2D', 'epok::debug_hud::State', 'epok::DungeonLibrary', 'epok::dungeon::MinimapRenderer']) if (!apiSearch.some(entry => entry.title === item)) errors.push(`New API type not indexed: ${item}`);
 const coverage = JSON.parse(fs.readFileSync(path.join(root, '../content/docs/api/coverage.json'), 'utf8'));
 if (coverage.modules.some(module => module.diagnostics.length)) errors.push('Published API extraction contains diagnostics');
 for (const area of ['<header class="header">', '<footer class="footer">']) {
   const html = homepage.slice(homepage.indexOf(area)).split(area.startsWith('<header') ? '</header>' : '</footer>')[0];
   if (!html.includes('https://discord.gg/2wEGxsVhKT') || !html.includes('aria-label="Join the Epok Discord server"') || !html.includes('<svg')) errors.push(`Discord icon/link missing from ${area}`);
 }
-if ((homepage.match(/data-slide data-title=/g) || []).length !== 3 || !homepage.includes('aria-label="3 of 3"') || !homepage.includes('epok-third-person-editor.png')) errors.push('Homepage gallery must retain both earlier slides and include the Third Person capture');
+if ((homepage.match(/data-slide data-title=/g) || []).length !== 5 || !homepage.includes('aria-label="5 of 5"') || !['epok-third-person-editor.png', 'epok-dungeon-editor.png', 'epok-2d-editor.png'].every(image => homepage.includes(image))) errors.push('Homepage gallery must retain its earlier slides and include the Third Person, Dungeon and 2D captures');
 for (const [slug, obsolete] of [['editor', 'an Epok C++ input API is not implemented yet'], ['editor', 'Adding and removing components arrives in a later'], ['features', 'Auto compile'], ['features', 'Component add/remove and actor rename/duplicate/delete are not yet'], ['features', 'there is no Lua gameplay VM'], ['features', 'Non-native/Lua gameplay execution'], ['third-person', 'template does not attach a character controller']]) {
   if (fs.readFileSync(path.join(root, `docs/${slug}/index.html`), 'utf8').includes(obsolete)) errors.push(`Obsolete claim still visible in ${slug}: ${obsolete}`);
 }

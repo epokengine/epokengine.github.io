@@ -23,7 +23,7 @@ unbounded or validated on every host and console. See [Known boundaries](#known-
   name, startup scene, Play profile and transition settings. Paths passed to the
   editor can be either the folder or descriptor. Canonical path resolution and
   a per-project lock prevent the same project being edited twice.
-- **Templates.** New-project choices are Basic, Sample and Third Person, each with a C++, Blueprint or Lua gameplay flavor that decides only the starter implementation.
+- **Templates.** New-project choices are Basic, Sample, Third Person and Platformer 2D, each with a C++, Blueprint or Lua gameplay flavor that decides only the starter implementation.
   Creation claims a new directory and never merges into existing content.
 - **Template browser and project defaults.** New project presents a thumbnail,
   title and summary per template with a large preview, and a Project Defaults
@@ -152,6 +152,42 @@ The complete interaction and preview contract is in the
   it bilinearly in Q12. See [Terrain](terrain.md).
 - **Spatial compilation.** Editable faces are converted to bounded PSX chunks
   with UV/material data, visibility bounds and optional external page locations.
+- **Dungeon Generator.** Place a generator in a 3D or 2D map, choose a seed and
+  rooms-and-corridors settings, and generate: rooms are joined by a spanning tree plus
+  optional loops, with corridors routed around other rooms. 3D output is a few
+  EditableMesh sections, one compound collider, navigation volumes and spawn/goal
+  actors; 2D output is one TileMapLayer solved with Floor and Wall terrains. The
+  Inspector shows the layout in the Scene view, warnings with fixes and the PSX budget
+  the map will use; generation is deterministic and one undo step. A Dungeon Style
+  asset, edited in a node graph with live preview, decides what every spot (floor,
+  wall, door, doorway, solid, corner, room, spawn, goal) becomes: blockout geometry,
+  merged meshes, actors of any class and baked lights in 3D, terrains and decoration
+  tiles in 2D, with chance, priority, area and limit per piece. A Dungeon Recipe asset
+  grows the layout instead from steps (lattice, main path, branches and loops, items by
+  depth and place in the room, keys and locks, one-way doors, cellular caves, rooms
+  with cut corners, floor levels joined by flights of stairs), edited as a step list with a live
+  room-graph preview; rooms of chosen paths can be Dungeon Rooms built by hand in any map
+  (a room asset with its footprint, doors and key spots, edited on a floor plan), turned
+  to fit their links, their static pieces merged into the dungeon's geometry and
+  collision and their lights and scripted actors copied; every key-and-lock placement
+  is checked to be solvable and the grid layout keeps locked doors from being walked
+  around. Keys, locks, one-way doors
+  and items become style spots, style pieces can keep to one path's rooms, and actors
+  placed on keys and locks receive their lock number. Ready-made Key and Door pieces
+  (backed by `DungeonKey` and `DungeonDoor` scripts installed into the project) make
+  keys that only the generator's Player picks up and doors that open when their key is
+  taken, in 3D and 2D. The built-in 3D look is sized for the Third Person character (or
+  fitted to any Player), closed by a ceiling, and dressed in sci-fi panel textures drawn for
+  the console. Game code asks about the generated rooms (the room an actor is in, the
+  way to the goal, keys, locks, free spots, a seed-bound random stream) through the
+  Dungeon gameplay library in C++, Blueprint and Lua. A console minimap, set up in the
+  generator band, fills in as the player explores (rooms on entering, corridors when
+  walked), marks the player, keys, locked doors and the goal, follows the player or fits
+  the dungeon, and opens as a full map from game code. A seed bench measures hundreds of
+  seeds against the console's budget (actors, quads, collision, navigation, tiles, recipe
+  attempts) with histograms, picks one or exports the seeds that fit. Generation volumes,
+  drawn on the grid in their own window, keep the dungeon out of an area or inside one,
+  force a room or mirror the rooms. See [Dungeon Generator](dungeons.md).
 - **Static OBJ/MTL import.** Import triangular or quad OBJ geometry and material
   colors into editable assets with configurable scale. See
   [Static OBJ import](static-mesh-import.md).
@@ -199,9 +235,13 @@ emulator validation are pending on an SDK machine. See
 - **PNG import.** Convert source PNGs into portable `.epokasset` packages with a
   source snapshot, 8-bit indexed pixels and a 256-color CLUT. Reimport keeps the
   UUID. See [Textures](textures.md).
-- **VRAM packing and validation.** The editor places texture pixels and palettes
-  alongside framebuffers and reserved HUD/loading regions, validating each scene
-  bank against the 1 MiB address space.
+- **Native TIM import.** Indexed 4/8-bit `.tim` sources import through the same
+  Texture workflow and keep every index and all 16 bits of each palette entry.
+- **VRAM packing and validation.** Builds cook textures to 4 bits per texel when
+  every index fits, pad rows to even words and pack pixel rectangles and CLUT
+  rows offline with deterministic MaxRects orderings, without a count-based
+  texture limit. Authored HUD fonts share the packer. Each scene bank is
+  validated against the 1 MiB address space. See [PSX texture cooking](texture-cooking.md).
 - **Materials.** Per-object/face tint, unlit mode, texture assignment, UV region,
   depth bias, UV scrolling and Cutout/Average/Add/Subtract/AddQuarter blend modes
   compile to native GPU packets.
@@ -236,6 +276,11 @@ emulator validation are pending on an SDK machine. See
 
 - **Cameras.** The first active camera is the default; gameplay can select another
   active camera. FOV and world-to-framebuffer projection are available natively.
+- **Camera background.** A flat sky color, or a sky gradient with horizon and
+  ground colors split at the true horizon, so gaps below the horizon read as
+  ground. See [Fog, water and texture animation](environment-effects.md#sky-gradient-background).
+- **Large worlds.** Actor and chunk positions are 32-bit Q12 with camera-relative
+  projection; there is no absolute ±128 world limit. See [World and camera coordinates](camera-space.md).
 - **World sprites.** Fixed, upright and spherical billboards support texture
   regions, tint, blend/depth settings and clipping/culling statistics.
 - **Sprite animation.** Flipbook clips have per-frame duration, looping,
@@ -291,14 +336,112 @@ emulator validation are pending on an SDK machine. See
 See the complete [Timeline reference](timelines.md) and the
 [troubleshooting guide](blueprints-vfx-troubleshooting.md).
 
+## 2D worlds
+
+- **2D nodes.** `Actor2D` actors with a pixel-based, Y-down 2D transform carry engine
+  Sprite2D, TileMapLayer, Collider2D, CharacterBody2D, Camera2D, Parallax2D, Path2D,
+  PathFollow2D, Line2D, Polygon2D, Particles2D, AudioPlayer2D,
+  VisibleOnScreenNotifier2D, RemoteTransform2D, Skeleton2D, NavigationRegion2D,
+  NavigationAgent2D, RigidBody2D, Joint2D, SubViewport2D, SplitScreen2D,
+  CanvasLayer2D and CanvasModulate2D components, plus any C++, Blueprint or Lua component. Ready-made presets, grouped by
+  purpose, create each kind of node in one click.
+- **Sprites and animation.** Texture regions, sprite-sheet cells, offset, centring,
+  flips, modulate, the console blend modes, z-index and y-sort; named frame
+  animations with speed, looping, autoplay, per-frame durations and events.
+- **Physics.** Box and circle colliders with 32-bit layers and masks, solid, trigger
+  and one-way modes; `move_and_slide` with floor, wall and ceiling detection and floor
+  snapping; Enter/Stay/Exit overlaps delivered to the actor's `overlap_2d` event and to
+  its components; `raycast_2d` and `overlap_box_2d` queries.
+- **Camera2D.** Follow with drag margins, limits, smoothing, offset, zoom, rotation,
+  shake and the background colour the game clears to.
+- **Tile maps.** TileSet assets cut a texture into tiles with full, partial or one-way
+  collision, animation, probabilities, custom data and saved patterns; terrain sets
+  (corners and sides, sides or corners) autotile as you paint. TileMapLayers cook only
+  their used 16 x 16-cell chunks, collide with bodies, rays and overlap queries, and
+  can be read and changed at runtime (`set_cell`, `get_cell_custom_data`, ...).
+- **Paths, shapes and effects.** Curved Path2D paths with PathFollow2D followers that
+  loop, ping-pong or stop and carry the bodies standing on them (moving platforms);
+  Line2D polylines with width and colour gradients editable at runtime; textured or
+  flat Polygon2D shapes; CPU Particles2D emitters with shapes, bursts, gravity, damping,
+  scale and colour over life; additive PointLight2D glows; AudioPlayer2D sounds that
+  fade and pan with the camera; on-screen notifiers that can pause nodes; remote
+  transforms; colliders fitted to a sprite's visible pixels.
+- **Cut-out skeletons.** Skeleton2D animates attached parts as bones with pose keys
+  (shorter-arc rotation blending, loops and one-shots) and up to two two-bone IK
+  chains with a chosen elbow side; the editor keys poses from a timeline on the
+  skeleton or on any bone, previews them and draws the bones and IK targets.
+- **Rigid bodies and joints.** Box and circle RigidBody2D bodies swept through tiles
+  and colliders with restitution, friction, damping, per-body gravity, momentum
+  exchange, sleeping, rolling circles and character pushing; rod, rope and spring
+  Joint2D links; Line2D lines that follow nodes draw ropes and chains.
+- **Navigation.** Grid regions built from tile collision and static bodies (A* with
+  no corner cutting and line-of-sight smoothing) or navmesh outlines (A* plus the
+  funnel algorithm); agents follow a target node or position, drive their
+  CharacterBody2D or node, and stop at the closest point when the target is
+  unreachable; the editor draws regions and predicted paths.
+- **Pictures and split screen.** SubViewport2D draws a camera's view (or one canvas
+  layer) into a 15-bit VRAM picture every few frames, which any Sprite2D can show:
+  minimaps, monitors, group transparency; SplitScreen2D shows two cameras side by side
+  or stacked with a divider, the HUD drawn once on top.
+- **Parallax and canvas layers.** Parallax2D scrolls attached nodes against the camera
+  with autoscroll and screen-filling repeats; CanvasLayer2D draws nodes on their own
+  layer in screen pixels or world space; CanvasModulate2D tints a whole canvas.
+- **Native renderer.** Exact-texel hardware rectangles for unscaled sprites and
+  tiles (fixed-size 8 x 8 and 16 x 16 rectangles for tiles) and textured quads
+  otherwise, sorted by canvas and a stable radix key, drawn over the 3D world and under
+  the HUD from a cooked, per-project packet budget; Native PC Play draws the same frame.
+  Projects without 2D content compile none of it.
+- **2D editor.** Select, move, rotate, scale and pan tools with shortcuts, grid and
+  rotation snapping, pixel rulers, real texture and animation previews, collider and
+  camera gizmos, drag-and-drop sprite creation, a sprite region editor and a
+  sprite-sheet frame slicer, and a visual 2D Inspector. Add 2D Node and Add Component
+  search by name, group or purpose, with the project's recent nodes first; node and
+  texture pickers with many choices search too. A node that cannot work as set up
+  shows a warning sign in the Hierarchy and the reasons in its Inspector, with
+  one-click fixes (a collider fitted to the sprite, a picture shown on the HUD, a
+  navigation region over the ground).
+- **Shape editing.** Paths, lines and polygons are edited on the canvas: drag, insert,
+  add and delete points, curve handles, smoothing; particle emitters preview live.
+- **Tile editing.** Paint, line, rectangle, bucket fill, picker, eraser and selection
+  tools with random scatter, flips and quarter turns; a palette with tiles, patterns
+  and terrains under the view; a TileSet editor for collision, terrains, animation and
+  custom data with its own undo.
+- **Dungeon template.** The Third Person character and camera in a generated sci-fi
+  dungeon with stairs between floors, a handmade Reactor room and a working key and
+  locked door, in C++, Blueprint or Lua, lit and ready to play. See [Dungeon template](dungeon-template.md).
+- **Platformer 2D template.** A playable side-scroller in C++, Blueprint or Lua, built
+  from tile layers, layered parallax scenery and a screen-space HUD canvas, with a
+  cut-out guide using IK, a navigating companion, a pushable crate, a garland on rope
+  joints and ambient particles, grouped by purpose so a game can start by deleting what
+  it does not need.
+
+See [2D worlds](2d.md).
+
 ## HUD and 2D interface
 
 - **Canvas hierarchy.** Canvas and RectTransform provide anchored parent-relative
   layout in the editor's 2D mode and native HUD renderer.
-- **Widgets.** Solid rectangles, atlas images, nine-slice borders, text and
-  progress bars support color and bounded ordering.
+- **Widgets.** Solid rectangles, atlas images, nine-slice borders, tiled panel
+  images, text and progress bars support color and bounded ordering. The editor's
+  UI menu creates Canvas, Panel, Image, Label, Text Area, Progress Bar, Button,
+  Check Box, Slider and layout containers, with anchor presets and eight resize
+  handles.
+- **Layout containers.** Horizontal, Vertical, Grid, Margin and Center containers
+  with per-element fill/expand/shrink flags, minimum size and stretch, measured
+  and arranged by the same code in the editor and on the console.
+- **Focus and rotation.** Focusable elements with explicit neighbours and a
+  highlight tint move focus with the D-pad; Cross presses the focused element, a
+  check box flips, Left/Right move a slider by its step, and gameplay reads the
+  pressed, changed and cancelled events. Rect rotation about the pivot is
+  inherited by children.
 - **Text.** The bundled bitmap font covers printable ASCII plus documented Spanish
-  characters, wrapping and fixed rows/columns. Generated C++ exposes mutable text.
+  characters, wrapping and fixed rows/columns. Imported TrueType/OpenType fonts
+  become 4bpp glyph atlases with per-glyph advance and Left/Center/Right
+  alignment. `[color=#rrggbb]` tags recolour part of a text. Generated C++
+  exposes mutable text.
+- **Localization.** A project string table (keys × languages, CSV import and
+  export, untranslated counts) feeds keyed texts; the editor previews any
+  language and gameplay switches it at runtime with `set_language`.
 - **Retained rendering.** Static HUD packets can be retained between frames while
   dynamic text/value changes invalidate the appropriate output.
 - **Navigation utilities.** `Focus<N>` and `layout_list` provide allocation-free
@@ -433,7 +576,8 @@ Start with [Your first Blueprint](blueprints-tutorial.md), then use the
   bounded catch-up, pause, single-step, tick counters and interpolation data.
 - **AABB collision.** Collider layers/masks, solid and trigger modes, overlap,
   swept movement and trigger Enter/Stay/Exit events run in bounded storage.
-  Collision is conservative and not a rigid-body solver.
+  Collision is conservative and not a rigid-body solver. A compound collider holds
+  up to 2,048 boxes on one actor; every query tests its parts.
 - **Baked navigation (NavLite).** Bake a bounded walking graph from box colliders,
   collider ramps and navigation surfaces inside authored volumes under one shared
   profile, then move agents over it within a fixed console search budget. Authored
@@ -523,7 +667,18 @@ and [performance](performance.md).
   synchronous fallback and scene warmup share the same pool contract. Required
   reads can stall and CD geometry can interact with XA playback.
 - **Visibility.** Precomputed chunk bounds, frustum outcodes, cached basis/bounds
-  tests and spatial chunks reduce submitted geometry.
+  tests and spatial chunks reduce submitted geometry. A Geometry Draw Distance
+  rejects chunks wholly beyond a camera-space distance before loading them.
+- **Camera visibility tracks.** For guided cameras, the build stores which faces
+  each camera sample sees and which pages it needs now and next; the streamer
+  loads exactly those. Optional static-world cooking removes seams between meshes.
+- **Prepared packet order.** Per-sample draw lists, already in draw order, let
+  the renderer skip visibility tests, sorting and per-polygon material setup for
+  static unlit scenery. See [World optimization techniques](world-optimization.md).
+- **Camera paths and visibility bake.** Build > Camera Path authors a guided
+  camera's route from Scene view keys on a timeline; Build > Bake Visibility
+  computes each sample's visible faces on the GPU, optionally from cameras
+  recorded while playing, and generates the packet order.
 - **Retained geometry/HUD.** Optional retained GPU packets reuse unchanged static
   work while preserving per-frame visibility and resource bounds.
 - **Counters.** Runtime structures expose frame timing, dropped fixed steps,
@@ -553,13 +708,15 @@ See [Memory Card service](memory-card.md).
 - **Optional local server.** Authenticated Streamable HTTP binds only to IPv4
   loopback; a stdio bridge connects clients to the already-running editor. The
   feature is disabled by default and requires no specific client provider.
-- **Twenty-four tools.** `editor_state`, `logs_read`, `scene_read`, `scene_schema`,
+- **Twenty-seven tools.** `editor_state`, `logs_read`, `scene_read`, `scene_schema`,
   `scene_apply`, `scene_actors`, `scene_add_actor`, `scene_remove_actor`,
-  `scene_set_actor`, `scene_history`, `scene_save`, `scene_open`, `entity_select`,
-  `editor_view`, `viewer_screenshot`, `editor_control`, `game_input`,
-  `project_settings`, `project_files`, `asset_list`, `asset_import`,
-  `mesh_create`, `asset_document` and `asset_manage` cover inspection, guarded
-  scene/actor/file edits, screenshots, imports, build/play and serial preparation.
+  `scene_set_actor`, `scene_history`, `scene_save`, `scene_open`, `actor_select`,
+  `editor_view`, `viewer_screenshot`, `editor_control`, `camera_path`,
+  `visibility_bake`, `game_input`, `project_settings`, `project_files`,
+  `asset_list`, `asset_import`, `mesh_create`, `asset_document`, `asset_manage`
+  and `dungeon_generate` cover inspection, guarded scene/actor/file edits,
+  screenshots, imports, camera paths, visibility bakes, dungeon generation,
+  build/play and serial preparation.
 - **Transactional guards.** Scene batches are atomic and revision-checked;
   project-file writes require SHA-256 revisions and keep backups; queues and
   responses have limits/timeouts; cancelled queued calls cannot mutate later.
@@ -583,6 +740,7 @@ The editor exposes the following implemented headless families. Run them with
 | Assets | `--scan-assets`, `--import-texture`, `--import-obj`, `--import-fbx`, `--import-audio`, `--reimport-asset`, `--inspect-asset` |
 | Native gameplay | `--reflect`, `--new-script`, `--parent`, `--new-blueprint`, `--compile-blueprints`, `--add-actor`, `--scene` |
 | Timeline and VFX | `--new-timeline`, `--compile-timelines`, `--install-timeline-adapters`, `--new-particle-effect`, `--preset`, `--validate-particle-effects`, `--preview-particle-effect` |
+| Level generation | `--generate-dungeon`, `--dungeon-seed`, `--dungeon-settings`, `--dungeon-new-style`, `--dungeon-new-recipe`, `--dungeon-seed-bench`, `--open-dungeon-room`, `--open-dungeon-seeds`, `--open-dungeon-volumes` |
 | Editor/runtime QA | `--bake-lighting`, `--profile-scene`, `--profile-scene-cpu`, `--profile-editor`, screenshot commands and bounded `--steps` / `--stop-after` execution |
 | Integration | `--mcp-stdio`, `--prepare-serial-tools`, `--list-serial-ports` |
 
@@ -632,8 +790,9 @@ features:
   Timelines/Effects, Blockout, Content Browser moves and MCP scene batches as
   documented by each tool.
 - The actor model has no Pawn/Character archetypes or positional 2D/3D audio.
-  The bounded 2D collision toolkit provides box/circle overlap, raycasts, sliding
-  movement and triggers, not a general rigid-body solver. Actor hierarchy editing
+  2D physics provides box/circle colliders, one-way platforms, raycasts, sliding
+  character movement and triggers, not a general rigid-body solver; boxes ignore
+  their owner's rotation. Actor hierarchy editing
   and compatible component add/remove are implemented; cross-domain conversion is
   not offered.
 - Scene banks, textures, scripts and resident audio must fit PSX memory. Geometry
@@ -662,6 +821,8 @@ live beside the corresponding implementation and are summarized under
 | Texture/model/audio import | `texture`, `model_import`, `obj_import`, `audio_decode`, `audio_import`, `preview_audio` |
 | Scene and preview | `scene`, `transform`, `viewport`, `scene_gpu`, `picking`, `gizmo`, `scene_bank`, `scene_dependencies`, `scene_view_mode` |
 | Object/Actor model | `object_model`, `actor_document` |
+| 2D worlds | `world2d`, `world2d_editor`, `platformer_template` |
+| Dungeon generation | `dungeon`, `dungeon_rooms`, `dungeon_recipe`, `dungeon_random`, `dungeon_style`, `dungeon_bake`, `dungeon_editor`, `dungeon_style_editor`, `dungeon_recipe_editor`, `dungeon_room`, `dungeon_room_editor`, `dungeon_query`, `dungeon_minimap`, `dungeon_seeds`, `dungeon_volumes`, `dungeon_volumes_editor`, `dungeon_gameplay`, `dungeon_template` |
 | Geometry and rendering | `mesh`, `mesh_ops`, `mesh_editor`, `mesh_compile`, `lighting`, `lighting_editor`, `shadows`, `effects`, `palette` |
 | Components and UI | `bitmap_font`, `collision`, `collision_editor`, `hud`, `hud_editor`, `sprites`, `sprites_editor`, `particles`, `skeletal`, `skeletal_compile`, `skeletal_ui`, `third_person` |
 | Native scripting/reflection | `scripts`, `script_values`, `script_backend`, `reflection`, `reflection_schema`, `header_extract`, `header_tool`, `native`, `native_metadata` |
@@ -671,14 +832,16 @@ live beside the corresponding implementation and are summarized under
 | Build/play/export | `build_inputs`, `staging_files`, `pipeline`, `play`, `play_ui`, `disc`, `export`, `export_ui`, `bridge`, `dependencies` |
 | Physical console and analysis | `serial`, `serial_support`, `serial_terminal`, `serial_ui`, `memory`, `memory_ui`, `streaming`, `music`, `audio` |
 | Assistant integration | `mcp`, `mcp_tools`, `mcp_stdio` |
-| In-crate validation | `mcp_tests`, `skeletal_tests`, plus the Blueprint and Timeline test modules declared only for test builds |
+| In-crate validation | `mcp_tests`, `skeletal_tests`, `dungeon_tests`, plus the Blueprint and Timeline test modules declared only for test builds |
 
 | Native runtime area | C++ runtime files |
 | --- | --- |
 | Core scene/lifetime | `epok.hpp`, `lifecycle.hpp`, `scene_service.hpp`, `affine.hpp`, `transform_cache.hpp`, `time.hpp`, `transition.hpp`, `loading_renderer.hpp`, `utility.hpp` |
 | Object/Actor model | `object_model.hpp`, `actor_tables.hpp`, `actor_blueprint.hpp`, `world2d.hpp` |
+| 2D worlds | `world2d.hpp`, `world2d_components.hpp`, `world2d_service.hpp`, `world2d_render.hpp` |
 | Rendering/resources | `frame_clear.hpp`, `gte_geometry.hpp`, `frustum.hpp`, `polygon.hpp`, `visibility.hpp`, `retained.hpp`, `texture_types.hpp`, `texture.hpp`, `resources.hpp`, `lighting.hpp`, `shadows.hpp` |
 | Visual content | `sprite_types.hpp`, `sprites.hpp`, `particle_types.hpp`, `particles.hpp`, `effect_types.hpp`, `effects.hpp`, `particle_effect_runtime.hpp`, `particle_effect_service.hpp`, `palette_types.hpp`, `palette.hpp`, `skeletal.hpp`, `hud.hpp`, `text.hpp` |
+| Dungeon generation | `dungeon_random.hpp`, `dungeon_map.hpp`, `dungeon_minimap.hpp` |
 | Gameplay services | `input.hpp`, `collision.hpp`, `audio.hpp`, `music.hpp`, `memory_card.hpp`, `memory_card_backend.hpp`, `streaming_pool.hpp`, `streaming.hpp` |
 | Blueprint/Lua/Timeline | `blueprint_api.hpp`, `blueprint_runtime.hpp`, `blueprint_debug.hpp`, `blueprint_spawn.hpp`, `blueprint_template.hpp`, `blueprint_playback_service.hpp`, `lua_runtime.hpp`, `playback_types.hpp`, `timeline.hpp`, `timeline_runtime.hpp`, `timeline_service.hpp` |
 
