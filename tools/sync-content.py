@@ -1,4 +1,4 @@
-"""Copy published engine documentation from a local Git checkout, never its working tree."""
+"""Copy guides from a Git revision and optionally import its regenerated API."""
 import io
 import json
 import re
@@ -10,8 +10,19 @@ import tarfile
 root = Path(__file__).resolve().parent.parent
 checkout = Path(sys.argv[1]).resolve()
 ref = sys.argv[2] if len(sys.argv) > 2 else "origin/develop"
-commit = subprocess.check_output(["git", "-C", str(checkout), "rev-parse", ref], text=True).strip()
-paths = ["VERSION", "docs", "knowledge/architecture.md", "knowledge/maintainers/resources.md", "knowledge/maintainers/testing.md", "README.md", "LICENSE", "THIRD_PARTY_NOTICES.md", "runtime/README.md", "runtime/THIRD_PARTY_NOTICES.md", "resources/branding/epok.png", "resources/branding/epok-lockup.png", "resources/branding/README.md"]
+commit = subprocess.check_output(["git", "-C", str(checkout), "rev-parse", "--verify", f"{ref}^{{commit}}"], text=True).strip()
+nugget_revision = subprocess.check_output(
+    ["git", "-C", str(checkout), "rev-parse", f"{commit}:third_party/nugget"], text=True
+).strip()
+api_checkout = Path(sys.argv[3]).resolve() if len(sys.argv) > 3 else None
+paths = ["docs", "knowledge/architecture.md", "knowledge/maintainers/resources.md", "knowledge/maintainers/testing.md", "README.md", "LICENSE", "THIRD_PARTY_NOTICES.md", "runtime/README.md", "runtime/THIRD_PARTY_NOTICES.md", "examples/rpg-2-5d-demo/README.md", "examples/rpg-2-5d-demo/preview.png", "resources/branding/epok.png", "resources/branding/epok-lockup.png", "resources/branding/README.md"]
+paths += ["VERSION", "examples/timeline-spell/README.md", "resources/templates/dungeon-complete/README.md"]
+# Some examples were removed from newer engine revisions. Only archive paths
+# present in the selected commit; callers must retire routes for removed guides.
+paths = [p for p in paths if subprocess.run(
+    ["git", "-C", str(checkout), "cat-file", "-e", f"{commit}:{p}"],
+    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+).returncode == 0]
 # These captures predate the public identity and contain obsolete UI branding.
 retired_captures = {"editor.png", "blueprint-editor.png", "mcp-preferences.png", "skeletal-preview.png", "third-person-arena.png"}
 
@@ -41,6 +52,26 @@ with tarfile.open(fileobj=io.BytesIO(archive)) as tar:
             data = public_document(data.decode("utf-8")).encode("utf-8")
         prepared.append((member.name, relative, data))
 
+if api_checkout:
+    api_commit = subprocess.check_output(
+        ["git", "-C", str(api_checkout), "rev-parse", "HEAD"], text=True
+    ).strip()
+    if api_commit != commit:
+        raise ValueError("The regenerated API checkout must use the selected engine commit")
+    api_directory = api_checkout / "docs/api"
+    for name in ("catalog.json", "coverage.json"):
+        data = json.loads((api_directory / name).read_text(encoding="utf-8"))
+        if data["nugget_revision"] != nugget_revision:
+            raise ValueError(f"{name} must use the selected engine's Nugget revision")
+    prepared = [item for item in prepared if not item[1].is_relative_to(PurePosixPath("docs/api"))]
+    for source in sorted(api_directory.rglob("*")):
+        if source.is_file() and source.suffix in {".md", ".json"}:
+            relative = PurePosixPath(source.relative_to(api_checkout).as_posix())
+            data = source.read_bytes()
+            if source.suffix == ".md":
+                data = public_document(data.decode("utf-8")).encode("utf-8")
+            prepared.append((relative.as_posix(), relative, data))
+
 # Validate and adapt the complete archive before replacing the previous snapshot.
 # A malformed Markdown file must leave the last publishable content intact.
 if previous.exists():
@@ -55,5 +86,5 @@ for name, relative, data in prepared:
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_bytes(data)
     files.append(name)
-previous.write_text(json.dumps({"repository": "https://github.com/epokengine/epok-engine", "commit": commit, "files": sorted(files)}, indent=2) + "\n", encoding="utf-8")
+previous.write_text(json.dumps({"repository": "https://github.com/epokengine/epok-engine", "commit": commit, "nugget_revision": nugget_revision, "files": sorted(files)}, indent=2) + "\n", encoding="utf-8")
 print(f"Synced {len(files)} files from {commit[:12]}")

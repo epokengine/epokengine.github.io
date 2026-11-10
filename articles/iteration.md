@@ -20,7 +20,9 @@ The Play profile separates destination, scene scope and data source:
 | Scenes | Current scene, whole game, or selected scenes with an initial scene |
 | Data source | In executable, CD on demand, or PCDrv host on demand |
 
-The selected-scenes UI has inclusion checkboxes and an initial-scene choice. Up to **16 banks total**, including startup bank zero, can be included. This is useful for a small integration test: build the menu and one arena before adding every map. It does not stream arbitrary assets or bypass the memory budget.
+**Native PC** is also available as a separate desktop gameplay preview. Its execution and rendering differ from PSX, so use the PlayStation target to validate console behavior.
+
+The selected-scenes UI has inclusion checkboxes and an initial-scene choice. Up to **16 banks total**, including startup bank zero, can be included. This is useful for a small integration test: build the menu and one arena before adding every map. Selected scene data can also be placed in [external scene files](/docs/scene-files/) when using a compatible CD or PC data path; scripts and engine code remain resident.
 
 Read [Play targets and loading](/docs/play/) for combinations, save behavior and destination prerequisites.
 
@@ -69,6 +71,6 @@ You still need the documented adapter and Unirom setup. Epok does not flash Unir
 
 **Install / Repair** verifies/restores bundled dependencies through the supported host setup. It is one guarded operation, with progress, cancellation and installation locking; a failed job must not certify a half-installed package as valid. Windows x64, Linux x86_64 and macOS Apple Silicon remain the editor host targets, with their documented experimental/toolchain differences.
 
-macOS development setup/profiling launchers now handle their host paths, and `tools/desktop-shortcuts-macos.sh` provides development-editor Desktop shortcuts. These are development conveniences, not a new packaged macOS app distribution. Consult [Getting started](/docs/getting-started/) and [Settings](/docs/settings/) for exact setup commands and host limitations.
+Consult [Getting started](/docs/getting-started/) and [Settings](/docs/settings/) for current setup commands, available packages and host limitations.
 
 Finally, the Console can follow fresh output automatically and lets you select compiler/runtime messages. Preserve a diagnostic and its build/profile context when reporting a problem: “the red line” is a surprisingly popular but unhelpful bug report.

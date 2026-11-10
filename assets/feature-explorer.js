@@ -18,7 +18,7 @@ document.querySelectorAll('[data-feature-explorer]').forEach(explorer => {
       if (visible) count++;
     }
     buttons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.featureCategory === category)));
-    status.textContent = `${count} of ${items.length} features${category === 'all' ? '' : ` · ${category}`}${fresh.checked ? ' · New in this update' : ''}`;
+    status.textContent = `${count} of ${items.length} features${category === 'all' ? '' : ` · ${category}`}${fresh.checked ? ' · Latest highlights' : ''}`;
     empty.hidden = count !== 0;
     results.scrollTop = 0;
   }

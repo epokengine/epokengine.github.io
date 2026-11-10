@@ -1,10 +1,10 @@
 # PsyQo API: Cdrom Commandbuffer
 
-> **Header:** `"psyqo/cdrom-commandbuffer.hh"` · **Tier:** Pinned PsyQo API · **Source:** [open header](https://github.com/pcsx-redux/nugget/blob/6186b131aacc5853a9161fb076ed34ffe504552d/psyqo/cdrom-commandbuffer.hh)
+> **Header:** `"psyqo/cdrom-commandbuffer.hh"` · **Tier:** Pinned PsyQo API · **Source:** [open header](https://github.com/epokengine/nugget/blob/4a01183295182b8e7702c908e1efaaa8f4538ffd/psyqo/cdrom-commandbuffer.hh)
 
 This module covers the cdrom commandbuffer module. It documents 1 public callable declared directly in this header.
 
-PsyQo is pinned through Nugget revision `6186b131aacc5853a9161fb076ed34ffe504552d`. Signatures and comments below come from that exact revision, not from whichever upstream version happens to be newest.
+PsyQo is pinned through Nugget revision `4a01183295182b8e7702c908e1efaaa8f4538ffd`. Signatures and comments below come from that exact revision, not from whichever upstream version happens to be newest.
 
 ## Declared types
 
@@ -26,7 +26,7 @@ PsyQo is pinned through Nugget revision `6186b131aacc5853a9161fb076ed34ffe504552
 template <CDRomArgumentType... T> void set(T... values)
 ```
 
-- **Declared at:** [line 41](https://github.com/pcsx-redux/nugget/blob/6186b131aacc5853a9161fb076ed34ffe504552d/psyqo/cdrom-commandbuffer.hh#L41)
+- **Declared at:** [line 41](https://github.com/epokengine/nugget/blob/4a01183295182b8e7702c908e1efaaa8f4538ffd/psyqo/cdrom-commandbuffer.hh#L41)
 - **Kind:** `function template`; qualifiers: `template`
 
 **Parameters**

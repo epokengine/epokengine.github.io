@@ -2,7 +2,7 @@
 
 > **Header:** `"world2d_service.hpp"` · **Tier:** Epok runtime API · **Source:** [open header](../../../runtime/world2d_service.hpp)
 
-This module covers the world2d service module. It documents 50 public callables declared directly in this header.
+This module covers the world2d service module. It documents 52 public callables declared directly in this header.
 
 ## Declared types
 
@@ -11,6 +11,7 @@ This module covers the world2d service module. It documents 50 public callables 
 ## Callable index
 
 - [`epok::world2d::collect_sprites`](#epok-world2d-collect-sprites-1) — Performs `collect sprites` as part of the world2d service module.
+- [`epok::world2d::depth_bucket_of`](#epok-world2d-depth-bucket-of-1) — The ordering-table bucket of a Depth2D: the bucket of its distance, or of its anchor's view depth when `anchor_depth(entity, z)` resolves one (Q12; false: no 3D position), moved by its bias.
 - [`epok::world2d::each_line_quad`](#epok-world2d-each-line-quad-1) — The quads of a Line2D entry, one per segment, extended by half the width at inner joints so corners close.
 - [`epok::world2d::each_particle`](#epok-world2d-each-particle-1) — The particles of an emitter entry as sprites (texel rectangle, colour, corners).
 - [`epok::world2d::each_polygon_triangle`](#epok-world2d-each-polygon-triangle-1) — The triangles of a Polygon2D entry.
@@ -19,6 +20,7 @@ This module covers the world2d service module. It documents 50 public callables 
 - [`epok::world2d::floor_div64`](#epok-world2d-floor-div64-1) — Performs `floor div64` as part of the world2d service module.
 - [`epok::world2d::install`](#epok-world2d-install-1) — Performs `install` as part of the world2d service module.
 - [`epok::world2d::mix`](#epok-world2d-mix-1) — Performs `mix` as part of the world2d service module.
+- [`epok::world2d::phase_range`](#epok-world2d-phase-range-1) — The sorted entries of one phase: items [first, last).
 - [`epok::world2d::Projector::point`](#epok-world2d-projector-point-1) — Performs `point` as part of the world2d service module.
 - [`epok::world2d::Projector::Projector`](#epok-world2d-projector-projector-1) — Constructs `epok::world2d::Projector` for the world2d service module.
 - [`epok::world2d::Projector::screen`](#epok-world2d-projector-screen-1) — A projection that maps world pixels straight to screen pixels (screen canvases).
@@ -73,7 +75,7 @@ This module covers the world2d service module. It documents 50 public callables 
 template<class TextureSize> size_t collect_sprites(SpriteDraw* draws, DrawItem* items, DrawItem* scratch, size_t capacity, TextureSize&& texture_size)
 ```
 
-- **Declared at:** [line 1187](../../../runtime/world2d_service.hpp#L1187)
+- **Declared at:** [line 1189](../../../runtime/world2d_service.hpp#L1189)
 - **Kind:** `function template`; qualifiers: `template`
 
 **Parameters**
@@ -114,6 +116,53 @@ auto result = object.collect_sprites<TextureSize>(draws, items, scratch, capacit
 
 **Trade-offs and warnings.** Every instantiated type must satisfy the header's compile-time requirements; extra instantiations can increase code size. Pointer/reference arguments are borrowed unless the source contract says otherwise; keep them valid for the complete operation and never assume null is accepted.
 
+<a id="epok-world2d-depth-bucket-of-1"></a>
+
+## `epok::world2d::depth_bucket_of`
+
+**Purpose.** The ordering-table bucket of a Depth2D: the bucket of its distance, or of its anchor's view depth when `anchor_depth(entity, z)` resolves one (Q12; false: no 3D position), moved by its bias.
+
+**Exact declaration**
+
+```cpp
+template<class AnchorDepth> inline int depth_bucket_of(const Depth2DComponent& depth, AnchorDepth&& anchor_depth)
+```
+
+- **Declared at:** [line 1416](../../../runtime/world2d_service.hpp#L1416)
+- **Kind:** `function template`; qualifiers: `template`
+
+**Parameters**
+
+| Name | Type | Role | Meaning |
+| --- | --- | --- | --- |
+| `depth` | `const Depth2DComponent &` | Input | Value supplied for `depth`. See the exact type and module contract. |
+| `anchor_depth` | `AnchorDepth &&` | Consumed or moved input | Value supplied for `anchor_depth`. See the exact type and module contract. |
+
+**Returns.** Returns `int`. Check the purpose and failure notes before using the value.
+
+**Use it when.** You need the world2d service module and the preconditions in the declaration are already satisfied.
+
+**Usage pattern**
+
+```cpp
+#include "world2d_service.hpp"
+
+// Replace these template arguments with types or values accepted by the declaration:
+// AnchorDepth
+
+// Assume these named values have been initialized with valid data:
+// const Depth2DComponent & depth
+// AnchorDepth && anchor_depth
+
+epok::world2d& object = /* obtain a valid instance */;
+
+auto result = object.depth_bucket_of<AnchorDepth>(depth, anchor_depth);
+```
+
+**Why choose it.** Template dispatch is resolved at compile time and normally adds no runtime indirection.
+
+**Trade-offs and warnings.** Every instantiated type must satisfy the header's compile-time requirements; extra instantiations can increase code size. Pointer/reference arguments are borrowed unless the source contract says otherwise; keep them valid for the complete operation and never assume null is accepted.
+
 <a id="epok-world2d-each-line-quad-1"></a>
 
 ## `epok::world2d::each_line_quad`
@@ -126,7 +175,7 @@ auto result = object.collect_sprites<TextureSize>(draws, items, scratch, capacit
 template<class Visit> inline void each_line_quad(const SpriteDraw& entry, Visit&& visit)
 ```
 
-- **Declared at:** [line 1414](../../../runtime/world2d_service.hpp#L1414)
+- **Declared at:** [line 1444](../../../runtime/world2d_service.hpp#L1444)
 - **Kind:** `function template`; qualifiers: `template`
 
 **Parameters**
@@ -173,7 +222,7 @@ object.each_line_quad<Visit>(entry, visit);
 template<class Visit> inline void each_particle(const SpriteDraw& entry, uint16_t texture_width, uint16_t texture_height, Visit&& visit)
 ```
 
-- **Declared at:** [line 1502](../../../runtime/world2d_service.hpp#L1502)
+- **Declared at:** [line 1532](../../../runtime/world2d_service.hpp#L1532)
 - **Kind:** `function template`; qualifiers: `template`
 
 **Parameters**
@@ -224,7 +273,7 @@ object.each_particle<Visit>(entry, texture_width, texture_height, visit);
 template<class Visit> inline void each_polygon_triangle(const SpriteDraw& entry, Visit&& visit)
 ```
 
-- **Declared at:** [line 1468](../../../runtime/world2d_service.hpp#L1468)
+- **Declared at:** [line 1498](../../../runtime/world2d_service.hpp#L1498)
 - **Kind:** `function template`; qualifiers: `template`
 
 **Parameters**
@@ -273,7 +322,7 @@ object.each_polygon_triangle<Visit>(entry, visit);
 template<class Visit> inline void each_tile(const SpriteDraw& entry, uint16_t texture_width, uint16_t texture_height, Visit&& visit)
 ```
 
-- **Declared at:** [line 1548](../../../runtime/world2d_service.hpp#L1548)
+- **Declared at:** [line 1578](../../../runtime/world2d_service.hpp#L1578)
 - **Kind:** `function template`; qualifiers: `template`
 
 **Parameters**
@@ -324,7 +373,7 @@ object.each_tile<Visit>(entry, texture_width, texture_height, visit);
 inline bool entry_space(const SpriteDraw& entry, Camera2D& camera, Affine2D& matrix)
 ```
 
-- **Declared at:** [line 1398](../../../runtime/world2d_service.hpp#L1398)
+- **Declared at:** [line 1428](../../../runtime/world2d_service.hpp#L1428)
 - **Kind:** `function decl`
 
 **Parameters**
@@ -368,7 +417,7 @@ auto result = epok::world2d::entry_space(entry, camera, matrix);
 inline int64_t floor_div64(int64_t value, int64_t size)
 ```
 
-- **Declared at:** [line 166](../../../runtime/world2d_service.hpp#L166)
+- **Declared at:** [line 171](../../../runtime/world2d_service.hpp#L171)
 - **Kind:** `function decl`
 
 **Parameters**
@@ -441,7 +490,7 @@ epok::world2d::install();
 inline uint8_t mix(uint8_t a, uint8_t b, Fixed t, uint8_t tint)
 ```
 
-- **Declared at:** [line 1408](../../../runtime/world2d_service.hpp#L1408)
+- **Declared at:** [line 1438](../../../runtime/world2d_service.hpp#L1438)
 - **Kind:** `function decl`
 
 **Parameters**
@@ -475,6 +524,54 @@ auto result = epok::world2d::mix(a, b, t, tint);
 
 **Trade-offs and warnings.** Call it only in the lifecycle phase described by the module. Validate indices, capacities and object state before use.
 
+<a id="epok-world2d-phase-range-1"></a>
+
+## `epok::world2d::phase_range`
+
+**Purpose.** The sorted entries of one phase: items [first, last).
+
+**Exact declaration**
+
+```cpp
+inline void phase_range(const DrawItem* items, size_t count, DrawPhase phase, size_t& first, size_t& last)
+```
+
+- **Declared at:** [line 1407](../../../runtime/world2d_service.hpp#L1407)
+- **Kind:** `function decl`
+
+**Parameters**
+
+| Name | Type | Role | Meaning |
+| --- | --- | --- | --- |
+| `items` | `const DrawItem *` | Input | Value supplied for `items`. See the exact type and module contract. |
+| `count` | `size_t` | Input | Value supplied for `count`. See the exact type and module contract. |
+| `phase` | `DrawPhase` | Input | Value supplied for `phase`. See the exact type and module contract. |
+| `first` | `size_t &` | Input/output; inspect the function contract | Value supplied for `first`. See the exact type and module contract. |
+| `last` | `size_t &` | Input/output; inspect the function contract | Value supplied for `last`. See the exact type and module contract. |
+
+**Returns.** No value is returned; observe the documented state change or callback.
+
+**Use it when.** You need the world2d service module and the preconditions in the declaration are already satisfied.
+
+**Usage pattern**
+
+```cpp
+#include "world2d_service.hpp"
+
+// Assume these named values have been initialized with valid data:
+// const DrawItem * items
+// size_t count
+// DrawPhase phase
+// size_t & first
+// size_t & last
+
+epok::world2d::phase_range(items, count, phase, first, last);
+```
+
+**Why choose it.** It provides direct, allocation-conscious access to the world2d service module. No exception-based error path is implied by the signature.
+
+**Trade-offs and warnings.** Pointer/reference arguments are borrowed unless the source contract says otherwise; keep them valid for the complete operation and never assume null is accepted.
+
 <a id="epok-world2d-projector-point-1"></a>
 
 ## `epok::world2d::Projector::point`
@@ -487,7 +584,7 @@ auto result = epok::world2d::mix(a, b, t, tint);
 void point(const Fixed* world, Fixed* screen) const
 ```
 
-- **Declared at:** [line 118](../../../runtime/world2d_service.hpp#L118)
+- **Declared at:** [line 123](../../../runtime/world2d_service.hpp#L123)
 - **Kind:** `cxx method`; qualifiers: `const`
 
 **Parameters**
@@ -531,7 +628,7 @@ object.point(world, screen);
 explicit Projector(const Camera2D& view) : c
 ```
 
-- **Declared at:** [line 102](../../../runtime/world2d_service.hpp#L102)
+- **Declared at:** [line 107](../../../runtime/world2d_service.hpp#L107)
 - **Kind:** `constructor`
 
 **Parameters**
@@ -569,7 +666,7 @@ epok::world2d::Projector value(view);
 static Projector screen()
 ```
 
-- **Declared at:** [line 112](../../../runtime/world2d_service.hpp#L112)
+- **Declared at:** [line 117](../../../runtime/world2d_service.hpp#L117)
 - **Kind:** `cxx method`; qualifiers: `static`
 
 **Returns.** Returns `Projector`. Check the purpose and failure notes before using the value.
@@ -600,7 +697,7 @@ auto result = epok::world2d::Projector::screen();
 template<class Visit> inline void repeat_copies(const Canvas& canvas, const Projector& projector, const int16_t* bounds, Visit&& visit)
 ```
 
-- **Declared at:** [line 1109](../../../runtime/world2d_service.hpp#L1109)
+- **Declared at:** [line 1111](../../../runtime/world2d_service.hpp#L1111)
 - **Kind:** `function template`; qualifiers: `template`
 
 **Parameters**
@@ -651,7 +748,7 @@ object.repeat_copies<Visit>(canvas, projector, bounds, visit);
 inline int16_t screen_pixel(Fixed value)
 ```
 
-- **Declared at:** [line 131](../../../runtime/world2d_service.hpp#L131)
+- **Declared at:** [line 136](../../../runtime/world2d_service.hpp#L136)
 - **Kind:** `function decl`
 
 **Parameters**
@@ -1949,7 +2046,7 @@ auto result = epok::world2d::Service::times(value, q12);
 inline void sort_draw_items(DrawItem* items, DrawItem* scratch, size_t count)
 ```
 
-- **Declared at:** [line 74](../../../runtime/world2d_service.hpp#L74)
+- **Declared at:** [line 77](../../../runtime/world2d_service.hpp#L77)
 - **Kind:** `function decl`
 
 **Parameters**
@@ -1995,7 +2092,7 @@ epok::world2d::sort_draw_items(items, scratch, count);
 inline bool tile_box(const TileInfo& tile, uint16_t value, const Fixed* cell_origin, uint16_t width, uint16_t height, Aabb2D& out)
 ```
 
-- **Declared at:** [line 141](../../../runtime/world2d_service.hpp#L141)
+- **Declared at:** [line 146](../../../runtime/world2d_service.hpp#L146)
 - **Kind:** `function decl`
 
 **Parameters**
@@ -2045,7 +2142,7 @@ auto result = epok::world2d::tile_box(tile, value, cell_origin, width, height, o
 inline void tint(uint8_t* color, const uint8_t* by)
 ```
 
-- **Declared at:** [line 1102](../../../runtime/world2d_service.hpp#L1102)
+- **Declared at:** [line 1104](../../../runtime/world2d_service.hpp#L1104)
 - **Kind:** `function decl`
 
 **Parameters**
@@ -2087,7 +2184,7 @@ epok::world2d::tint(color, by);
 const uint8_t* of(int8_t layer) const
 ```
 
-- **Declared at:** [line 1147](../../../runtime/world2d_service.hpp#L1147)
+- **Declared at:** [line 1149](../../../runtime/world2d_service.hpp#L1149)
 - **Kind:** `cxx method`; qualifiers: `const`
 
 **Parameters**
@@ -2129,7 +2226,7 @@ auto result = object.of(layer);
 Tints()
 ```
 
-- **Declared at:** [line 1137](../../../runtime/world2d_service.hpp#L1137)
+- **Declared at:** [line 1139](../../../runtime/world2d_service.hpp#L1139)
 - **Kind:** `constructor`
 
 **Use it when.** You need the world2d service module and the preconditions in the declaration are already satisfied.
@@ -2160,7 +2257,7 @@ epok::world2d::Tints value();
 inline bool view_camera(Camera2D& out)
 ```
 
-- **Declared at:** [line 1164](../../../runtime/world2d_service.hpp#L1164)
+- **Declared at:** [line 1166](../../../runtime/world2d_service.hpp#L1166)
 - **Kind:** `function decl`
 
 **Parameters**
@@ -2200,7 +2297,7 @@ auto result = epok::world2d::view_camera(out);
 inline uint32_t z_key(int32_t z)
 ```
 
-- **Declared at:** [line 1153](../../../runtime/world2d_service.hpp#L1153)
+- **Declared at:** [line 1155](../../../runtime/world2d_service.hpp#L1155)
 - **Kind:** `function decl`
 
 **Parameters**

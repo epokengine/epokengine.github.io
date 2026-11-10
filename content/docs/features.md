@@ -213,7 +213,8 @@ The complete interaction and preview contract is in the
 - **C++ and Blueprint chains.** `EPOK_CLASS(Blueprintable, Placeable, Spawnable,
   Domain=World3D, Id="…")` and `EPOK_COMPONENT(Root, Name="…")` declare actors and
   their default components; Blueprints derive from them with Begin Play / Tick /
-  End Play, typed actor/component references and a Spawn Actor node.
+  End Play, typed actor/component references and a Spawn Actor node. `PlacedOnly`
+  withdraws an inherited `Spawnable`, for a class that exists once in its scene.
 - **Scene Blueprint per map.** Each map owns one `SceneScriptActor` class, edited
   from Map Settings, compiled with the project, and able to name actors, components
   and entities of its own map by identity.
@@ -343,7 +344,7 @@ See the complete [Timeline reference](timelines.md) and the
   PathFollow2D, Line2D, Polygon2D, Particles2D, AudioPlayer2D,
   VisibleOnScreenNotifier2D, RemoteTransform2D, Skeleton2D, NavigationRegion2D,
   NavigationAgent2D, RigidBody2D, Joint2D, SubViewport2D, SplitScreen2D,
-  CanvasLayer2D and CanvasModulate2D components, plus any C++, Blueprint or Lua component. Ready-made presets, grouped by
+  CanvasLayer2D, CanvasModulate2D and Depth2D components, plus any C++, Blueprint or Lua component. Ready-made presets, grouped by
   purpose, create each kind of node in one click.
 - **Sprites and animation.** Texture regions, sprite-sheet cells, offset, centring,
   flips, modulate, the console blend modes, z-index and y-sort; named frame
@@ -386,11 +387,16 @@ See the complete [Timeline reference](timelines.md) and the
 - **Parallax and canvas layers.** Parallax2D scrolls attached nodes against the camera
   with autoscroll and screen-filling repeats; CanvasLayer2D draws nodes on their own
   layer in screen pixels or world space; CanvasModulate2D tints a whole canvas.
+- **2D with the 3D world.** A CanvasLayer2D drawn Under 3D puts a background behind
+  all 3D geometry; a Depth2D inserts sprites and tile layers into the 3D ordering table
+  at a camera distance or an anchor actor's depth, plus a bucket bias, so cut-outs of a
+  pre-rendered background hide the 3D characters walking behind them.
 - **Native renderer.** Exact-texel hardware rectangles for unscaled sprites and
   tiles (fixed-size 8 x 8 and 16 x 16 rectangles for tiles) and textured quads
   otherwise, sorted by canvas and a stable radix key, drawn over the 3D world and under
-  the HUD from a cooked, per-project packet budget; Native PC Play draws the same frame.
-  Projects without 2D content compile none of it.
+  the HUD (or under and inside the 3D world, as above) from a cooked, per-project packet
+  budget; Native PC Play composes the same frame. Projects without 2D content compile
+  none of it.
 - **2D editor.** Select, move, rotate, scale and pan tools with shortcuts, grid and
   rotation snapping, pixel rulers, real texture and animation previews, collider and
   camera gizmos, drag-and-drop sprite creation, a sprite region editor and a
@@ -467,6 +473,14 @@ See [HUD and 2D entities](hud.md).
   fits the sample bank to the PSX budget.
 - **XA background music.** Encode/interleave disc XA, generate the disc manifest
   and drive asynchronous ISO/CD playback with loop/end/error state.
+- **Full-motion video.** Import MP4, MOV, AVI, MKV, WebM, MPEG and GIF clips as
+  Video assets encoded to MDEC/XA `.STR` streams; every frame is checked with the
+  console's decoder at import. The File Inspector previews the clip as the
+  console decodes it and reports picture, duration, disc space and player RAM.
+  Blueprint *Play/Stop/Is video playing* nodes and `epok.play_video` stream it
+  from CD at double speed, decode it with the MDEC into the frame buffer,
+  letterbox it in 320 x 240, pause gameplay, skip on START/✕ and expand TV-range
+  levels for free. See [Full-motion video](video.md).
 - **Transition audio.** Scene transitions multiply authored audio gain during
   fade-out/fade-in and stop outgoing sources safely after pending callbacks.
 - **Capacity.** Resident audio is validated against the 512 KiB SPU budget with a
@@ -572,6 +586,13 @@ Start with [Your first Blueprint](blueprints-tutorial.md), then use the
   embedded Game view owns focus and releases buttons when focus is lost. An
   opt-in analog-controller mode adds signed Q12 stick axes for both sticks with
   an exact center and no dead zone.
+- **Controller rumble.** The reflected Input library requests finite DualShock
+  large/small motor pulses from C++, Blueprint and Lua Gameplay profile 2.
+  PSX uses the shared SIO0 owner; Native PC uses individually assigned devices
+  and bounded host effects. Controls exposes device support and a short rumble
+  test, while Play preferences and in-game settings can mute output. See
+  [controller rumble](input-collision.md#controller-rumble) for platform limits
+  and the acceptance status.
 - **Measured fixed step.** Host frame time feeds a fixed 60 Hz simulation with
   bounded catch-up, pause, single-step, tick counters and interpolation data.
 - **AABB collision.** Collider layers/masks, solid and trigger modes, overlap,
@@ -646,8 +667,16 @@ See [Play targets and loading](play.md).
   loading frame with configurable text/64x64 RGB555 image, retire the old bank,
   warm streamed geometry, load the new bank and fade in. Failed reads stay muted
   and allow retry. C++ can override transition options per request.
+- **Scenes outside the executable.** The project's scene table marks which scenes
+  stay in the EXE. With CD or PC data, the others are saved as checked
+  `SCENEnn.BIN` files and load into one shared RAM region behind the loading
+  screen, with a progress bar of the bytes read. See
+  [Scenes outside the executable](scene-files.md).
 - **Executable and disc packaging.** Produce a PS-X EXE; package ISO or BIN/CUE
   with XA/external geometry and a user-supplied system-area license when required.
+- **PS-EXE packages.** Export a verified ZIP holding the executable, the PCDrv
+  files it reads, a manifest, launch instructions and notices, for
+  PCDrv-compatible loaders. See [Export PS-EXE](ps-exe-export.md).
 - **Standalone export.** Generate a relocatable C++/PsyQo project with runtime,
   scripts, assets, Make launchers, manifests, guides, licenses and notices. It can
   rebuild without the Rust editor, libclang extractor or original authoring tree.
@@ -703,6 +732,35 @@ See [Geometry streaming](streaming.md) and [Native PSX performance](performance.
 
 See [Memory Card service](memory-card.md).
 
+## PocketStation
+
+- **PocketStation apps.** An authored asset (Add > PocketStation App...) holding
+  Pocket Lua or ARM/Thumb assembly sources, editor-drawn sprites, the animated menu
+  icon, the PlayStation memory card icon, the title and the card file name; three
+  starting templates including the Star Catcher mini-game.
+- **Pocket Lua.** A statically typed Lua subset compiled to Thumb code by Epok:
+  integers and booleans, flash tables, RAM arrays with bounds checks, multi-frame
+  sprites, tunes, typed functions, and the `screen`, `button`, `sound`, `clock`,
+  `save`, `link`, `system`, `math` and `print` libraries, with line-accurate errors
+  and suggestions. Assembly files add functions Pocket Lua calls directly.
+- **Assembler.** ARM and Thumb with literal pools, local labels, includes and
+  automatic relaxation of far Thumb branches; whole programs can be assembly.
+- **Embedded emulator.** ARM7TDMI CPU, flash banking, interrupts, timers, clock
+  speeds, real-time clock, LCD, buttons, speaker, LED and the memory card
+  connector, with Epok's own kernel and start-up menu (no console firmware).
+- **PocketStation window.** Code, Sprites, Icons, App Settings and Card tabs; the
+  device with clickable buttons and keyboard control; Console, Problems, live
+  Variables, Debug (registers, source line, hardware differences) and a PlayStation
+  link tester; `.mcs`/`.bin` export for real hardware.
+- **Game integration.** Every app is embedded in the game build; `epok::pocketstation`
+  (C++), the Start/Install app Blueprint nodes and Lua builtins, and the
+  `epok.pocketstation` library probe, install, start, message and share 16 values
+  with Pocket Lua programs.
+- **Play link.** Play places the editor's emulated PocketStation in memory card
+  slot 1 through the emulator bridge.
+
+See [PocketStation](pocketstation.md).
+
 ## External tools / MCP integration
 
 - **Optional local server.** Authenticated Streamable HTTP binds only to IPv4
@@ -735,13 +793,14 @@ The editor exposes the following implemented headless families. Run them with
 
 | Family | Commands |
 | --- | --- |
-| Build and run | `--build-psx`, `--play-psx`, `--use-play-profile`, `--blueprint-debug`, `--analyze-memory`, `--export-psx` |
+| Build and run | `--build-psx`, `--play-psx`, `--use-play-profile`, `--blueprint-debug`, `--analyze-memory`, `--export-psx`, `--export-ps-exe` |
 | Projects | `--create-project`, `--template`, `--migrate-project`, `--recover-project` |
 | Assets | `--scan-assets`, `--import-texture`, `--import-obj`, `--import-fbx`, `--import-audio`, `--reimport-asset`, `--inspect-asset` |
 | Native gameplay | `--reflect`, `--new-script`, `--parent`, `--new-blueprint`, `--compile-blueprints`, `--add-actor`, `--scene` |
 | Timeline and VFX | `--new-timeline`, `--compile-timelines`, `--install-timeline-adapters`, `--new-particle-effect`, `--preset`, `--validate-particle-effects`, `--preview-particle-effect` |
 | Level generation | `--generate-dungeon`, `--dungeon-seed`, `--dungeon-settings`, `--dungeon-new-style`, `--dungeon-new-recipe`, `--dungeon-seed-bench`, `--open-dungeon-room`, `--open-dungeon-seeds`, `--open-dungeon-volumes` |
 | Editor/runtime QA | `--bake-lighting`, `--profile-scene`, `--profile-scene-cpu`, `--profile-editor`, screenshot commands and bounded `--steps` / `--stop-after` execution |
+| PocketStation | `--new-pocketstation-app`, `--pocketstation-template`, and for screenshots `--open-pocketstation`, `--pocketstation-run`, `--pocketstation-play`, `--pocketstation-tab`, `--screenshot-delay` |
 | Integration | `--mcp-stdio`, `--prepare-serial-tools`, `--list-serial-ports` |
 
 Most families have detailed examples in [Getting started](getting-started.md),
@@ -819,6 +878,8 @@ live beside the corresponding implementation and are summarized under
 | Settings/project UI | `settings`, `settings_ui`, `project`, `project_browser`, `console` |
 | Asset system | `assets`, `asset_manager`, `asset_ui`, `asset_inspector`, `content_preview`, `import_settings`, `artifact_dependencies`, `artifact_dependency_ui` |
 | Texture/model/audio import | `texture`, `model_import`, `obj_import`, `audio_decode`, `audio_import`, `preview_audio` |
+| Video | `fmv`, `video_import`, `video_probe`, `video`, `video_preview` |
+| PocketStation | `pocketstation`, `pocketstation_ui`, and the `epok-pocketstation` crate (`cpu`, `hw`, `rom`, `kernel`, `launcher`, `link`, `machine`, `card`, `file`, `asm`, `plua`) |
 | Scene and preview | `scene`, `transform`, `viewport`, `scene_gpu`, `picking`, `gizmo`, `scene_bank`, `scene_dependencies`, `scene_view_mode` |
 | Object/Actor model | `object_model`, `actor_document` |
 | 2D worlds | `world2d`, `world2d_editor`, `platformer_template` |
@@ -829,7 +890,7 @@ live beside the corresponding implementation and are summarized under
 | Lua scripting | `lua_aot`, `lua_api_stub`, `lua_asset`, `lua_bytecode`, `lua_compile`, `lua_dependencies`, `lua_frontend`, `lua_identity`, `lua_vm`, `script_ir` |
 | Blueprints | `blueprint`, `blueprint_asset`, `blueprint_compile`, `blueprint_debug`, `blueprint_debug_ui`, `blueprint_dependencies`, `blueprint_editor`, `blueprint_ir`, `blueprint_playback`, `blueprint_refs`, `blueprint_spawn`, `blueprint_templates`, `blueprint_template_editor`, `blueprint_workflow`, `blueprint_action_menu`, `blueprint_inline_values`, `blueprint_split_pins` |
 | Timeline/VFX | `timeline`, `timeline_adapters`, `timeline_compile`, `timeline_curve`, `timeline_editor`, `timeline_runtime`, `timeline_scene`, `particle_effect`, `particle_effect_editor`, `particle_effect_preview`, `particle_effect_scene`, `playback_staging` |
-| Build/play/export | `build_inputs`, `staging_files`, `pipeline`, `play`, `play_ui`, `disc`, `export`, `export_ui`, `bridge`, `dependencies` |
+| Build/play/export | `build_inputs`, `staging_files`, `pipeline`, `play`, `play_ui`, `disc`, `export`, `export_ui`, `ps_exe_export`, `ps_exe_export_ui`, `bridge`, `dependencies` |
 | Physical console and analysis | `serial`, `serial_support`, `serial_terminal`, `serial_ui`, `memory`, `memory_ui`, `streaming`, `music`, `audio` |
 | Assistant integration | `mcp`, `mcp_tools`, `mcp_stdio` |
 | In-crate validation | `mcp_tests`, `skeletal_tests`, `dungeon_tests`, plus the Blueprint and Timeline test modules declared only for test builds |
@@ -843,6 +904,8 @@ live beside the corresponding implementation and are summarized under
 | Visual content | `sprite_types.hpp`, `sprites.hpp`, `particle_types.hpp`, `particles.hpp`, `effect_types.hpp`, `effects.hpp`, `particle_effect_runtime.hpp`, `particle_effect_service.hpp`, `palette_types.hpp`, `palette.hpp`, `skeletal.hpp`, `hud.hpp`, `text.hpp` |
 | Dungeon generation | `dungeon_random.hpp`, `dungeon_map.hpp`, `dungeon_minimap.hpp` |
 | Gameplay services | `input.hpp`, `collision.hpp`, `audio.hpp`, `music.hpp`, `memory_card.hpp`, `memory_card_backend.hpp`, `streaming_pool.hpp`, `streaming.hpp` |
+| Video | `fmv.hpp`, `fmv_bitstream.hpp`, `video_service.hpp` |
+| PocketStation | `pocketstation.hpp`, `pocketstation_apps.hpp`, `pocketstation_service.hpp` |
 | Blueprint/Lua/Timeline | `blueprint_api.hpp`, `blueprint_runtime.hpp`, `blueprint_debug.hpp`, `blueprint_spawn.hpp`, `blueprint_template.hpp`, `blueprint_playback_service.hpp`, `lua_runtime.hpp`, `playback_types.hpp`, `timeline.hpp`, `timeline_runtime.hpp`, `timeline_service.hpp` |
 
 `runtime/main.cpp`, `runtime/Makefile`, `runtime/build.ps1`, `runtime/build.sh`

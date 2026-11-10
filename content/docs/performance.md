@@ -4,6 +4,14 @@
 
 ## Counters and timing
 
+**Project Settings > Rendering > Geometry > Mesh Triangle Budget** can cap the
+double-buffered mesh packet reservation, including retained geometry. Automatic
+keeps the scene-derived capacity used by existing projects. A limit of 512..8192
+reduces main RAM use without changing mesh assets or resolution. Validate all
+camera views and encounters: geometry beyond the pool is counted in
+`lighting_stats.dropped_triangles`. Streaming retains its independent limit; when
+both apply, the smaller capacity wins. Changes apply on the next build.
+
 ### Optional on-screen debug HUD
 
 **Project Settings > Debug** has independent FPS, CPU, Geometry/GTE, GPU Command
@@ -98,6 +106,20 @@ of this diagnostic. Compare builds with matching instrumentation; `--detail`
 adds timing and counter overhead and is not a release FPS measurement.
 
 GTE validation counters are populated only with `EPOK_VALIDATE_GTE=1`. Validation compares GTE and software results within the runtime's coordinate and screen tolerances; its extra work also affects timing.
+
+## Compound collision queries
+
+Compound static colliders, including generated dungeons, automatically use a
+spatial grid cooked from their collision boxes. Movement queries cover the whole
+swept box, camera rays cover their full segment, and triggers query their own
+footprint. Only candidate parts reach the existing collision solver; boxes
+outside the rendered view still collide normally. Candidate order is preserved,
+including contact ties and trigger event order.
+
+The grid starts with eight-unit XZ cells and coarsens to keep its cell lists
+within 8 KiB per collider. It needs no per-frame rebuild or heap allocation and
+follows translated owners. Small colliders and layouts without a useful bounded
+grid retain the linear query path.
 
 ## Precomputed chunk visibility
 
@@ -194,10 +216,66 @@ changes instead of relying on the recorded numbers.
 
 ## Compilation and measurement
 
+The editable-mesh cooker gives nonconforming opaque wall joins a small coverage
+margin (at most 1/2 unit for coplanar T joins and 1/8 unit for convex floor
+corners, capped to a quarter of panel width). The wider coplanar overlap covers
+integer edge disagreement at grazing views without adding faces or per-frame
+stitching.
+At convex joins the shared floor corner also extends just beneath the walls,
+with all copies kept coincident to avoid pinholes at their base.
+Authored meshes, face/corner order, UVs, normals, bake colors and collision data
+are retained. Open boundaries, translucent/scrolling materials, free-standing
+props and inward room corners do not receive this margin.
+
+Software clipping preserves already projected corners, so the general renderer
+uses the same GTE screen coordinates as its unclipped neighbours. Shared clipping
+edges interpolate consistently from outside to inside, independent of winding.
+When either half of a quad needs software clipping, both surviving halves use
+the same clipping planes so their shared diagonal cannot bend apart.
+
+Chunk bounds use native 32-bit products when each input fits the limit derived
+from the actual view coefficients, rather than a fixed 32-world-unit cutoff.
+A conservative rounding guard contains the previous wide bounds. Plane tests
+also use 32-bit arithmetic only when their coefficient and translation bounds
+prove it safe; larger transforms and unusual display ratios retain the wide
+path. This changes render traversal cost without changing geometry, lighting,
+draw distance or collision queries.
+
 Release builds optimize the runtime's `main.o` with `-O2`; PsyQo and game scripts retain their configured options. `EPOK_RUNTIME_OPT=-Os` permits comparison. Rebuild `main.o` after changing optimization, detail or validation flags.
 
 When using the editor, rebuild it after runtime source changes because it embeds those sources. Standalone C++ exports contain their own runtime snapshot and are rebuilt with their included Makefile.
 
 Use the same scene, input sequence, resolution, build mode and instrumentation for comparisons. Track dropped simulation steps and primitives alongside timings, and inspect rendered frames for regressions. Changing camera position, visible geometry, HUD content or particles can change the measured workload.
+
+Optional PC sampling is enabled with `EPOK_RUNTIME_OPT="-O2 -DEPOK_PROFILE_SAMPLE"`.
+Its default uses Timer0 and a 32 KiB histogram: 8,192 bins of 128 bytes cover physical
+code addresses `0x10000..0x110000`. Native-only sequence music uses Timer2 and
+can remain enabled; legacy sequence timing uses Timer0 and rejects this combination
+at compilation. The sampler starts after sequence-clock setup, which clears Timer0.
+Normal builds do not contain its state or interrupt handler.
+
+Diagnostic builds can override `EPOK_PROFILE_SAMPLE_BASE`,
+`EPOK_PROFILE_SAMPLE_SHIFT` and `EPOK_PROFILE_SAMPLE_BINS`. A focused window at
+`0x70000`, shift 6 and 2,048 bins covers 128 KiB at 64-byte resolution with an
+8 KiB histogram. Choose the window from the matching ELF; instrumentation can
+move code. The compiler requires aligned RAM-code addresses, 1..8,192 bins and
+a shift of 2..16, with the whole window inside 2 MiB RAM. Samples outside the
+chosen window remain in the outside counter; they are not discarded or assigned
+to a function in that window.
+
+Debugger tools can pause collection through `epok::cpu_sample_enabled` and read
+`cpu_sample_layout`, `cpu_sample_bins` and `cpu_sample_outside`. Clear the bins
+while collection is disabled and record the exact measurement window. The
+Complete-game verifier's `--deterministic-route --capture-cpu-samples` options
+collect frames 301 through 1,440 without removing music. They read the linked
+layout and verify its count against the ELF buffer size. This is a diagnostic
+build, and its timings do not certify normal-build performance.
+
+Use `tools/summarize_cpu_samples.py --samples <cpu-samples.json> --elf <matching.elf>
+--nm <mipsel-none-elf-nm> --out <report.json>` to attribute samples. Only bins
+wholly inside one linked function are assigned to it. Boundary bins remain
+ambiguous, inlined work belongs to its containing function, and time spent with
+interrupts masked can defer sampling and underrepresent interrupt handlers.
+Always retain the matching executable and ELF alongside the report.
 
 Capacity limits are not frame-rate guarantees. Emulator measurements describe the tested workload; physical-console timing and GPU/presentation costs require separate validation. No scene-specific benchmark results are bundled with this guide.

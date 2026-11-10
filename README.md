@@ -17,14 +17,31 @@ npm run preview
 
 Open http://127.0.0.1:4173. The generated static site lives in `dist/`.
 
+The homepage demo is at http://127.0.0.1:4173/#playable-preview. It uses the
+packaged PSX disc in `play/reactor-station.zip` and downloads EmulatorJS 4.2.3
+when the visitor starts the game. See [play/README.md](play/README.md) for the
+disc's provenance and update steps.
+
+The gallery is at http://127.0.0.1:4173/gallery/, linked from the shared navigation
+and homepage. Edit `gallery-content.json` to add screenshots or MP4/WebM videos;
+`tools/media-gallery.mjs` generates the static cards and
+`assets/media-gallery.js` adds media tabs, topic/search filters and a keyboard
+accessible viewer. Without JavaScript, the cards link to their original files.
+The three bundled videos are explicitly labeled silent demo montages of existing
+captures. See `assets/reels/README.md` for provenance and regeneration. Replace
+them with actual recordings when available. No external video service is needed.
+
 ## Update the engine guides
 
-The Markdown and screenshots in `content/` come from published engine documentation. The sync step adapts migration wording to the current public identity and excludes historical editor captures with obsolete branding. `content-manifest.json` records the exact commit. They do not include uncommitted editor or runtime changes.
+The Markdown and screenshots in `content/` come from committed engine
+documentation. The sync step adapts historical branding and excludes old
+editor captures. `content-manifest.json` records the exact engine commit and
+SDK revision. The generated API can also be imported from a detached worktree.
 
-After fetching the engine repository, sync from its published branch:
+After fetching the engine release tag, sync from that tag:
 
 ```sh
-python tools/sync-content.py /path/to/Epok origin/develop
+python tools/sync-content.py /path/to/Epok v0.10.0 /path/to/Epok-v0.10.0-api
 npm run build
 npm run check
 ```
@@ -36,31 +53,34 @@ Web-specific long-form guides live in `articles/`; their introductory notes are 
 the build tool. Evidence-backed corrections to older synced prose live in
 `correctWebMarkdown`, never as unrecorded changes to the active engine checkout.
 
-The landing Feature Explorer is generated from the full committed feature catalog
-plus `feature-updates.json`. Add source paths, useful descriptions and guide links
-there; counts, static rows and the new-features article section are derived from
-the same data. Keep future ideas out of implemented-feature counts. The bounded
-widget supports category/search/new filters and a JavaScript-free disclosure view.
+The landing Feature Explorer combines the committed feature catalog with
+`latest-feature-highlights.json`. Refresh the highlights against a committed
+engine release; verify each description and source path. Counts and static
+rows are derived from the data. The widget supports category/search/latest
+filters and a JavaScript-free disclosure view.
 
 The architecture graphic is semantic HTML in `tools/architecture-section.mjs`
 with responsive styling in `assets/architecture.css`. Solid connectors describe
 the current build path; the dashed undisclosed-target teaser is editorial, not
 an implemented backend. Discord navigation is shared across every generated page.
 
-If new runtime headers or declarations land, regenerate the API in an isolated
-engine worktree and import it with `node tools/refresh-api.mjs <worktree>` after
-syncing. The checked procedure, extraction fixture, source audit and design
-references are in [the September audit](notes/feature-audit-2026-09-14.md).
+The v0.10.0 tag carries an older generated API catalog. In a detached worktree
+at v0.10.0, run the engine's `tools/generate-api-reference.py` with the pinned
+Nugget checkout, Clang bindings and MIPS compiler. Pass that worktree as the
+third argument above to import its regenerated API while syncing the guides
+from the tag. Omit the worktree argument for a release with a current catalog.
+After syncing, run
+`node tools/verify-api-sources.mjs /path/to/Epok` to compare every recorded
+header hash against the committed engine and pinned Nugget blobs and reject
+extraction diagnostics. The pinned Nugget commit must exist in the checkout's
+submodule Git repository. If the committed generated reference is stale or has
+diagnostics, regenerate it in an isolated worktree before importing; never use
+uncommitted engine changes as a published snapshot. The [API audit](notes/documentation-api-audit-2026-11-06.md) records the current review and its limits.
 
-The documentation index offers six learning paths: a first Blueprint, a first
-Lua Actor class, VFX authoring, a marker-driven spell, a first generated dungeon
-(with a room built by hand) and a first 2D platformer. Keep introductory
-tutorials separate from their complete references. The Lua tutorial should stay
-small enough to follow end-to-end while linking to the full language/runtime
-contracts for exact types, modes and target limits. The Timelines & VFX group
-also includes the playable example and a shared troubleshooting guide. Search,
-navigation, table-of-contents anchors and the editor captures are checked by
-`npm run check`.
+The documentation index offers learning paths for Blueprints, Lua, VFX,
+terrain and navigation, dungeon generation, and 2D platforming. Keep tutorials
+separate from the full references. Run `npm run check` to verify search,
+navigation, anchors and editor captures.
 
 ## Publish
 

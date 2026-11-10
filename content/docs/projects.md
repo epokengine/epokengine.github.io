@@ -1,6 +1,6 @@
 # Independent game projects
 
-Epok starts in **Projects**. Create a project with a template, a gameplay flavor, a name and a parent folder, or open an existing project folder. Recent projects are shortcuts to their folders; **Remove from list** forgets a shortcut without deleting the game. **Basic** contains a camera and an empty scene; **Sample** is a ground plane, two cubes and one Spinner behaviour. The default location is `Documents/Epok Projects`, outside the editor installation.
+Epok starts in **Projects**. Create a project with a template, a gameplay flavor, a name and a parent folder, or open an existing project folder. Recent projects are shortcuts to their folders; **Remove from list** forgets a shortcut without deleting the game. **Basic** contains a camera, an empty world and an inert GameRoot class in the chosen language; **Sample** is a ground plane, two cubes and one Spinner behaviour. The default location is `Documents/Epok Projects`, outside the editor installation.
 
 Use **File > Projects... (New / Open / Close)** to return to the selector. Unsaved scenes offer Save and close, Discard changes and Cancel. Closing a project stops its owned build/emulator before releasing its lock. A failed open stays in the selector and displays the error; it never substitutes a sample scene or overwrites a damaged project.
 
@@ -19,7 +19,7 @@ Project location and project name stay at the bottom with the resolved destinati
 
 ### Gameplay flavors
 
-The flavor is a generation choice, never a project mode. A Lua project can gain C++ classes and Blueprints afterwards, a C++ project can gain Lua scripts, and a scene can bind all three at once. Nothing in the descriptor records the choice, because nothing in the engine acts on it after creation.
+The flavor is a generation choice. A Lua project can gain C++ classes and Blueprints afterwards, a C++ project can gain Lua scripts, and a scene can bind all three at once. All six templates record their installation choice and semantic class references in `ProjectSettings/Template.epoksettings`; the descriptor continues to own project settings. See [starter classes and roles](starter-templates.md) for generated files and inheritance.
 
 | Flavor | What the template writes | Console build |
 | --- | --- | --- |
@@ -27,7 +27,23 @@ The flavor is a generation choice, never a project mode. A Lua project can gain 
 | Blueprint | A project-owned graph under `assets/Blueprints` | The backend generates native code; the source you edit stays visual |
 | Lua | Project-owned `.lua` under `assets/scripts` | Built with the project's Lua execution setting, which starts on the ahead-of-time native mode |
 
-Every template accepts every flavor, and the three share one scene: the same actors, transforms, colliders and assets, with only the class the Player binds differing. Basic writes no gameplay in any flavor, and its card says so. A template that ever gains an unimplemented pair disables that flavor in the selector and explains why; creation never silently falls back to another language.
+All six templates accept every authoring flavor and share the same actors, transforms, colliders and resources. Basic writes an editable, inert GameRoot Actor class. Dungeon Complete writes game policies and ordinary editable HUD/modal widget classes in the selected language, alongside shared native mechanisms and its Pocket Lua game. Lua template rules use Native C++ AOT: edit the Lua source; generated C++ belongs to build output. The required template acceptance matrix has 18 combinations. The engine retains separate VM bytecode/source functionality and regression coverage.
+
+### Dungeon Complete
+
+![Dungeon Complete running in the PlayStation emulator](images/dungeon-complete.png)
+
+**Dungeon Complete** is the finished Reactor Station action game: pooled enemies,
+a boss, camera-relative controls, inventory, healing items, upgrades, persistent
+trading and the Asteroid Catcher PocketStation minigame. It includes only the
+level's referenced assets, selected authoring sources and shared native mechanisms, with editable import
+sources and asset notices. Its SoundFont keeps the three MIDI presets used by
+the song, preserving their samples and settings.
+
+New projects start in the embedded PSX emulator with PC-on-demand geometry,
+320x240 output and the game's bounded render pools. No serial adapter settings,
+memory cards, captures, build outputs or personal editor layout are copied.
+The separate [Dungeon starter](dungeon-template.md) remains available.
 
 Opening a project shows a centered, borderless 640 × 400 splash with abstract
 retro artwork, the original Epok logo, the project name and live loading stage.
@@ -44,7 +60,9 @@ The artwork is embedded, so it works outside the installation's working director
 My Game/
   My Game.epokproject              # Versioned project identity and settings
   assets/scenes/Main.epokmap      # Original scenes
-  assets/scripts/                   # Original C++ and .epokscript metadata
+  assets/scripts/                   # Project-owned C++ and Lua classes
+  assets/Blueprints/                # Editable Blueprint classes
+  ProjectSettings/Template.epoksettings # Template installation and class roles
   assets/Audio/*.epokasset          # Imported assets with UUIDs and source snapshots
   .gitignore
   .epok/                           # Regenerable build/emulator data; ignored
@@ -69,6 +87,7 @@ cargo run --locked
 cargo run --locked -- --create-project "D:/Games/My Game" --template basic
 cargo run --locked -- --create-project "D:/Games/My Demo" --template sample --name "My Demo"
 cargo run --locked -- --create-project "D:/Games/My Hero" --template third-person --gameplay lua
+cargo run --locked -- --create-project "D:/Games/My Complete Game" --template dungeon-complete
 cargo run --locked -- --project "D:/Games/My Game"
 cargo run --locked -- --project "D:/Games/My Game/My Game.epokproject"
 cargo run --locked -- --project "D:/Games/My Game" --build-psx

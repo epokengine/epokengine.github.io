@@ -1,10 +1,10 @@
 # PsyQo API: Shared
 
-> **Header:** `"psyqo/shared.hh"` · **Tier:** Pinned PsyQo API · **Source:** [open header](https://github.com/pcsx-redux/nugget/blob/6186b131aacc5853a9161fb076ed34ffe504552d/psyqo/shared.hh)
+> **Header:** `"psyqo/shared.hh"` · **Tier:** Pinned PsyQo API · **Source:** [open header](https://github.com/epokengine/nugget/blob/4a01183295182b8e7702c908e1efaaa8f4538ffd/psyqo/shared.hh)
 
 This module covers the shared module. It documents 0 public callables declared directly in this header.
 
-PsyQo is pinned through Nugget revision `6186b131aacc5853a9161fb076ed34ffe504552d`. Signatures and comments below come from that exact revision, not from whichever upstream version happens to be newest.
+PsyQo is pinned through Nugget revision `4a01183295182b8e7702c908e1efaaa8f4538ffd`. Signatures and comments below come from that exact revision, not from whichever upstream version happens to be newest.
 
 ## Declared types
 

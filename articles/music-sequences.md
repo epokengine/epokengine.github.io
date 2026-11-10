@@ -229,30 +229,26 @@ asset decides which playback service is used.
 
 ### C++
 
-Usually the asset assignment belongs in the Inspector and C++ only decides *when*
-to start or stop it. This Behaviour starts the audio already assigned to its actor
-and stops it when the title is left.
+Usually the asset assignment belongs in the Inspector and C++ decides when
+to start or stop it. Call the following helper with a valid `AudioComponent`
+from your Actor or ActorComponent gameplay, for example during `begin_play`.
 
 ```cpp
 #include "epok.hpp"
 
-class MusicStarter : public epok::Behaviour {
-public:
-    void start(epok::Transform&) override {
-        auto& music = entity().audio;
-        music.volume = 0.70;
-        music.priority = 200;
-        music.play();
-    }
+void start_music(epok::AudioComponent& music) {
+    music.set_volume(epok::Fixed(0.70));
+    music.set_priority(200);
+    music.play();
+}
 
-    void stop_music() {
-        entity().audio.stop();
-    }
-};
+void stop_music(epok::AudioComponent& music) {
+    music.stop();
+}
 ```
 
 `play()`, `stop()` and `is_playing()` have the same meaning for resident effects,
-MusicSequence and a streamed track. `volume` is clamped from 0 to 1. `pitch` is
+MusicSequence and a streamed track. `set_volume` clamps from 0 to 1. `set_pitch` is
 useful for a sampled clip but changes neither the tempo of a MusicSequence nor the
 fixed pitch of an XA stream.
 

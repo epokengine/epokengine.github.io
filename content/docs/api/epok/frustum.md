@@ -2,7 +2,7 @@
 
 > **Header:** `"frustum.hpp"` · **Tier:** Epok runtime API · **Source:** [open header](../../../runtime/frustum.hpp)
 
-This module covers the frustum module. It documents 10 public callables declared directly in this header.
+This module covers the frustum module. It documents 14 public callables declared directly in this header.
 
 ## Declared types
 
@@ -10,8 +10,12 @@ This module covers the frustum module. It documents 10 public callables declared
 
 ## Callable index
 
+- [`epok::chunk_bounds_input_limit`](#epok-chunk-bounds-input-limit-1) — Every individual product must fit int32; the renderer checks this once per chunk using the largest coefficient magnitude.
 - [`epok::chunk_bounds_isolated_x`](#epok-chunk-bounds-isolated-x-1) — Detect once per object.
+- [`epok::chunk_bounds_planes_fit`](#epok-chunk-bounds-planes-fit-1) — With the narrow products, each post-shift center/span sum is <=3*524288.
 - [`epok::chunk_fully_inside`](#epok-chunk-fully-inside-1) — Q12 bounds.
+- [`epok::chunk_outside`](#epok-chunk-outside-1) — Performs `chunk outside` as part of the frustum module.
+- [`epok::closed_cube_faces`](#epok-closed-cube-faces-1) — Default cube face numbers: -Z,+Z,-X,+X,+Y,-Y.
 - [`epok::frustum_gcd`](#epok-frustum-gcd-1) — Performs `frustum gcd` as part of the frustum module.
 - [`epok::frustum_outcode`](#epok-frustum-outcode-1) — Performs `frustum outcode` as part of the frustum module.
 - [`epok::frustum_outcode32`](#epok-frustum-outcode32-1) — Plain 32-bit variant for inputs bounded by 2^27 in magnitude (the GTE projection path guarantees this); 3z+4y then cannot overflow.
@@ -20,6 +24,48 @@ This module covers the frustum module. It documents 10 public callables declared
 - [`epok::narrow_chunk_bounds`](#epok-narrow-chunk-bounds-1) — Performs `narrow chunk bounds` as part of the frustum module.
 - [`epok::ScreenFrustum::distance`](#epok-screenfrustum-distance-1) — Performs `distance` as part of the frustum module.
 - [`epok::ScreenFrustum::outcode`](#epok-screenfrustum-outcode-1) — Performs `outcode` as part of the frustum module.
+
+<a id="epok-chunk-bounds-input-limit-1"></a>
+
+## `epok::chunk_bounds_input_limit`
+
+**Purpose.** Every individual product must fit int32; the renderer checks this once per chunk using the largest coefficient magnitude.
+
+**Details.** Post-shift sums then fit too.
+
+**Exact declaration**
+
+```cpp
+inline int32_t chunk_bounds_input_limit(int32_t peak)
+```
+
+- **Declared at:** [line 64](../../../runtime/frustum.hpp#L64)
+- **Kind:** `function decl`
+
+**Parameters**
+
+| Name | Type | Role | Meaning |
+| --- | --- | --- | --- |
+| `peak` | `int32_t` | Input | Value supplied for `peak`. See the exact type and module contract. |
+
+**Returns.** Returns `int32_t`. Check the purpose and failure notes before using the value.
+
+**Use it when.** Post-shift sums then fit too.
+
+**Usage pattern**
+
+```cpp
+#include "frustum.hpp"
+
+// Assume these named values have been initialized with valid data:
+// int32_t peak
+
+auto result = epok::chunk_bounds_input_limit(peak);
+```
+
+**Why choose it.** It provides direct, allocation-conscious access to the frustum module. No exception-based error path is implied by the signature.
+
+**Trade-offs and warnings.** Call it only in the lifecycle phase described by the module. Validate indices, capacities and object state before use.
 
 <a id="epok-chunk-bounds-isolated-x-1"></a>
 
@@ -35,7 +81,7 @@ This module covers the frustum module. It documents 10 public callables declared
 inline bool chunk_bounds_isolated_x(const int32_t rows[3][3])
 ```
 
-- **Declared at:** [line 28](../../../runtime/frustum.hpp#L28)
+- **Declared at:** [line 48](../../../runtime/frustum.hpp#L48)
 - **Kind:** `function decl`
 
 **Parameters**
@@ -63,6 +109,51 @@ auto result = epok::chunk_bounds_isolated_x(rows);
 
 **Trade-offs and warnings.** Check the return value; `false` is part of normal control flow for many PSX resource operations.
 
+<a id="epok-chunk-bounds-planes-fit-1"></a>
+
+## `epok::chunk_bounds_planes_fit`
+
+**Purpose.** With the narrow products, each post-shift center/span sum is <=3*524288.
+
+**Details.** This translation bound leaves ample room for their signed plane products.
+
+**Exact declaration**
+
+```cpp
+template<class Frustum=ScreenFrustum<320,240>> inline bool chunk_bounds_planes_fit(const int32_t* translation)
+```
+
+- **Declared at:** [line 69](../../../runtime/frustum.hpp#L69)
+- **Kind:** `function template`; qualifiers: `template`
+
+**Parameters**
+
+| Name | Type | Role | Meaning |
+| --- | --- | --- | --- |
+| `translation` | `const int32_t *` | Input | Value supplied for `translation`. See the exact type and module contract. |
+
+**Returns.** Returns `bool`. Check the purpose and failure notes before using the value.
+
+**Use it when.** This translation bound leaves ample room for their signed plane products.
+
+**Usage pattern**
+
+```cpp
+#include "frustum.hpp"
+
+// Replace these template arguments with types or values accepted by the declaration:
+// Frustum
+
+// Assume these named values have been initialized with valid data:
+// const int32_t * translation
+
+auto result = epok::chunk_bounds_planes_fit<Frustum>(translation);
+```
+
+**Why choose it.** Template dispatch is resolved at compile time and normally adds no runtime indirection. The boolean result makes success, availability or state explicit without exceptions.
+
+**Trade-offs and warnings.** Every instantiated type must satisfy the header's compile-time requirements; extra instantiations can increase code size. Check the return value; `false` is part of normal control flow for many PSX resource operations. Pointer/reference arguments are borrowed unless the source contract says otherwise; keep them valid for the complete operation and never assume null is accepted.
+
 <a id="epok-chunk-fully-inside-1"></a>
 
 ## `epok::chunk_fully_inside`
@@ -74,10 +165,10 @@ auto result = epok::chunk_bounds_isolated_x(rows);
 **Exact declaration**
 
 ```cpp
-template<class Frustum=ScreenFrustum<320,240>> inline bool chunk_fully_inside(const int32_t* center,const int32_t* extent,int32_t focal)
+template<class Frustum=ScreenFrustum<320,240>,class Number=int64_t> inline bool chunk_fully_inside(const int32_t* center,const int32_t* extent,int32_t focal)
 ```
 
-- **Declared at:** [line 33](../../../runtime/frustum.hpp#L33)
+- **Declared at:** [line 53](../../../runtime/frustum.hpp#L53)
 - **Kind:** `function template`; qualifiers: `template`
 
 **Parameters**
@@ -112,6 +203,99 @@ auto result = epok::chunk_fully_inside<Frustum>(center, extent, focal);
 
 **Trade-offs and warnings.** Every instantiated type must satisfy the header's compile-time requirements; extra instantiations can increase code size. Check the return value; `false` is part of normal control flow for many PSX resource operations. Pointer/reference arguments are borrowed unless the source contract says otherwise; keep them valid for the complete operation and never assume null is accepted.
 
+<a id="epok-chunk-outside-1"></a>
+
+## `epok::chunk_outside`
+
+**Purpose.** Performs `chunk outside` as part of the frustum module.
+
+**Exact declaration**
+
+```cpp
+template<class Frustum=ScreenFrustum<320,240>,class Number=int64_t> inline bool chunk_outside(const int32_t* center,const int32_t* extent,int32_t far)
+```
+
+- **Declared at:** [line 75](../../../runtime/frustum.hpp#L75)
+- **Kind:** `function template`; qualifiers: `template`
+
+**Parameters**
+
+| Name | Type | Role | Meaning |
+| --- | --- | --- | --- |
+| `center` | `const int32_t *` | Input | Value supplied for `center`. See the exact type and module contract. |
+| `extent` | `const int32_t *` | Input | Value supplied for `extent`. See the exact type and module contract. |
+| `far` | `int32_t` | Input | Value supplied for `far`. See the exact type and module contract. |
+
+**Returns.** Returns `bool`. Check the purpose and failure notes before using the value.
+
+**Use it when.** You need the frustum module and the preconditions in the declaration are already satisfied.
+
+**Usage pattern**
+
+```cpp
+#include "frustum.hpp"
+
+// Replace these template arguments with types or values accepted by the declaration:
+// Frustum
+
+// Assume these named values have been initialized with valid data:
+// const int32_t * center
+// const int32_t * extent
+// int32_t far
+
+auto result = epok::chunk_outside<Frustum>(center, extent, far);
+```
+
+**Why choose it.** Template dispatch is resolved at compile time and normally adds no runtime indirection. The boolean result makes success, availability or state explicit without exceptions.
+
+**Trade-offs and warnings.** Every instantiated type must satisfy the header's compile-time requirements; extra instantiations can increase code size. Check the return value; `false` is part of normal control flow for many PSX resource operations. Pointer/reference arguments are borrowed unless the source contract says otherwise; keep them valid for the complete operation and never assume null is accepted.
+
+<a id="epok-closed-cube-faces-1"></a>
+
+## `epok::closed_cube_faces`
+
+**Purpose.** Default cube face numbers: -Z,+Z,-X,+X,+Y,-Y.
+
+**Details.** For an axis-aligned closed box, a camera on the inner side of a face cannot see that exterior face. Keep a world-space rounding margin; unsupported bases keep all faces.
+
+**Exact declaration**
+
+```cpp
+inline uint8_t closed_cube_faces(const int32_t basis[3][3],const int32_t* position,const int32_t* camera)
+```
+
+- **Declared at:** [line 8](../../../runtime/frustum.hpp#L8)
+- **Kind:** `function decl`
+
+**Parameters**
+
+| Name | Type | Role | Meaning |
+| --- | --- | --- | --- |
+| `basis` | `const int32_t[3][3]` | Input | Value supplied for `basis`. See the exact type and module contract. |
+| `position` | `const int32_t *` | Input | Value supplied for `position`. See the exact type and module contract. |
+| `camera` | `const int32_t *` | Input | Value supplied for `camera`. See the exact type and module contract. |
+
+**Returns.** Returns `uint8_t`. Check the purpose and failure notes before using the value.
+
+**Use it when.** For an axis-aligned closed box, a camera on the inner side of a face cannot see that exterior face. Keep a world-space rounding margin; unsupported bases keep all faces.
+
+**Usage pattern**
+
+```cpp
+#include "frustum.hpp"
+
+// Assume these named values have been initialized with valid data:
+// const int32_t[3][3] basis
+// const int32_t * position
+// const int32_t * camera
+
+auto result = epok::closed_cube_faces(basis, position, camera);
+```
+
+**Why choose it.** It provides direct, allocation-conscious access to the frustum module. No exception-based error path is implied by the signature.
+
+**Trade-offs and warnings.** Pointer/reference arguments are borrowed unless the source contract says otherwise; keep them valid for the complete operation and never assume null is accepted.
+
 <a id="epok-frustum-gcd-1"></a>
 
 ## `epok::frustum_gcd`
@@ -124,7 +308,7 @@ auto result = epok::chunk_fully_inside<Frustum>(center, extent, focal);
 constexpr int frustum_gcd(int a,int b)
 ```
 
-- **Declared at:** [line 4](../../../runtime/frustum.hpp#L4)
+- **Declared at:** [line 24](../../../runtime/frustum.hpp#L24)
 - **Kind:** `function decl`
 
 **Parameters**
@@ -166,7 +350,7 @@ auto result = epok::frustum_gcd(a, b);
 inline uint8_t frustum_outcode(int32_t x,int32_t y,int32_t z)
 ```
 
-- **Declared at:** [line 83](../../../runtime/frustum.hpp#L83)
+- **Declared at:** [line 125](../../../runtime/frustum.hpp#L125)
 - **Kind:** `function decl`
 
 **Parameters**
@@ -210,7 +394,7 @@ auto result = epok::frustum_outcode(x, y, z);
 template<int32_t Near,int32_t FarExclusive> inline uint8_t frustum_outcode32(int32_t x,int32_t y,int32_t z)
 ```
 
-- **Declared at:** [line 86](../../../runtime/frustum.hpp#L86)
+- **Declared at:** [line 128](../../../runtime/frustum.hpp#L128)
 - **Kind:** `function template`; qualifiers: `template`
 
 **Parameters**
@@ -259,7 +443,7 @@ auto result = epok::frustum_outcode32<Near, FarExclusive>(x, y, z);
 template<int32_t Near,int32_t FarExclusive> inline uint8_t frustum_outcode_units(int32_t x,int32_t y,int32_t z)
 ```
 
-- **Declared at:** [line 73](../../../runtime/frustum.hpp#L73)
+- **Declared at:** [line 115](../../../runtime/frustum.hpp#L115)
 - **Kind:** `function template`; qualifiers: `template`
 
 **Parameters**
@@ -308,7 +492,7 @@ auto result = epok::frustum_outcode_units<Near, FarExclusive>(x, y, z);
 template<class Point> bool gpu_clip_safe(const Point& a,const Point& b,const Point& c)
 ```
 
-- **Declared at:** [line 99](../../../runtime/frustum.hpp#L99)
+- **Declared at:** [line 141](../../../runtime/frustum.hpp#L141)
 - **Kind:** `function template`; qualifiers: `template`
 
 **Parameters**
@@ -352,10 +536,10 @@ auto result = epok::gpu_clip_safe<Point>(a, b, c);
 **Exact declaration**
 
 ```cpp
-__attribute__((always_inline)) #endif inline void narrow_chunk_bounds(const int32_t rows[3][3],const int32_t absolute[3][3], const int32_t translation[3],const int32_t vector[3], const int32_t extent[3],int32_t center[3],int32_t span[3], bool isolated_x)
+__attribute__((always_inline)) inline void narrow_chunk_bounds(const int32_t rows[3][3],const int32_t absolute[3][3], const int32_t translation[3],const int32_t vector[3], const int32_t extent[3],int32_t center[3],int32_t span[3], bool isolated_x)
 ```
 
-- **Declared at:** [line 49](../../../runtime/frustum.hpp#L49)
+- **Declared at:** [line 91](../../../runtime/frustum.hpp#L91)
 - **Kind:** `function decl`
 
 **Parameters**
@@ -409,7 +593,7 @@ epok::narrow_chunk_bounds(rows, absolute, translation, vector, extent, center, s
 template<class Number> static Number distance(int plane,Number x,Number y,Number z)
 ```
 
-- **Declared at:** [line 11](../../../runtime/frustum.hpp#L11)
+- **Declared at:** [line 31](../../../runtime/frustum.hpp#L31)
 - **Kind:** `function template`; qualifiers: `static, template`
 
 **Parameters**
@@ -458,7 +642,7 @@ auto result = epok::ScreenFrustum::distance<Number>(plane, x, y, z);
 template<int32_t Near,int32_t Far,bool Bounded=false> static uint8_t outcode(int32_t x,int32_t y,int32_t z)
 ```
 
-- **Declared at:** [line 15](../../../runtime/frustum.hpp#L15)
+- **Declared at:** [line 35](../../../runtime/frustum.hpp#L35)
 - **Kind:** `function template`; qualifiers: `static, template`
 
 **Parameters**

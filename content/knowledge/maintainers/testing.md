@@ -94,6 +94,59 @@ Default tests also verify treemap area/containment, malformed ELF rejection,
 symbol alias accounting, complete/fragmented NOTPSXSerial progress records, and
 the compact modal's size, continued workspace rendering and keyboard/MCP lock.
 
+`python tests/integration/verify_ps_exe_export.py` exports a fresh third-person
+project with Geometry Streaming through `--export-ps-exe`. It plants stale disc,
+XA, video and archive files in the build folder and requires the ZIP to hold only
+the certified executable, `GEOMETRY.BIN`, manifest, README, notices and optional
+debug symbols. It checks that the saved Play profile is unchanged and that a
+repeat export reuses the build and reproduces the ZIP byte for byte. XA music
+must stop the export by name, even directly after a Serial Play build that omits
+it, leaving the previous ZIP intact. It then extracts the ZIP to a fresh folder,
+removes the project's build folder and runs PCSX-Redux with no disc and PCDrv
+rooted at the extracted folder. Streaming must read pages with no errors; a
+modified or missing `GEOMETRY.BIN` must raise the streaming error counter.
+`--no-emulator` stops after the packaging checks. Port 8099 is used. This does
+not validate a physical console, a serial loader or any remote loader service.
+Unit tests cover the package file list, rejected tampering, cancellation,
+command-line scope parsing and the in-memory export profile.
+
+`python tests/integration/verify_ps_exe_scenes.py` builds a fresh three-scene
+project whose camera carries a Lua component mapping Cross, Circle and Triangle
+to scenes 1, 0 and 2. The startup scene plays a resident MusicSequence and the
+second a resident sound effect. Whole Game and Selected Scenes packages run from
+clean folders in PCSX-Redux with no disc while a Lua driver presses the buttons
+and samples `epok::scene_stats` and the effect and note voices in
+`epok::audio_voices`. Whole Game must start at the startup scene and make three
+transitions; Selected Scenes must start at its initial scene and reject the
+excluded one. The Whole Game package is exported with `--debug-overlay`: the
+overlay must start hidden and appear after Select (`epok::debug_hud::visible`
+and the screen corner), while Select changes nothing in the package without it.
+A video in the excluded scene must stop the Whole Game export by name but not
+the Selected Scenes export.
+
+`python tests/integration/verify_scene_files.py` checks
+[scenes outside the executable](../../docs/scene-files.md). It builds a fresh
+three-scene project with a different sky colour per scene and the same Lua
+scene-switching component, then runs it in PCSX-Redux while a Lua driver
+presses buttons and samples `epok::scene_stats`, `epok::scene_file_stats`, the
+header of the shared scene region and the centre pixel: a CD build with Main in
+the EXE (Second and Third read from the disc image), a PS-EXE package with every
+scene outside (the startup scene loads behind the boot screen), a package with
+a corrupt `SCENE02.BIN` that the driver repairs before pressing START, and a
+missing `SCENE01.BIN`, and a CD image with one damaged scene sector. Finally the
+same project with every scene in the EXE must produce a larger executable, and
+the report's scene region must equal the largest scene file. Loading times in
+its `report.json` are emulator times.
+
+The Build menu dialog has a real-ImGui acceptance test that clicks
+**Build > Export PS-EXE... > Export**, waits for the compilation and checks the
+published ZIP, **Open Folder** and the unchanged Play settings. It needs the
+SDK, so run it explicitly:
+
+```powershell
+cargo test --locked build_menu_dialog_exports_a_package -- --ignored
+```
+
 `python tests/runtime/verify_frame_clear.py` checks the real PsyQo clear packets
 for all ten video modes and both buffer parities. Interlaced rendering clears
 with a rectangle at `(0,0)` and preserves the displayed field; progressive
@@ -224,6 +277,11 @@ python tests/integration/verify_streaming_xa.py
 The two host runners cover input, time, collision, transform caching, lifecycle,
 Memory Card recovery, utility services, palettes, frustum/polygon processing and
 sprite/particle pools. They require a C++20 compiler and the pinned Nugget sources.
+
+`python tests/integration/verify_world2d_depth.py` plays a 3D cube against a 2D
+background drawn Under 3D and a Depth2D mask, near, far and anchored, in PCSX-Redux
+and on Native PC (`--skip-native` runs the emulator cases only). It checks the
+composed pixels and keeps its captures under `.epok/world2d-depth-*/`.
 Streaming checks use isolated projects on ports 8092 and 8093 and require the
 configured CD authoring tools. For diagnostic assertions, benchmark methodology
 and regression gates, see the internal
@@ -243,6 +301,7 @@ cargo run --locked -- --project examples/sample-game --build-psx
 python tests/integration/verify_projects.py
 python tests/integration/verify_audio_assets.py
 python tests/integration/verify_bgm.py
+python tests/integration/verify_fmv.py
 python tests/integration/verify_pipeline.py
 python tests/integration/verify_hierarchy.py
 python tests/integration/verify_hud.py
@@ -443,6 +502,42 @@ glowing key) is written by
 and generated with `--generate-dungeon Dungeon`, which also places its Actor piece. `--screenshot-input` presses pad buttons on a
 `milliseconds:mask` schedule from the first Play frame and delays the capture until it
 ends; 16 is Up.
+
+## Dungeon Complete
+
+`cargo test --locked --bin epok-editor -- dungeon_complete_template::tests
+project_templates::tests` checks fresh creation, portable settings, asset
+resolution, packet budgets, previews and unsupported flavor rejection.
+`cargo test --locked --bin epok-editor
+complete_game_card_and_unavailable_flavors_use_real_controls -- --ignored
+--test-threads=1` clicks the real template cards and language lists in ImGui.
+`python -m unittest discover -s tools -p test_package_dungeon_complete.py`
+checks merged MIDI program state and byte-preserving SoundFont pruning.
+
+Create a project with `--template dungeon-complete`, then export its current
+scene with `--export-ps-exe --debug-symbols --output <project>/exports/DungeonComplete-ps-exe.zip`.
+`python tests/integration/verify_dungeon_complete.py --project <project> --route
+guards --frames 1800` checks three guards, sound assets, verified geometry/VRAM
+and the cumulative 25 ms frame budget. Repeat with `--route boss --frames 6000
+--minimum-loops 1` for key pickup, boss defeat and a MIDI loop. Both use a private
+emulator and a free API port; neither touches physical hardware.
+
+`python tests/integration/verify_dungeon_complete_economy.py --project <project>`
+uses the template's exact staged PocketStation image and real ARM catches to
+check transfer from the native menu, duplicate receipts, safe reuse, sales,
+purchases, full-health item rules, healing after damage and cold save reload.
+Add `--fresh-install` for an empty-card install and ARM cold launch. The emulator
+profile must be Embedded / PC on demand, the project must already be built and
+the engine's PocketStation Rust library must be present in `target/debug/deps`.
+Existing emulator card files are backed up and restored; generated ones are
+moved into the test evidence. Reports and captures live below the created
+project's `.epok/validation` directory.
+
+`tools/package_dungeon_complete.py <source-game> <new-staging-folder> --report
+<report.json>` is the developer import step. It keeps the original game read-only
+and refuses to overwrite an existing destination. Review the staged assets and
+README before replacing the bundled template; never package `.epok`, exports,
+personal preferences or card saves.
 
 ## Screenshots and profiling
 
@@ -702,6 +797,10 @@ Before publishing structural or dependency changes, validate a separate checkout
 Compile the sample PS-X EXE with no pre-existing SDK objects. Check the standalone C++ export and its README/license files. Finish with the runtime integration checks. Cargo's downloaded dependency cache may be reused, but previous compiled project/SDK outputs must not be needed.
 
 After validation, verify that generated files remain ignored and Nugget source remains clean.
+
+`verify_pocketstation.py` copies the sample project, adds the Star Catcher PocketStation app with `--new-pocketstation-app`, gives the sample's C++ component a routine that installs and starts the app, sends it a message, reads the shared values and switches the LED, then runs `--play-psx --stop-after 25`. The headless run answers the game's PocketStation requests with the emulated PocketStation and prints its state; the check expects Star Catcher running, the app on the card and the LED on. It runs on macOS with the setup's MIPS tools and PCSX-Redux. `cargo test --workspace` covers the PocketStation CPU, assembler, kernel, link protocol and Pocket Lua runtime without the emulator. Transfers to a physical PocketStation remain unverified.
+
+`verify_fmv.py` writes an original 16:9 test clip (an uncompressed AVI generated by the script, with a moving bar and a stereo tone), imports it as a Video asset, plays it from a Lua `begin_play`, builds BIN/CUE and runs it in PCSX-Redux with a Lua driver that reads `epok::video_stats` and captures the screen every vsync. It checks real-time playback without errors or dropped frames, the letterboxed colours, that no older picture reappears across double-buffer flips, that the game's display mode returns and that START skips the clip. Use `--display 320x240` for the progressive double-buffered path and `--keep <dir>` to keep the screenshots. It runs on macOS and needs the setup's MIPS tools, psxavenc, mkpsxiso and PCSX-Redux. Physical-console MDEC and CD timing remain unverified.
 
 `verify_bgm.py` imports a generated stereo MP3 as SFX and XA, removes the source/cache and moves the package while closed, then builds/boots BIN/CUE. It DMA-reads the emulated SPU CD capture buffers and checks stereo decoding alongside a sample voice, loops, stop/restart/retrigger, music priority, switching and mono one-shot completion. Evidence is saved as `artifacts/bgm-*`. It needs the complete setup tools and port 8077. Physical-console XA timing/audio remains unverified.
 

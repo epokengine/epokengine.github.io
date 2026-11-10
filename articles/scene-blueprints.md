@@ -23,7 +23,7 @@ An illustrative graph design is:
 2. Start the opening cue through the available reflected Timeline/gameplay functions.
 3. On the cue's marker or completion, call the gate class's own exposed function.
 
-The gate function is project code you provide, not a built-in “Arena Gate” node. See the [Timeline reference](/docs/timelines/) and the [VFX editor guide](/docs/vfx-editor/) for concrete playback/wait workflows using implemented nodes.
+The gate function is project code you provide, not a built-in “Arena Gate” node. See the [Timeline reference](/docs/timelines/) and [Blueprint guide](/docs/blueprints/) for supported playback and graph workflows.
 
 This division lets you reuse the gate class in another level without carrying the arena's entire introduction with it.
 
@@ -45,6 +45,6 @@ Prefer event-driven work for one-time cues. A Tick graph runs repeatedly, so avo
 
 ## Compatibility and limits
 
-Legacy Behaviour Blueprints continue to work with their original callbacks. Scene Blueprints participate in reflection, generated source, per-bank actor tables and dependency invalidation. Their presence does not add a graph interpreter to the console.
+Older Entity/Behaviour maps and Blueprint formats must be recreated for the current Actor architecture; they are not silently converted. Scene Blueprints participate in reflection, generated source, per-bank actor tables and dependency invalidation. Their presence does not add a graph interpreter to the console.
 
-Reflection authoring requires the supported Windows/Linux toolchain. The new Actor architecture has host-side implementation/tests, while its dedicated console acceptance remains incomplete in the committed notes. Validate your map's actual Play/export path and consult [Actors and Components](/docs/actors/) for pool and domain restrictions.
+Reflection authoring requires the supported Windows/Linux toolchain. Validate your map's actual Play/export path and consult [Actors and Components](/docs/actors/) for pool and domain restrictions.

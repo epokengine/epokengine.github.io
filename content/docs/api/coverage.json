@@ -1,15 +1,15 @@
 {
-  "nugget_revision": "6186b131aacc5853a9161fb076ed34ffe504552d",
+  "nugget_revision": "4a01183295182b8e7702c908e1efaaa8f4538ffd",
   "epok": {
-    "headers": 116,
-    "types": 511,
-    "callables": 2016,
-    "properties": 2913
+    "headers": 149,
+    "types": 717,
+    "callables": 2735,
+    "properties": 3956
   },
   "psyqo": {
     "headers": 53,
     "types": 160,
-    "callables": 944,
+    "callables": 945,
     "properties": 539
   },
   "modules": [
@@ -27,30 +27,30 @@
       "family": "epok",
       "header": "actor_tables.hpp",
       "slug": "actor-tables",
-      "callables": 12,
-      "types": 8,
-      "properties": 46,
-      "source_sha256": "4f6ea3ea311109f5233ed4e950e7b4688bde084c350160137c6057c80f6fcba4",
+      "callables": 13,
+      "types": 9,
+      "properties": 48,
+      "source_sha256": "d18e03fae9ca30d9e5148d234922e3bed14b4680a7b5d0cc7eb3862060c78b5d",
       "diagnostics": []
     },
     {
       "family": "epok",
       "header": "affine.hpp",
       "slug": "affine",
-      "callables": 7,
+      "callables": 8,
       "types": 2,
       "properties": 3,
-      "source_sha256": "8a4da44b5642ce2c35af61520075763641113029ec0c3f863c9b6ffb14157caf",
+      "source_sha256": "e8cab9412e90701877e24e360dc952d1a0379a0ca5a0de99d1040dcd2b379d27",
       "diagnostics": []
     },
     {
       "family": "epok",
       "header": "audio.hpp",
       "slug": "audio",
-      "callables": 7,
-      "types": 3,
-      "properties": 16,
-      "source_sha256": "2880e6c631547412a1679a7bfd69bfcbc26c88566c26eb22adc95258a168bc13",
+      "callables": 10,
+      "types": 4,
+      "properties": 21,
+      "source_sha256": "ab1d33033a6b6fa52c1438aa999e757c278c8f11bfd19bf300fdd4923110c43e",
       "diagnostics": []
     },
     {
@@ -87,10 +87,10 @@
       "family": "epok",
       "header": "blueprint_api.hpp",
       "slug": "blueprint-api",
-      "callables": 46,
+      "callables": 50,
       "types": 0,
       "properties": 0,
-      "source_sha256": "412c2ccb9f6872da03b2591fe26e4ffcea21f2b5ae681a9489a70a24d24da3d8",
+      "source_sha256": "095f91a41bc0ab4d42038f7ebfcda9b0a236c4122e9904ac9312bde74183444f",
       "diagnostics": []
     },
     {
@@ -165,22 +165,152 @@
     },
     {
       "family": "epok",
+      "header": "camera_projection.hpp",
+      "slug": "camera-projection",
+      "callables": 2,
+      "types": 0,
+      "properties": 0,
+      "source_sha256": "5653ff2e7abb924c7c97045a18150800ca8ead6b0bf7ebfe301bb39105729fd0",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "camera_rig.hpp",
+      "slug": "camera-rig",
+      "callables": 37,
+      "types": 13,
+      "properties": 62,
+      "source_sha256": "4ae74889a8a9090c2cf0ad9a66e00b442830c0e8ef250aeaa33d6897c3626e2a",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "character2d.hpp",
+      "slug": "character2d",
+      "callables": 17,
+      "types": 4,
+      "properties": 22,
+      "source_sha256": "b90b5ebe3d4f1bb7ea8065c33a0811df0abc07c52fac017445522b5eb51f1213",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "character3d.hpp",
+      "slug": "character3d",
+      "callables": 24,
+      "types": 9,
+      "properties": 46,
+      "source_sha256": "496e306a284ed14f1d982f50319471010314a73b828284d17c68148f047b7ffa",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "character_animation.hpp",
+      "slug": "character-animation",
+      "callables": 35,
+      "types": 10,
+      "properties": 64,
+      "source_sha256": "df7ad8851ad4daaf9503f3347027761a41f07d7f3efb38b07860447c27e85dbc",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "character_commands.hpp",
+      "slug": "character-commands",
+      "callables": 44,
+      "types": 13,
+      "properties": 45,
+      "source_sha256": "8b5a1fe9d94304b7ac2e2fdb347ddde7500932614901a97d7e5dfe1618548116",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "character_input.hpp",
+      "slug": "character-input",
+      "callables": 8,
+      "types": 4,
+      "properties": 15,
+      "source_sha256": "085798ce9df54ec6fa46c125bfcf4d68676679bad518af28388b631fc01e3028",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
       "header": "collision.hpp",
       "slug": "collision",
-      "callables": 18,
-      "types": 8,
-      "properties": 39,
-      "source_sha256": "e92e066346fc417d27ac79953cf078192a285e6c023b37139d6dcd1b686c2f0d",
+      "callables": 19,
+      "types": 9,
+      "properties": 50,
+      "source_sha256": "a8fd97bd6953513ed42cf5819d947b8bc65c6bb7cac97b7f1dd547a35af43aca",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "controller_pad.hpp",
+      "slug": "controller-pad",
+      "callables": 11,
+      "types": 4,
+      "properties": 6,
+      "source_sha256": "0617feb727815dfc22c8483c304bd52a6d19dce1a9b056954c242687910950cc",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "data_table.hpp",
+      "slug": "data-table",
+      "callables": 6,
+      "types": 1,
+      "properties": 7,
+      "source_sha256": "391a61dab7612012945b4fd6f3aedc753885ffd269f53652e59a4d398529f0d8",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "data_table_service.hpp",
+      "slug": "data-table-service",
+      "callables": 0,
+      "types": 0,
+      "properties": 0,
+      "source_sha256": "5d8ab73ca23d43913d63917f169f399ae2be629e006912dcf70b9799ba7fcb01",
       "diagnostics": []
     },
     {
       "family": "epok",
       "header": "debug_hud.hpp",
       "slug": "debug-hud",
-      "callables": 4,
+      "callables": 5,
       "types": 1,
-      "properties": 16,
-      "source_sha256": "bd6c768da1e7b4728fbf53968671dc836feba360d7e356fa79d599faeea2c667",
+      "properties": 17,
+      "source_sha256": "7c90fcc88a022d5a6009bbf280b5308e2fcbfd0e5bf74a3e45592a3cee41565d",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "device_io.hpp",
+      "slug": "device-io",
+      "callables": 13,
+      "types": 3,
+      "properties": 11,
+      "source_sha256": "afa57cefa112cf4df0f432e1c456f472aed6d5b7436b956d54c745beddcdd0e3",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "dialogue.hpp",
+      "slug": "dialogue",
+      "callables": 24,
+      "types": 24,
+      "properties": 116,
+      "source_sha256": "b3a88487450057d3561f76c00659d0caaa260745809be92d5b691bd3d87b1cb7",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "dialogue_helpers.hpp",
+      "slug": "dialogue-helpers",
+      "callables": 44,
+      "types": 10,
+      "properties": 64,
+      "source_sha256": "4ae327eb7ce08095ecb62d797211da02f056fcfd4277ba6861e46f08dcd68901",
       "diagnostics": []
     },
     {
@@ -247,20 +377,20 @@
       "family": "epok",
       "header": "epok.hpp",
       "slug": "epok",
-      "callables": 54,
-      "types": 62,
-      "properties": 368,
-      "source_sha256": "7e4cb376c2cafbaf0151ef5c1c9f8477cd30c15118a3eb0d0e18482a14da70a2",
+      "callables": 63,
+      "types": 64,
+      "properties": 379,
+      "source_sha256": "428df8d04c7db4243e4841789be5837faa2e32afcf02e7222bc45a2ece740304",
       "diagnostics": []
     },
     {
       "family": "epok",
       "header": "fixed_math.hpp",
       "slug": "fixed-math",
-      "callables": 3,
+      "callables": 4,
       "types": 0,
       "properties": 1,
-      "source_sha256": "d5bf28107f11a801ab3f8f4ccfd7efefaff9a5c71cf0a6609f809db24eaf9276",
+      "source_sha256": "d5127ade29c38209880916b1a2015195a4b8d94be705d23b05626d608e2d6b01",
       "diagnostics": []
     },
     {
@@ -275,12 +405,42 @@
     },
     {
       "family": "epok",
+      "header": "fmv.hpp",
+      "slug": "fmv",
+      "callables": 0,
+      "types": 3,
+      "properties": 31,
+      "source_sha256": "63d1e3a5cf5b657fc6d840133d8a875919a806416ce0f6d065fb5fe95de1f2f4",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "fmv_bitstream.hpp",
+      "slug": "fmv-bitstream",
+      "callables": 17,
+      "types": 8,
+      "properties": 42,
+      "source_sha256": "5da1435b67c2bd33c028d2d754e1fd3b8380cc20c33c56be9f5ae80763065bb9",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
       "header": "font_types.hpp",
       "slug": "font-types",
       "callables": 3,
       "types": 2,
       "properties": 20,
       "source_sha256": "33d0682a7c7b749b8bac41f5ebb087221b6f58b4b13110b69073ae09a6b0995b",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "fragment_slot.hpp",
+      "slug": "fragment-slot",
+      "callables": 5,
+      "types": 1,
+      "properties": 2,
+      "source_sha256": "46e3ef129359cbdca8f2c80a19305d614945d00b7753aca2c48d9a1a3b75f941",
       "diagnostics": []
     },
     {
@@ -297,50 +457,70 @@
       "family": "epok",
       "header": "frustum.hpp",
       "slug": "frustum",
-      "callables": 10,
+      "callables": 14,
       "types": 1,
       "properties": 7,
-      "source_sha256": "bbe6a39a555d6d31f98d29e953e6b0c24a8f47894dc933931564f2b815e30f81",
+      "source_sha256": "35fe6bf86774e563fcc2cf408e09dd3fd6e0d9208e4affbc0d14655019ff574a",
       "diagnostics": []
     },
     {
       "family": "epok",
       "header": "gameplay_api.hpp",
       "slug": "gameplay-api",
-      "callables": 122,
-      "types": 37,
-      "properties": 134,
-      "source_sha256": "6ba07c779213f61fa1c638947d61aac3537c13b1d0e8838a54460ba3c4ad2787",
+      "callables": 163,
+      "types": 42,
+      "properties": 150,
+      "source_sha256": "b05e40fea4a546f54e04885c7b9052331501f6c44ac5c1a73931624b764ac13f",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "gameplay_control.hpp",
+      "slug": "gameplay-control",
+      "callables": 47,
+      "types": 5,
+      "properties": 30,
+      "source_sha256": "01e0ce0a2b4b522cb31f21a008d0c3059785a189713275a7f78163152707e674",
       "diagnostics": []
     },
     {
       "family": "epok",
       "header": "gte_geometry.hpp",
       "slug": "gte-geometry",
-      "callables": 26,
+      "callables": 27,
       "types": 2,
       "properties": 7,
-      "source_sha256": "190984eec4efa6fded9ff7a2d8b9c3d9fd72486ca891e5317015f3a3c3e97aa2",
+      "source_sha256": "0879e6c94f5d87960028194a7858f7548a4f18ac6dd9f4da7b4a3b42992a59c4",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "health.hpp",
+      "slug": "health",
+      "callables": 5,
+      "types": 4,
+      "properties": 10,
+      "source_sha256": "b1b93f667f656c7474bf4f86a0391a6cbce130b580212ac7f9d24647745e31f4",
       "diagnostics": []
     },
     {
       "family": "epok",
       "header": "hud.hpp",
       "slug": "hud",
-      "callables": 12,
-      "types": 1,
+      "callables": 16,
+      "types": 2,
       "properties": 0,
-      "source_sha256": "705775ce460551405c5accd40cb96c5f29e5a4839324af3d734c8362b587bd59",
+      "source_sha256": "29e740dd497e864c71a9d8813b645201c0f6d893c411f6256f0e4bbc643ea763",
       "diagnostics": []
     },
     {
       "family": "epok",
       "header": "hud_core.hpp",
       "slug": "hud-core",
-      "callables": 14,
-      "types": 5,
-      "properties": 16,
-      "source_sha256": "18d101ab79b0b34099d4c5a7b463d4c28dd555f6e0860c4865dd9c3315e5a0e4",
+      "callables": 34,
+      "types": 14,
+      "properties": 41,
+      "source_sha256": "586bef4900826219b1de416d71af888c2ae000f1bb71a14fd1eb86693816adc4",
       "diagnostics": []
     },
     {
@@ -350,7 +530,7 @@
       "callables": 3,
       "types": 0,
       "properties": 0,
-      "source_sha256": "57224b3bfb63b73074bbb90858eaecfcd3b9d01536d096b80a8e9c0379cfc7d3",
+      "source_sha256": "75b09054ea423d1b52ce4a5da41996eb629f6762433852df1a36d2b26e03b288",
       "diagnostics": []
     },
     {
@@ -367,10 +547,10 @@
       "family": "epok",
       "header": "instrument_allocator.hpp",
       "slug": "instrument-allocator",
-      "callables": 2,
+      "callables": 3,
       "types": 3,
       "properties": 16,
-      "source_sha256": "5987ee2bfd8e5d18593f205d8d00ccecda7349805f84fe4422a3605d41862fbd",
+      "source_sha256": "c85fc25e9ce2efdf6216c2f06fcbd064a911a90970ddcd9ab7b0cc8371cdb575",
       "diagnostics": []
     },
     {
@@ -415,12 +595,22 @@
     },
     {
       "family": "epok",
+      "header": "interaction.hpp",
+      "slug": "interaction",
+      "callables": 63,
+      "types": 11,
+      "properties": 52,
+      "source_sha256": "b8f616f6f8cc1cf9aa61fa41a61622c4451cf13400c604247533532b16f1856a",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
       "header": "lifecycle.hpp",
       "slug": "lifecycle",
-      "callables": 2,
-      "types": 0,
-      "properties": 1,
-      "source_sha256": "4acab904c8b924ccd380d598637be43408ac7a509967cb143b8ce6beed77e3d0",
+      "callables": 4,
+      "types": 1,
+      "properties": 10,
+      "source_sha256": "ff8c09233451031cd784deb596f25767176bcb7feb7203fc060daf876eeb2ade",
       "diagnostics": []
     },
     {
@@ -430,7 +620,7 @@
       "callables": 15,
       "types": 5,
       "properties": 12,
-      "source_sha256": "cc3709b03a88db773a3a124a498588a0fffdf3fc3de2a02aa4ab7bebedf7a3aa",
+      "source_sha256": "4fbdcb999283c207e6f6afda1951bfb7a65ce3b4e52ed54c77d2a8d53e00b23f",
       "diagnostics": []
     },
     {
@@ -440,7 +630,7 @@
       "callables": 1,
       "types": 1,
       "properties": 0,
-      "source_sha256": "c2557b1077694762230b42cecdd7fac562a7e4294541690b4e33689c725a4579",
+      "source_sha256": "2a2b1719212ff5d15a6d41aecef75891bf5d2069822cb1dd3b9da5bcacbf4a03",
       "diagnostics": []
     },
     {
@@ -450,7 +640,17 @@
       "callables": 0,
       "types": 0,
       "properties": 0,
-      "source_sha256": "ef268258d268106b7a66516cd050ca3f5486342d3303f0d5ee152537e8f5cb6a",
+      "source_sha256": "a90905d693b405d3d0fe2ef0631a8055afcb13d96d6ecb0fe38a15082e7029b2",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "lua_value_storage.hpp",
+      "slug": "lua-value-storage",
+      "callables": 5,
+      "types": 1,
+      "properties": 0,
+      "source_sha256": "6328f1a87536a593cbab6dcf5e0aa8cf7a227790c6e4ad7037976a76d5697a99",
       "diagnostics": []
     },
     {
@@ -470,7 +670,7 @@
       "callables": 6,
       "types": 1,
       "properties": 0,
-      "source_sha256": "04a94350d9a11332bce18eabc6a9f71799a1a71283179ebfdd3f478f64326e4d",
+      "source_sha256": "71e1ef9af343d40a3af4c856f64ab943082d79655f18f8e219372910ee5234de",
       "diagnostics": []
     },
     {
@@ -499,8 +699,8 @@
       "slug": "music",
       "callables": 10,
       "types": 2,
-      "properties": 25,
-      "source_sha256": "84f35ad30c430db3ad392c56b8b7cd3fe85578c28e2dfb70bf8331a42745cc7f",
+      "properties": 26,
+      "source_sha256": "971d2e9042cabedf5489dac9546a28680940ff280d4f62c0704b0236a0f7b884",
       "diagnostics": []
     },
     {
@@ -520,7 +720,7 @@
       "callables": 0,
       "types": 0,
       "properties": 0,
-      "source_sha256": "9b2b2b220d66bf3fef5257dbcb916afb9e0ce62676c673c3945be0c50e4d7adf",
+      "source_sha256": "a15b4c062d8249a103b2dbe6e75abeda78e8a56a123d4740ca5dcc5532d6e5c5",
       "diagnostics": []
     },
     {
@@ -530,7 +730,7 @@
       "callables": 1,
       "types": 0,
       "properties": 0,
-      "source_sha256": "f89ef58b6a7973715c8d9c021e3bc7da5efa16c596391ead545bff79f8b18354",
+      "source_sha256": "9512576fc09e79403acfa4bd8aab034d13e04ad2f8dec07b5183ab9b4eaa570a",
       "diagnostics": []
     },
     {
@@ -557,10 +757,20 @@
       "family": "epok",
       "header": "object_model.hpp",
       "slug": "object-model",
-      "callables": 364,
-      "types": 52,
-      "properties": 157,
-      "source_sha256": "f7754b1b0d05a113d38fe0997c204bd877f9bdb0202bad39c212d681f28da55c",
+      "callables": 377,
+      "types": 56,
+      "properties": 175,
+      "source_sha256": "1641fe579775a569543c0d11d01989e096cdbb9f9e902359719eaadf3cd44c13",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "object_storage.hpp",
+      "slug": "object-storage",
+      "callables": 9,
+      "types": 4,
+      "properties": 18,
+      "source_sha256": "d69b303709891848dddf5747d17b4ee802f1e3fc5e70f4100534fabe9a021139",
       "diagnostics": []
     },
     {
@@ -600,7 +810,7 @@
       "callables": 0,
       "types": 0,
       "properties": 0,
-      "source_sha256": "eecdd8a7c49d4d48b810c2d2196be07b523e33ab27cd2a3b965f171ff6a310d4",
+      "source_sha256": "643d4109bd5f510b96cec4882f02b156668471ce55ae89b5bdc4167a7faafd68",
       "diagnostics": []
     },
     {
@@ -675,12 +885,62 @@
     },
     {
       "family": "epok",
+      "header": "pocketstation.hpp",
+      "slug": "pocketstation",
+      "callables": 25,
+      "types": 6,
+      "properties": 47,
+      "source_sha256": "30e60f4c45ef76c7c248501096642cd9779693312bf57552875e34f08aa8894b",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "pocketstation_apps.hpp",
+      "slug": "pocketstation-apps",
+      "callables": 3,
+      "types": 0,
+      "properties": 1,
+      "source_sha256": "a90d84e7858aca588f7eb8da19137ac791dcd5619c2e74defcfabfb5a785b255",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "pocketstation_async.hpp",
+      "slug": "pocketstation-async",
+      "callables": 13,
+      "types": 1,
+      "properties": 0,
+      "source_sha256": "d5c0ced730f6c0f7030edb85713da67c04345050b7f22fd68ff839510783a7cd",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "pocketstation_service.hpp",
+      "slug": "pocketstation-service",
+      "callables": 0,
+      "types": 0,
+      "properties": 0,
+      "source_sha256": "59c9bccf995d8bd2ba5cac99ec815ef000cfea0fbd12a48424992ddbc794a7dd",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
       "header": "polygon.hpp",
       "slug": "polygon",
-      "callables": 18,
+      "callables": 21,
       "types": 9,
       "properties": 24,
-      "source_sha256": "9108e846fd15fcbd6a23396df7c651acd5d2391da0b5d420158018314ca4a5ea",
+      "source_sha256": "dd64356082793b306b7da2c21b2c8246bb8cda1332a9afb3783135320b4b93e9",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "projectile3d.hpp",
+      "slug": "projectile3d",
+      "callables": 17,
+      "types": 13,
+      "properties": 72,
+      "source_sha256": "02719907af4d6644312e54b199a1ab62cee1c70f4cf19a6ea99942c86db4633c",
       "diagnostics": []
     },
     {
@@ -727,30 +987,60 @@
       "family": "epok",
       "header": "retained.hpp",
       "slug": "retained",
-      "callables": 19,
+      "callables": 23,
       "types": 7,
-      "properties": 38,
-      "source_sha256": "19fc97d820f908b2a3f9530a30c322221729ad1ddb183b2284753747d88e8dea",
+      "properties": 49,
+      "source_sha256": "30e4c12061963ad46c05cd32a407bec672a2f11483e4936d83e6416e3dcdeeb0",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "rumble.hpp",
+      "slug": "rumble",
+      "callables": 11,
+      "types": 3,
+      "properties": 14,
+      "source_sha256": "02a114da69b38618e9dc754e8f67c440312a8118c8e0c24e1852ee6fafa478e9",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "scene_files.hpp",
+      "slug": "scene-files",
+      "callables": 15,
+      "types": 4,
+      "properties": 41,
+      "source_sha256": "9c43e6e2d2e83267369d4aa8a9f99dc5a2c6d845e4ed6cbb0025ab3aaac5227a",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "scene_lifecycle.hpp",
+      "slug": "scene-lifecycle",
+      "callables": 3,
+      "types": 1,
+      "properties": 9,
+      "source_sha256": "2c5c1062ddc27eba85e48b49f47551937d9ba54e4a6fc704d53a900d4d9f7c3e",
       "diagnostics": []
     },
     {
       "family": "epok",
       "header": "scene_service.hpp",
       "slug": "scene-service",
-      "callables": 3,
-      "types": 1,
-      "properties": 9,
-      "source_sha256": "e709fe841b827c24e595d69daa2a70e2eb50e98607b1c8c65ad5f8f5d26aa464",
+      "callables": 4,
+      "types": 0,
+      "properties": 0,
+      "source_sha256": "087295f7c56ed753d8656789b4e9ee1802bad072ebd49324c6478a8ecb993c69",
       "diagnostics": []
     },
     {
       "family": "epok",
       "header": "sequence_clock.hpp",
       "slug": "sequence-clock",
-      "callables": 3,
-      "types": 0,
-      "properties": 3,
-      "source_sha256": "1d6090446ae27cdddadaa70fce588244e1e71847e434ad3a338e1447160fc738",
+      "callables": 6,
+      "types": 2,
+      "properties": 13,
+      "source_sha256": "adc09c04c46db5a4725930276f7ea0e72e80dde85db931fe96237734a4fc92ff",
       "diagnostics": []
     },
     {
@@ -817,20 +1107,20 @@
       "family": "epok",
       "header": "serial_debug.hpp",
       "slug": "serial-debug",
-      "callables": 2,
+      "callables": 3,
       "types": 0,
       "properties": 0,
-      "source_sha256": "33c30964e51eec906b3523cfba087e67d73f6f498e5f476985d5b3afa019d09d",
+      "source_sha256": "91d6d81c708f25b267818c3529782b473ce3f972afbf20be2e2deb7b973588fb",
       "diagnostics": []
     },
     {
       "family": "epok",
       "header": "serial_kernel.hpp",
       "slug": "serial-kernel",
-      "callables": 5,
+      "callables": 7,
       "types": 2,
       "properties": 8,
-      "source_sha256": "7814d42e1b121b8c80d5978af592831eb9d7ab60840c63a914e0db22ce9c08aa",
+      "source_sha256": "d4bc9d82aabf9289005258efd9f40ae8e92f0b669c420ebb0214fc64eebc4f46",
       "diagnostics": []
     },
     {
@@ -849,8 +1139,8 @@
       "slug": "skeletal",
       "callables": 19,
       "types": 2,
-      "properties": 5,
-      "source_sha256": "4d289396cbd5b4aaf0e91881dcddb3276367631bf0f5499b73a5dc87f7f57124",
+      "properties": 15,
+      "source_sha256": "a34a1d138a7468d875db22f311066502398e9e353cea752711b2dcdfd3757a62",
       "diagnostics": []
     },
     {
@@ -910,7 +1200,7 @@
       "callables": 45,
       "types": 8,
       "properties": 53,
-      "source_sha256": "c60c91f0b798f60ca43f7be2b2966c8f94c48ae5a7ee5c5e3a586bf46749dfd5",
+      "source_sha256": "21df7c2a545f283550bcf68ed8387b3f02afe10a7abfa31d5d4e2ee95cca9760",
       "diagnostics": []
     },
     {
@@ -939,8 +1229,8 @@
       "slug": "text",
       "callables": 2,
       "types": 4,
-      "properties": 23,
-      "source_sha256": "6c6369c137522573e06da06cce64ce79baed92ba552b54748c2e2a058e2b5563",
+      "properties": 24,
+      "source_sha256": "83ded29871a6aa1a60cef757a8e049607f16e166caba2f05a900800d7fe3ea03",
       "diagnostics": []
     },
     {
@@ -979,8 +1269,8 @@
       "slug": "time",
       "callables": 8,
       "types": 1,
-      "properties": 7,
-      "source_sha256": "3ed8efb6af2c135cc3be1824df8538ade7573d57eeb802092ba4dfd8c418d83d",
+      "properties": 8,
+      "source_sha256": "d35a3a41f799cd7f49099be587d87879635b88be8f27b33e0910acc4813ba18a",
       "diagnostics": []
     },
     {
@@ -1027,10 +1317,10 @@
       "family": "epok",
       "header": "transform_cache.hpp",
       "slug": "transform-cache",
-      "callables": 4,
+      "callables": 5,
       "types": 1,
       "properties": 2,
-      "source_sha256": "8513efcf4b86eaed3b272f8886d8980aebdbbe804f47335435873211d15bc248",
+      "source_sha256": "56ace93e308c78f2430ecca56161aad89fe94f7e33b2e815214fb94e93b8fa31",
       "diagnostics": []
     },
     {
@@ -1045,6 +1335,26 @@
     },
     {
       "family": "epok",
+      "header": "ui_anchor.hpp",
+      "slug": "ui-anchor",
+      "callables": 10,
+      "types": 2,
+      "properties": 15,
+      "source_sha256": "426a53b540a1e114039500c97a23ac37bdac4216666883d99a4993f7b4ef2011",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "ui_anchor_service.hpp",
+      "slug": "ui-anchor-service",
+      "callables": 5,
+      "types": 1,
+      "properties": 4,
+      "source_sha256": "0a32622691bbf16a2645a6defbab959ff46b0a7f18cff83d21f16ebf05de4f74",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
       "header": "utility.hpp",
       "slug": "utility",
       "callables": 64,
@@ -1055,12 +1365,22 @@
     },
     {
       "family": "epok",
+      "header": "video_service.hpp",
+      "slug": "video-service",
+      "callables": 0,
+      "types": 0,
+      "properties": 0,
+      "source_sha256": "ce17a90bc6f0aca01446c91bad8935bbcd7331058deab3f4991c444cf6f66660",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
       "header": "visibility.hpp",
       "slug": "visibility",
-      "callables": 13,
+      "callables": 14,
       "types": 5,
-      "properties": 26,
-      "source_sha256": "a315c9a0f4440e3da445fc88356cd638e5ab7dbd3d0d43da57cc5bdb1d57c6c3",
+      "properties": 27,
+      "source_sha256": "7513ca0645dedc9096dd89f77b662c3ae4be094d457e6863682d909286be61ec",
       "diagnostics": []
     },
     {
@@ -1080,17 +1400,17 @@
       "callables": 49,
       "types": 12,
       "properties": 54,
-      "source_sha256": "ee9ce639f77c9e927fed528206af47de0a91fdfd48c816a6692bc48a85e65eb2",
+      "source_sha256": "3ff95dd9154db56e216d212b0f78eb284fe50ec3db2c03698f15de2dda18529c",
       "diagnostics": []
     },
     {
       "family": "epok",
       "header": "world2d_components.hpp",
       "slug": "world2d-components",
-      "callables": 82,
+      "callables": 84,
       "types": 7,
       "properties": 77,
-      "source_sha256": "24349d4c74602ac983d7316e00e7fc12672cdbe952c0183b89f3497409515528",
+      "source_sha256": "abfb669821c01d586b3a5404167b563c230fc101b98227bc1f07385ac0fdea6f",
       "diagnostics": []
     },
     {
@@ -1127,20 +1447,20 @@
       "family": "epok",
       "header": "world2d_render.hpp",
       "slug": "world2d-render",
-      "callables": 1,
-      "types": 1,
-      "properties": 1,
-      "source_sha256": "2e3e2de87c1d7df5c96e6b87710887b793e0a7d9adc87f172e26ca099495ec1a",
+      "callables": 4,
+      "types": 3,
+      "properties": 3,
+      "source_sha256": "9da6ea4571776cf2ea03cf732fc9abdec190aa426892e163167e00977e37243a",
       "diagnostics": []
     },
     {
       "family": "epok",
       "header": "world2d_service.hpp",
       "slug": "world2d-service",
-      "callables": 50,
+      "callables": 52,
       "types": 10,
-      "properties": 75,
-      "source_sha256": "09360bf6067f4d1e651972de4b12f8419429040ab3434ca5ef9ed02ea4e5612f",
+      "properties": 79,
+      "source_sha256": "d9ba846e5eafb4202f231129b87b4ac865155cd2e80a0c46206ec04eef8abdee",
       "diagnostics": []
     },
     {
@@ -1157,10 +1477,10 @@
       "family": "epok",
       "header": "world2d_tiles.hpp",
       "slug": "world2d-tiles",
-      "callables": 48,
-      "types": 9,
-      "properties": 75,
-      "source_sha256": "f468a06e0073b2d3b481f1348ca806520a35eeaa509f4bbf3c7b9cd1b61658d3",
+      "callables": 63,
+      "types": 10,
+      "properties": 85,
+      "source_sha256": "67c296e2870b84189e8085784dc7333d34afd4c8976dffa963409f463da1784c",
       "diagnostics": []
     },
     {
@@ -1168,9 +1488,19 @@
       "header": "world2d_viewports.hpp",
       "slug": "world2d-viewports",
       "callables": 23,
-      "types": 3,
-      "properties": 32,
-      "source_sha256": "bd9c2db31c89f3449c68f0fe299b9554eb1595f646def72dafb3579d8943f270",
+      "types": 4,
+      "properties": 36,
+      "source_sha256": "9f88477687b413e42f350c616f3b9f03c9189da87bec730e07dd9c6f32d5f13f",
+      "diagnostics": []
+    },
+    {
+      "family": "epok",
+      "header": "world_gameplay.hpp",
+      "slug": "world-gameplay",
+      "callables": 56,
+      "types": 14,
+      "properties": 53,
+      "source_sha256": "22438bc50ffe22102f4a8573e9d7c3274a5dab6bddba894f2981102b4d79a1ea",
       "diagnostics": []
     },
     {
@@ -1180,7 +1510,7 @@
       "callables": 3,
       "types": 0,
       "properties": 0,
-      "source_sha256": "acbf938b97f5127ab28e44027cd951d98e1cbb3d2f5549b597c3225f92b69ee2",
+      "source_sha256": "5b19345dd6bf70a175acc1cb3a7c6fbcdb0022ffb01580df696b244a4ecf667a",
       "diagnostics": []
     },
     {
@@ -1190,7 +1520,7 @@
       "callables": 11,
       "types": 8,
       "properties": 50,
-      "source_sha256": "5a3b169e4312a3f64c59c82982bf4c8e2e5529d186a0edbfb4e5c62e3435d27a",
+      "source_sha256": "5f63abafb4bf2088a5defab28199533933342002a075579bb4824acf5164bc6f",
       "diagnostics": []
     },
     {
@@ -1200,7 +1530,7 @@
       "callables": 10,
       "types": 2,
       "properties": 0,
-      "source_sha256": "59e2297eddab172affba94c0d4570f31097de473198fbcdc0c4e088e830f0717",
+      "source_sha256": "e00cb603b3ec340d1bab954f5d08f0784bf2f7c95dd3a80f902a9ff91b263169",
       "diagnostics": []
     },
     {
@@ -1210,7 +1540,7 @@
       "callables": 2,
       "types": 0,
       "properties": 0,
-      "source_sha256": "4795bffc23bfcda70fbe4161a3dafa86f0b9e40e0320314f23d60b131cc6fd9f",
+      "source_sha256": "ba065d2b46fa7577753347b7635dbc6fdb400d8966aa98360b4a0eb24e8fea4c",
       "diagnostics": []
     },
     {
@@ -1220,7 +1550,7 @@
       "callables": 4,
       "types": 2,
       "properties": 0,
-      "source_sha256": "4116cc0d741a612e91cdc7750cb61590e4d8b097e87d6fdf039b12b405092985",
+      "source_sha256": "55576de7d254eafff169e8a6e502183fba1d61bac6dd24813ca64c0bac75b5ea",
       "diagnostics": []
     },
     {
@@ -1230,7 +1560,7 @@
       "callables": 5,
       "types": 1,
       "properties": 0,
-      "source_sha256": "2a40ac87dba7bb3256989215e25e3f820d3ab5b1e14551b15d63e4b2362c5116",
+      "source_sha256": "3883c7e6f5c40bdbd5873b3412d776e2e58168519e3303594d8ce40cf6431640",
       "diagnostics": []
     },
     {
@@ -1240,7 +1570,7 @@
       "callables": 1,
       "types": 1,
       "properties": 2,
-      "source_sha256": "d0bef3a74991d841f24fbb3424e15af0e4cb0fc864825124adc70cac13533c02",
+      "source_sha256": "d4bbc519796057574b8540014173c10f9696645ec30533b11875ff5df7f15295",
       "diagnostics": []
     },
     {
@@ -1250,7 +1580,7 @@
       "callables": 64,
       "types": 11,
       "properties": 4,
-      "source_sha256": "127dfe7e33d82f145c70372d340546ed5082a0239381fb2f0753f73a365ab2e9",
+      "source_sha256": "ce7021ca34ed9186cab2de88af715834ea932fa33d1320fc0fa1c13e8f608927",
       "diagnostics": []
     },
     {
@@ -1260,7 +1590,7 @@
       "callables": 3,
       "types": 1,
       "properties": 0,
-      "source_sha256": "e1ddf0920150d7d0801747b7179471a0731afe4854a235a4a1aad9a7a8db82e0",
+      "source_sha256": "833eb86fa8381bb9c887f2ab6940b6c4935cba3a89219615997a2740dd29cf0a",
       "diagnostics": []
     },
     {
@@ -1270,7 +1600,7 @@
       "callables": 5,
       "types": 2,
       "properties": 3,
-      "source_sha256": "926077f0496ff80c9b68f9b6e9be73631e5adb36e569fd17659c42970d6520c9",
+      "source_sha256": "8daaf45a94ee293b31f2e15c4d179784b8b07f18b737804e7fad40d569d54ae7",
       "diagnostics": []
     },
     {
@@ -1280,7 +1610,7 @@
       "callables": 34,
       "types": 7,
       "properties": 2,
-      "source_sha256": "1f7fb1de89183cdd2ca5fe9a3505769cc0aee95ee45e31f9db4bdabefd07be1d",
+      "source_sha256": "7a125eb582d4189954e1d5ce0dc6d6353ae98440219b28a2cc71f7407beeaac6",
       "diagnostics": []
     },
     {
@@ -1290,7 +1620,7 @@
       "callables": 50,
       "types": 2,
       "properties": 3,
-      "source_sha256": "0744776790428769a46aadba405a47c8799dd8e3489ee7b9bf30512198d18116",
+      "source_sha256": "9bb1f11d1811ef46c85b05d5716305ed1585655c001d870ec55fd95a0252ddf9",
       "diagnostics": []
     },
     {
@@ -1300,7 +1630,7 @@
       "callables": 18,
       "types": 2,
       "properties": 0,
-      "source_sha256": "9ad21d9f5b178a170ef0508c0a9d249ea34739a14b711665b267e49557030306",
+      "source_sha256": "1c4caa5e62043e54c602c1e4614a9773b1087209dc68df6512b52efb1f32e4a3",
       "diagnostics": []
     },
     {
@@ -1310,7 +1640,7 @@
       "callables": 0,
       "types": 1,
       "properties": 0,
-      "source_sha256": "91eadfeb28d120f1505b88afc81e9140a0f75198c7e83d3f578a68d664e40949",
+      "source_sha256": "1aaac3d0e196d360964d58c8cbcf306c997c59e53d787218f0a38f2e366d0945",
       "diagnostics": []
     },
     {
@@ -1320,7 +1650,7 @@
       "callables": 16,
       "types": 6,
       "properties": 9,
-      "source_sha256": "0792b35bd2b100716cf8e637a424363c1742023440bda6a2620b827eb3033f21",
+      "source_sha256": "65c0711723982de3dc2503eb842631447579df7a97270572b8cb046a2d5674e4",
       "diagnostics": []
     },
     {
@@ -1330,7 +1660,7 @@
       "callables": 46,
       "types": 7,
       "properties": 16,
-      "source_sha256": "b41653e8941308284d22a258f255389744e81903a23b9a968289e6e380fead72",
+      "source_sha256": "4b1efadbb6ffcf7df63ef5a77fdec7889a4a85f34a92306f521cf70128c6cc88",
       "diagnostics": []
     },
     {
@@ -1340,7 +1670,7 @@
       "callables": 74,
       "types": 5,
       "properties": 15,
-      "source_sha256": "24dfed0d597d79c91c5bf6ab381f3f9b702f4affa42b2fd41e8a2f6571d369dd",
+      "source_sha256": "ba52957196576fd9de1eee900f3ddc0df289f31ccb0a031e2128d8925ad926eb",
       "diagnostics": []
     },
     {
@@ -1350,7 +1680,7 @@
       "callables": 11,
       "types": 0,
       "properties": 0,
-      "source_sha256": "37cf9b034bb4e4d7e938370397b8ff5dc8501129a7afd5756fe6bc59c06c2ea1",
+      "source_sha256": "702a65748070a1c4ee48b94e8eef331d564dd247bfbe1b72524780816d50a6d8",
       "diagnostics": []
     },
     {
@@ -1360,7 +1690,7 @@
       "callables": 101,
       "types": 4,
       "properties": 79,
-      "source_sha256": "d0d655ed9e63fc8dd1dd99da4874c9d9b83bbaaa2c284f819e2b55bd0dce3e63",
+      "source_sha256": "f01f1ccf76ef9a8a45035a7a9a171ac4b70e9d0b9a266c3786cff97340c45142",
       "diagnostics": []
     },
     {
@@ -1370,7 +1700,7 @@
       "callables": 4,
       "types": 3,
       "properties": 44,
-      "source_sha256": "d8a4609c31942703ee3051608f55257557e10bcd0000361f3b293e663f026659",
+      "source_sha256": "44dc588834f4a37613200a1d5004658afe4a97375d6ddd453d0550136d1760a4",
       "diagnostics": []
     },
     {
@@ -1380,7 +1710,7 @@
       "callables": 5,
       "types": 2,
       "properties": 16,
-      "source_sha256": "80114be57797b3b6625e793fea092318d6ec25e585c353bce243d2452e8690e2",
+      "source_sha256": "f8566fa5bed48bb1863fa1c407ef8a95fa039df490c279e87247f5ddbcf5dcb0",
       "diagnostics": []
     },
     {
@@ -1390,7 +1720,7 @@
       "callables": 0,
       "types": 0,
       "properties": 2,
-      "source_sha256": "6ce14f50220c6873fb696ec1a0adbbdab888e7afe4442444c56ad4a98992a72a",
+      "source_sha256": "0f4d3494ee554ad4c19ba2cdf61807da0dce1416fe5e1887ae2b8bcf8fe9714a",
       "diagnostics": []
     },
     {
@@ -1400,7 +1730,7 @@
       "callables": 41,
       "types": 3,
       "properties": 3,
-      "source_sha256": "dd506023172470e82f273582bb6ec50795194fe169068ef6a4bf005861c3fea4",
+      "source_sha256": "27b5a6c1a9741ff4f881c3d1389a479fb3e3ad01c02b52d1bcd541c4f6482a71",
       "diagnostics": []
     },
     {
@@ -1410,7 +1740,7 @@
       "callables": 0,
       "types": 0,
       "properties": 3,
-      "source_sha256": "930f29a5e1f1d9667068e7e273f0792bd479bb4f62217b5b31fd10222e138223",
+      "source_sha256": "82db90d57087e7808a10610ea69485985902c3fe4c22f0ba28856d4e01467eeb",
       "diagnostics": []
     },
     {
@@ -1420,7 +1750,7 @@
       "callables": 0,
       "types": 2,
       "properties": 27,
-      "source_sha256": "8cfd38b48d8d4b3eb6ca037c86d356a20377f1d968f5e43c5acccef769e66362",
+      "source_sha256": "1896e339261d0604b683f2583ed489883c98c1de9f831d676690ed1044d8d846",
       "diagnostics": []
     },
     {
@@ -1430,7 +1760,7 @@
       "callables": 5,
       "types": 1,
       "properties": 0,
-      "source_sha256": "f9bd9c160424334cfbf0d42631e31a11fed14257f29e904a473e3bc40c795471",
+      "source_sha256": "d8aed45348032adba61fd670fd50456d0e5c6680d6f59c8480199f194de38f89",
       "diagnostics": []
     },
     {
@@ -1440,7 +1770,7 @@
       "callables": 18,
       "types": 6,
       "properties": 11,
-      "source_sha256": "b8aaa6c8dccd0aa4f8e2cfb0e6dc7bf0b198ac0970e96e0f0aca766b9edb4efe",
+      "source_sha256": "963cc66d156c8e24a878c00b74a8be8f2efd60e7f47166581d45df087328581e",
       "diagnostics": []
     },
     {
@@ -1450,7 +1780,7 @@
       "callables": 29,
       "types": 4,
       "properties": 23,
-      "source_sha256": "980d814130f6fa84af169a6eacbdb05b98d78b7a3e30c592da88b9eee7b3bce8",
+      "source_sha256": "fa7b498634dc73182a2820870210372a6ca6130030d2238787a6a1eb124f0047",
       "diagnostics": []
     },
     {
@@ -1460,7 +1790,7 @@
       "callables": 0,
       "types": 1,
       "properties": 1,
-      "source_sha256": "719e051216541652a43369eac24a034537e01379fcd96d719763fe140c70d2c0",
+      "source_sha256": "d2dfb7816dca5c395e71d47e4542032abfb35ec147091f96abae90797dd0c511",
       "diagnostics": []
     },
     {
@@ -1470,17 +1800,17 @@
       "callables": 20,
       "types": 7,
       "properties": 8,
-      "source_sha256": "88c72ddd2a0c536894770f7d922221b96e62bf2f63a195367962e5dbbeeb1fa8",
+      "source_sha256": "b4d4294289aab2901158dc5995631661baa13aed7b083c5db96e13f1aee33008",
       "diagnostics": []
     },
     {
       "family": "psyqo",
       "header": "memory-card.hh",
       "slug": "memory-card",
-      "callables": 23,
+      "callables": 24,
       "types": 6,
       "properties": 24,
-      "source_sha256": "919e817851cea4833701bb43b33ee61dbd0d8992c619adb9a62a284562da973c",
+      "source_sha256": "3a76f4380927a2e41427c8f25b4afe20fc6f9d9faf53929003bf53445e095d28",
       "diagnostics": []
     },
     {
@@ -1490,7 +1820,7 @@
       "callables": 13,
       "types": 2,
       "properties": 6,
-      "source_sha256": "eeab8ba53aafd830d68d3bd081352afc4eba50643f786c73055d9e87aa9c18e7",
+      "source_sha256": "16fda296b6343b01acf86301ec7e6fea62d2c70b259b4cd6ce7b03f69d8afd1d",
       "diagnostics": []
     },
     {
@@ -1500,7 +1830,7 @@
       "callables": 4,
       "types": 3,
       "properties": 1,
-      "source_sha256": "fb2abe3b651ae0ac1802d642622452c76278a28a0a780e9394a21073f2ec4d85",
+      "source_sha256": "be6e402f91c979cd9fb983d7c3cbd71d493914eb8df83b9a6964a733d5bd98a3",
       "diagnostics": []
     },
     {
@@ -1510,7 +1840,7 @@
       "callables": 0,
       "types": 0,
       "properties": 0,
-      "source_sha256": "9671f6a5ea0c42f3e132cdb24be7d115f215cad451e30da2cf987a10d27eb285",
+      "source_sha256": "9a8e01b9376ec8aa71a2445963f22d2ab7698da9087e5e1900ef70439abdc9ec",
       "diagnostics": []
     },
     {
@@ -1520,7 +1850,7 @@
       "callables": 27,
       "types": 13,
       "properties": 39,
-      "source_sha256": "a540ccdd85f67ec77a8fcbbd3db07ad0934802e0a030e1dbc4b9f043c80644c0",
+      "source_sha256": "7ca36138380b2eec16267dc78dbc59d58469af27bd24a4e22dd2713b05a9f58b",
       "diagnostics": []
     },
     {
@@ -1530,7 +1860,7 @@
       "callables": 14,
       "types": 9,
       "properties": 9,
-      "source_sha256": "231b25d46766d0725508782fd35bd38dda7a10ce90762b1435fa1894101627b4",
+      "source_sha256": "9a14a42894ff63ad0ef3c36b8f8d0ebcb32422a9d02691e1f85f7d736ce64e8d",
       "diagnostics": []
     },
     {
@@ -1540,7 +1870,7 @@
       "callables": 23,
       "types": 5,
       "properties": 8,
-      "source_sha256": "5474b45bc489b6b0f9e1937dd226a31660308979674ca6d8c8a2f5f0c8559025",
+      "source_sha256": "ffb34c6c2aa8fe608147646271f650b467bbff3decb6292c292ce35046d36a57",
       "diagnostics": []
     },
     {
@@ -1550,7 +1880,7 @@
       "callables": 4,
       "types": 2,
       "properties": 1,
-      "source_sha256": "811e979c8ff6deaa5a5506ba98de9820d4c34cff781ccb9b3d7588db1bd69eb3",
+      "source_sha256": "6d379c32fe2e9560312ec0d7ee87f822ed70fb807e39fe82331b8ab43b53657b",
       "diagnostics": []
     },
     {
@@ -1560,7 +1890,7 @@
       "callables": 60,
       "types": 4,
       "properties": 34,
-      "source_sha256": "6d6a548d596c11fd8952210fc2323c9e0811d23098d5605b7176c08284ea3794",
+      "source_sha256": "87076c5514d03d4108240a39133285112310e3aa0d58074c26d9873279707d83",
       "diagnostics": []
     },
     {
@@ -1570,7 +1900,7 @@
       "callables": 20,
       "types": 4,
       "properties": 9,
-      "source_sha256": "1f89f4575b6ec9fe7cd635426d4c0809b0476f6c4ad90dd98ea31f4466470c9d",
+      "source_sha256": "05671399d83438c0a97b41d6ed3332713a061d424a3149377392a39bcaa78a5e",
       "diagnostics": []
     },
     {
@@ -1580,7 +1910,7 @@
       "callables": 20,
       "types": 4,
       "properties": 13,
-      "source_sha256": "e8128a2472a0240561b83b9dad1a38d6b7176c6e6a87ed40bd5614a4a267e0d6",
+      "source_sha256": "621328710619dfa86bef3de01c4ad6d1b9f75791906bb02b1f295564a29836c5",
       "diagnostics": []
     },
     {
@@ -1590,7 +1920,7 @@
       "callables": 54,
       "types": 4,
       "properties": 26,
-      "source_sha256": "ff96808585474725c3bf265ae8d727b6d1ba73d441f11776e559b1781de5494e",
+      "source_sha256": "142923b72b5f8bbd033009150bc413643ed4373bb650fd73be21b0fc87691a0c",
       "diagnostics": []
     },
     {
@@ -1600,7 +1930,7 @@
       "callables": 0,
       "types": 0,
       "properties": 0,
-      "source_sha256": "c4d925cac60320a2707c9b205ff796d84254fa0f33b884e979a859c657e71a0f",
+      "source_sha256": "ee935f504b99e961aea6ffe37610892e899071471f717bfd0b57bbe345ea2192",
       "diagnostics": []
     },
     {
@@ -1610,7 +1940,7 @@
       "callables": 4,
       "types": 4,
       "properties": 4,
-      "source_sha256": "8383a64abf1760c197ad1d16094fe34735e27bad770d244cfa327cf857e833c3",
+      "source_sha256": "dff686aac2ea9a7e16463c53a5f573fa6fe092f977510c9cdc95f321dbcd716d",
       "diagnostics": []
     },
     {
@@ -1620,7 +1950,7 @@
       "callables": 0,
       "types": 1,
       "properties": 2,
-      "source_sha256": "f290f1a3528a705d68db15e693d10eff20a999ebce12b07739a5cdeb80da59f5",
+      "source_sha256": "db09c6682d74428ccc51db03b864f110a7fb747c529a2049b1a5fd502a68f6ba",
       "diagnostics": []
     },
     {
@@ -1630,7 +1960,7 @@
       "callables": 4,
       "types": 5,
       "properties": 25,
-      "source_sha256": "7ad74559b1ab0e1fab1d305b3446fdd381a180888ae082eafc34e2d1a76d4c17",
+      "source_sha256": "c8e8c8f5acf72254268e45ae9db2348ed03dace81d8a5c15a210b2bee9dd3a56",
       "diagnostics": []
     },
     {
@@ -1640,7 +1970,7 @@
       "callables": 7,
       "types": 2,
       "properties": 0,
-      "source_sha256": "e55da603d0f10631619e4b1c5b2c4f1330978a7c7f42ee2698cd8e7cd328b815",
+      "source_sha256": "7eed20a89f172355ef42ca8184e073b511d6588b526f85397041e5f290b114bc",
       "diagnostics": []
     },
     {
@@ -1650,7 +1980,7 @@
       "callables": 30,
       "types": 1,
       "properties": 3,
-      "source_sha256": "0c4297f30fdbef451f9e257679d6d25a1bcc97dfd5cd302d8dfba27fddc9d0cc",
+      "source_sha256": "957083db0d5809e72185161e085d9fcd78c61a0a6daabcb03947c50b4eeebccf",
       "diagnostics": []
     },
     {
@@ -1660,7 +1990,7 @@
       "callables": 7,
       "types": 2,
       "properties": 10,
-      "source_sha256": "2a408ed57192442c7c8da38259144c273924c6d2dca0e9d38e77fcf99fcfeb1b",
+      "source_sha256": "f868e78a108130119ecd2ffde35d4d600aef472f49c57a39c387a5e64c852451",
       "diagnostics": []
     },
     {
@@ -1670,7 +2000,7 @@
       "callables": 1,
       "types": 0,
       "properties": 0,
-      "source_sha256": "19f052572fca618850bbb9d51993e5513ea777e41fd4be7e8d65029b2b29d5f1",
+      "source_sha256": "b7a7fd7c44bfa5c5801d22242eea0b9f2f6c5e9d13e269bb14250e37743c28d8",
       "diagnostics": []
     },
     {
@@ -1680,7 +2010,7 @@
       "callables": 19,
       "types": 3,
       "properties": 0,
-      "source_sha256": "37ca7d3f87c039b5391fab5a14db5c416de9537be3138b09982b35c04f140a8e",
+      "source_sha256": "5c4b5c5467be9e0704eef116ae2dda8ce0cbc1c0c511e63d62d1f218ae24165e",
       "diagnostics": []
     },
     {
@@ -1690,7 +2020,7 @@
       "callables": 5,
       "types": 1,
       "properties": 0,
-      "source_sha256": "f9f0a4894b26e23af29961e9c889e7b5f406cf15a0697e1a582742774f10eb4d",
+      "source_sha256": "e82032435da4d0841b75807b003b9b02828069aa2d64e6290698811df0f0eafa",
       "diagnostics": []
     },
     {
@@ -1700,7 +2030,7 @@
       "callables": 25,
       "types": 3,
       "properties": 4,
-      "source_sha256": "1bbfde5a4003533bea42e6e7e2fbddcd11aebc25f00025359c2d7ad83704b538",
+      "source_sha256": "4a00cb2404873d69227d75a9d575f72fc09cf18c5b2e33ecad3ebb96f56a87e2",
       "diagnostics": []
     }
   ]

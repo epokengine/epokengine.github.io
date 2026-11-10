@@ -1,0 +1,15 @@
+{
+  "revision": "6d018533c57d94ea12e17817df3fbad5e6a5d639",
+  "items": [
+    {"title":"Dungeon Complete","category":"World building","description":"Play or customize Reactor Station, a third-person action game with robot guards, a boss, inventory, upgrades and a PocketStation minigame. Choose C++, Blueprint or Lua for the game rules.","guide":"docs/dungeon-complete.md","source":"resources/templates/dungeon-complete/README.md"},
+    {"title":"Six starters in three languages","category":"Blueprints & code","description":"Create Basic, Sample, Third Person, Platformer 2D, Dungeon or Dungeon Complete in C++, Blueprint or Lua. All three variants share the same scenes and assets. Lua gameplay compiles ahead of time to native C++ for PSX.","guide":"docs/starter-templates.md","source":"docs/starter-templates.md"},
+    {"title":"Gameplay actions and input contexts","category":"Gameplay & Actors","description":"Bind controller inputs to named actions. Let gameplay, menus and conversations take turns handling the same buttons through temporary contexts.","guide":"docs/gameplay-controls.md","source":"runtime/gameplay_control.hpp"},
+    {"title":"World interaction helpers","category":"Gameplay & Actors","description":"Place and extend reflected actors for examination, NPC dialogue, pickups, doors and switches in any of the three gameplay languages.","guide":"docs/world-gameplay-helpers.md","source":"runtime/world_gameplay.hpp"},
+    {"title":"Dialogue widgets","category":"UI & HUD","description":"Author conversations with lines, choices, conditions and actions. Present them through a UIActor derived from DialoguePresenter.","guide":"docs/dialogue-widgets.md","source":"runtime/dialogue.hpp"},
+    {"title":"Shared character movement and animation","category":"Gameplay & Actors","description":"Drive 2D and 3D character movement with shared motors and use gameplay state to select animation. The starter languages use the same underlying components.","guide":"docs/character-motor.md","source":"runtime/character3d.hpp"},
+    {"title":"Gameplay camera rigs","category":"Rendering & animation","description":"Configure camera follow and aiming through shared rigs and projection helpers.","guide":"docs/camera-rigs.md","source":"runtime/camera_rig.hpp"},
+    {"title":"Health helpers","category":"Gameplay & Actors","description":"Apply damage and healing with shared, bounded health arithmetic through HealthState and HealthLibrary.","guide":"docs/health.md","source":"runtime/health.hpp"},
+    {"title":"Pooled projectiles","category":"Gameplay & Actors","description":"Fire and update projectiles from a bounded pool backed by the 3D collision system.","guide":"docs/projectiles.md","source":"runtime/projectile3d.hpp"},
+    {"title":"Shared 3D query context","category":"Gameplay & Actors","description":"Use a reflected component to perform 3D gameplay queries through the existing collision backend.","guide":"docs/spatial-query-context.md","source":"runtime/world_gameplay.hpp"}
+  ]
+}

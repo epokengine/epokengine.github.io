@@ -129,6 +129,12 @@ The parent picker requires a Blueprintable class that is not final. Abstract cla
 
 ### Typed references and spawning
 
+Map Settings can author a **Runtime Spawn Reserve**, the actor slots a map keeps
+for runtime spawns. It defaults to 32. Authoring a smaller value shrinks every
+per-actor table and sizes object storage for the map's live peak, and a build
+fails if the reserve is below the largest spawnable prefab. A spawn beyond it is
+refused and rolled back.
+
 `ActorRef<Class>` identifies an Actor, `ComponentRef<Class>` identifies a component, and `ObjectRef` can hold either. `ClassRef<Base>` identifies a class. References are generation-checked identities; deleting an instance invalidates its references. Serialized references use authoring UUIDs, which the scene loader resolves before gameplay begins.
 
 **Spawn Actor**, **Spawn** and **Spawn Class** accept concrete spawnable Actor classes. They use the same component composition and property initialization as scene placements. Components are attached to an existing owner. Capacity failures return a null reference and roll back partial allocations.
@@ -202,7 +208,9 @@ also take two object, actor or component references of any classes and tell whet
 they name the same object (is the actor that entered a trigger the player?); wiring a
 reference widens both pins to Object. Engine adapters cover self,
 handle validity, local transforms, input, activity/destruction, scene requests,
-class tests/spawning and entity audio/texture assignment. Native annotated
+class tests/spawning, entity audio/texture assignment and full-screen video
+(**Video › Play video / Stop video / Is video playing**, see
+[Full-motion video](video.md)). Native annotated
 methods extend the callable surface without adding an interpreted language.
 
 Make Vector combines two or three Fixed inputs. Vector Component extracts one
